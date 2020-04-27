@@ -1,0 +1,90 @@
+// Copyright 2009 Peter Stegemann
+
+#include "Store.h"
+
+#include "GUI/Setup/Select.h"
+#include "Main/Setup.h"
+#include "Signal/Processor.h"
+#include "Text/Text.h"
+
+#include "AVR/Components/Utility.h"
+
+Screen_Setup_Source_Store::Screen_Setup_Source_Store( uint8_t SignalSourceId)
+						 : Screen_Setup_Source_Base( SignalSourceId, 0b0101101, Text::Store)
+						 , sourceStore( NULL)
+{
+	sourceStore = &( source->Body.Store);
+}
+
+void Screen_Setup_Source_Store::display( void)
+{
+	Screen_Setup_Source_Base::display();
+
+	// Adjust gauges to frame and set them up.
+	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+
+	uint16_t ValueLeft = menuLeft + 7 * Font->CellWidth;
+
+	uint8_t Line = 3;
+
+	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
+								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
+								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Source);
+	sourceNameLabel.SetDimensions( ValueLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
+
+	SetSourceLabel( &sourceNameLabel, sourceName, sourceStore->SignalSourceId);
+
+	Line++;
+
+	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
+								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
+								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Reset);
+}
+
+bool Screen_Setup_Source_Store::processMenu( DoMenuResult Result)
+{
+	switch( Result)
+	{
+		case DMR_Selected :
+		{
+			bool ValueChanged = false;
+
+			switch( currentMenuEntry)
+			{
+				case 3 :
+				{
+					ValueChanged = GUI_Setup_Select::DoSourceSelect(
+						&( sourceStore->SignalSourceId), &( sourceStore->Setup.InputSource),
+						&menuMarker, &sourceNameLabel, NULL, sourceName, this, &staticUpdate,
+						false, source->GetLevel());
+				}
+				break;
+
+				case 5 :
+				{
+					sourceStore->ResetValue();
+				}
+				break;
+
+				default :
+				{
+					return( Screen_Setup_Source_Base::processMenu( Result));
+				}
+				break;
+			}
+
+			// Store new values.
+			if( ValueChanged == true)
+			{
+				GLOBAL.SetupService.SetSourceStore( setupSourceId, &( sourceStore->Setup));
+			}
+		}
+		break;
+
+		case DMR_Changed :	break;
+
+		default : break;
+	}
+
+	return( true);
+}
