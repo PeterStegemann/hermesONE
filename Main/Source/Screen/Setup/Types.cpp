@@ -7,7 +7,7 @@
 #include "GUI/Setup/Popup.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_Types::Screen_Setup_Types( void)
 				  : Screen_Setup_BaseList( Text::Types)

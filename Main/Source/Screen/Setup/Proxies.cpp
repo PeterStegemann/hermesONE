@@ -7,7 +7,7 @@
 #include "Source/Proxy.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_Proxies::Screen_Setup_Proxies( void)
 					: Screen_Setup_BaseList( Text::Proxies)

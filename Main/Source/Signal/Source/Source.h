@@ -12,7 +12,7 @@
 #include "Timer.h"
 #include "Trimmer.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 union Signal_Source_Union
 {

@@ -3,7 +3,7 @@
 #ifndef SERIAL_DESKTOPPROTOCOL_H
 #define SERIAL_DESKTOPPROTOCOL_H
 
-#include "AVR/Components/Serial/Serial_Protocol.h"
+#include "AVR/Source/Serial/Serial_Protocol.h"
 
 class Serial_DesktopProtocol : public SERIAL_Protocol
 {

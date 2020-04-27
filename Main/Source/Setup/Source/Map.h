@@ -5,7 +5,7 @@
 
 #include "Tupel.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 #define SETUP_SOURCE_MAP_POINTS		7
 

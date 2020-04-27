@@ -5,7 +5,7 @@
 
 #include "Source/Tupel.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 struct Setup_Channel
 {

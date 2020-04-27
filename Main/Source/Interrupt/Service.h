@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 #define INTERRUPT_SERVICE_MAXIMUM_MILLIS	1000
 

@@ -8,7 +8,7 @@
 #include "Signal/Utility.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_Source_Trimmer::Screen_Setup_Source_Trimmer( uint8_t SignalSourceId)
 						   : Screen_Setup_Source_Base( SignalSourceId, 0b101010101110101,

@@ -8,7 +8,7 @@
 #include "Signal/Utility.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_Source_Proxy::Screen_Setup_Source_Proxy( uint8_t SignalSourceId)
 						 : Screen_Setup_Source_Base( SignalSourceId, 0b10101, Text::Proxy)

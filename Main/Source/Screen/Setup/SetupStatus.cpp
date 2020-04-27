@@ -6,7 +6,7 @@
 #include "GUI/Setup/Select.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_SetupStatus::Screen_Setup_SetupStatus( void)
 						: Screen_Setup_Base( 0b1010101001101, Text::Status)

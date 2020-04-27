@@ -3,7 +3,7 @@
 #ifndef SETUP_CALIBRATION_H
 #define SETUP_CALIBRATION_H
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 struct Setup_Calibration
 {

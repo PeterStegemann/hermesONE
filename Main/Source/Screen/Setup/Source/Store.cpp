@@ -7,7 +7,7 @@
 #include "Signal/Processor.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_Source_Store::Screen_Setup_Source_Store( uint8_t SignalSourceId)
 						 : Screen_Setup_Source_Base( SignalSourceId, 0b0101101, Text::Store)

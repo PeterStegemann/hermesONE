@@ -7,7 +7,7 @@
 #include "Signal/Processor.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 static uint16_t getMenuPattern( uint8_t SignalSourceId)
 {

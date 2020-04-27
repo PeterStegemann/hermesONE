@@ -4,9 +4,9 @@
 
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
-#include "AVR/Components/Font/Font.h"
-#include "AVR/Components/LCD/LCD_DOG.h"
+#include "AVR/Source/Utility.h"
+#include "AVR/Source/Font/Font.h"
+#include "AVR/Source/LCD/LCD_DOG.h"
 
 Screen_Status_Menu_Base::Screen_Status_Menu_Base( uint8_t MenuEntries, Level MenuLevel)
 					   : Screen_Base()

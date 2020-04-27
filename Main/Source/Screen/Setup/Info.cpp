@@ -6,7 +6,7 @@
 #include "Setup/Struct.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/EEPROM.h"
+#include "AVR/Source/EEPROM.h"
 
 Screen_Setup_Info::Screen_Setup_Info( void)
 				 : Screen_Setup_Base( 0b101, Text::Info)

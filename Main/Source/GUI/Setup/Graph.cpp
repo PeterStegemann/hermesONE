@@ -5,7 +5,7 @@
 #include "Main/Setup.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 #define GUI_SETUP_GRAPH_LABEL_FONT		FONT::FI_Medium
 

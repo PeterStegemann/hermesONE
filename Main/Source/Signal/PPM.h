@@ -3,7 +3,7 @@
 #ifndef SIGNAL_PPM_H
 #define SIGNAL_PPM_H
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 #define SIGNAL_PPM_CHANNELS					9
 

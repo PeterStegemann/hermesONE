@@ -7,7 +7,7 @@
 #include "Signal/Processor.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_Source_Base::Screen_Setup_Source_Base( uint8_t SignalSourceId, uint32_t MenuPattern,
 												    const flash_char* Title, bool HasGauge)

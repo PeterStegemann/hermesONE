@@ -7,7 +7,7 @@
 #include "Signal/Processor.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 #define TIME_LIMIT					( 5 * 60 * 60)
 #define TIME_STEP_WIDTH				5

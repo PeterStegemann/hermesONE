@@ -13,8 +13,8 @@
 #include "Main/Setup.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
-#include "AVR/Components/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/Utility.h"
+#include "AVR/Source/LCD/LCD_65K_RGB.h"
 
 Screen_Setup_Main::Screen_Setup_Main( void)
 				 : Screen_Setup_Base( 0b1100101110100101, Text::Main)

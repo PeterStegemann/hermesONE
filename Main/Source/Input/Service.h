@@ -5,7 +5,7 @@
 #include "Ports.h"
 #include "Rotary.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 #include <stdio.h>
 

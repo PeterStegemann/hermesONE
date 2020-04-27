@@ -3,7 +3,7 @@
 #ifndef SETUP_BATTERY_H
 #define SETUP_BATTERY_H
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 #define SETUP_BATTERY_VOLTAGE_MINIMUM		0
 #define SETUP_BATTERY_VOLTAGE_MAXIMUM		120

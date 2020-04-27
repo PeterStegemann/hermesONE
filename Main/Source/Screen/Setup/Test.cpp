@@ -5,9 +5,9 @@
 #include "Input.h"
 #include "Ports.h"
 
-#include "AVR/Components/Utility.h"
-#include "AVR/Components/Font/Font.h"
-#include "AVR/Components/LCD/LCD.h"
+#include "AVR/Source/Utility.h"
+#include "AVR/Source/Font/Font.h"
+#include "AVR/Source/LCD/LCD.h"
 
 using namespace Screen::Setup;
 

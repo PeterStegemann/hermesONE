@@ -3,7 +3,7 @@
 #ifndef GUI_STATUS_GAUGE_H
 #define GUI_STATUS_GAUGE_H
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 #define SCREEN_STATUS_STATUS_HORIZONTAL_GAUGE_WIDTH		44
 #define SCREEN_STATUS_STATUS_VERTICAL_GAUGE_HEIGHT		40

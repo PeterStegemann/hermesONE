@@ -3,7 +3,7 @@
 #ifndef SIGNAL_UTILITY_H
 #define SIGNAL_UTILITY_H
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 class Signal_Processor;
 

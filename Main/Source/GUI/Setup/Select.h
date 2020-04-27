@@ -4,7 +4,7 @@
 
 #include "Setup/Defines.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 class GUI_Setup_Gauge;
 class GUI_Setup_Label;

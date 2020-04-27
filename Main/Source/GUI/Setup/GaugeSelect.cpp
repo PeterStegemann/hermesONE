@@ -10,7 +10,7 @@
 #include "Main/Setup.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 bool GUI_Setup_GaugeSelect::DoSelect( uint8_t* Value, uint8_t LowerLimit, uint8_t UpperLimit,
 									  uint8_t StepWidth, GUI_Setup_Marker* Marker,

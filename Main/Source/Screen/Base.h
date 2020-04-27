@@ -3,7 +3,7 @@
 #ifndef SCREEN_BASE_H
 #define SCREEN_BASE_H
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 #include <string.h>
 

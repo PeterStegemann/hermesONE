@@ -3,7 +3,7 @@
 #ifndef SETUP_SOURCE_STORE_H
 #define SETUP_SOURCE_STORE_H
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 struct Setup_Source_Store
 {

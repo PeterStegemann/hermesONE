@@ -3,7 +3,7 @@
 #ifndef SETUP_SOURCE_PROXY_H
 #define SETUP_SOURCE_PROXY_H
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 struct Setup_Source_Proxy
 {

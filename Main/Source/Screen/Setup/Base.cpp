@@ -8,7 +8,7 @@
 #include "Setup/Defines.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 #include <string.h>
 

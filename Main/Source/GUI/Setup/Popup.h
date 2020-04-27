@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "AVR/Components/Types.h"
-#include "AVR/Components/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/Types.h"
+#include "AVR/Source/LCD/LCD_65K_RGB.h"
 
 class GUI_Setup_Popup
 {

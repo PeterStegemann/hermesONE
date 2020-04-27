@@ -8,7 +8,7 @@
 #include "Signal/Utility.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_Channel::Screen_Setup_Channel( uint8_t ChannelId)
 					: Screen_Setup_Base( 0b11011101110101, Text::Channel)

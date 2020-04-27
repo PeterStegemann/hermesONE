@@ -9,7 +9,7 @@
 #include "Setup/Utility.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 #include <string.h>
 

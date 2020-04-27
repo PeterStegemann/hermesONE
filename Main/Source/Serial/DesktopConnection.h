@@ -7,9 +7,9 @@
 #include "Setup/PPM.h"
 #include "Setup/Source/Tupel.h"
 
-#include "AVR/Components/String.h"
-#include "AVR/Components/Types.h"
-#include "AVR/Components/Serial/Serial_TypedConnection.h"
+#include "AVR/Source/String.h"
+#include "AVR/Source/Types.h"
+#include "AVR/Source/Serial/Serial_TypedConnection.h"
 
 template< uint8_t DeviceId>
 class Serial_DesktopConnection

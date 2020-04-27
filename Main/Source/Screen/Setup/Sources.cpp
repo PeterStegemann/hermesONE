@@ -13,7 +13,7 @@
 #include "Source/Trimmer.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 static const flash_char* getTitle( Signal_Source_Source::Type SourceType)
 {

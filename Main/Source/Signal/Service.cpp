@@ -6,7 +6,7 @@
 #include "Setup/PPM.h"
 #include "Signal/Utility.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 #include <avr/io.h>	
 #include <avr/interrupt.h>

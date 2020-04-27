@@ -8,9 +8,9 @@
 #include "Struct.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/EEPROM.h"
-#include "AVR/Components/Utility.h"
-#include "AVR/Components/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/EEPROM.h"
+#include "AVR/Source/Utility.h"
+#include "AVR/Source/LCD/LCD_65K_RGB.h"
 
 #include <avr/eeprom.h>
 #include <string.h>

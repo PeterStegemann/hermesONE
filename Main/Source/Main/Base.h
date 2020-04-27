@@ -13,9 +13,9 @@
 #include "Status/Service.h"
 #include "Status/Time.h"
 
-#include "AVR/Components/SPI.h"
+#include "AVR/Source/SPI.h"
 
-#include "AVR/Components/LCD/LCD_DOG_S102.h"
+#include "AVR/Source/LCD/LCD_DOG_S102.h"
 
 #define GLOBAL	MainInstance
 

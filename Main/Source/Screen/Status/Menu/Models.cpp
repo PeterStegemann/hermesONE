@@ -4,9 +4,9 @@
 
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
-#include "AVR/Components/Font/Font.h"
-#include "AVR/Components/LCD/LCD_DOG.h"
+#include "AVR/Source/Utility.h"
+#include "AVR/Source/Font/Font.h"
+#include "AVR/Source/LCD/LCD_DOG.h"
 
 #define MENU_EXIT		0
 #define MENU_START		1

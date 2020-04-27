@@ -3,7 +3,7 @@
 #ifndef STATUS_BATTERY_CONTROL_H
 #define STATUS_BATTERY_CONTROL_H
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 #include "Setup/Battery.h"
 
 class Status_Battery

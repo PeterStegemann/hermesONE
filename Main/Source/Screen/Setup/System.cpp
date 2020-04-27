@@ -12,7 +12,7 @@
 #include "System/PPM.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_System::Screen_Setup_System( void)
 				   : Screen_Setup_Base( 0b1010001100110101, Text::System)

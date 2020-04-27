@@ -7,7 +7,7 @@
 #include "Signal/Processor.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_Source_Mix::Screen_Setup_Source_Mix( uint8_t SignalSourceId)
 					   : Screen_Setup_Source_Base( SignalSourceId, 0b111111100101, Text::Mix)

@@ -5,7 +5,7 @@
 
 #include "PPM.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 #define SIGNAL_SERVICE_PPMS							2
 

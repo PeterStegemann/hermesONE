@@ -5,7 +5,7 @@
 #include "Main/Setup.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 int16_t GUI_Setup_SourceTupelGraph::getPoint( const Setup_Source_Tupel Point[], uint8_t PointId)
 {

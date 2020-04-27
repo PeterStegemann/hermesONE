@@ -4,7 +4,7 @@
 
 #include "GUI/Setup/Marker.h"
 
-#include "AVR/Components/Types.h"
+#include "AVR/Source/Types.h"
 
 class GUI_Setup_Gauge
 {

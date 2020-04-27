@@ -3,8 +3,8 @@
 #ifndef GUI_STATUS_LABEL_H
 #define GUI_STATUS_LABEL_H
 
-#include "AVR/Components/Types.h"
-#include "AVR/Components/LCD/LCD_DOG.h"
+#include "AVR/Source/Types.h"
+#include "AVR/Source/LCD/LCD_DOG.h"
 
 class GUI_Status_Label
 {

@@ -5,7 +5,7 @@
 #include "GUI/Setup/GaugeSelect.h"
 #include "GUI/Setup/Select.h"
 #include "Text/Text.h"
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 Screen_Setup_System_Display::Screen_Setup_System_Display( void)
 						   : Screen_Setup_Base( 0b1010110010100101, Text::Display)

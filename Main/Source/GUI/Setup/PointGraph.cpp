@@ -5,7 +5,7 @@
 #include "Main/Setup.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
+#include "AVR/Source/Utility.h"
 
 bool GUI_Setup_PointGraph::calculateGraph( const int16_t Point[], uint8_t Points,
 										   int16_t GraphPoint[], uint8_t* GraphPoints)
