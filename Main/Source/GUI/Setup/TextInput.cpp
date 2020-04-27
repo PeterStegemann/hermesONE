@@ -6,8 +6,8 @@
 #include "Main/Setup.h"
 #include "Text/Text.h"
 
-#include "AVR/Components/Utility.h"
-#include "AVR/Components/Font/Font.h"
+#include "AVR/Source/Utility.h"
+#include "AVR/Source/Font/Font.h"
 
 #include <ctype.h>
 #include <string.h>

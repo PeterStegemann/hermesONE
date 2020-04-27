@@ -4,7 +4,7 @@
 
 #include "Setup/Source/Tupel.h"
 
-#include "AVR/Components/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/LCD/LCD_65K_RGB.h"
 
 #define GUI_SETUP_GRAPH_POINTS		7
 
