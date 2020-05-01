@@ -4,11 +4,11 @@
 
 #include "Ports.h"
 
-#include "AVR/Components/Types.h"
-#include "AVR/Components/Utility.h"
-#include "AVR/Components/LCD/LCD_65K_RGB.h"
-#include "AVR/Components/LCD/LCD_SerialOledProtocol.h"
-#include "AVR/Components/Serial/Serial_Connection.h"
+#include "AVR/Source/Types.h"
+#include "AVR/Source/Utility.h"
+#include "AVR/Source/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/LCD/LCD_SerialOledProtocol.h"
+#include "AVR/Source/Serial/Serial_Connection.h"
 
 #define SERIAL_STRING_SIZE		5
 

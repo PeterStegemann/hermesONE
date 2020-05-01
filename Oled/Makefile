@@ -95,23 +95,23 @@ SRC =
 
 # List C++ source files here. (C dependencies are automatically generated.)
 CPPSRC = Source/Main.cpp \
-		 AVR/Components/Utility.cpp \
 		 Source/Serial/Serial_GraphicConnection.cpp \
-		 AVR/Components/Font/Font.cpp \
-		 AVR/Components/Font/Font_Type.cpp \
-		 AVR/Components/Font/Font_Large.cpp \
-		 AVR/Components/Font/Font_Medium.cpp \
-		 AVR/Components/Font/Font_Micro.cpp \
-		 AVR/Components/Font/Font_Mini.cpp \
-		 AVR/Components/Font/Font_Normal.cpp \
-		 AVR/Components/LCD/LCD.cpp \
-		 AVR/Components/LCD/LCD_65K_RGB.cpp \
-		 AVR/Components/LCD/LCD_65K_RGB_Window.cpp \
-		 AVR/Components/LCD/LCD_S6E63D6.cpp \
-		 AVR/Components/LCD/LCD_S6E63D6_Parallel.cpp
+		 AVR/Source/Utility.cpp \
+		 AVR/Source/Font/Font.cpp \
+		 AVR/Source/Font/Font_Type.cpp \
+		 AVR/Source/Font/Font_Large.cpp \
+		 AVR/Source/Font/Font_Medium.cpp \
+		 AVR/Source/Font/Font_Micro.cpp \
+		 AVR/Source/Font/Font_Mini.cpp \
+		 AVR/Source/Font/Font_Normal.cpp \
+		 AVR/Source/LCD/LCD.cpp \
+		 AVR/Source/LCD/LCD_65K_RGB.cpp \
+		 AVR/Source/LCD/LCD_65K_RGB_Window.cpp \
+		 AVR/Source/LCD/LCD_S6E63D6.cpp \
+		 AVR/Source/LCD/LCD_S6E63D6_Parallel.cpp
 
-#		 AVR/Components/SPI.cpp \
-		 AVR/Components/LCD/LCD_S6E63D6_SPI.cpp \
+#		 AVR/Source/SPI.cpp \
+		 AVR/Source/LCD/LCD_S6E63D6_SPI.cpp \
 
 # List Assembler source files here.
 #     Make them always end in a capital .S.  Files ending in a lowercase .s

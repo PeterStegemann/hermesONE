@@ -1,0 +1,3 @@
+[submodule "Oled/AVR"]
+	path = Oled/AVR
+	url = https://github.com/PeterStegemann/Atmel-AVR-CPP.git
