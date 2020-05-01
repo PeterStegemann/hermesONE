@@ -1,0 +1,37 @@
+Partlist
+
+Exported from Oled v1.0.brd at 9/12/13 19:06 
+
+EAGLE Version 5.10.0 Copyright (c) 1988-2010 CadSoft
+
+Part     Value          Package      Library                   Position (mm)         Orientation
+
+C1       22p            C0603        resistor                  (58.1025 28.575)      R0
+C2       22p            C0603        resistor                  (54.2925 28.575)      R180
+C3       100n           C0603        resistor                  (63.8175 38.4175)     R270
+C4       100n           C0603        resistor                  (46.355 38.735)       R90
+C5       100n           C0603        resistor                  (51.1175 29.21)       R90
+C7       100n           C0603        resistor                  (54.9275 47.498)      R90
+D1       3v3            SOT23        diode                     (5.3975 35.56)        R0
+D2       3v3            SOT23        diode                     (12.3825 45.085)      R90
+D3       3v3            SOT23        diode                     (12.3825 48.895)      R90
+D5       3v3            SOT23        diode                     (13.0175 9.525)       R0
+D6       2v7            SOT23        diode                     (16.8275 9.525)       R0
+D7       2v7            SOT23        diode                     (20.6375 9.525)       R0
+IC1      644P-AU        TQFP44       avr-6                     (54.9275 38.1)        R90
+IC2      3v3 Regulator  TO220H       pst-dimension-engineering (23.1775 26.67)       R270
+JP1      Display1       1X25         pinhead                   (34.6075 57.15)       R0
+JP2      Display2       1X25         pinhead                   (34.6075 3.81)        R0
+L1       10µH           SM-1206      inductor-neosid           (52.8955 50.165)      R0
+LD1      Status         DUOLED-C-5MM led                       (66.3575 48.5775)     R90
+M8       ISP            MICROMATCH-6 con-amp-micromatch        (6.6675 46.99)        MR270
+M13      Display        MICROMATCH-6 con-amp-micromatch        (6.6675 13.97)        MR270
+Q1       14.7456MHz     QS           special                   (56.1975 23.495)      R180
+R1       10k            R0603        resistor                  (13.0175 39.37)       R270
+R2       10k            R0603        resistor                  (9.2075 39.37)        R270
+R3       1k             R0603        resistor                  (5.3975 39.37)        R270
+R4       1k             R0603        resistor                  (13.0175 13.335)      R270
+R5       xk             R0603        resistor                  (66.3575 42.8625)     R270
+R6       1k             R0603        resistor                  (16.8275 13.335)      R90
+R7       1k             R0603        resistor                  (20.6375 13.335)      R90
+R8       xk             R0603        resistor                  (68.8975 42.8625)     R90
