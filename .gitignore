@@ -33,3 +33,12 @@ xcuserdata
 *.exe
 *.out
 *.app
+
+# AVR
+*.eep
+*.elf
+*.hex
+*.lss
+*.map
+*.sym
+
