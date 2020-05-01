@@ -1,0 +1,17 @@
+Partlist
+
+6	2	C1       22p              C-EUC0805        C0805         rcl
+15	5	C3       100n             C-EUC0805        C0805         rcl
+3	1	C7       1u               C-EUC0805        C0805         rcl
+9	3	R1       10k              R-EU_R0805       R0805         rcl
+3	1	R4       2.4k             R-EU_R0805       R0805         rcl
+3	1	R5       4.7k             R-EU_R0805       R0805         rcl
+3	1	L1       10µH             SM-1206          SM-1206       inductor-neosid
+3	1	IC1      ATMEGA2561V-16AU ATMEGA2561V-16AU TQFP64        atmel-2005
+3	1	IC2      FM24C512         24C64SM          SO-08M        microchip
+3	1	IC3      CP2102           CP2102           MLP28         silabs
+15	5	M1       Analog A         MICROMATCH-4     MICROMATCH-4  con-amp-micromatch
+12	4	M8       ISP              MICROMATCH-6     MICROMATCH-6  con-amp-micromatch
+3	1	M12      RF               MICROMATCH-8     MICROMATCH-8  con-amp-micromatch
+9	3	M5       Digital HI       MICROMATCH-10    MICROMATCH-10 con-amp-micromatch
+3	1	Q1       14.7456MHz       XTAL/S           QS            special

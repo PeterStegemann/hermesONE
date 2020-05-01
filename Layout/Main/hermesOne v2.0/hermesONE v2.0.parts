@@ -1,0 +1,78 @@
+Partlist
+
+Exported from hermesONE v2.0.brd at 02.07.19 23:37 
+
+EAGLE Version 9.4.2 Copyright (c) 1988-2019 Autodesk, Inc.
+
+Assembly variant: 
+
+Part     Value             Package     Library                       Position (mil)        Orientation
+
+C1       22p               C0603       resistor                      (2035 690)            R45
+C2       22p               C0603       resistor                      (1935 590)            R225
+C3       100n              C0603       resistor                      (2400 450)            R90
+C4       100n              C0603       resistor                      (2500 450)            R90
+C5       100n              C0603       resistor                      (1110 1290)           R45
+C6       100n              C0603       resistor                      (1390 1570)           R225
+C7       100n              C0603       resistor                      (1970 1440)           R135
+C8       100n              C0603       resistor                      (1830 520)            R315
+C9       100n              C0603       resistor                      (1275 855)            R315
+C10      100n              C0603       resistor                      (3050 275)            R180
+C11      4.7µ              PANASONIC_B resistor                      (2425 275)            R180
+C12      100n              C0603       resistor                      (320 2625)            MR180
+C13      100n              C0603       resistor                      (80 2775)             MR0
+C14      100n              C0603       resistor                      (820 2625)            MR180
+C15      100n              C0603       resistor                      (580 2775)            MR0
+C16      100n              C0603       resistor                      (1320 2625)           MR180
+C17      100n              C0603       resistor                      (1080 2775)           MR0
+C18      100n              C0603       resistor                      (1820 2625)           MR180
+C19      100n              C0603       resistor                      (1580 2775)           MR0
+C20      100n              C0603       resistor                      (1720 2225)           MR180
+C21      100n              C0603       resistor                      (1610 2440)           MR180
+C22      100n              C0603       resistor                      (1720 1825)           MR180
+C23      100n              C0603       resistor                      (1610 2040)           MR180
+C24      100n              C0603       resistor                      (2025 1780)           R180
+C25      100n              C0603       resistor                      (1980 1975)           MR0
+G1       CR 1220           KZH12THM    kzh12_lithium_batterie_holder (3150 900)            R135
+IC1      ATMEGA2560-16AU   TQFP100     atmel-2005                    (1600 1150)           R45
+IC3      DS1307            SOIC-8      dallas                        (2850 1500)           R180
+IC4      FM24W256          SO-08M      microchip                     (2850 1800)           R90
+IC5      FM24W256          SO-08M      microchip                     (3250 1800)           R90
+L1       10µ               SM-1206     inductor-neosid               (1050 1180)           R0
+M1       Analog A          MT-4        pst-con-amp-micromatch        (200 2725)            R0
+M2       Analog B          MT-4        pst-con-amp-micromatch        (700 2725)            R0
+M3       Analog C          MT-4        pst-con-amp-micromatch        (1200 2725)           R0
+M4       Analog D          MT-4        pst-con-amp-micromatch        (1700 2725)           R0
+M5       Analog E          MT-4        pst-con-amp-micromatch        (1600 2325)           R0
+M6       Analog F          MT-4        pst-con-amp-micromatch        (1600 1925)           R0
+M7       Analog G          MT-4        pst-con-amp-micromatch        (2100 1925)           R0
+M8       Digital HI        MT-10       pst-con-amp-micromatch        (2350 2725)           R0
+M9       Digital JK        MT-10       pst-con-amp-micromatch        (3150 2725)           R0
+M10      Digital LM        MT-10       pst-con-amp-micromatch        (2350 2325)           R0
+M11      Digital NO        MT-10       pst-con-amp-micromatch        (3150 2325)           R0
+M20      Power             MT-6        pst-con-amp-micromatch        (250 175)             R0
+M21      ISP               MT-6        pst-con-amp-micromatch        (850 575)             R0
+M23      USB               MT-4        pst-con-amp-micromatch        (3300 175)            R0
+M30      RF 1              MT-6        pst-con-amp-micromatch        (250 2325)            R0
+M31      RF 2              MT-6        pst-con-amp-micromatch        (250 1925)            R0
+M32      Extern            MT-10       pst-con-amp-micromatch        (350 1525)            R0
+M40      Display Head      MT-10       pst-con-amp-micromatch        (950 1925)            R0
+M41      Display Secondary MT-10       pst-con-amp-micromatch        (950 2325)            R0
+M42      Display Main      MT-6        pst-con-amp-micromatch        (250 975)             R0
+M43      Reserve Serial    MT-6        pst-con-amp-micromatch        (250 575)             R0
+M50      Light & Sound     MT-6        pst-con-amp-micromatch        (2050 175)            R0
+M51      Menu              MT-4        pst-con-amp-micromatch        (1500 175)            R0
+M52      Keyboard          MT-8        pst-con-amp-micromatch        (900 175)             R0
+Q1       14.7456MHz        QS          special                       (2105 520)            R225
+Q2       32768Hz           TC26H       crystal                       (3100 1475)           R270
+R1       10k               R0603       resistor                      (1765 615)            R45
+R2       10k               R0603       resistor                      (2550 1525)           R0
+R3       10k               R0603       resistor                      (2550 1625)           R0
+R4       2.2k              R0603       resistor                      (975 1375)            R270
+R5       4.7k              R0603       resistor                      (825 1425)            R180
+R6       4.7k              R0603       resistor                      (3050 375)            R180
+R7       10k               R0603       resistor                      (3050 475)            R180
+R8       1k                R0603       resistor                      (2500 650)            R135
+R9       1k                R0603       resistor                      (2560 710)            R135
+SJ1      ISP Power         SJ          jumper                        (925 395)             R270
+U1       FT232R            SSOP28DB    ftdichip-5                    (2750 400)            R270
