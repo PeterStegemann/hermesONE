@@ -1,0 +1,12 @@
+Partlist
+
+Part     Value          Package
+
+3        1µ             C-EUC0805
+1        EADOGS102      EADOGS102
+1        4050D          SO16
+1        MICROMATCH-10  MICROMATCH-10
+1        28/36          C0805
+1        0              C0805
+1        BCR135         SOT23
+I
