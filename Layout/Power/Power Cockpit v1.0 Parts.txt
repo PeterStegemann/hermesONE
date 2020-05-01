@@ -1,0 +1,25 @@
+Partlist
+
+Exported from Power Cockpit v1.0.brd at 9/12/13 19:14 
+
+EAGLE Version 5.10.0 Copyright (c) 1988-2010 CadSoft
+
+Part           Value          Package      Library                   Position (mm)         Orientation
+
+BATTERY        Battery        1X02         pinhead                   (21.59 5.08)          R270
+CHARGE         Charge         MAB8SH       pst-con-hirschmann        (31.75 10.16)         R90
+IC1            5v Regulator   TO220H       pst-dimension-engineering (6.35 14.605)         MR270
+IC3            3v3 Regulator  TO220H       pst-dimension-engineering (6.35 31.415)         MR270
+JP1            Power          2X03         pinhead                   (22.225 13.335)       R90
+JP2            Buzzer         2X01         pst-pinhead               (3.81 15.875)         R0
+JP3            Light Sensor   2X01         pst-pinhead               (10.16 15.875)        R0
+LD1                           DUOLED-C-5MM led                       (5.715 10.16)         MR180
+M1             Power          MICROMATCH-6 con-amp-micromatch        (22.225 23.495)       R90
+M2             USB            MICROMATCH-4 con-amp-micromatch        (22.225 34.925)       R90
+M10            Light & Sound  MICROMATCH-6 con-amp-micromatch        (5.715 2.54)          MR0
+POWER_SWITCH_1 Power Switch 1 1X03         pinhead                   (16.51 6.35)          R270
+POWER_SWITCH_2 Power Switch 2 1X03         pinhead                   (5.715 37.465)        MR180
+R1             330            R0603        resistor                  (7.62 6.985)          R90
+R2             330            R0603        resistor                  (3.81 6.985)          R270
+S1                            255SB        switch                    (5.715 24.765)        MR90
+X1             USB            PN61729-S    con-berg                  (38.735 30.48)        R90
