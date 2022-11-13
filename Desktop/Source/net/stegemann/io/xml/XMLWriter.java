@@ -59,7 +59,7 @@ import org.w3c.dom.Node;
 
 public class XMLWriter
 {
-	public void WriteToFile( Configuration UseConfiguration, String FileName) throws WriteException
+	public void writeToFile( Configuration UseConfiguration, String FileName) throws WriteException
 	{
 		DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder Builder;
@@ -580,7 +580,7 @@ public class XMLWriter
 	{
 		appendNode( ConfigurationDocument, ConfigurationNode, Names.TYPE_NAME, UseType.getName());
 		appendNode( ConfigurationDocument, ConfigurationNode, Names.TYPE_STATE,
-			Utility.ConvertTypeState( UseType.getState()));
+			Utility.convertTypeState( UseType.getState()));
 	}
 
 	private void exportModels( Models UseModels, Document ConfigurationDocument,
@@ -616,7 +616,7 @@ public class XMLWriter
 	{
 		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_NAME, UseModel.getName());
 		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATE,
-			Utility.ConvertModelState( UseModel.getState()));
+			Utility.convertModelState( UseModel.getState()));
 		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_RF_MODE,
 			UseModel.getRFMode());
 		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_TYPE, UseModel.getTypeId());

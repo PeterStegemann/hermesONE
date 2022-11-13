@@ -571,7 +571,7 @@ public class SerialConfigurationReader
 
 				case ModelState :
 				{
-					model.setState( Utility.ConvertModelState( TextContent));
+					model.setState( Utility.convertModelState( TextContent));
 				}
 				break;
 
@@ -890,7 +890,7 @@ public class SerialConfigurationReader
 
 				case TypeState :
 				{
-					type.setState( Utility.ConvertTypeState( TextContent));
+					type.setState( Utility.convertTypeState( TextContent));
 				}
 				break;
 

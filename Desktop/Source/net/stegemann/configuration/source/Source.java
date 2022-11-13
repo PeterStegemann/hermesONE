@@ -10,7 +10,7 @@ import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
 public abstract class Source extends ChangeObservable< Source>
-						  		  implements ChangeListener< Text>, Comparable< Source>, Named
+						  implements ChangeListener< Text>, Comparable< Source>, Named
 {
 	public static final int SOURCE_FIXED = 0xfffe;
 	public static final int SOURCE_NONE = 0xffff;
@@ -40,15 +40,15 @@ public abstract class Source extends ChangeObservable< Source>
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 
-		Buffer.append( "Source = {\n");
-		Buffer.append(  " Id: " + id + "\n");
-		Buffer.append(  " Name: " + name + "\n");
-		Buffer.append(  " Model Id: " + model + "\n");
-		Buffer.append( "}\n");
+		builder.append( "Source = {\n");
+		builder.append(  " Id: " + id + "\n");
+		builder.append(  " Name: " + name + "\n");
+		builder.append(  " Model Id: " + model + "\n");
+		builder.append( "}\n");
 
-		return Buffer.toString();
+		return builder.toString();
 	}
 
 	@Override

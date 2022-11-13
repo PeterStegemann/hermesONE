@@ -59,7 +59,7 @@ public class XMLReader
 		Models
 	}
 
-	public void ReadFromFile( Configuration UseConfiguration, String FileName, Mode UseMode)
+	public void readFromFile( Configuration UseConfiguration, String FileName, Mode UseMode)
 		throws ReadException
 	{
 		DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
@@ -462,7 +462,7 @@ public class XMLReader
 			}
 			else if( Names.MODEL_STATE.compareToIgnoreCase( NodeName) == 0)
 			{
-				UseModel.setState( Utility.ConvertModelState( TextContent));
+				UseModel.setState( Utility.convertModelState( TextContent));
 			}
 			else if( Names.MODEL_RF_MODE.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -727,7 +727,7 @@ public class XMLReader
 			}
 			else if( Names.TYPE_STATE.compareToIgnoreCase( NodeName) == 0)
 			{
-				UseType.setState( Utility.ConvertTypeState( TextContent));
+				UseType.setState( Utility.convertTypeState( TextContent));
 			}
 			else
 			{

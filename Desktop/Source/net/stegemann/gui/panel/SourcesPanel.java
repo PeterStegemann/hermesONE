@@ -3,6 +3,7 @@ package net.stegemann.gui.panel;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -39,6 +40,7 @@ public class SourcesPanel extends JPanel implements ActionListener, ListSelectio
 		MODEL
 	}
 
+	@Serial
 	private static final long serialVersionUID = 2773055623640369468L;
 
 	private final Controller controller;
@@ -90,96 +92,119 @@ public class SourcesPanel extends JPanel implements ActionListener, ListSelectio
 //		Layout.setAutoCreateGaps( true);
 		Layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup( Layout.createSequentialGroup()
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( SourcesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 150,
-							   Integer.MAX_VALUE)
-				.addGroup( Layout.createSequentialGroup()
-					.addComponent( addButton)
-					.addComponent( cloneButton)
-					.addComponent( removeButton)
+		Layout.setHorizontalGroup
+		(
+			Layout.createSequentialGroup()
+				.addGroup
+				(
+					Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+						.addComponent
+						(
+							SourcesScrollPane,
+							javax.swing.GroupLayout.PREFERRED_SIZE,
+							150,
+							Integer.MAX_VALUE
+						)
+						.addGroup
+						(
+							Layout.createSequentialGroup()
+								.addComponent( addButton)
+								.addComponent( cloneButton)
+								.addComponent( removeButton)
+						)
 				)
-			)
-			.addComponent( sourcePanel)
+				.addComponent( sourcePanel)
 		);
 
-		Layout.setVerticalGroup( Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-			.addGroup( Layout.createSequentialGroup()
-				.addComponent( SourcesScrollPane)
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-					.addComponent( addButton)
-					.addComponent( cloneButton)
-					.addComponent( removeButton)
+		Layout.setVerticalGroup
+		(
+			Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+				.addGroup
+				(
+					Layout.createSequentialGroup()
+						.addComponent( SourcesScrollPane)
+						.addGroup
+						(
+							Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+								.addComponent( addButton)
+								.addComponent( cloneButton)
+								.addComponent( removeButton)
+						)
 				)
-			)
-			.addComponent( sourcePanel)
+				.addComponent( sourcePanel)
 		);
 	}
 
 	@Override
-	public void valueChanged( ListSelectionEvent e)
+	public void valueChanged( ListSelectionEvent event)
 	{
-		if( e.getValueIsAdjusting() == false)
+		if( event.getValueIsAdjusting() == false)
 		{
 			sourcePanel.set( model, sourcesView.getSourceFromIndex( sourcesList.getSelectedIndex()));
 		}
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent actionEvent)
 	{
-		int SelectedSourceIndex = sourcesList.getSelectedIndex();
+		int selectedSourceIndex = sourcesList.getSelectedIndex();
 
-		if( e.getSource() == addButton)
+		if( actionEvent.getSource() == addButton)
 		{
-			Object[] Options = SourceUtility.getSelectableTypeNames();
+			Object[] options = SourceUtility.getSelectableTypeNames();
 
-			String TypeName =
-				( String) JOptionPane.showInputDialog(
-					this, null, "Neuen Mischer Typ auswaehlen...", JOptionPane.PLAIN_MESSAGE,
-					null, Options, Options[ 0]);
+			String typeName = ( String) JOptionPane.showInputDialog
+			(
+				this,
+				null,
+				"Neuen Mischer Typ auswählen...",
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				options,
+				options[ 0]
+			);
 
-			Source NewSource =
-				controller.addSource( SourceUtility.createSourceForTypeName( TypeName), modelId);
+			Source newSource =
+				controller.addSource( SourceUtility.createSourceForTypeName( typeName), modelId);
 
-			if( NewSource == null)
+			if( newSource == null)
 			{
 				return;
 			}
 
 			// Select new source.
 			sourcesView.rescan();
-			sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( NewSource.getId()));
+			sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( newSource.getId()));
 		}
-		else if( e.getSource() == cloneButton)
+		else if( actionEvent.getSource() == cloneButton)
 		{
-			Source NewSource =
-				controller.cloneSource( sourcesView.getFullSourceIndex( SelectedSourceIndex));
+			Source newSource =
+				controller.cloneSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
 
-			if( NewSource == null)
+			if( newSource == null)
 			{
 				return;
 			}
 
 			// Select new source.
 			sourcesView.rescan();
-			sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( NewSource.getId()));
+			sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( newSource.getId()));
 		}
-		else if( e.getSource() == removeButton)
+		else if( actionEvent.getSource() == removeButton)
 		{
-			controller.removeSource( sourcesView.getFullSourceIndex( SelectedSourceIndex));
+			controller.removeSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
 
-			if( SelectedSourceIndex > 0)
+			if( selectedSourceIndex > 0)
 			{
-				sourcesList.setSelectedIndex( SelectedSourceIndex - 1);
+				sourcesList.setSelectedIndex( selectedSourceIndex - 1);
 			}
 		}
 
-		if( SelectedSourceIndex == sourcesList.getSelectedIndex())
+		if( selectedSourceIndex == sourcesList.getSelectedIndex())
 		{
 			// In this case, valueChanged wasn't triggered, so we set the panel here.
 			sourcesView.rescan();
-			sourcePanel.set( model, sourcesView.getSourceFromIndex( SelectedSourceIndex));
+			sourcePanel.set( model, sourcesView.getSourceFromIndex( selectedSourceIndex));
 		}
 	}
 
@@ -187,36 +212,50 @@ public class SourcesPanel extends JPanel implements ActionListener, ListSelectio
 	{
 		this.model = model;
 
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
 		switch( panelType)
 		{
-			case GLOBAL :
+			case GLOBAL ->
 			{
 				modelId = Model.Global;
-				sourcesView = new SourcesView( UseSources, PickGlobals.Yes, null, null, HasEmpty.No,
-														 HasFixed.No, HasProxies.No);
+				sourcesView = sourcesView( sources, PickGlobals.Yes, null, null);
 			}
-			break;
 
-			case TYPE :
+			case TYPE ->
 			{
 				modelId = model.getTypeId();
-				sourcesView = new SourcesView( UseSources, PickGlobals.No, modelId, null, HasEmpty.No,
-														 HasFixed.No, HasProxies.No);
+				sourcesView = sourcesView( sources, PickGlobals.No, modelId, null);
 			}
-			break;
 
-			case MODEL :
+			case MODEL ->
 			{
 				modelId = model.getId();
-				sourcesView = new SourcesView( UseSources, PickGlobals.No, null, modelId, HasEmpty.No,
-														 HasFixed.No, HasProxies.No);
+				sourcesView = sourcesView( sources, PickGlobals.No, null, modelId);
 			}
-			break;
 		}
 
 		sourcesList.setModel( new SourcesComboBoxModel( sourcesView));
 		sourcePanel.set( model, sourcesView.getSourceFromIndex( sourcesList.getSelectedIndex()));
+	}
+
+	private SourcesView sourcesView
+	(
+		Sources sources,
+		PickGlobals pickGlobals,
+		Number typeId,
+		Number modelId
+	)
+	{
+		return new SourcesView
+		(
+			sources,
+			pickGlobals,
+			typeId,
+			modelId,
+			HasEmpty.No,
+			HasFixed.No,
+			HasProxies.No
+		);
 	}
 }

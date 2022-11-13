@@ -7,97 +7,96 @@ import net.stegemann.configuration.Type.State;
 
 public class Utility
 {
-	public static Model.State ConvertModelState( String StateString)
+	public static Model.State convertModelState( String statestring)
 	{
-		return ConvertModelState( Integer.parseInt( StateString));
+		return convertModelState( Integer.parseInt( statestring));
 	}
 
 	/** Convert the model state number to the model state enum.
 	 * 
-	 * @param StateValue The state as numeric value.
+	 * @param stateValue The state as numeric value.
 	 * 
 	 * @return The state as enum.
 	 */
-	private static Model.State ConvertModelState( int StateValue)
+	private static Model.State convertModelState( int stateValue)
 	{
 		try
 		{
-			return Model.State.values()[ StateValue];
+			return Model.State.values()[ stateValue];
 		}
-		catch( ArrayIndexOutOfBoundsException Reason)
+		catch( ArrayIndexOutOfBoundsException reason)
 		{
 			// Map bad values to empty.
 			return Model.State.EMPTY;
 		}
 	}
 
-	public static int ConvertModelState( Model.State UseState)
+	public static int convertModelState( Model.State state)
 	{
-		return UseState.ordinal();
+		return state.ordinal();
 	}
 
-	public static Type.State ConvertTypeState( String StateString)
+	public static Type.State convertTypeState( String stateString)
 	{
-		return ConvertTypeState( Integer.parseInt( StateString));
+		return convertTypeState( Integer.parseInt( stateString));
 	}
 
 	/** Convert the type state number to the type state enum.
 	 * 
-	 * @param StateValue The state as numeric value.
+	 * @param stateValue The state as numeric value.
 	 * 
 	 * @return The state as enum.
 	 */
-	private static Type.State ConvertTypeState( int StateValue)
+	private static Type.State convertTypeState( int stateValue)
 	{	
 		try
 		{
-			return Type.State.values()[ StateValue];
+			return Type.State.values()[ stateValue];
 		}
-		catch( ArrayIndexOutOfBoundsException Reason)
+		catch( ArrayIndexOutOfBoundsException reason)
 		{
 			// Map bad values to empty.
 			return Type.State.EMPTY;
 		}
 	}
 
-	public static int ConvertTypeState( State UseState)
+	public static int convertTypeState( State state)
 	{
-		return UseState.ordinal();
+		return state.ordinal();
 	}
 
-	public static RFMode ConvertModelRFMode( String RFModeString)
+	public static RFMode convertModelRFMode( String rfModeString)
 	{
-		return ConvertModelRFMode( Integer.parseInt( RFModeString));
+		return convertModelRFMode( Integer.parseInt( rfModeString));
 	}
 
 	/** Convert the model rf mode number to the model rf mode enum.
 	 * 
-	 * @param RFModeValue The rf mode as numeric value.
+	 * @param rfModeValue The rf mode as numeric value.
 	 * 
 	 * @return The rf mode as enum.
 	 */
-	private static Model.RFMode ConvertModelRFMode( int RFModeValue)
+	private static Model.RFMode convertModelRFMode( int rfModeValue)
 	{
 		try
 		{
-			return Model.RFMode.values()[ RFModeValue];
+			return Model.RFMode.values()[ rfModeValue];
 		}
-		catch( ArrayIndexOutOfBoundsException Reason)
+		catch( ArrayIndexOutOfBoundsException reason)
 		{
 			// Map bad values to none.
 			return Model.RFMode.NONE;
 		}
 	}
 
-	public static int ConvertModelRFMode( RFMode UseRFMode)
+	public static int convertModelRFMode( RFMode rfMode)
 	{
-		return UseRFMode.ordinal();
+		return rfMode.ordinal();
 	}
-
 /*
-	public static Source.Type ConvertSourceType( String TypeString)
+	public static Source.Type convertSourceType( String typeString)
 	{
-		return ConvertSourceType( Integer.parseInt( TypeString));
+		return convertSourceType( Integer.parseInt( typeString));
 	}
 */
 	/** Convert the source type number to the source type enum.
@@ -106,14 +105,14 @@ public class Utility
 	 * 
 	 * @return The type as enum.
 	 */
-/*	private static Source.Type ConvertSourceType( int TypeValue)
+/*	private static Source.Type convertSourceType( int typeValue)
 	{
-		return Source.Type.values()[ TypeValue];
+		return Source.Type.values()[ typeValue];
 	}
 
-	public static int ConvertSourceType( Source.Type UseType)
+	public static int convertSourceType( Source.Type type)
 	{
-		return UseType.ordinal();
+		return type.ordinal();
 	}
 */
 }

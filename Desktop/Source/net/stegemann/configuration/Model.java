@@ -44,12 +44,12 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 	public static final int MODEL_NONE		= 0xff;
 	public static final int MODEL_GLOBAL	= MODEL_NONE - 1;
 	public static final int TYPE_START		= 100;
-	public static final int TYPE_END			= MODEL_GLOBAL - 1;
+	public static final int TYPE_END		= MODEL_GLOBAL - 1;
 	public static final int MODEL_START		= 0;
 	public static final int MODEL_END		= TYPE_START - 1;
 
 	public static final int CHANNELS	= 9;
-	public static final int PROXIES	= 25;
+	public static final int PROXIES		= 25;
 
 	public final static Number Global;
 
@@ -59,8 +59,8 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 	private final Number rfMode;
 	private final Number typeId;
 	private final Channels channels;
-	private final List< SourceId> statusSourceIds = new ArrayList< SourceId>();
-	private final List< SourceId> statusTimeIds = new ArrayList< SourceId>();
+	private final List< SourceId> statusSourceIds = new ArrayList<>();
+	private final List< SourceId> statusTimeIds = new ArrayList<>();
 	private final ProxyReferences proxyReferences;
 
 	static
@@ -140,33 +140,34 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 
-		Buffer.append( "Model = {\n");
-		Buffer.append( " Id: " + id + "\n");
-		Buffer.append( " Name: " + name + "\n");
-		Buffer.append( " State: " + state + "\n");
-		Buffer.append( " RFMode: " + rfMode + "\n");
-		Buffer.append( " Type Id: " + typeId + "\n");
-		Buffer.append( channels);
-		Buffer.append( " Status Source Ids = {\n");
+		builder.append( "Model = {\n");
+		builder.append( " Id: " + id + "\n");
+		builder.append( " Name: " + name + "\n");
+		builder.append( " State: " + state + "\n");
+		builder.append( " RFMode: " + rfMode + "\n");
+		builder.append( " Type Id: " + typeId + "\n");
+		builder.append( channels);
+		builder.append( " Status Source Ids = {\n");
 		for( SourceId StatusSourceId: statusSourceIds)
 		{
-			Buffer.append( "  Status Source Id: " + StatusSourceId + "\n");
+			builder.append( "  Status Source Id: " + StatusSourceId + "\n");
 		}
-		Buffer.append( "}\n");
-		Buffer.append( " Status Time Ids = {\n");
+		builder.append( "}\n");
+		builder.append( " Status Time Ids = {\n");
 		for( SourceId StatusTimeId: statusTimeIds)
 		{
-			Buffer.append( "  Status Time Id: " + StatusTimeId + "\n");
+			builder.append( "  Status Time Id: " + StatusTimeId + "\n");
 		}
-		Buffer.append( "}\n");
-		Buffer.append( proxyReferences);
-		Buffer.append( "}\n");
+		builder.append( "}\n");
+		builder.append( proxyReferences);
+		builder.append( "}\n");
 
-		return Buffer.toString();
+		return builder.toString();
 	}
 
+	@SuppressWarnings( "MethodDoesntCallSuperMethod" )
 	@Override
 	public Model clone()
 	{

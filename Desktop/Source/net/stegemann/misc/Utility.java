@@ -4,50 +4,47 @@ public class Utility
 {
 	static public String formatTime( int time)
 	{
-		int Seconds = time % 60;
-		int Minutes = time / 60;
-		int Hours = Minutes / 60;
-		Minutes = Minutes % 60;
+		int seconds = time % 60;
+		int minutes = time / 60;
+		int hours = minutes / 60;
+		minutes = minutes % 60;
 
-		String Result;
+		String result;
 
-		if( Hours > 0)
+		if( hours > 0)
 		{
-			Result = String.format( "%d:%02d:%02d", Integer.valueOf( Hours),
-													Integer.valueOf( Minutes),
-													Integer.valueOf(Seconds));
+			result = String.format( "%d:%02d:%02d", hours, minutes, seconds);
 		}
-		else if( Minutes > 0)
+		else if( minutes > 0)
 		{
-			Result = String.format( "%d:%02d", Integer.valueOf( Minutes),
-											   Integer.valueOf( Seconds));
+			result = String.format( "%d:%02d", minutes, seconds);
 		}
 		else
 		{
-			Result = String.format( "%d", Integer.valueOf( Seconds));
+			result = String.format( "%d", seconds);
 		}
 
-		return Result;
+		return result;
 	}
 
 	static public int parseTime( String time)
 	{
-		String[] ValueArray = time.split( ":");
+		String[] valueArray = time.split( ":");
 
-		if( ValueArray.length == 0)
+		if( valueArray.length == 0)
 		{
-			throw new NumberFormatException( "No parseable number.");
+			throw new NumberFormatException( "No parse able number.");
 		}
 
-		int Seconds = 0;
+		int seconds = 0;
 
-		for( String Part: ValueArray)
+		for( String part: valueArray)
 		{
-			Seconds *= 60;
-			Seconds += Integer.parseInt( Part);
+			seconds *= 60;
+			seconds += Integer.parseInt( part);
 		}
 
-		return Seconds;
+		return seconds;
 	}
 
 	static public String formatMilliSeconds( int milliSeconds)
@@ -64,19 +61,19 @@ public class Utility
 
 	static public int parseMilliSeconds( String milliSeconds)
 	{
-		String[] ValueArray = milliSeconds.split( "ms");
+		String[] valueArray = milliSeconds.split( "ms");
 
-		if( ValueArray.length == 1)
+		if( valueArray.length == 1)
 		{
-			ValueArray = ValueArray[ 0].split( "ms");
+			valueArray = valueArray[ 0].split( "ms");
 		}
 
-		if( ValueArray.length == 0)
+		if( valueArray.length == 0)
 		{
-			throw new NumberFormatException( "No parseable number.");
+			throw new NumberFormatException( "No parse able number.");
 		}
 
-		return ( int)( Float.parseFloat( ValueArray[ 0]) * 10);
+		return ( int)( Float.parseFloat( valueArray[ 0]) * 10);
 	}
 
 	static public String formatVoltage( int voltage)
@@ -86,18 +83,18 @@ public class Utility
 
 	static public int parseVoltage( String voltage)
 	{
-		String[] ValueArray = voltage.split( "V");
+		String[] valueArray = voltage.split( "V");
 
-		if( ValueArray.length == 1)
+		if( valueArray.length == 1)
 		{
-			ValueArray = ValueArray[ 0].split( "v");
+			valueArray = valueArray[ 0].split( "v");
 		}
 
-		if( ValueArray.length == 0)
+		if( valueArray.length == 0)
 		{
-			throw new NumberFormatException( "No parseable number.");
+			throw new NumberFormatException( "No parse able number.");
 		}
 
-		return ( int)( Float.parseFloat( ValueArray[ 0]) * 10);
+		return ( int)( Float.parseFloat( valueArray[ 0]) * 10);
 	}
 }

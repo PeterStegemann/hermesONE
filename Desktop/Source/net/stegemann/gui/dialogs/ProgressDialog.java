@@ -2,6 +2,7 @@ package net.stegemann.gui.dialogs;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.io.Serial;
 
 import javax.swing.GroupLayout;
 import javax.swing.JDialog;
@@ -17,14 +18,17 @@ import net.stegemann.misc.ChangeListener;
 
 public class ProgressDialog 
 	extends JDialog
-	implements ChangeListener<ConfigurationProgress>
+	implements ChangeListener< ConfigurationProgress>
 {
+	@Serial
 	private static final long serialVersionUID = 108509389789556744L;
 
-	private final JLabel typesLabel = new JLabel( "0");
-	private final JLabel modelsLabel = new JLabel( "0");
-	private final JLabel sourcesLabel = new JLabel( "0");
+	private final JLabel typesValue = new JLabel( "0");
+	private final JLabel modelsValue = new JLabel( "0");
+	private final JLabel sourcesValue = new JLabel( "0");
 
+	// This flag is set on close and is respected by open, just for the case that close is called
+	// before open. In that case, open won't do anything.
 	private boolean gone = false;
 
 	public ProgressDialog( JFrame parent, String text)
@@ -34,68 +38,91 @@ public class ProgressDialog
 		setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE);
 		setResizable( false);
 
-		JLabel TextLabel = new JLabel( text);
+		JLabel textLabel = new JLabel( text);
 
-		JProgressBar ProgressBar = new JProgressBar();
-		ProgressBar.setIndeterminate( true);
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setIndeterminate( true);
 
-		JSeparator ValueSeparator = new JSeparator( SwingConstants.HORIZONTAL);
+		JSeparator valueSeparator = new JSeparator( SwingConstants.HORIZONTAL);
 
-		JLabel TypesLabel = new JLabel( "Types");
-		JLabel ModelsLabel = new JLabel( "Models");
-		JLabel SourcesLabel = new JLabel( "Sources");
+		JLabel typesLabel = new JLabel( "Types");
+		JLabel modelsLabel = new JLabel( "Models");
+		JLabel sourcesLabel = new JLabel( "Sources");
 
 		// Layout elements.
-		GroupLayout Layout = new GroupLayout( getContentPane());
-		setLayout( Layout);
+		GroupLayout layout = new GroupLayout( getContentPane());
+		setLayout( layout);
 
 //		Layout.setAutoCreateGaps( true);
-		Layout.setAutoCreateContainerGaps( true);
+		layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-			.addComponent( TextLabel)
-			.addComponent( ProgressBar)
-			.addComponent( ValueSeparator)
-			.addGroup( Layout.createSequentialGroup()
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-					.addComponent( TypesLabel)
-					.addComponent( typesLabel)
+		layout.setHorizontalGroup
+		(
+			layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+				.addComponent( textLabel)
+				.addComponent( progressBar)
+				.addComponent( valueSeparator)
+				.addGroup
+				(
+					layout.createSequentialGroup()
+						.addGroup
+						(
+							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+								.addComponent( typesLabel)
+								.addComponent( typesValue)
+						)
+						.addPreferredGap( ComponentPlacement.UNRELATED)
+						.addGroup
+						(
+							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+								.addComponent( modelsLabel)
+								.addComponent( modelsValue)
+						)
+						.addPreferredGap( ComponentPlacement.UNRELATED)
+						.addGroup
+						(
+							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+								.addComponent( sourcesLabel)
+								.addComponent( sourcesValue)
+						)
 				)
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-					.addComponent( ModelsLabel)
-					.addComponent( modelsLabel)
-				)
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-					.addComponent( SourcesLabel)
-					.addComponent( sourcesLabel)
-				)
-			)
 		);
 
-		Layout.setVerticalGroup( Layout.createSequentialGroup()
-			.addComponent( TextLabel)
-			.addComponent( ProgressBar)
-			.addComponent( ValueSeparator)
-			.addGroup( Layout.createSequentialGroup()
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-					.addComponent( TypesLabel)
-					.addComponent( ModelsLabel)
-					.addComponent( SourcesLabel)
+		layout.setVerticalGroup
+		(
+			layout.createSequentialGroup()
+				.addComponent( textLabel)
+				.addComponent( progressBar)
+				.addComponent( valueSeparator)
+				.addGroup
+				(
+					layout.createSequentialGroup()
+						.addGroup
+						(
+							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+								.addComponent( typesLabel)
+								.addComponent( modelsLabel)
+								.addComponent( sourcesLabel)
+						)
+						.addGroup
+						(
+							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+								.addComponent( typesValue)
+								.addComponent( modelsValue)
+								.addComponent( sourcesValue)
+						)
 				)
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-					.addComponent( typesLabel)
-					.addComponent( modelsLabel)
-					.addComponent( sourcesLabel)
-				)
-			)
 		);
 	}
 
-	public void open()
+	public synchronized void open()
 	{
-	    pack(); 
+		if( gone == true)
+		{
+			return;
+		}
+
+		pack();
 
 		if( getParent() != null)
 		{
@@ -103,17 +130,17 @@ public class ProgressDialog
 			Point parentLocation = getParent().getLocation();
 			Dimension thisSize = getSize();
 
-			setLocation( parentLocation.x + parentSize.width / 2 - thisSize.width / 2,
-					     parentLocation.y + parentSize.height / 2 - thisSize.height / 2);
+			setLocation
+			(
+				parentLocation.x + parentSize.width / 2 - thisSize.width / 2,
+				parentLocation.y + parentSize.height / 2 - thisSize.height / 2
+			);
 		}
 
-		if( gone == false)
-		{
-			setVisible( true);
-		}
+		setVisible( true);
 	}
 
-	public void close()
+	public synchronized void close()
 	{
 		gone = true;
 
@@ -121,9 +148,10 @@ public class ProgressDialog
 	}
 
 	@Override
-	public void hasChanged(ConfigurationProgress configurationProgress) {
-		typesLabel.setText(String.valueOf(configurationProgress.getTypeCount()));
-		modelsLabel.setText(String.valueOf(configurationProgress.getModelCount()));
-		sourcesLabel.setText(String.valueOf(configurationProgress.getSourceCount()));
+	public void hasChanged( ConfigurationProgress configurationProgress)
+	{
+		typesValue.setText( String.valueOf( configurationProgress.getTypeCount()));
+		modelsValue.setText( String.valueOf( configurationProgress.getModelCount()));
+		sourcesValue.setText( String.valueOf( configurationProgress.getSourceCount()));
 	}
 }

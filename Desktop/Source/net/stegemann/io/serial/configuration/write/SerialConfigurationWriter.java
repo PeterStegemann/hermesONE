@@ -1,22 +1,9 @@
 package net.stegemann.io.serial.configuration.write;
 
-import net.stegemann.configuration.Battery;
-import net.stegemann.configuration.Calibration;
-import net.stegemann.configuration.Calibrations;
-import net.stegemann.configuration.Channel;
-import net.stegemann.configuration.ChannelMappings;
-import net.stegemann.configuration.Channels;
-import net.stegemann.configuration.Configuration;
-import net.stegemann.configuration.Model;
+import net.stegemann.configuration.*;
 import net.stegemann.configuration.Model.StatusTime;
-import net.stegemann.configuration.Models;
-import net.stegemann.configuration.PPM;
-import net.stegemann.configuration.PPMs;
-import net.stegemann.configuration.ProxyReferences;
-import net.stegemann.configuration.System;
-import net.stegemann.configuration.Type;
-import net.stegemann.configuration.Types;
 import net.stegemann.configuration.Model.StatusSource;
+import net.stegemann.configuration.System;
 import net.stegemann.configuration.source.Follower;
 import net.stegemann.configuration.source.Map;
 import net.stegemann.configuration.source.Mix;
@@ -44,6 +31,7 @@ import net.stegemann.io.serial.base.DesktopProtocol.Id;
 import net.stegemann.io.serial.configuration.ConfigurationProgress;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.io.serial.base.TypedConnectionHandler;
+import net.stegemann.misc.ThrowingFunction;
 
 public class SerialConfigurationWriter
 {
@@ -51,16 +39,20 @@ public class SerialConfigurationWriter
 
 	private DesktopConnection connection;
 
-	public void writeToPort( Configuration configuration, String PortName,
-		ChangeListener<ConfigurationProgress> configurationListener)
+	public void writeToPort
+	(
+		Configuration configuration,
+		String portName,
+		ChangeListener< ConfigurationProgress> configurationListener
+	)
 		throws WriteException
 	{
-		TypedConnectionForwarder ConnectionForwarder = new TypedConnectionForwarder();
+		TypedConnectionForwarder connectionForwarder = new TypedConnectionForwarder();
 		connection = new DesktopConnection();
 
-		if( connection.open( PortName, ConnectionForwarder) == false)
+		if( connection.open( portName, connectionForwarder) == false)
 		{
-			throw new WriteException( "Failed to open connection with port " + PortName + ".");
+			throw new WriteException( "Failed to open connection with port " + portName + ".");
 		}
 
 		configurationProgress.addChangeListener( configurationListener);
@@ -77,14 +69,14 @@ public class SerialConfigurationWriter
 		}
 		finally
 		{
-			configurationProgress.removeChangeListener( configurationListener);	
+			configurationProgress.removeChangeListener( configurationListener);
 
 			connection.close();
 			connection = null;
 		}
 	}
 
-	private class TypedConnectionForwarder implements TypedConnectionHandler
+	private static class TypedConnectionForwarder implements TypedConnectionHandler
 	{
 		@Override
 		public void complexOpened( byte Id)
@@ -102,7 +94,8 @@ public class SerialConfigurationWriter
 		}
 	}
 
-	private void exportConfiguration( Configuration UseConfiguration) throws WriteException
+	private void exportConfiguration( Configuration UseConfiguration)
+		throws WriteException
 	{
 		connection.openComplex( Id.Configuration);
 
@@ -148,12 +141,11 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.PPM);
 
- 			writeValue( Id.PPMInverted,
-			UsePPM.getPPMInverted());
- 			writeValue( Id.PPMCenter, UsePPM.getPPMCenter());
- 			writeValue( Id.PPMName, UsePPM.getName());
+			writeValue( Id.PPMInverted, UsePPM.getPPMInverted());
+			writeValue( Id.PPMCenter, UsePPM.getPPMCenter());
+			writeValue( Id.PPMName, UsePPM.getName());
 
- 			exportChannelMappings( UsePPM.getChannelMappings());
+			exportChannelMappings( UsePPM.getChannelMappings());
 
 		connection.closeComplex();
 	}
@@ -164,7 +156,7 @@ public class SerialConfigurationWriter
 
 			for( Number CurrentChannelMapping: UseChannelMappings)
 			{
-	 			writeValue( Id.ChannelMapping, CurrentChannelMapping);
+				writeValue( Id.ChannelMapping, CurrentChannelMapping);
 			}
 
 		connection.closeComplex();
@@ -191,67 +183,68 @@ public class SerialConfigurationWriter
 
 				SourceId++;
 
-				configurationProgress.setSourceCount(SourceId);
+				configurationProgress.setSourceCount( SourceId);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportSource( Source UseSource) throws WriteException
+	private void exportSource( Source source)
+		throws WriteException
 	{
 		connection.openComplex( Id.Source);
 
- 			writeValue( Id.SourceName,	UseSource.getName());
- 			writeValue( Id.SourceModel, UseSource.getModel());
+			writeValue( Id.SourceName, source.getName());
+			writeValue( Id.SourceModel, source.getModel());
 
- 			if( UseSource instanceof Analog)
- 			{
- 				exportSourceInputAnalog(( Analog) UseSource);
- 			}
- 			else if( UseSource instanceof Button)
- 			{
- 				exportSourceInputButton(( Button) UseSource);
- 			}
- 			else if( UseSource instanceof Rotary)
- 			{
- 				exportSourceInputRotary(( Rotary) UseSource);
- 			}
- 			else if( UseSource instanceof Switch)
- 			{
- 				exportSourceInputSwitch(( Switch) UseSource);
- 			}
- 			else if( UseSource instanceof Ticker)
- 			{
- 				exportSourceInputTicker(( Ticker) UseSource);
- 			}
- 			else if( UseSource instanceof Map)
- 			{
- 				exportSourceMap(( Map) UseSource);
- 			}
- 			else if( UseSource instanceof Mix)
- 			{
- 				exportSourceMix(( Mix) UseSource);
- 			}
- 			else if( UseSource instanceof Store)
- 			{
- 				exportSourceStore(( Store) UseSource);
- 			}
- 			else if( UseSource instanceof Proxy)
- 			{
- 				exportSourceProxy(( Proxy) UseSource);
- 			}
- 			else if( UseSource instanceof Follower)
- 			{
- 				exportSourceFollower(( Follower) UseSource);
- 			}
- 			else if( UseSource instanceof Timer)
- 			{
- 				exportSourceTimer(( Timer) UseSource);
- 			}
- 			else if( UseSource instanceof Trim)
- 			{
- 				exportSourceTrimmer(( Trim) UseSource);
- 			}
+			if( source instanceof Analog)
+			{
+				exportSourceInputAnalog(( Analog) source);
+			}
+			else if( source instanceof Button)
+			{
+				exportSourceInputButton(( Button) source);
+			}
+			else if( source instanceof Rotary)
+			{
+				exportSourceInputRotary(( Rotary) source);
+			}
+			else if( source instanceof Switch)
+			{
+				exportSourceInputSwitch(( Switch) source);
+			}
+			else if( source instanceof Ticker)
+			{
+				exportSourceInputTicker(( Ticker) source);
+			}
+			else if( source instanceof Map)
+			{
+				exportSourceMap(( Map) source);
+			}
+			else if( source instanceof Mix)
+			{
+				exportSourceMix(( Mix) source);
+			}
+			else if( source instanceof Store)
+			{
+				exportSourceStore(( Store) source);
+			}
+			else if( source instanceof Proxy)
+			{
+				exportSourceProxy(( Proxy) source);
+			}
+			else if( source instanceof Follower)
+			{
+				exportSourceFollower(( Follower) source);
+			}
+			else if( source instanceof Timer)
+			{
+				exportSourceTimer(( Timer) source);
+			}
+			else if( source instanceof Trim)
+			{
+				exportSourceTrimmer(( Trim) source);
+			}
 
 		connection.closeComplex();
 	}
@@ -260,7 +253,7 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.SourceInputAnalog);
 
- 			writeValue( Id.SourceInputAnalogInput, UseSource.getInputId());
+			writeValue( Id.SourceInputAnalogInput, UseSource.getInputId());
 
 		connection.closeComplex();
 	}
@@ -269,12 +262,12 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.SourceInputButton);
 
- 			writeValue( Id.SourceInputButtonInput, UseSource.getInputId());
- 			writeValue( Id.SourceInputButtonInit, UseSource.getInit());
- 			writeValue( Id.SourceInputButtonStore, UseSource.getStore());
- 			writeValue( Id.SourceInputButtonToggle, UseSource.getToggle());
- 			writeValue( Id.SourceInputButtonTop, UseSource.getTop());
- 			writeValue( Id.SourceInputButtonBottom, UseSource.getBottom());
+			writeValue( Id.SourceInputButtonInput, UseSource.getInputId());
+			writeValue( Id.SourceInputButtonInit, UseSource.getInit());
+			writeValue( Id.SourceInputButtonStore, UseSource.getStore());
+			writeValue( Id.SourceInputButtonToggle, UseSource.getToggle());
+			writeValue( Id.SourceInputButtonTop, UseSource.getTop());
+			writeValue( Id.SourceInputButtonBottom, UseSource.getBottom());
 
 		connection.closeComplex();
 	}
@@ -283,13 +276,13 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.SourceInputRotary);
 
- 			writeValue( Id.SourceInputRotaryAInput, UseSource.getAInputId());
- 			writeValue( Id.SourceInputRotaryBInput, UseSource.getBInputId());
- 			writeValue( Id.SourceInputRotaryStore, UseSource.getStore());
- 			writeValue( Id.SourceInputRotaryInit, UseSource.getInit());
- 			writeValue( Id.SourceInputRotaryStep, UseSource.getStep());
- 			writeValue( Id.SourceInputRotaryTop, UseSource.getTop());
- 			writeValue( Id.SourceInputRotaryBottom, UseSource.getBottom());
+			writeValue( Id.SourceInputRotaryAInput, UseSource.getAInputId());
+			writeValue( Id.SourceInputRotaryBInput, UseSource.getBInputId());
+			writeValue( Id.SourceInputRotaryStore, UseSource.getStore());
+			writeValue( Id.SourceInputRotaryInit, UseSource.getInit());
+			writeValue( Id.SourceInputRotaryStep, UseSource.getStep());
+			writeValue( Id.SourceInputRotaryTop, UseSource.getTop());
+			writeValue( Id.SourceInputRotaryBottom, UseSource.getBottom());
 
 		connection.closeComplex();
 	}
@@ -298,10 +291,10 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.SourceInputSwitch);
 
- 			writeValue( Id.SourceInputSwitchLowInput, UseSource.getLowInputId());
- 			writeValue( Id.SourceInputSwitchHighInput, UseSource.getHighInputId());
- 			writeValue( Id.SourceInputSwitchTop, UseSource.getTop());
- 			writeValue( Id.SourceInputSwitchBottom, UseSource.getBottom());
+			writeValue( Id.SourceInputSwitchLowInput, UseSource.getLowInputId());
+			writeValue( Id.SourceInputSwitchHighInput, UseSource.getHighInputId());
+			writeValue( Id.SourceInputSwitchTop, UseSource.getTop());
+			writeValue( Id.SourceInputSwitchBottom, UseSource.getBottom());
 
 		connection.closeComplex();
 	}
@@ -310,13 +303,13 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.SourceInputTicker);
 
- 			writeValue( Id.SourceInputTickerLowInput, UseSource.getLowInputId());
- 			writeValue( Id.SourceInputTickerHighInput, UseSource.getHighInputId());
- 			writeValue( Id.SourceInputTickerInit, UseSource.getInit());
- 			writeValue( Id.SourceInputTickerStep, UseSource.getStep());
- 			writeValue( Id.SourceInputTickerStore, UseSource.getStore());
- 			writeValue( Id.SourceInputTickerTop, UseSource.getTop());
- 			writeValue( Id.SourceInputTickerBottom, UseSource.getBottom());
+			writeValue( Id.SourceInputTickerLowInput, UseSource.getLowInputId());
+			writeValue( Id.SourceInputTickerHighInput, UseSource.getHighInputId());
+			writeValue( Id.SourceInputTickerInit, UseSource.getInit());
+			writeValue( Id.SourceInputTickerStep, UseSource.getStep());
+			writeValue( Id.SourceInputTickerStore, UseSource.getStore());
+			writeValue( Id.SourceInputTickerTop, UseSource.getTop());
+			writeValue( Id.SourceInputTickerBottom, UseSource.getBottom());
 
 		connection.closeComplex();
 	}
@@ -345,10 +338,10 @@ public class SerialConfigurationWriter
 
 			connection.openComplex( Id.SourceMixInputs);
 
-				for( SourceWithVolume Input: UseSource.getInputs())
-				{
-					exportSourceTupel( Input, Id.SourceMixInput);
-				}
+			for( SourceWithVolume Input: UseSource.getInputs())
+			{
+				exportSourceTupel( Input, Id.SourceMixInput);
+			}
 
 			connection.closeComplex();
 
@@ -359,8 +352,8 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.SourceStore);
 
- 			writeValue( Id.SourceStoreInput, UseSource.getInput());
- 			writeValue( Id.SourceStoreInit, UseSource.getInit());
+			writeValue( Id.SourceStoreInput, UseSource.getInput());
+			writeValue( Id.SourceStoreInit, UseSource.getInit());
 
 		connection.closeComplex();
 	}
@@ -372,9 +365,9 @@ public class SerialConfigurationWriter
 			exportSourceTupel( UseSource.getTarget(), Id.SourceFollowerTarget);
 			exportSourceTupel( UseSource.getStep(), Id.SourceFollowerStep);
 
- 			writeValue( Id.SourceFollowerTrigger, UseSource.getTriggerId());
- 			writeValue( Id.SourceFollowerTriggerLowLimit, UseSource.getTriggerLowLimit());
- 			writeValue( Id.SourceFollowerTriggerHighLimit, UseSource.getTriggerHighLimit());
+			writeValue( Id.SourceFollowerTrigger, UseSource.getTriggerId());
+			writeValue( Id.SourceFollowerTriggerLowLimit, UseSource.getTriggerLowLimit());
+			writeValue( Id.SourceFollowerTriggerHighLimit, UseSource.getTriggerHighLimit());
 
 		connection.closeComplex();
 	}
@@ -383,19 +376,19 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.SourceTimer);
 
- 	 		writeValue( Id.SourceTimerInitTime, UseSource.getInitTime());
- 			writeValue( Id.SourceTimerCurrentTime, UseSource.getCurrentTime());
+			writeValue( Id.SourceTimerInitTime, UseSource.getInitTime());
+			writeValue( Id.SourceTimerCurrentTime, UseSource.getCurrentTime());
 
- 			writeValue( Id.SourceTimerStore, UseSource.getStore());
- 			writeValue( Id.SourceTimerReverse, UseSource.getReverse());
+			writeValue( Id.SourceTimerStore, UseSource.getStore());
+			writeValue( Id.SourceTimerReverse, UseSource.getReverse());
 
- 			writeValue( Id.SourceTimerTrigger, UseSource.getTrigger());
- 			writeValue( Id.SourceTimerTriggerLowLimit, UseSource.getTriggerLowLimit());
- 			writeValue( Id.SourceTimerTriggerHighLimit, UseSource.getTriggerHighLimit());
+			writeValue( Id.SourceTimerTrigger, UseSource.getTrigger());
+			writeValue( Id.SourceTimerTriggerLowLimit, UseSource.getTriggerLowLimit());
+			writeValue( Id.SourceTimerTriggerHighLimit, UseSource.getTriggerHighLimit());
 
- 			writeValue( Id.SourceTimerWarnLowTime, UseSource.getWarnLowTime());
- 			writeValue( Id.SourceTimerWarnCriticalTime, UseSource.getWarnCriticalTime());
- 			writeValue( Id.SourceTimerWarnPauseTime, UseSource.getWarnPauseTime());
+			writeValue( Id.SourceTimerWarnLowTime, UseSource.getWarnLowTime());
+			writeValue( Id.SourceTimerWarnCriticalTime, UseSource.getWarnCriticalTime());
+			writeValue( Id.SourceTimerWarnPauseTime, UseSource.getWarnPauseTime());
 
 		connection.closeComplex();
 	}
@@ -404,13 +397,13 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.SourceTrimmer);
 
- 			writeValue( Id.SourceTrimmerReverse, UseSource.getReverse());
+			writeValue( Id.SourceTrimmerReverse, UseSource.getReverse());
 
- 			exportSourceTupel( UseSource.getInput(), Id.SourceTrimmerInput);
- 			exportSourceTupel( UseSource.getTrim(), Id.SourceTrimmerTrim);
- 			exportSourceTupel( UseSource.getLimit(), Id.SourceTrimmerLimit);
+			exportSourceTupel( UseSource.getInput(), Id.SourceTrimmerInput);
+			exportSourceTupel( UseSource.getTrim(), Id.SourceTrimmerTrim);
+			exportSourceTupel( UseSource.getLimit(), Id.SourceTrimmerLimit);
 
- 			exportSourceTrimmerPoints( UseSource);
+			exportSourceTrimmerPoints( UseSource);
 
 		connection.closeComplex();
 	}
@@ -423,7 +416,7 @@ public class SerialConfigurationWriter
 			{
 				Volume Point = UseSource.getPoint( PointIndex);
 
-	 			writeValue( Id.SourceTrimmerPoint, Point);
+				writeValue( Id.SourceTrimmerPoint, Point);
 			}
 
 		connection.closeComplex();
@@ -433,7 +426,7 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.SourceProxy);
 
- 			writeValue( Id.SourceProxySlot, UseSource.getSlot());
+			writeValue( Id.SourceProxySlot, UseSource.getSlot());
 
 		connection.closeComplex();
 	}
@@ -462,23 +455,25 @@ public class SerialConfigurationWriter
 
 				TypeId++;
 
-				configurationProgress.setTypeCount(TypeId);
+				configurationProgress.setTypeCount( TypeId);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportType( Type UseType) throws WriteException
+	private void exportType( Type UseType)
+		throws WriteException
 	{
 		connection.openComplex( Id.Type);
 
- 			writeValue( Id.TypeName, UseType.getName());
- 			writeValue( Id.TypeState, Utility.ConvertTypeState( UseType.getState()));
+			writeValue( Id.TypeName, UseType.getName());
+			writeValue( Id.TypeState, Utility.convertTypeState( UseType.getState()));
 
 		connection.closeComplex();
 	}
 
-	private void exportModels( Models UseModels)	throws WriteException
+	private void exportModels( Models UseModels)
+		throws WriteException
 	{
 		connection.openComplex( Id.Models);
 
@@ -498,31 +493,33 @@ public class SerialConfigurationWriter
 				exportModel( CurrentModel);
 
 				ModelId++;
-				
-				configurationProgress.setModelCount(ModelId);
+
+				configurationProgress.setModelCount( ModelId);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportModel( Model UseModel)	throws WriteException
+	private void exportModel( Model UseModel)
+		throws WriteException
 	{
 		connection.openComplex( Id.Model);
 
- 			writeValue( Id.ModelName, UseModel.getName());
- 			writeValue( Id.ModelState, Utility.ConvertModelState( UseModel.getState()));
- 			writeValue( Id.ModelRFMode, UseModel.getRFMode());
- 			writeValue( Id.ModelType, UseModel.getTypeId());
+			writeValue( Id.ModelName, UseModel.getName());
+			writeValue( Id.ModelState, Utility.convertModelState( UseModel.getState()));
+			writeValue( Id.ModelRFMode, UseModel.getRFMode());
+			writeValue( Id.ModelType, UseModel.getTypeId());
 
- 			exportStatusSources( UseModel);
- 			exportStatusTimes( UseModel);
- 			exportChannels( UseModel.getChannels());
- 			exportProxyReferences( UseModel.getProxyReferences());
+			exportStatusSources( UseModel);
+			exportStatusTimes( UseModel);
+			exportChannels( UseModel.getChannels());
+			exportProxyReferences( UseModel.getProxyReferences());
 
 		connection.closeComplex();
 	}
 
-	private void exportProxyReferences( ProxyReferences UseProxyReferences) throws WriteException
+	private void exportProxyReferences( ProxyReferences UseProxyReferences)
+		throws WriteException
 	{
 		connection.openComplex( Id.ModelProxyReferences);
 
@@ -534,7 +531,8 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportStatusSources( Model UseModel) throws WriteException
+	private void exportStatusSources( Model UseModel)
+		throws WriteException
 	{
 		connection.openComplex( Id.StatusSources);
 
@@ -546,7 +544,8 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportStatusTimes( Model UseModel) throws WriteException
+	private void exportStatusTimes( Model UseModel)
+		throws WriteException
 	{
 		connection.openComplex( Id.StatusTimers);
 
@@ -556,7 +555,8 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportChannels( Channels UseChannels) throws WriteException
+	private void exportChannels( Channels UseChannels)
+		throws WriteException
 	{
 		connection.openComplex( Id.Channels);
 
@@ -568,7 +568,8 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportChannel( Channel UseChannel) throws WriteException
+	private void exportChannel( Channel UseChannel)
+		throws WriteException
 	{
 		connection.openComplex( Id.Channel);
 
@@ -585,7 +586,8 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportChannelPoints( Channel UseChannel) throws WriteException
+	private void exportChannelPoints( Channel UseChannel)
+		throws WriteException
 	{
 		connection.openComplex( Id.ChannelPoints);
 
@@ -635,38 +637,53 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportCalibration( Calibration UseCalibration) throws WriteException
+	private void exportCalibration( Calibration calibration)
+		throws WriteException
 	{
-		connection.openComplex( Id.Calibration);
+		complex( Id.Calibration, () ->
+		{
+			writeValue( Id.CalibrationHigh, calibration.getHigh());
+			writeValue( Id.CalibrationCenter, calibration.getCenter());
+			writeValue( Id.CalibrationLow, calibration.getLow());
+		});
+	}
 
-			writeValue( Id.CalibrationHigh, UseCalibration.getHigh());
-			writeValue( Id.CalibrationCenter, UseCalibration.getCenter());
-			writeValue( Id.CalibrationLow, UseCalibration.getLow());
+	private void complex( Id id, ThrowingFunction<WriteException> content)
+			throws WriteException
+	{
+		connection.openComplex( id);
+
+			content.apply();
 
 		connection.closeComplex();
 	}
 
-	private void writeValue( DesktopProtocol.Id id, Bool value) throws WriteException
-	{
-		writeValue( id, value.getConfigurationValue());		
-	}
-
-	private void writeValue( DesktopProtocol.Id id, Text value) throws WriteException
+	private void writeValue( DesktopProtocol.Id id, Bool value)
+			throws WriteException
 	{
 		writeValue( id, value.getConfigurationValue());
 	}
 
-	private void writeValue( DesktopProtocol.Id id, Number value) throws WriteException
+	private void writeValue( DesktopProtocol.Id id, Text value)
+			throws WriteException
 	{
 		writeValue( id, value.getConfigurationValue());
 	}
 
-	private void writeValue( DesktopProtocol.Id id, int value) throws WriteException
+	private void writeValue( DesktopProtocol.Id id, Number value)
+			throws WriteException
+	{
+		writeValue( id, value.getConfigurationValue());
+	}
+
+	private void writeValue( DesktopProtocol.Id id, int value)
+		throws WriteException
 	{
 		writeValue( id, java.lang.Integer.toString( value));
 	}
 
-	private void writeValue( DesktopProtocol.Id id, String value) throws WriteException
+	private void writeValue( DesktopProtocol.Id id, String value)
+		throws WriteException
 	{
 		connection.writeValue( id, value);
 	}

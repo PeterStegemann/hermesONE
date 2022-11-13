@@ -45,65 +45,72 @@ public class SourcesView extends ChangeObservable< SourcesView>
 
 	private final Sources baseSources;
 
-	private final List< Source> sources = new ArrayList< Source>();
-	private PickGlobals pickGlobals = PickGlobals.No;
-	private Number typeId = null;
-	private Number modelId = null;
-	private HasEmpty hasEmpty = HasEmpty.No;
-	private HasFixed hasFixed = HasFixed.No;
-	private HasProxies hasProxies = HasProxies.No;
-	private Class< ?> type = null;
+	private final List< Source> sources = new ArrayList<>();
+	private final PickGlobals pickGlobals;
+	private final Number typeId;
+	private final Number modelId;
+	private final HasEmpty hasEmpty;
+	private final HasFixed hasFixed;
+	private final HasProxies hasProxies;
+	private final Class< ?> type;
 
 	/**
 	 * This view presents a limited selection of sources based on the given criteria.
 	 * 
-	 * @param UseSources The sources to pick from.
-	 * @param PickGlobals There's no id for globals, so this switch turns selection of globals on
+	 * @param sources The sources to pick from.
+	 * @param pickGlobals There's no id for globals, so this switch turns selection of globals on
 	 * or off.
-	 * @param TypeId Selects sources that are valid for this type id. If this is null, no sources
+	 * @param typeId Selects sources that are valid for this type id. If this is null, no sources
 	 * will be selected based on the type id.
-	 * @param ModelId Selects sources that are valid for this model id. If this is null, no sources
+	 * @param modelId Selects sources that are valid for this model id. If this is null, no sources
 	 * will be selected based on the model id.
-	 * @param UseHasEmpty Sources will contain the empty source element.
-	 * @param UseHasFixed Sources will contain the fixed source element.
-	 * @param UseHasProxies Sources will contain proxies.
+	 * @param hasEmpty Sources will contain the empty source element.
+	 * @param hasFixed Sources will contain the fixed source element.
+	 * @param hasProxies Sources will contain proxies.
 	 */
-	public SourcesView( Sources UseSources, PickGlobals PickGlobals, Number TypeId, Number ModelId,
-						HasEmpty UseHasEmpty, HasFixed UseHasFixed, HasProxies UseHasProxies)
+	public SourcesView( Sources sources, PickGlobals pickGlobals, Number typeId, Number modelId,
+						HasEmpty hasEmpty, HasFixed hasFixed, HasProxies hasProxies)
 	{
-		this( UseSources, PickGlobals, TypeId, ModelId, null, UseHasEmpty, UseHasFixed,
-			  UseHasProxies);
+		this( sources, pickGlobals, typeId, modelId, null, hasEmpty, hasFixed, hasProxies);
 	}
 
 	/**
 	 * This view presents a limited selection of sources based on the given criteria.
 	 * 
-	 * @param UseSources The sources to pick from.
-	 * @param UsePickGlobals There's no id for globals, so this switch turns selection of globals on
+	 * @param sources The sources to pick from.
+	 * @param pickGlobals There's no id for globals, so this switch turns selection of globals on
 	 * or off.
-	 * @param TypeId Selects sources that are valid for this type id. If this is null, no sources
+	 * @param typeId Selects sources that are valid for this type id. If this is null, no sources
 	 * will be selected based on the type id.
-	 * @param ModelId Selects sources that are valid for this model id. If this is null, no sources
+	 * @param modelId Selects sources that are valid for this model id. If this is null, no sources
 	 * will be selected based on the model id.
-	 * @param Type Limits the above selections to sources of the given type.
-	 * @param HasEmpty Sources will contain the empty source element.
-	 * @param HasFixed Sources will contain the fixed source element.
-	 * @param HasProxies Sources will contain proxies.
+	 * @param type Limits the above selections to sources of the given type.
+	 * @param hasEmpty Sources will contain the empty source element.
+	 * @param hasFixed Sources will contain the fixed source element.
+	 * @param hasProxies Sources will contain proxies.
 	 */
-	public SourcesView( Sources UseSources, PickGlobals UsePickGlobals, Number TypeId,
-						Number ModelId, Class<?> Type, HasEmpty HasEmpty, HasFixed HasFixed,
-						HasProxies HasProxies)
+	public SourcesView
+	(
+		Sources sources,
+		PickGlobals pickGlobals,
+		Number typeId,
+		Number modelId,
+		Class< ?> type,
+		HasEmpty hasEmpty,
+		HasFixed hasFixed,
+		HasProxies hasProxies
+	)
 	{
-		baseSources = UseSources;
+		baseSources = sources;
 		baseSources.addChangeListener( this);
 
-		this.pickGlobals = UsePickGlobals;
-		this.typeId = TypeId;
-		this.modelId = ModelId;
-		this.type = Type;
-		this.hasEmpty = HasEmpty;
-		this.hasFixed = HasFixed;
-		this.hasProxies = HasProxies;
+		this.pickGlobals = pickGlobals;
+		this.typeId = typeId;
+		this.modelId = modelId;
+		this.type = type;
+		this.hasEmpty = hasEmpty;
+		this.hasFixed = hasFixed;
+		this.hasProxies = hasProxies;
 
 		rescan();
 	}
@@ -111,22 +118,22 @@ public class SourcesView extends ChangeObservable< SourcesView>
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 
-		Buffer.append( "SourcesView = {\n");
+		builder.append( "SourcesView = {\n");
 
 		for( Source Source: sources)
 		{
-			Buffer.append( Source);
+			builder.append( Source);
 		}
 
-		Buffer.append( "}\n");
+		builder.append( "}\n");
 
-		return Buffer.toString();
+		return builder.toString();
 	}
 
 	@Override
-	public void hasChanged( Sources Object)
+	public void hasChanged( Sources sources)
 	{
 		rescan();
 
@@ -136,7 +143,7 @@ public class SourcesView extends ChangeObservable< SourcesView>
 	@Override
 	public Iterator< Source> iterator()
 	{
-		return new SourcesViewIterator( this);
+		return new SourcesViewIterator( this );
 	}
 
 	private boolean isMatchingSource( Source source)
@@ -159,14 +166,14 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		}
 
 		// Match if the source is global, same type or same model.
-		Number ModelId = source.getModel();
+		Number sourceModelId = source.getModel();
 
-		boolean IsMatching =
-			((( pickGlobals == PickGlobals.Yes) && ( ModelId.equals( Model.MODEL_GLOBAL))) ||
-			 (( typeId != null) && ( ModelId.equals( typeId))) ||
-		     (( modelId != null) && ( ModelId.equals( modelId))));
+		boolean isMatching =
+			((( pickGlobals == PickGlobals.Yes) && ( sourceModelId.equals( Model.MODEL_GLOBAL))) ||
+			 (( typeId != null) && ( sourceModelId.equals( typeId))) ||
+		     ((this.modelId != null) && ( sourceModelId.equals( this.modelId))));
 
-		return IsMatching;
+		return isMatching;
 	}
 
 	/**
@@ -174,7 +181,7 @@ public class SourcesView extends ChangeObservable< SourcesView>
 	 */
 	public void rescan()
 	{
-		SortedSet< Source> sortedSources = new TreeSet< Source>();
+		SortedSet< Source> sortedSources = new TreeSet<>();
 
 		if( hasEmpty == HasEmpty.Yes)
 		{
@@ -272,13 +279,13 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		return sources.size();
 	}
 
-	private class SourcesViewIterator implements Iterator< Source>
+	private static class SourcesViewIterator implements Iterator< Source>
 	{
-		private Iterator< Source> iterator;
+		private final Iterator< Source> iterator;
 
-		public SourcesViewIterator( SourcesView UseSourcesView)
+		public SourcesViewIterator( SourcesView sourcesView)
 		{
-			iterator = UseSourcesView.sources.iterator();
+			iterator = sourcesView.sources.iterator();
 		}
 
 		@Override

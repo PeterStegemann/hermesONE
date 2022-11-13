@@ -14,7 +14,7 @@ public class hermesONE
 
 	private final MainFrame modelsFrame = new MainFrame( controller);
 
-	public static void main( String[] Arguments)
+	public static void main( String[] arguments)
 	{
 		System.setProperty( "apple.laf.useScreenMenuBar", "true");
 //		System.setProperty( "com.apple.mrj.application.apple.menu.about.name", "Test");
@@ -28,15 +28,8 @@ public class hermesONE
 			reason.printStackTrace();
 		}
 
-		hermesONE hermesONE = new hermesONE();
-
-		hermesONE.Run();
-	}
-
-	public void Run()
-	{
 		// Start UI.
-		javax.swing.SwingUtilities.invokeLater(this::run);
+		javax.swing.SwingUtilities.invokeLater(() -> new hermesONE().run());
 	}
 
 	private void run() {

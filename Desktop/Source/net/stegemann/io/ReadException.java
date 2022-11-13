@@ -1,16 +1,19 @@
 package net.stegemann.io;
 
+import java.io.Serial;
+
 public class ReadException extends Exception
 {
+	@Serial
 	private static final long serialVersionUID = -6359511165210375059L;
 
-	public ReadException( String Message)
+	public ReadException( String message)
 	{
-		super( Message);
+		super( message);
 	}
 
-	public ReadException( String Message, Exception Cause)
+	public ReadException( String message, Exception cause)
 	{
-		super( Message, Cause);
+		super( message, cause);
 	}
 }

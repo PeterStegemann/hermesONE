@@ -1,9 +1,9 @@
 package net.stegemann.gui.frame;
 
-import java.awt.FileDialog;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -30,6 +30,7 @@ import net.stegemann.io.xml.XMLWriter;
 
 public class MainFrame extends JFrame implements ActionListener
 {
+	@Serial
 	private static final long serialVersionUID = 7528862913260099674L;
 
 	private final Configuration configuration;
@@ -48,8 +49,8 @@ public class MainFrame extends JFrame implements ActionListener
 
 	private CheckboxMenuItemGroup portGroup;
 
-	private String directory = null;
-	private String file = null;
+	private String lastDirectory;
+	private String lastFile;
 	private final FileDialog openConfigurationDialog;
 	private final FileDialog saveConfigurationDialog;
 
@@ -59,7 +60,8 @@ public class MainFrame extends JFrame implements ActionListener
 
 		configuration = controller.getConfiguration();
 
-		file = "Configuration.xml";
+		lastDirectory = null;
+		lastFile = "Configuration.xml";
 
 		setResizable( true);
 
@@ -80,69 +82,73 @@ public class MainFrame extends JFrame implements ActionListener
 
 	private void addMenus()
 	{
-		JMenuBar NewMenuBar = new JMenuBar();
-		JMenu NewMenu;
+		JMenuBar newMenuBar = new JMenuBar();
+		JMenu newMenu;
 
-		NewMenu = new JMenu( "Datei");
+		newMenu = new JMenu( "Datei");
 
-		openMenuItem = addMenuItem( NewMenu, "Konfiguration öffnen...", 'O');
-		NewMenu.addSeparator();
-		closeMenuItem = addMenuItem( NewMenu, "Schliessen", 'W');
-		saveMenuItem = addMenuItem( NewMenu, "Konfiguration speichern", 'S');
-		saveAsMenuItem = addMenuItem( NewMenu, "Konfiguration speichern unter...", 'S',
-			ActionEvent.SHIFT_MASK);
-		NewMenu.addSeparator();
-		openSystemMenuItem = addMenuItem( NewMenu, "Systemeinstellungen von Datei importieren...");
-		openModelsMenuItem = addMenuItem( NewMenu, "Modelleinstellungen von Datei importieren...");
+		openMenuItem = addMenuItem( newMenu, "Konfiguration öffnen...", 'O');
+		newMenu.addSeparator();
+		closeMenuItem = addMenuItem( newMenu, "Schliessen", 'W');
+		saveMenuItem = addMenuItem( newMenu, "Konfiguration speichern", 'S');
+		saveAsMenuItem = addMenuItem
+		(
+			newMenu, "Konfiguration speichern unter...", 'S', ActionEvent.SHIFT_MASK
+		);
+		newMenu.addSeparator();
+		openSystemMenuItem =
+			addMenuItem( newMenu, "Systemeinstellungen von Datei importieren...");
+		openModelsMenuItem =
+			addMenuItem( newMenu, "Modelleinstellungen von Datei importieren...");
 
-		NewMenuBar.add( NewMenu);
+		newMenuBar.add( newMenu);
 
-		NewMenu = new JMenu( "Fernsteuerung");
+		newMenu = new JMenu( "Fernsteuerung");
 
-		readMenuItem = addMenuItem( NewMenu, "Konfiguration lesen...");
-		writeMenuItem = addMenuItem( NewMenu, "Konfiguration schreiben...");
-		NewMenu.addSeparator();
+		readMenuItem = addMenuItem( newMenu, "Konfiguration lesen...");
+		writeMenuItem = addMenuItem( newMenu, "Konfiguration schreiben...");
+		newMenu.addSeparator();
 		portMenu = new JMenu( "Port");
 		portMenu.addActionListener( this);
 		portMenu.addMenuListener( new PortMenuListener());
 
 		setPortMenu();
 
-		NewMenu.add( portMenu);
+		newMenu.add( portMenu);
 
-		NewMenuBar.add( NewMenu);
+		newMenuBar.add( newMenu);
 
 //		NewMenu = new Menu( "Modell");
 //		NewMenuBar.add( NewMenu);
 
-		setJMenuBar( NewMenuBar);
+		setJMenuBar( newMenuBar);
 	}
 
 	private void setPortMenu()
 	{
 		portMenu.removeAll();
 
-		CheckboxMenuItemGroup NewPortGroup = new CheckboxMenuItemGroup();
+		CheckboxMenuItemGroup newPortGroup = new CheckboxMenuItemGroup();
 
-		for( String Port: Ports.FindPorts())
+		for( String port: Ports.FindPorts())
 		{
-			JCheckBoxMenuItem NewMenuItem = new JCheckBoxMenuItem( Port);
-			NewPortGroup.add( NewMenuItem);
-			portMenu.add( NewMenuItem);
+			JCheckBoxMenuItem newMenuItem = new JCheckBoxMenuItem( port);
+			newPortGroup.add( newMenuItem);
+			portMenu.add( newMenuItem);
 
 			// Get state from old item.
 			if( portGroup != null)
 			{
-				JCheckBoxMenuItem OldMenuItem = portGroup.get( Port);
+				JCheckBoxMenuItem oldMenuItem = portGroup.get( port);
 
-				if( OldMenuItem != null)
+				if( oldMenuItem != null)
 				{
-					NewMenuItem.setSelected( OldMenuItem.getState());
+					newMenuItem.setSelected( oldMenuItem.getState());
 				}
 			}
 		}
 
-		portGroup = NewPortGroup;
+		portGroup = newPortGroup;
 	}
 
 	private class PortMenuListener implements MenuListener
@@ -168,26 +174,24 @@ public class MainFrame extends JFrame implements ActionListener
 		return NewMenuItem;
 	}
 
-	private JMenuItem addMenuItem( JMenu Parent, String Text, char Shortcut)
+	private JMenuItem addMenuItem( JMenu parent, String text, char shortcut)
 	{
-		return addMenuItem( Parent, Text, KeyStroke.getKeyStroke( Shortcut,
-								Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		return addMenuItem( parent, text, shortcut, 0);
 	}
 
-	private JMenuItem addMenuItem( JMenu Parent, String Text, char Shortcut, int Modifier)
+	private JMenuItem addMenuItem( JMenu parent, String text, char shortcut, int modifier)
 	{
-		return addMenuItem( Parent, Text, KeyStroke.getKeyStroke( Shortcut,
-								Modifier | Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-	}
+		KeyStroke keyStroke = KeyStroke.getKeyStroke
+		(
+			shortcut,
+			modifier | Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()
+		);
 
-	private JMenuItem addMenuItem( JMenu Parent, String Text, KeyStroke UseKeyStroke)
-	{
-		JMenuItem NewMenuItem = new JMenuItem( Text);
-		NewMenuItem.setAccelerator( UseKeyStroke);
-		NewMenuItem.addActionListener( this); 
-		Parent.add( NewMenuItem);
+		JMenuItem menuItem = addMenuItem( parent, text);
 
-		return NewMenuItem;
+		menuItem.setAccelerator( keyStroke);
+
+		return menuItem;
 	}
 
 	public void set()
@@ -206,65 +210,66 @@ public class MainFrame extends JFrame implements ActionListener
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent CurrentEvent)
+	public void actionPerformed( ActionEvent actionEvent)
 	{
-		if( CurrentEvent.getSource() == openMenuItem)
+		if( actionEvent.getSource() == openMenuItem)
 		{
-			openConfiguration(XMLReader.Mode.All);
+			openConfiguration( XMLReader.Mode.All);
 		}
-		else if( CurrentEvent.getSource() == openSystemMenuItem)
+		else if( actionEvent.getSource() == openSystemMenuItem)
 		{
-			openConfiguration(XMLReader.Mode.System);
+			openConfiguration( XMLReader.Mode.System);
 		}
-		else if( CurrentEvent.getSource() == openModelsMenuItem)
+		else if( actionEvent.getSource() == openModelsMenuItem)
 		{
-			openConfiguration(XMLReader.Mode.Models);
+			openConfiguration( XMLReader.Mode.Models);
 		}
-		else if( CurrentEvent.getSource() == closeMenuItem)
+		else if( actionEvent.getSource() == closeMenuItem)
 		{
-			System.exit( NORMAL);
+			System.exit( 0);
 		}
-		else if( CurrentEvent.getSource() == saveMenuItem)
+		else if( actionEvent.getSource() == saveMenuItem)
 		{
 			saveConfiguration();
 		}
-		else if( CurrentEvent.getSource() == saveAsMenuItem)
+		else if( actionEvent.getSource() == saveAsMenuItem)
 		{
 			saveAsConfiguration();
 		}
-		else if( CurrentEvent.getSource() == readMenuItem)
+		else if( actionEvent.getSource() == readMenuItem)
 		{
 			readConfiguration();
 		}
-		else if( CurrentEvent.getSource() == writeMenuItem)
+		else if( actionEvent.getSource() == writeMenuItem)
 		{
 			writeConfiguration();
 		}
 	}
 
-	private void openConfiguration(XMLReader.Mode mode)
+	private void openConfiguration( XMLReader.Mode mode)
 	{
 		openConfigurationDialog.setVisible( true);
 
-		String Directory = openConfigurationDialog.getDirectory();
-		String File = openConfigurationDialog.getFile();
+		String directory = openConfigurationDialog.getDirectory();
+		String file = openConfigurationDialog.getFile();
 
-		if(( Directory != null) && ( File != null))
+		if(( directory != null) && ( file != null))
 		{
-			XMLReader ConfigurationReader = new XMLReader();
+			lastDirectory = directory;
+			lastFile = file;
+
+			XMLReader configurationReader = new XMLReader();
 
 			try
 			{
-				directory = Directory;
-				file = File;
-
-				ConfigurationReader.ReadFromFile( configuration, directory + file, mode);
+				configurationReader
+					.readFromFile( configuration, lastDirectory + lastFile, mode);
 			}
-			catch( ReadException Reason)
+			catch( ReadException reason)
 			{
-				System.out.println( "Failed opening configuration, reason: " + Reason.getMessage());
+				System.out.println( "Failed opening configuration, reason: " + reason.getMessage());
 
-				Reason.printStackTrace();
+				reason.printStackTrace();
 			}
 
 			set();
@@ -274,7 +279,7 @@ public class MainFrame extends JFrame implements ActionListener
 	private void saveConfiguration()
 	{
 		// No current file yet? Go, pick one.
-		if(( directory == null) || ( file == null))
+		if(( lastDirectory == null) || ( lastFile == null))
 		{
 			saveAsConfiguration();
 
@@ -282,126 +287,136 @@ public class MainFrame extends JFrame implements ActionListener
 		}
 
 		// Overwrite old one.
-		XMLWriter ConfigurationWriter = new XMLWriter();
-
-		try
-		{
-			ConfigurationWriter.WriteToFile( configuration, directory + file);
-		}
-		catch( WriteException Reason)
-		{
-			Reason.printStackTrace();
-		}
+		doSaveConfiguration();
 	}
 
 	private void saveAsConfiguration()
 	{
-		saveConfigurationDialog.setDirectory( directory);
-		saveConfigurationDialog.setFile( file);
+		saveConfigurationDialog.setDirectory( lastDirectory);
+		saveConfigurationDialog.setFile( lastFile);
 
 		saveConfigurationDialog.setVisible( true);
 
-		String Directory = saveConfigurationDialog.getDirectory();
-		String File = saveConfigurationDialog.getFile();
+		String directory = saveConfigurationDialog.getDirectory();
+		String file = saveConfigurationDialog.getFile();
 
-		if(( Directory != null) && ( File != null))
+		if(( directory != null) && ( file != null))
 		{
-			XMLWriter ConfigurationWriter = new XMLWriter();
+			lastDirectory = directory;
+			lastFile = file;
 
-			try
-			{
-				directory = Directory;
-				file = File;
+			doSaveConfiguration();
+		}
+	}
 
-				ConfigurationWriter.WriteToFile( configuration, directory + file);
-			}
-			catch( WriteException Reason)
-			{
-				Reason.printStackTrace();
-			}
+	private void doSaveConfiguration()
+	{
+		XMLWriter configurationWriter = new XMLWriter();
+
+		try
+		{
+			configurationWriter.writeToFile( configuration, lastDirectory + lastFile);
+		}
+		catch( WriteException reason)
+		{
+			System.out.println( "Failed writing configuration, reason: " + reason.getMessage());
+
+			reason.printStackTrace();
 		}
 	}
 
 	private void readConfiguration()
 	{
-		final JCheckBoxMenuItem ActiveItem = portGroup.getActiveItem();
+		final JCheckBoxMenuItem activeItem = portGroup.getActiveItem();
 
-		if( ActiveItem == null)
+		if( activeItem == null)
 		{
-			JOptionPane.showMessageDialog( this, "Es ist kein serieller Port ausgewaehlt!",
-										   "Fehler beim Lesen", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog
+			(
+				this,
+				"Es ist kein serieller Port ausgewaehlt!",
+				"Fehler beim Lesen",
+				JOptionPane.ERROR_MESSAGE
+			);
 
 			return;
 		}
 
-		final SerialConfigurationReader ConfigurationReader = new SerialConfigurationReader();
-		final ProgressDialog readingDialog = new ProgressDialog( this, "Lese Konfiguration...");
+		String portName = activeItem.getText();
+		ProgressDialog progressDialog =
+				new ProgressDialog( this, "Lese Konfiguration...");
 
-		new Thread( new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				try
-				{
-					ConfigurationReader.readFromPort( configuration, ActiveItem.getText(),
-							readingDialog);
-				}
-				catch( ReadException Reason)
-				{
-					System.out.println( "Failed reading configuration, reason: " +
-						Reason.getMessage());
-
-					Reason.printStackTrace();
-				}
-
-				readingDialog.close();
-			}				
-		}).start();
-
-		readingDialog.open();
+		runWithProgress( progressDialog, () -> readConfiguration( portName, progressDialog ) );
 
 		set();
 	}
 
+	private void readConfiguration( String portName, ProgressDialog progressDialog)
+	{
+		try
+		{
+			new SerialConfigurationReader().readFromPort( configuration, portName, progressDialog);
+		}
+		catch( ReadException reason)
+		{
+			System.out.println( "Failed reading configuration, reason: " + reason.getMessage());
+
+			reason.printStackTrace();
+		}
+	}
+
 	private void writeConfiguration()
 	{
-		final JCheckBoxMenuItem ActiveItem = portGroup.getActiveItem();
+		final JCheckBoxMenuItem activeItem = portGroup.getActiveItem();
 
-		if( ActiveItem == null)
+		if( activeItem == null)
 		{
-			JOptionPane.showMessageDialog( this, "Es ist kein serieller Port ausgewaehlt!",
-										   "Fehler beim Schreiben", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog
+			(
+				this,
+				"Es ist kein serieller Port ausgewaehlt!",
+				"Fehler beim Schreiben",
+				JOptionPane.ERROR_MESSAGE
+			);
 
 			return;
 		}
 
-		final SerialConfigurationWriter ConfigurationWriter = new SerialConfigurationWriter();
-		final ProgressDialog writingDialog = new ProgressDialog( this, "Schreibe Konfiguration...");
+		String portName = activeItem.getText();
+		ProgressDialog progressDialog =
+				new ProgressDialog( this, "Schreibe Konfiguration..." );
 
-		new Thread( new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				try
-				{
-					ConfigurationWriter.writeToPort( configuration, ActiveItem.getText(),
-							writingDialog);
-				}
-				catch( WriteException reason)
-				{
-					System.out.println( "Failed writing configuration, reason: " + reason.getMessage());
-
-					reason.printStackTrace();
-				}
-
-				writingDialog.close();
-			}				
-		}).start();
-
-		writingDialog.open();
+		runWithProgress( progressDialog, () -> writeConfiguration( portName, progressDialog));
 
 		set();
+	}
+
+	private void writeConfiguration( String portName, ProgressDialog progressDialog)
+	{
+		try
+		{
+			new SerialConfigurationWriter().writeToPort( configuration, portName, progressDialog);
+		}
+		catch( WriteException reason)
+		{
+			System.out.println( "Failed writing configuration, reason: " + reason.getMessage());
+
+			reason.printStackTrace();
+		}
+	}
+
+	private void runWithProgress( ProgressDialog progressDialog, Runnable runnable)
+	{
+		new Thread
+		(
+			() ->
+			{
+				runnable.run();
+
+				progressDialog.close();
+			}
+		).start();
+
+		progressDialog.open();
 	}
 }
