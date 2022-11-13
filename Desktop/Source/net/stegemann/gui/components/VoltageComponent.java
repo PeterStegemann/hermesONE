@@ -53,14 +53,14 @@ public class VoltageComponent extends JPanel
 		slider.setMajorTickSpacing( 20);
 
 		Hashtable< Integer, JLabel> LabelTable = new Hashtable< Integer, JLabel>();
-		LabelTable.put( new Integer( minimum), new JLabel( Utility.formatVoltage( minimum)));
-		LabelTable.put( new Integer( maximum / 4 * 1),
+		LabelTable.put( minimum, new JLabel( Utility.formatVoltage( minimum)));
+		LabelTable.put( maximum / 4 * 1,
 				        	 new JLabel( Utility.formatVoltage( maximum / 4 * 1)));
-		LabelTable.put( new Integer( maximum / 4 * 2),
+		LabelTable.put( maximum / 4 * 2,
 							 new JLabel( Utility.formatVoltage( maximum / 4 * 2)));
-		LabelTable.put( new Integer( maximum / 4 * 3),
+		LabelTable.put( maximum / 4 * 3,
 							 new JLabel( Utility.formatVoltage( maximum / 4 * 3)));
-		LabelTable.put( new Integer( maximum), new JLabel( Utility.formatVoltage( maximum)));
+		LabelTable.put( maximum, new JLabel( Utility.formatVoltage( maximum)));
 
 		slider.setLabelTable( LabelTable);
 		slider.addChangeListener( this);

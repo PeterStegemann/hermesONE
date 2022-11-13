@@ -31,27 +31,27 @@ public class TimeSliderComponent extends JPanel
 	private final JSlider slider;
 	private final JTextField textfield;
 
-	public TimeSliderComponent(int Minimum, int Maximum)
+	public TimeSliderComponent( int minimum, int maximum)
 	{
-		minimum = Minimum;
-		maximum = Maximum;
+		this.minimum = minimum;
+		this.maximum = maximum;
 
-		int Range = maximum - minimum;
+		int Range = this.maximum - this.minimum;
 
 		slider = new JSlider();
 		slider.setPaintLabels( true);
 		slider.setPaintTicks( true);
 		slider.setPaintTrack( true);
-		slider.setMinimum( minimum);
-		slider.setMaximum( maximum);
+		slider.setMinimum( this.minimum );
+		slider.setMaximum( this.maximum );
 		slider.setMinorTickSpacing( Range / 10);
 		slider.setMajorTickSpacing( Range / 5);
 
-		Hashtable< Integer, JLabel> LabelTable = new Hashtable< Integer, JLabel>();
-		LabelTable.put( new Integer( minimum), new JLabel( "Aus"));
-		LabelTable.put( new Integer( minimum + ( Range / 2)),
-						new JLabel( Utility.formatTime( minimum + ( Range / 2))));
-		LabelTable.put( new Integer( maximum), new JLabel( Utility.formatTime( maximum)));
+		Hashtable< Integer, JLabel> LabelTable = new Hashtable<>();
+		LabelTable.put( this.minimum, new JLabel( "Aus"));
+		LabelTable.put( this.minimum + (Range / 2),
+						new JLabel( Utility.formatTime( this.minimum + (Range / 2))));
+		LabelTable.put( this.maximum, new JLabel( Utility.formatTime( this.maximum)));
 
 		slider.setLabelTable( LabelTable);
 		slider.addChangeListener( this);
@@ -64,11 +64,7 @@ public class TimeSliderComponent extends JPanel
 		// No gaps within component.
 		setLayout( new FlowLayout( 0, 0, 0));
 
-		if( slider != null)
-		{
-			add( slider);
-		}
-
+		add( slider);
 		add( textfield);
 	}
 

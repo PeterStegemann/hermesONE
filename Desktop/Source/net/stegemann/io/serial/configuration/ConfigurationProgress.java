@@ -1,19 +1,15 @@
 package net.stegemann.io.serial.configuration;
 
+import lombok.Getter;
 import net.stegemann.misc.ChangeObservable;
 
-public class ConfigurationProgress 
-	extends ChangeObservable< ConfigurationProgress>
+@Getter
+public class ConfigurationProgress extends ChangeObservable< ConfigurationProgress>
 {
 	private int typeCount = 0;
 	private int modelCount = 0;
 	private int sourceCount = 0;
-	
-	public int getTypeCount()
-	{
-		return typeCount;
-	}
-	
+
 	public void setTypeCount( int typeCount)
 	{
 		this.typeCount = typeCount;
@@ -21,20 +17,11 @@ public class ConfigurationProgress
 		notifyChange( this);
 	}
 
-	public int getModelCount() 
-	{
-		return modelCount;
-	}
-
 	public void setModelCount( int modelCount)
 	{
 		this.modelCount = modelCount;
 	
 		notifyChange( this);
-	}
-
-	public int getSourceCount() {
-		return sourceCount;
 	}
 
 	public void setSourceCount( int sourceCount)

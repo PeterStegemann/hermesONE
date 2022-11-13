@@ -873,7 +873,7 @@ public class SerialConfigurationReader
 			{
 				types.addType( type);
 
-				configurationProgress.setTypeCount(configuration.getTypes().getCount());
+				configurationProgress.setTypeCount( configuration.getTypes().getCount());
 			}
 		}
 

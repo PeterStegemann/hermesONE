@@ -1,8 +1,12 @@
 package net.stegemann.io.serial.configuration.write;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class SerialConfigurationWriterTest
 {
-
+	@Test
+	void test()
+	{
+		SerialConfigurationWriter writer = new SerialConfigurationWriter();
+	}
 }

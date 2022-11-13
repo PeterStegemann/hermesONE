@@ -47,10 +47,10 @@ public class MilliSecondComponent extends JPanel
 		slider.setMajorTickSpacing( Range / 2);
 
 		Hashtable< Integer, JLabel> LabelTable = new Hashtable< Integer, JLabel>();
-		LabelTable.put( new Integer( minimum), new JLabel( Utility.formatMilliSeconds( minimum + offset)));
-		LabelTable.put( new Integer( minimum + Range / 2 * 1),
+		LabelTable.put( minimum, new JLabel( Utility.formatMilliSeconds( minimum + offset)));
+		LabelTable.put( minimum + Range / 2 * 1,
 				        new JLabel( Utility.formatMilliSeconds( minimum + offset + Range / 2 * 1)));
-		LabelTable.put( new Integer( minimum + Range), new JLabel( Utility.formatMilliSeconds( maximum + offset)));
+		LabelTable.put( minimum + Range, new JLabel( Utility.formatMilliSeconds( maximum + offset)));
 
 		slider.setLabelTable( LabelTable);
 		slider.addChangeListener( this);
@@ -63,11 +63,7 @@ public class MilliSecondComponent extends JPanel
 		// No gaps within component.
 		setLayout( new FlowLayout( 0, 0, 0));
 
-		if( slider != null)
-		{
-			add( slider);
-		}
-
+		add( slider);
 		add( textfield);
 	}
 
