@@ -10,15 +10,15 @@ public class IterableNodeList implements Iterable< Node>
 {
 	private final NodeList nodeList;
 
-	public IterableNodeList( NodeList UseNodeList)
+	public IterableNodeList( NodeList useNodeList)
 	{
-		nodeList = UseNodeList;
+		nodeList = useNodeList;
 	}
 
 	@Override
 	public Iterator< Node> iterator()
 	{
-		return new Iterator< Node>()
+		return new Iterator<>()
 		{
 			private int nodeIndex = 0;
 
@@ -45,14 +45,14 @@ public class IterableNodeList implements Iterable< Node>
 
 			/**
 			 * Return current node if it is an element or search for next one.
-			 * 
+			 *
 			 * @return Node
 			 */
 			private Node getNode()
 			{
 				Node node;
 
-				while(( node = nodeList.item( nodeIndex)) != null)
+				while(( node = nodeList.item( nodeIndex )) != null)
 				{
 					if( node.getNodeType() == Node.ELEMENT_NODE)
 					{

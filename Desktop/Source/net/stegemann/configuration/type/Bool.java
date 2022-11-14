@@ -17,13 +17,13 @@ public class Bool
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 
-		Buffer.append( "Bool = {\n");
-		Buffer.append(  " Value: " + Boolean.toString( value) + "\n");
-		Buffer.append( "}\n");
+		builder.append( "Bool = {\n");
+		builder.append( " Value: " + value + "\n");
+		builder.append( "}\n");
 
-		return Buffer.toString();
+		return builder.toString();
 	}
 
 	@Override

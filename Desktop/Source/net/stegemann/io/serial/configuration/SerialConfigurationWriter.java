@@ -1,4 +1,4 @@
-package net.stegemann.io.serial.configuration.write;
+package net.stegemann.io.serial.configuration;
 
 import net.stegemann.configuration.*;
 import net.stegemann.configuration.Model.StatusTime;
@@ -28,16 +28,20 @@ import net.stegemann.io.WriteException;
 import net.stegemann.io.serial.base.DesktopConnection;
 import net.stegemann.io.serial.base.DesktopProtocol;
 import net.stegemann.io.serial.base.DesktopProtocol.Id;
-import net.stegemann.io.serial.configuration.ConfigurationProgress;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.io.serial.base.TypedConnectionHandler;
 import net.stegemann.misc.ThrowingFunction;
 
 public class SerialConfigurationWriter
 {
-	private final ConfigurationProgress configurationProgress = new ConfigurationProgress();
+	private final ConfigurationProgress configurationProgress;
 
 	private DesktopConnection connection;
+
+	SerialConfigurationWriter( ConfigurationProgress useConfigurationProgress)
+	{
+		configurationProgress = useConfigurationProgress;
+    }
 
 	public void writeToPort
 	(

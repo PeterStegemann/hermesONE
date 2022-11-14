@@ -5,28 +5,27 @@ import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.MenuShortcut;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ActionListener;import java.io.Serial;
 
 import javax.swing.JFrame;
 
 import net.stegemann.configuration.ChannelMappings;
 import net.stegemann.gui.panel.system.ChannelMappingsPanel;
 
-public class ChannelMappingsFrame  extends JFrame implements ActionListener
+public class ChannelMappingsFrame extends JFrame implements ActionListener
 {
+	@Serial
 	private static final long serialVersionUID = 8578935790343135041L;
 
-	private ChannelMappings channelMappings;
-
-	private ChannelMappingsPanel channelMappingsPanel;
+	private final ChannelMappings channelMappings;
 
 	private MenuItem closeMenuItem;
 
-	public ChannelMappingsFrame( ChannelMappings UseChannelMappings)
+	public ChannelMappingsFrame( ChannelMappings useChannelMappings)
 	{
 		super( "Kanalzuweisung");
 
-		channelMappings = UseChannelMappings;
+		channelMappings = useChannelMappings;
 
 		setResizable( false);
 
@@ -51,7 +50,7 @@ public class ChannelMappingsFrame  extends JFrame implements ActionListener
 
 	public void set()
 	{
-		channelMappingsPanel = new ChannelMappingsPanel( channelMappings);
+		ChannelMappingsPanel channelMappingsPanel = new ChannelMappingsPanel( channelMappings);
 		setContentPane( channelMappingsPanel);
 
 		channelMappingsPanel.set();

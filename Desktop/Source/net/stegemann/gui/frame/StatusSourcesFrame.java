@@ -5,7 +5,7 @@ import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.MenuShortcut;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ActionListener;import java.io.Serial;
 
 import javax.swing.JFrame;
 
@@ -15,6 +15,7 @@ import net.stegemann.gui.panel.StatusPanel;
 
 public class StatusSourcesFrame extends JFrame implements ActionListener
 {
+	@Serial
 	private static final long serialVersionUID = 2158442385827846260L;
 
 	private final StatusPanel statusSources;

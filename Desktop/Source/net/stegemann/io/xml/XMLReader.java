@@ -699,7 +699,7 @@ public class XMLReader
 
 						UseTypes.addType( NewType);
 					}
-					catch( Exception Reason)
+					catch( Exception ignored)
 					{
 					}
 				}
@@ -1199,10 +1199,6 @@ public class XMLReader
 			{
 				readValue( UseSource.getCurrentTime(), TextContent);
 			}
-			else if( Names.SOURCE_TIMER_STORE.compareToIgnoreCase( NodeName) == 0)
-			{
-				readValue( UseSource.getStore(), TextContent);
-			}
 			else if( Names.SOURCE_TIMER_REVERSE.compareToIgnoreCase( NodeName) == 0)
 			{
 				readValue( UseSource.getReverse(), TextContent);
@@ -1343,10 +1339,7 @@ public class XMLReader
 		{
 			Value.setConfigurationValue( TextContent);
 		}
-		catch( NumberFormatException e)
-		{
-		}
-		catch( ValueOutOfRangeException e)
+		catch( NumberFormatException | ValueOutOfRangeException ignored )
 		{
 		}
 	}

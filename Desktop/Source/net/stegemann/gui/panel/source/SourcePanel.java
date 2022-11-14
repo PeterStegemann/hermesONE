@@ -22,7 +22,7 @@ import net.stegemann.configuration.source.input.Switch;
 import net.stegemann.configuration.source.input.Ticker;
 import net.stegemann.gui.Constants;
 import net.stegemann.gui.components.TextComponent;
-import net.stegemann.gui.misc.SourceUtility;
+import net.stegemann.controller.SourceUtility;
 import net.stegemann.gui.panel.source.input.AnalogPanel;
 import net.stegemann.gui.panel.source.input.ButtonPanel;
 import net.stegemann.gui.panel.source.input.RotaryPanel;

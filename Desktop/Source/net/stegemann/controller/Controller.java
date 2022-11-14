@@ -20,7 +20,6 @@ import net.stegemann.configuration.view.SourcesView.HasEmpty;
 import net.stegemann.configuration.view.SourcesView.HasFixed;
 import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
-import net.stegemann.gui.misc.SourceUtility;
 
 public class Controller
 {
@@ -69,8 +68,7 @@ public class Controller
 			return null;
 		}
 
-		return cloneModel( SelectedModel, SelectedModel.getTypeId(),
-						   new HashMap< SourceId, SourceId>());
+		return cloneModel( SelectedModel, SelectedModel.getTypeId(), new HashMap<>());
 	}
 
 	private Model cloneModel( Model model, Number type, HashMap< SourceId, SourceId> typeSourcesMap)
@@ -98,10 +96,10 @@ public class Controller
 
 		// Map of all the sources that get cloned for this model. We need this later to change the
 		// references.
-		HashMap< SourceId, SourceId> SourcesMap = new HashMap< SourceId, SourceId>();
+		HashMap< SourceId, SourceId> sourcesMap = new HashMap<>();
 
 		// Add the type mappings.
-		SourcesMap.putAll( typeSourcesMap);
+		sourcesMap.putAll( typeSourcesMap);
 
 		SourcesView ModelSourcesView =
 			new SourcesView( UseSources, PickGlobals.No, null, model.getId(), HasEmpty.No,
@@ -111,7 +109,7 @@ public class Controller
 		{
 			Source NewSource = cloneSource( UseSource, NewModel.getId());
 
-			SourcesMap.put( UseSource.getId(), NewSource.getId());
+			sourcesMap.put( UseSource.getId(), NewSource.getId());
 		}
 
 		// Now adjust the source references in the new sources and the model.
@@ -121,10 +119,10 @@ public class Controller
 
 		for( Source UseSource: NewModelSourcesView)
 		{
-			UseSource.replaceSources( SourcesMap);
+			UseSource.replaceSources( sourcesMap);
 		}
 
-		NewModel.replaceSources( SourcesMap);
+		NewModel.replaceSources( sourcesMap);
 
 		return NewModel;
 	}
@@ -200,7 +198,7 @@ public class Controller
 		Sources UseSources = configuration.getSources();
 
 		// Map of all the source ids that get cloned for this type.
-		HashMap< SourceId, SourceId> SourcesMap = new HashMap< SourceId, SourceId>();
+		HashMap< SourceId, SourceId> SourcesMap = new HashMap<>();
 
 		SourcesView TypeSourcesView =
 			new SourcesView( UseSources, PickGlobals.No, type.getId(), null, HasEmpty.No,
@@ -384,11 +382,11 @@ public class Controller
 
 	private int findEmptySlot()
 	{
-		boolean AvailableProxies[] = new boolean[ Model.PROXIES];
+		boolean[] availableProxies = new boolean[ Model.PROXIES];
 
 		for( int CurrentProxyId = 0; CurrentProxyId < Model.PROXIES; CurrentProxyId++)
 		{
-			AvailableProxies[ CurrentProxyId] = true;
+			availableProxies[ CurrentProxyId] = true;
 		}
 
 		// Loop sources.
@@ -403,14 +401,14 @@ public class Controller
 				// Better ignore invalid slots.
 				if( Slot < Model.PROXIES)
 				{
-					AvailableProxies[ Slot] = false;
+					availableProxies[ Slot] = false;
 				}
 			}
 		}
 
 		for( int CurrentProxyId = 0; CurrentProxyId < Model.PROXIES; CurrentProxyId++)
 		{
-			if( AvailableProxies[ CurrentProxyId] == true)
+			if( availableProxies[ CurrentProxyId] == true)
 			{
 				return CurrentProxyId;
 			}

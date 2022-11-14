@@ -1,7 +1,7 @@
 package net.stegemann.io.xml;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,10 +45,8 @@ import net.stegemann.configuration.source.input.Button;
 import net.stegemann.configuration.source.input.Rotary;
 import net.stegemann.configuration.source.input.Switch;
 import net.stegemann.configuration.source.input.Ticker;
-import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.SourceWithVolume;
-import net.stegemann.configuration.type.Text;
 import net.stegemann.configuration.type.Volume;
 import net.stegemann.io.Utility;
 import net.stegemann.io.WriteException;
@@ -59,71 +57,102 @@ import org.w3c.dom.Node;
 
 public class XMLWriter
 {
-	public void writeToFile( Configuration UseConfiguration, String FileName) throws WriteException
+	private final DocumentGenerator documentGenerator;
+
+	XMLWriter( DocumentGenerator documentGenerator)
+ 	{
+		 this.documentGenerator = documentGenerator;
+	}
+
+	public void writeToFile( Configuration configuration, String fileName)
+		throws WriteException
 	{
-		DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder Builder;
+		Document configurationDocument = configurationDocument( configuration);
+
+		DOMSource domSource = new DOMSource( configurationDocument);
+		StreamResult result = streamResult( fileName);
+
+		transform( domSource, result);
+	}
+
+	private static void transform( DOMSource domSource, StreamResult result)
+		throws WriteException
+	{
+		Transformer transformer = transformer();
 
 		try
 		{
-			Builder = Factory.newDocumentBuilder();
+			transformer.transform( domSource, result);
 		}
-		catch( ParserConfigurationException Reason)
+		catch( TransformerException reason)
 		{
-			throw new WriteException( "Failed to create xml document builder.", Reason);
-		}
-
-		Document ConfigurationDocument = Builder.newDocument();
-
-		createDocument( UseConfiguration, ConfigurationDocument);
-
-		TransformerFactory UseTransformerFactory = TransformerFactory.newInstance();
-		Transformer UseTransformer;
-
-		try
-		{
-			UseTransformer = UseTransformerFactory.newTransformer();
-		}
-		catch( TransformerConfigurationException Reason)
-		{
-			throw new WriteException( "Failed to create xml tranformer.", Reason);
-		}
-
-		UseTransformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "yes");
-		UseTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		UseTransformer.setOutputProperty( OutputKeys.INDENT, "yes");
-
-		DOMSource UseSource = new DOMSource( ConfigurationDocument);
-
-		FileOutputStream ResultFile;
-
-		try
-		{
-			ResultFile = new FileOutputStream( FileName);
-		}
-		catch( FileNotFoundException Reason)
-		{
-			throw new WriteException( "Failed to create file '" + FileName + "'.", Reason);
-		}
-
-		StreamResult Result = new StreamResult( ResultFile);
-
-		try
-		{
-			UseTransformer.transform( UseSource, Result);
-		}
-		catch( TransformerException Reason)
-		{
-			throw new WriteException( "Failed to transform xml.", Reason);
+			throw new WriteException( "Failed to transform xml.", reason);
 		}
 	}
 
-	private void createDocument( Configuration UseConfiguration, Document ConfigurationDocument)
+	private static StreamResult streamResult( String fileName)
+		throws WriteException
 	{
-		Node ConfigurationNode = ConfigurationDocument.createElement( Names.CONFIGURATION);
-		ConfigurationDocument.appendChild( ConfigurationNode);
+		try( FileOutputStream resultFile = new FileOutputStream( fileName))
+		{
+			return new StreamResult( resultFile);
+		}
+		catch( IOException reason)
+		{
+			throw new WriteException( "Failed to create file '" + fileName + "'.", reason);
+		}
+	}
 
-		exportConfiguration( UseConfiguration, ConfigurationDocument, ConfigurationNode);
+	private static Transformer transformer()
+		throws WriteException
+	{
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer;
+
+		try
+		{
+			transformer = transformerFactory.newTransformer();
+		}
+		catch( TransformerConfigurationException reason)
+		{
+			throw new WriteException( "Failed to create xml tranformer.", reason);
+		}
+
+		transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+		transformer.setOutputProperty( OutputKeys.INDENT, "yes");
+
+		return transformer;
+	}
+
+	private Document configurationDocument( Configuration configuration)
+		throws WriteException
+	{
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+
+		try
+		{
+			builder = factory.newDocumentBuilder();
+		}
+		catch( ParserConfigurationException reason)
+		{
+			throw new WriteException( "Failed to create xml document builder.", reason);
+		}
+
+		Document configurationDocument = builder.newDocument();
+
+		renderDocument( configuration, configurationDocument);
+
+		return configurationDocument;
+	}
+
+	private void renderDocument( Configuration configuration, Document document)
+	{
+		Node configurationNode = document.createElement( Names.CONFIGURATION);
+		document.appendChild( configurationNode);
+
+		exportConfiguration( configuration, document, configurationNode);
 	}
 
 	private void exportConfiguration( Configuration UseConfiguration, Document ConfigurationDocument,
@@ -131,30 +160,30 @@ public class XMLWriter
 	{
 		System UseSystem = UseConfiguration.getSystem();
 
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_ANALOG_INPUTS,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_ANALOG_INPUTS,
 			UseSystem.getAnalogInputs());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_DIGITAL_INPUTS,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_DIGITAL_INPUTS,
 			UseSystem.getDigitalInputs());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_OUTPUT_CHANNELS,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_OUTPUT_CHANNELS,
 			UseSystem.getOutputChannels());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_OUTPUTS,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_OUTPUTS,
 			UseSystem.getOutputs());
 
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_OWNER,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_OWNER,
 			UseSystem.getOwner());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_SETUP_BACKLIGHT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_SETUP_BACKLIGHT,
 			UseSystem.getSetupBacklight());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_SETUP_BLANK_TIME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_SETUP_BLANK_TIME,
 			UseSystem.getSetupBlankTime());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_BACKLIGHT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_BACKLIGHT,
 			UseSystem.getStatusBacklight());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_CONTRAST,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_CONTRAST,
 			UseSystem.getStatusContrast());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_BLANK_TIME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_BLANK_TIME,
 			UseSystem.getStatusBlankTime());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_INVERTED,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_INVERTED,
 			UseSystem.getStatusInverted());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_SELECTED_MODEL,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_SELECTED_MODEL,
 			UseSystem.getSelectedModel());
 
 		Node NewNode;
@@ -209,11 +238,11 @@ public class XMLWriter
 
 	private void exportPPM( PPM UsePPM, Document ConfigurationDocument, Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.PPM_INVERTED,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.PPM_INVERTED,
 			UsePPM.getPPMInverted());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.PPM_CENTER,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.PPM_CENTER,
 			UsePPM.getPPMCenter());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.PPM_NAME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.PPM_NAME,
 			UsePPM.getName());
 
 		Element NewNode = ConfigurationDocument.createElement( Names.PPM_CHANNEL_MAPPINGS);
@@ -227,7 +256,7 @@ public class XMLWriter
 	{
 		for( Number CurrentChannelMapping: UseChannelMappings)
 		{
-			appendNode( ConfigurationDocument, ConfigurationNode, Names.PPM_CHANNEL_MAPPING,
+			documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.PPM_CHANNEL_MAPPING,
 				CurrentChannelMapping);
 		}
 	}
@@ -264,9 +293,9 @@ public class XMLWriter
 	private void exportSource( Source UseSource, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_NAME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_NAME,
 			UseSource.getName());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_MODEL,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_MODEL,
 			UseSource.getModel());
 
 		Node NewNode = null;
@@ -353,75 +382,75 @@ public class XMLWriter
 	private void exportSourceInputAnalog( Analog UseSource, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ANALOG_INPUT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ANALOG_INPUT,
 			UseSource.getInputId());
 	}
 
 	private void exportSourceInputButton( Button UseSource, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_INPUT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_INPUT,
 			UseSource.getInputId());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_INIT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_INIT,
 			UseSource.getInit());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_STORE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_STORE,
 			UseSource.getStore());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_TOGGLE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_TOGGLE,
 			UseSource.getToggle());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_TOP,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_TOP,
 			UseSource.getTop());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_BOTTOM,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_BUTTON_BOTTOM,
 			UseSource.getBottom());
 	}
 
 	private void exportSourceInputRotary( Rotary UseSource, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_A_INPUT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_A_INPUT,
 			UseSource.getAInputId());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_B_INPUT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_B_INPUT,
 			UseSource.getBInputId());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_STORE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_STORE,
 			UseSource.getStore());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_INIT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_INIT,
 			UseSource.getInit());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_STEP,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_STEP,
 			UseSource.getStep());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_TOP,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_TOP,
 			UseSource.getTop());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_BOTTOM,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_ROTARY_BOTTOM,
 			UseSource.getBottom());
 	}
 
 	private void exportSourceInputSwitch( Switch UseSource, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_SWITCH_LOW_INPUT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_SWITCH_LOW_INPUT,
 					UseSource.getLowInputId());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_SWITCH_HIGH_INPUT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_SWITCH_HIGH_INPUT,
 					UseSource.getHighInputId());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_SWITCH_TOP,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_SWITCH_TOP,
 					UseSource.getTop());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_SWITCH_BOTTOM,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_SWITCH_BOTTOM,
 					UseSource.getBottom());
 	}
 
 	private void exportSourceInputTicker( Ticker UseSource, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_LOW_INPUT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_LOW_INPUT,
 			UseSource.getLowInputId());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_HIGH_INPUT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_HIGH_INPUT,
 			UseSource.getHighInputId());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_INIT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_INIT,
 			UseSource.getInit());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_STEP,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_STEP,
 			UseSource.getStep());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_STORE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_STORE,
 			UseSource.getStore());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_TOP,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_TOP,
 			UseSource.getTop());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_BOTTOM,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_INPUT_TICKER_BOTTOM,
 			UseSource.getBottom());
 	}
 
@@ -455,9 +484,9 @@ public class XMLWriter
 	private void exportSourceStore( Store UseSource, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_STORE_INPUT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_STORE_INPUT,
 			UseSource.getInput());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_STORE_INIT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_STORE_INIT,
 			UseSource.getInit());
 	}
 
@@ -469,46 +498,46 @@ public class XMLWriter
 		exportSourceTupel( UseSource.getStep(), ConfigurationDocument, ConfigurationNode,
 			Names.SOURCE_FOLLOWER_STEP);
 
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_FOLLOWER_TRIGGER,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_FOLLOWER_TRIGGER,
 			UseSource.getTriggerId());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_FOLLOWER_TRIGGER_LOW_LIMIT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_FOLLOWER_TRIGGER_LOW_LIMIT,
 			UseSource.getTriggerLowLimit());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_FOLLOWER_TRIGGER_HIGH_LIMIT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_FOLLOWER_TRIGGER_HIGH_LIMIT,
 			UseSource.getTriggerHighLimit());
 	}
 
 	private void exportSourceTimer( Timer UseSource, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_INIT_TIME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_INIT_TIME,
 			UseSource.getInitTime());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_CURRENT_TIME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_CURRENT_TIME,
 			UseSource.getCurrentTime());
 
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_STORE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_STORE,
 			UseSource.getStore());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_REVERSE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_REVERSE,
 			UseSource.getReverse());
 
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_TRIGGER,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_TRIGGER,
 			UseSource.getTrigger());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_TRIGGER_LOW_LIMIT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_TRIGGER_LOW_LIMIT,
 			UseSource.getTriggerLowLimit());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_TRIGGER_HIGH_LIMIT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_TRIGGER_HIGH_LIMIT,
 			UseSource.getTriggerHighLimit());
 
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_WARN_LOW_TIME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_WARN_LOW_TIME,
 			UseSource.getWarnLowTime());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_WARN_CRITICAL_TIME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_WARN_CRITICAL_TIME,
 			UseSource.getWarnCriticalTime());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_WARN_PAUSE_TIME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TIMER_WARN_PAUSE_TIME,
 			UseSource.getWarnPauseTime());
 	}
 
 	private void exportSourceTrimmer( Trim UseSource, Document ConfigurationDocument,
 			Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TRIMMER_REVERSE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TRIMMER_REVERSE,
 			UseSource.getReverse());
 
 		exportSourceTupel( UseSource.getInput(), ConfigurationDocument, ConfigurationNode,
@@ -529,7 +558,7 @@ public class XMLWriter
 	private void exportSourceProxy( Proxy UseSource, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_PROXY_SLOT,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_PROXY_SLOT,
 			UseSource.getSlot());
 	}
 
@@ -540,7 +569,7 @@ public class XMLWriter
 		{
 			Volume Point = UseSource.getPoint( PointIndex);
 
-			appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TRIMMER_POINT, Point);
+			documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SOURCE_TRIMMER_POINT, Point);
 		}
 	}
 
@@ -578,8 +607,8 @@ public class XMLWriter
 
 	private void exportType( Type UseType, Document ConfigurationDocument, Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.TYPE_NAME, UseType.getName());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.TYPE_STATE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.TYPE_NAME, UseType.getName());
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.TYPE_STATE,
 			Utility.convertTypeState( UseType.getState()));
 	}
 
@@ -614,12 +643,12 @@ public class XMLWriter
 
 	private void exportModel( Model UseModel, Document ConfigurationDocument, Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_NAME, UseModel.getName());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_NAME, UseModel.getName());
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATE,
 			Utility.convertModelState( UseModel.getState()));
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_RF_MODE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_RF_MODE,
 			UseModel.getRFMode());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_TYPE, UseModel.getTypeId());
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_TYPE, UseModel.getTypeId());
 
 		Node NewNode;
 
@@ -647,22 +676,22 @@ public class XMLWriter
 	private void exportStatusSources( Model UseModel, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_SOURCE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_SOURCE,
 			UseModel.getStatusSourceId( StatusSource.LEFT_SIDE));
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_SOURCE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_SOURCE,
 			UseModel.getStatusSourceId( StatusSource.LEFT_BOTTOM));
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_SOURCE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_SOURCE,
 			UseModel.getStatusSourceId( StatusSource.RIGHT_SIDE));
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_SOURCE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_SOURCE,
 			UseModel.getStatusSourceId( StatusSource.RIGHT_BOTTOM));
 	}
 
 	private void exportStatusTimes( Model UseModel, Document ConfigurationDocument,
 									  		  Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_TIME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_TIME,
 			UseModel.getStatusTimeId( StatusTime.TOP));
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_TIME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.MODEL_STATUS_TIME,
 			UseModel.getStatusTimeId( StatusTime.BOTTOM));
 	}
 
@@ -687,11 +716,11 @@ public class XMLWriter
 	private void exportChannel( Channel UseChannel, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.CHANNEL_NAME,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.CHANNEL_NAME,
 			UseChannel.getName());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.CHANNEL_REVERSE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.CHANNEL_REVERSE,
 			UseChannel.getReverse());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.CHANNEL_MODE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.CHANNEL_MODE,
 			UseChannel.getMode());
 
 		exportSourceTupel( UseChannel.getInput(), ConfigurationDocument, ConfigurationNode,
@@ -716,7 +745,7 @@ public class XMLWriter
 		{
 			Volume ChannelPoint = UseChannel.getPoint( ChannelPointIndex);
 
-			appendNode( ConfigurationDocument, ConfigurationNode, Names.CHANNEL_POINT, ChannelPoint);
+			documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.CHANNEL_POINT, ChannelPoint);
 		}
 	}
 
@@ -738,24 +767,24 @@ public class XMLWriter
 		NewNode = ConfigurationDocument.createElement( NodeName);
 		ConfigurationNode.appendChild( NewNode);
 
-		appendNode( ConfigurationDocument, NewNode, Names.SOURCE_TUPEL_SOURCE_ID,
+		documentGenerator.appendNode( ConfigurationDocument, NewNode, Names.SOURCE_TUPEL_SOURCE_ID,
 			UseSourceTupel.getSourceId());
-		appendNode( ConfigurationDocument, NewNode, Names.SOURCE_TUPEL_VOLUME,
+		documentGenerator.appendNode( ConfigurationDocument, NewNode, Names.SOURCE_TUPEL_VOLUME,
 			UseSourceTupel.getVolume());
 	}
 
 	private void exportBattery( Battery UseBattery, Document ConfigurationDocument,
 		Node ConfigurationNode)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_WARN_LOW_VOLTAGE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_WARN_LOW_VOLTAGE,
 			UseBattery.getWarnLowVoltage());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_WARN_CRITICAL_VOLTAGE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_WARN_CRITICAL_VOLTAGE,
 			UseBattery.getWarnCriticalVoltage());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_MINIMUM_VOLTAGE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_MINIMUM_VOLTAGE,
 			UseBattery.getMinimumVoltage());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_MAXIMUM_VOLTAGE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_MAXIMUM_VOLTAGE,
 			UseBattery.getMaximumVoltage());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_CALIBRATION_VOLTAGE,
+		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.BATTERY_CALIBRATION_VOLTAGE,
 			UseBattery.getCalibrationVoltage());
 	}
 
@@ -776,47 +805,33 @@ public class XMLWriter
 		}
 	}
 
-	private void exportCalibration( Calibration UseCalibration, Document ConfigurationDocument,
-		Node ConfigurationNode)
+	private void exportCalibration
+	(
+		Calibration calibration,
+		Document configurationDocument,
+		Node configurationNode
+	)
 	{
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.CALIBRATION_HIGH,
-			UseCalibration.getHigh());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.CALIBRATION_CENTER,
-			UseCalibration.getCenter());
-		appendNode( ConfigurationDocument, ConfigurationNode, Names.CALIBRATION_LOW,
-			UseCalibration.getLow());
-	}
-
-	private void appendNode( Document ConfigurationDocument, Node ConfigurationNode, String NodeTag,
-		Bool Value)
-	{
-		appendNode( ConfigurationDocument, ConfigurationNode, NodeTag, Value.getConfigurationValue());		
-	}
-
-	private void appendNode( Document ConfigurationDocument, Node ConfigurationNode, String NodeTag,
-		Text Value)
-	{
-		appendNode( ConfigurationDocument, ConfigurationNode, NodeTag, Value.getConfigurationValue());
-	}
-
-	private void appendNode( Document ConfigurationDocument, Node ConfigurationNode, String NodeTag,
-		Number Value)
-	{
-		appendNode( ConfigurationDocument, ConfigurationNode, NodeTag, Value.getConfigurationValue());
-	}
-
-	private void appendNode( Document ConfigurationDocument, Node ConfigurationNode, String NodeTag,
-		int Value)
-	{
-		appendNode( ConfigurationDocument, ConfigurationNode, NodeTag,
-			java.lang.Integer.toString( Value));
-	}
-
-	private void appendNode( Document ConfigurationDocument, Node ConfigurationNode, String NodeTag,
-		String Value)
-	{
-		Node NewNode = ConfigurationDocument.createElement( NodeTag);
-		ConfigurationNode.appendChild( NewNode);
-		NewNode.setTextContent( Value);
+		documentGenerator.appendNode
+		(
+			configurationDocument,
+			configurationNode,
+			Names.CALIBRATION_HIGH,
+			calibration.getHigh()
+		);
+		documentGenerator.appendNode
+		(
+			configurationDocument,
+			configurationNode,
+			Names.CALIBRATION_CENTER,
+			calibration.getCenter()
+		);
+		documentGenerator.appendNode
+		(
+			configurationDocument,
+			configurationNode,
+			Names.CALIBRATION_LOW,
+			calibration.getLow()
+		);
 	}
 }

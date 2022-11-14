@@ -26,7 +26,7 @@ import net.stegemann.configuration.view.SourcesView.HasFixed;
 import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
 import net.stegemann.controller.Controller;
-import net.stegemann.gui.misc.SourceUtility;
+import net.stegemann.controller.SourceUtility;
 import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.SourcesComboBoxModel;
 import net.stegemann.gui.panel.source.SourcePanel;

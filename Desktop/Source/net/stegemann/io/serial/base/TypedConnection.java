@@ -5,9 +5,9 @@ import net.stegemann.io.WriteException;
 
 public class TypedConnection
 {
-	private static boolean Debug = true;
+	private static final boolean Debug = true;
 
-	private TypedConnectionHandler handler = null;
+	private TypedConnectionHandler handler;
 	private Connection connection = new Connection();
 
 	public TypedConnection( TypedConnectionHandler handler)

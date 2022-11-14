@@ -23,8 +23,9 @@ import net.stegemann.gui.misc.CheckboxMenuItemGroup;
 import net.stegemann.io.ReadException;
 import net.stegemann.io.WriteException;
 import net.stegemann.io.serial.base.Ports;
-import net.stegemann.io.serial.configuration.read.SerialConfigurationReader;
-import net.stegemann.io.serial.configuration.write.SerialConfigurationWriter;
+import net.stegemann.io.serial.configuration.ConfigurationObjectFactory;import net.stegemann.io.serial.configuration.SerialConfigurationReader;
+import net.stegemann.io.serial.configuration.SerialConfigurationWriter;
+import net.stegemann.io.xml.XMLObjectFactory;
 import net.stegemann.io.xml.XMLReader;
 import net.stegemann.io.xml.XMLWriter;
 
@@ -53,6 +54,11 @@ public class MainFrame extends JFrame implements ActionListener
 	private String lastFile;
 	private final FileDialog openConfigurationDialog;
 	private final FileDialog saveConfigurationDialog;
+
+	private final SerialConfigurationReader serialConfigurationReader =
+	 	ConfigurationObjectFactory.serialConfigurationReader();
+	private final SerialConfigurationWriter serialConfigurationWriter =
+	 	ConfigurationObjectFactory.serialConfigurationWriter();
 
 	public MainFrame( Controller controller)
 	{
@@ -258,12 +264,16 @@ public class MainFrame extends JFrame implements ActionListener
 			lastDirectory = directory;
 			lastFile = file;
 
-			XMLReader configurationReader = new XMLReader();
+			XMLReader configurationReader = XMLObjectFactory.xmlReader();
 
 			try
 			{
-				configurationReader
-					.readFromFile( configuration, lastDirectory + lastFile, mode);
+				configurationReader.readFromFile
+				(
+					configuration,
+					lastDirectory + lastFile,
+			 		mode
+				);
 			}
 			catch( ReadException reason)
 			{
@@ -311,7 +321,7 @@ public class MainFrame extends JFrame implements ActionListener
 
 	private void doSaveConfiguration()
 	{
-		XMLWriter configurationWriter = new XMLWriter();
+		XMLWriter configurationWriter = XMLObjectFactory.xmlWriter();
 
 		try
 		{
@@ -355,7 +365,7 @@ public class MainFrame extends JFrame implements ActionListener
 	{
 		try
 		{
-			new SerialConfigurationReader().readFromPort( configuration, portName, progressDialog);
+			serialConfigurationReader.readFromPort( configuration, portName, progressDialog);
 		}
 		catch( ReadException reason)
 		{
@@ -395,7 +405,7 @@ public class MainFrame extends JFrame implements ActionListener
 	{
 		try
 		{
-			new SerialConfigurationWriter().writeToPort( configuration, portName, progressDialog);
+			serialConfigurationWriter.writeToPort( configuration, portName, progressDialog);
 		}
 		catch( WriteException reason)
 		{

@@ -10,6 +10,8 @@ public class ConfigurationProgress extends ChangeObservable< ConfigurationProgre
 	private int modelCount = 0;
 	private int sourceCount = 0;
 
+	ConfigurationProgress()	{}
+
 	public void setTypeCount( int typeCount)
 	{
 		this.typeCount = typeCount;

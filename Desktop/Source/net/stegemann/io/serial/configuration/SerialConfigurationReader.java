@@ -1,4 +1,4 @@
-package net.stegemann.io.serial.configuration.read;
+package net.stegemann.io.serial.configuration;
 
 import java.util.ArrayList;
 
@@ -44,18 +44,22 @@ import net.stegemann.io.serial.base.DesktopConnection;
 import net.stegemann.io.serial.base.DesktopConnectionHandler;
 import net.stegemann.io.serial.base.DesktopProtocol;
 import net.stegemann.io.serial.base.TypedConnectionHandler;
-import net.stegemann.io.serial.configuration.ConfigurationProgress;
 import net.stegemann.misc.ChangeListener;
 
 public class SerialConfigurationReader
 {
-	private final ArrayList< TypedConnectionHandler> handlerStack =
-			new ArrayList< TypedConnectionHandler>();
-	private final ConfigurationProgress configurationProgress = new ConfigurationProgress();
+	private final ConfigurationProgress configurationProgress;
+
+	private final ArrayList< TypedConnectionHandler> handlerStack = new ArrayList<>();
+
+	public SerialConfigurationReader( ConfigurationProgress useConfigurationProgress)
+	{
+		configurationProgress = useConfigurationProgress;
+    }
 
 	public void readFromPort( Configuration configuration, String PortName,
-			ChangeListener<ConfigurationProgress> configurationListener) 
-			throws ReadException
+			ChangeListener< ConfigurationProgress> configurationListener)
+		throws ReadException
 	{
 		TypedConnectionForwarder ConnectionForwarder = new TypedConnectionForwarder();
 		DesktopConnection Connection = new DesktopConnection();

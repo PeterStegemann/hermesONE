@@ -52,15 +52,15 @@ public class Number extends ChangeObservable< Number>
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 
-		Buffer.append( "Number = {\n");
-		Buffer.append(  " Minimum: " + Integer.toString( minimum) + "\n");
-		Buffer.append(  " Maximum: " + Integer.toString( maximum) + "\n");
-		Buffer.append(  " Value: " + Integer.toString( value) + "\n");
-		Buffer.append( "}\n");
+		builder.append( "Number = {\n");
+		builder.append( " Minimum: " + minimum + "\n");
+		builder.append( " Maximum: " + maximum + "\n");
+		builder.append( " Value: " + value + "\n");
+		builder.append( "}\n");
 
-		return Buffer.toString();
+		return builder.toString();
 	}
 
 	@Override

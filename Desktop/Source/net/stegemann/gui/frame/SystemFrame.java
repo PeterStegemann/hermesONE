@@ -5,7 +5,7 @@ import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.MenuShortcut;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ActionListener;import java.io.Serial;
 
 import javax.swing.JFrame;
 
@@ -14,19 +14,16 @@ import net.stegemann.gui.panel.SystemPanel;
 
 public class SystemFrame extends JFrame implements ActionListener
 {
+	@Serial
 	private static final long serialVersionUID = -6717842936654950443L;
-
-	private final Configuration configuration;
 
 	private final SystemPanel system;
 
 	private MenuItem closeMenuItem;
 
-	public SystemFrame( Configuration UseConfiguration)
+	public SystemFrame( Configuration configuration)
 	{
 		super( "System");
-
-		configuration = UseConfiguration;
 
 		system = new SystemPanel( configuration);
 

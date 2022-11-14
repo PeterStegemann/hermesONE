@@ -1,4 +1,4 @@
-package net.stegemann.gui.misc;
+package net.stegemann.controller;
 
 import net.stegemann.configuration.source.Follower;
 import net.stegemann.configuration.source.Map;
@@ -16,7 +16,7 @@ import net.stegemann.configuration.source.input.Ticker;
 
 public class SourceUtility
 {
-	private static String[] names =
+	private static final String[] names =
 	{
 		"Geber Analog",
 		"Geber Taster",
@@ -38,58 +38,58 @@ public class SourceUtility
 
 	public static String getTypeNameForSource( Source source)
 	{
-		String TypeString = "";
+		String typeString = "";
 
 		if( source instanceof Proxy)
 		{
-			TypeString = "Proxy";
+			typeString = "Proxy";
 		}
 		else if( source instanceof Analog)
 		{
-			TypeString = names[ 0];
+			typeString = names[ 0];
 		}
 		else if( source instanceof Button)
 		{
-			TypeString = names[ 1];
+			typeString = names[ 1];
 		}
 		else if( source instanceof Rotary)
 		{
-			TypeString = names[ 2];
+			typeString = names[ 2];
 		}
 		else if( source instanceof Switch)
 		{
-			TypeString = names[ 3];
+			typeString = names[ 3];
 		}
 		else if( source instanceof Ticker)
 		{
-			TypeString = names[ 4];
+			typeString = names[ 4];
 		}
 		else if( source instanceof Map)
 		{
-			TypeString = names[ 5];
+			typeString = names[ 5];
 		}
 		else if( source instanceof Mix)
 		{
-			TypeString = names[ 6];
+			typeString = names[ 6];
 		}
 		else if( source instanceof Store)
 		{
-			TypeString = names[ 7];
+			typeString = names[ 7];
 		}
 		else if( source instanceof Follower)
 		{
-			TypeString = names[ 8];
+			typeString = names[ 8];
 		}
 		else if( source instanceof Timer)
 		{
-			TypeString = names[ 9];
+			typeString = names[ 9];
 		}
 		else if( source instanceof Trim)
 		{
-			TypeString = names[ 10];
+			typeString = names[ 10];
 		}
 
-		return TypeString;
+		return typeString;
 	}
 
 	public static Source createSourceForTypeName( String typeName)
