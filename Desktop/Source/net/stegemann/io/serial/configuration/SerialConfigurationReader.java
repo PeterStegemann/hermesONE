@@ -40,33 +40,37 @@ import net.stegemann.configuration.type.Text;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.io.ReadException;
 import net.stegemann.io.Utility;
-import net.stegemann.io.serial.base.DesktopConnection;
-import net.stegemann.io.serial.base.DesktopConnectionHandler;
-import net.stegemann.io.serial.base.DesktopProtocol;
-import net.stegemann.io.serial.base.TypedConnectionHandler;
+import net.stegemann.io.serial.base.*;
 import net.stegemann.misc.ChangeListener;
 
 public class SerialConfigurationReader
 {
 	private final ConfigurationProgress configurationProgress;
+	private final DesktopConnection connection;
 
 	private final ArrayList< TypedConnectionHandler> handlerStack = new ArrayList<>();
 
-	public SerialConfigurationReader( ConfigurationProgress useConfigurationProgress)
+	SerialConfigurationReader(
+		ConfigurationProgress useConfigurationProgress,
+		DesktopConnection useConnection
+	)
 	{
 		configurationProgress = useConfigurationProgress;
+		connection = useConnection;
     }
 
-	public void readFromPort( Configuration configuration, String PortName,
-			ChangeListener< ConfigurationProgress> configurationListener)
+	public void readFromPort(
+		Configuration configuration,
+		String portName,
+		ChangeListener< ConfigurationProgress> configurationListener
+	)
 		throws ReadException
 	{
-		TypedConnectionForwarder ConnectionForwarder = new TypedConnectionForwarder();
-		DesktopConnection Connection = new DesktopConnection();
+		TypedConnectionForwarder connectionForwarder = new TypedConnectionForwarder();
 
-		if( Connection.open( PortName, ConnectionForwarder) == false)
+		if( connection.open( portName, connectionForwarder) == false)
 		{
-			throw new ReadException( "Failed to open connection with port " + PortName + ".");
+			throw new ReadException( "Failed to open connection with port " + portName + ".");
 		}
 
 		configuration.clear();
@@ -77,7 +81,7 @@ public class SerialConfigurationReader
 
 		try
 		{
-			Connection.readConfiguration();
+			connection.readConfiguration();
 		}
 		catch( ReadException reason)
 		{
@@ -89,21 +93,21 @@ public class SerialConfigurationReader
 
 			handlerStack.remove( 0);
 
-			Connection.close();
+			connection.close();
 		}
-
 
 //		java.lang.System.err.println( "End, stack size: " + handlerStack.size());
   	}
 
-	private class TypedConnectionForwarder implements TypedConnectionHandler
+	private class TypedConnectionForwarder
+		implements TypedConnectionHandler
 	{
 		@Override
-		public void complexOpened( byte UseId)
+		public void complexOpened( byte id)
 		{
 //			java.lang.System.out.print( ".");
 
-			handlerStack.get( 0).complexOpened( UseId);
+			handlerStack.get( 0).complexOpened( id);
 		}
 
 		@Override
@@ -117,18 +121,19 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( byte UseId, String value)
+		public void valueRead( byte id, String value)
 		{
-			handlerStack.get( 0).valueRead( UseId, value);
+			handlerStack.get( 0).valueRead( id, value);
 		}
 	}
 
-	private class UnknownTypeHandler extends DesktopConnectionHandler
+	private class UnknownTypeHandler
+		extends DesktopConnectionHandler
 	{
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			java.lang.System.out.println( "Unknown complex " + UseId);
+			java.lang.System.out.println( "Unknown complex " + id);
 
 			pushHandler( new UnknownTypeHandler());
 		}
@@ -139,33 +144,30 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{
-			java.lang.System.out.println( "Unknown value " + UseId.GetByteValue() + " {" + TextContent + "}");
+			java.lang.System.out.println( "Unknown value " + id.getByteValue() + " {" + textContent + "}");
  		}
 
-		protected void readValue( Number value, String TextContent)
+		protected void readValue( Number value, String textContent)
 		{
 			try
 			{
-				value.setConfigurationValue( TextContent);
+				value.setConfigurationValue( textContent);
 			}
-			catch( NumberFormatException e)
+			catch( NumberFormatException | ValueOutOfRangeException ignored)
 			{
 			}
-			catch( ValueOutOfRangeException e)
-			{
-			}		
 		}
 
-		protected void readValue( Text value, String TextContent)
+		protected void readValue( Text value, String textContent)
 		{
-			value.setConfigurationValue( TextContent);
+			value.setConfigurationValue( textContent);
 		}
 
-		protected void readValue( Bool value, String TextContent)
+		protected void readValue( Bool value, String textContent)
 		{
-			value.setConfigurationValue( TextContent);
+			value.setConfigurationValue( textContent);
 		}
 	}
 
@@ -174,15 +176,15 @@ public class SerialConfigurationReader
 	{
 		final Configuration configuration;
 
-		public StartHandler( Configuration configuration)
+		public StartHandler( Configuration useConfiguration)
 		{
-			this.configuration = configuration;
+			configuration = useConfiguration;
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case Configuration :
 				{
@@ -190,7 +192,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -206,49 +208,43 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
 			System UseSystem = configuration.getSystem();
 
-			switch( UseId)
+			switch( id)
 			{
-				case Battery :
+				case Battery ->
 				{
 					pushHandler( new BatteryHandler( UseSystem.getBattery()));
 				}
-				break;
 
-				case Calibrations :
+				case Calibrations ->
 				{
 					pushHandler( new CalibrationsHandler( UseSystem.getCalibrations()));
 				}
-				break;
 
-				case Models :
+				case Models ->
 				{
 					pushHandler( new ModelsHandler( configuration.getModels(), configuration));
 				}
-				break;
 
-				case Types :
+				case Types ->
 				{
 					pushHandler( new TypesHandler( configuration.getTypes(), configuration));
 				}
-				break;
 
-				case Sources :
+				case Sources ->
 				{
 					pushHandler( new SourcesHandler( configuration.getSources(), configuration));
 				}
-				break;
 
-				case PPMs :
+				case PPMs ->
 				{
 					pushHandler( new PPMsHandler( UseSystem.getPPMs()));
 				}
-				break;
 
-				default : super.complexOpened( UseId); break;
+				default -> super.complexOpened( id);
 			}
  		}
 
@@ -259,85 +255,85 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{
 			System UseSystem = configuration.getSystem();
 
-			switch( UseId)
+			switch( id)
 			{
 				case Owner :
 				{
-					readValue( UseSystem.getOwner(), TextContent);
+					readValue( UseSystem.getOwner(), textContent);
 				}
 				break;
 
 				case AnalogInputs :
 				{
-					readValue( UseSystem.getAnalogInputs(), TextContent);
+					readValue( UseSystem.getAnalogInputs(), textContent);
 				}
 				break;
 
 				case DigitalInputs :
 				{
-					readValue( UseSystem.getDigitalInputs(), TextContent);
+					readValue( UseSystem.getDigitalInputs(), textContent);
 				}
 				break;
 
 				case OutputChannels :
 				{
-					readValue( UseSystem.getOutputChannels(), TextContent);
+					readValue( UseSystem.getOutputChannels(), textContent);
 				}
 				break;
 
 				case Outputs :
 				{
-					readValue( UseSystem.getOutputs(), TextContent);
+					readValue( UseSystem.getOutputs(), textContent);
 				}
 				break;
 
 				case SetupBacklight :
 				{
-					readValue( UseSystem.getSetupBacklight(), TextContent);
+					readValue( UseSystem.getSetupBacklight(), textContent);
 				}
 				break;
 
 				case SetupBlankTime :
 				{
-					readValue( UseSystem.getSetupBlankTime(), TextContent);
+					readValue( UseSystem.getSetupBlankTime(), textContent);
 				}
 				break;
 
 				case StatusBacklight :
 				{
-					readValue( UseSystem.getStatusBacklight(), TextContent);
+					readValue( UseSystem.getStatusBacklight(), textContent);
 				}
 				break;
 
 				case StatusContrast :
 				{
-					readValue( UseSystem.getStatusContrast(), TextContent);
+					readValue( UseSystem.getStatusContrast(), textContent);
 				}
 				break;
 
 				case StatusBlankTime :
 				{
-					readValue( UseSystem.getStatusBlankTime(), TextContent);
+					readValue( UseSystem.getStatusBlankTime(), textContent);
 				}
 				break;
 
 				case StatusInverted :
 				{
-					readValue( UseSystem.getStatusInverted(), TextContent);
+					readValue( UseSystem.getStatusInverted(), textContent);
 				}
 				break;
 
 				case SelectedModel :
 				{
-					readValue( UseSystem.getSelectedModel(), TextContent);
+					readValue( UseSystem.getSelectedModel(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
 		}
 	}
@@ -352,41 +348,41 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case BatteryWarnLowVoltage :
 				{
-					readValue( battery.getWarnLowVoltage(), TextContent);
+					readValue( battery.getWarnLowVoltage(), textContent);
 				}
 				break;
 
 				case BatteryWarnCriticalVoltage :
 				{
-					readValue( battery.getWarnCriticalVoltage(), TextContent);
+					readValue( battery.getWarnCriticalVoltage(), textContent);
 				}
 				break;
 
 				case BatteryMinimumVoltage :
 				{
-					readValue( battery.getMinimumVoltage(), TextContent);
+					readValue( battery.getMinimumVoltage(), textContent);
 				}
 				break;
 
 				case BatteryMaximumVoltage :
 				{
-					readValue( battery.getMaximumVoltage(), TextContent);
+					readValue( battery.getMaximumVoltage(), textContent);
 				}
 				break;
 
 				case BatteryCalibrationVoltage :
 				{
-					readValue( battery.getCalibrationVoltage(), TextContent);
+					readValue( battery.getCalibrationVoltage(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
 		}
 	}
@@ -403,9 +399,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case Calibration :
 				{
@@ -419,7 +415,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -434,29 +430,29 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case CalibrationHigh :
 				{
-					readValue( calibration.getHigh(), TextContent);
+					readValue( calibration.getHigh(), textContent);
 				}
 				break;
 
 				case CalibrationCenter :
 				{
-					readValue( calibration.getCenter(), TextContent);
+					readValue( calibration.getCenter(), textContent);
 				}
 				break;
 
 				case CalibrationLow :
 				{
-					readValue( calibration.getLow(), TextContent);
+					readValue( calibration.getLow(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
 		}
 	}
@@ -477,9 +473,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case Model :
 				{
@@ -500,7 +496,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -519,9 +515,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case StatusSources :
 				{
@@ -547,7 +543,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
 		}
 
@@ -563,35 +559,35 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case ModelName :
 				{
-					readValue( model.getName(), TextContent);
+					readValue( model.getName(), textContent);
 				}
 				break;
 
 				case ModelState :
 				{
-					model.setState( Utility.convertModelState( TextContent));
+					model.setState( Utility.convertModelState( textContent));
 				}
 				break;
 
 				case ModelType :
 				{
-					readValue( model.getTypeId(), TextContent);
+					readValue( model.getTypeId(), textContent);
 				}
 				break;
 
 				case ModelRFMode :
 				{
-					readValue( model.getRFMode(), TextContent);
+					readValue( model.getRFMode(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -608,20 +604,20 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case StatusSource :
 				{
 					readValue( model.getStatusSourceId( StatusSource.values()[ statusSourceIndex]),
-						TextContent);
+						textContent);
 
 					statusSourceIndex++;
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -638,20 +634,20 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case StatusTimer :
 				{
 					readValue( model.getStatusTimeId( StatusTime.values()[ statusTimeIndex]),
-						TextContent);
+						textContent);
 
 					statusTimeIndex++;
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -668,9 +664,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case Channel :
 				{
@@ -682,7 +678,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -697,9 +693,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case ChannelInput :
 				{
@@ -725,34 +721,34 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case ChannelName :
 				{
-					readValue( channel.getName(), TextContent);
+					readValue( channel.getName(), textContent);
 				}
 				break;
 
 				case ChannelReverse :
 				{
-					readValue( channel.getReverse(), TextContent);
+					readValue( channel.getReverse(), textContent);
 				}
 				break;
 
 				case ChannelMode :
 				{
-					readValue( channel.getMode(), TextContent);
+					readValue( channel.getMode(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -769,17 +765,17 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case ChannelPoint :
 				{
-					readValue( channel.getPoint( channelPointIndex++), TextContent);
+					readValue( channel.getPoint( channelPointIndex++), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -796,9 +792,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case ModelProxyReference :
 				{
@@ -807,7 +803,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -829,9 +825,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case Type :
 				{
@@ -852,7 +848,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -882,23 +878,23 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case TypeName :
 				{
-					readValue( type.getName(), TextContent);
+					readValue( type.getName(), textContent);
 				}
 				break;
 
 				case TypeState :
 				{
-					type.setState( Utility.convertTypeState( TextContent));
+					type.setState( Utility.convertTypeState( textContent));
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -919,9 +915,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case Source :
 				{
@@ -929,7 +925,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -952,9 +948,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case SourceInputAnalog :
 				{
@@ -1064,7 +1060,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 
@@ -1088,23 +1084,23 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceName :
 				{
-					name = TextContent;
+					name = textContent;
 				}
 				break;
 
 				case SourceModel :
 				{
-					readValue( modelId, TextContent);
+					readValue( modelId, textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1119,17 +1115,17 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceInputAnalogInput :
 				{
-					readValue( source.getInputId(), TextContent);
+					readValue( source.getInputId(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1144,47 +1140,47 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceInputButtonInput :
 				{
-					readValue( source.getInputId(), TextContent);
+					readValue( source.getInputId(), textContent);
 				}
 				break;
 
 				case SourceInputButtonInit :
 				{
-					readValue( source.getInit(), TextContent);
+					readValue( source.getInit(), textContent);
 				}
 				break;
 
 				case SourceInputButtonStore :
 				{
-					readValue( source.getStore(), TextContent);
+					readValue( source.getStore(), textContent);
 				}
 				break;
 
 				case SourceInputButtonToggle :
 				{
-					readValue( source.getToggle(), TextContent);
+					readValue( source.getToggle(), textContent);
 				}
 				break;
 
 				case SourceInputButtonTop :
 				{
-					readValue( source.getTop(), TextContent);
+					readValue( source.getTop(), textContent);
 				}
 				break;
 
 				case SourceInputButtonBottom :
 				{
-					readValue( source.getBottom(), TextContent);
+					readValue( source.getBottom(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1199,53 +1195,53 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceInputRotaryAInput :
 				{
-					readValue( source.getAInputId(), TextContent);
+					readValue( source.getAInputId(), textContent);
 				}
 				break;
 
 				case SourceInputRotaryBInput :
 				{
-					readValue( source.getBInputId(), TextContent);
+					readValue( source.getBInputId(), textContent);
 				}
 				break;
 
 				case SourceInputRotaryStore :
 				{
-					readValue( source.getStore(), TextContent);
+					readValue( source.getStore(), textContent);
 				}
 				break;
 
 				case SourceInputRotaryInit :
 				{
-					readValue( source.getInit(), TextContent);
+					readValue( source.getInit(), textContent);
 				}
 				break;
 
 				case SourceInputRotaryStep :
 				{
-					readValue( source.getStep(), TextContent);
+					readValue( source.getStep(), textContent);
 				}
 				break;
 
 				case SourceInputRotaryTop :
 				{
-					readValue( source.getTop(), TextContent);
+					readValue( source.getTop(), textContent);
 				}
 				break;
 
 				case SourceInputRotaryBottom :
 				{
-					readValue( source.getBottom(), TextContent);
+					readValue( source.getBottom(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1260,35 +1256,35 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceInputSwitchLowInput :
 				{
-					readValue( source.getLowInputId(), TextContent);
+					readValue( source.getLowInputId(), textContent);
 				}
 				break;
 
 				case SourceInputSwitchHighInput :
 				{
-					readValue( source.getHighInputId(), TextContent);
+					readValue( source.getHighInputId(), textContent);
 				}
 				break;
 
 				case SourceInputSwitchTop :
 				{
-					readValue( source.getTop(), TextContent);
+					readValue( source.getTop(), textContent);
 				}
 				break;
 
 				case SourceInputSwitchBottom :
 				{
-					readValue( source.getBottom(), TextContent);
+					readValue( source.getBottom(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1303,53 +1299,53 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceInputTickerLowInput :
 				{
-					readValue( source.getLowInputId(), TextContent);
+					readValue( source.getLowInputId(), textContent);
 				}
 				break;
 
 				case SourceInputTickerHighInput :
 				{
-					readValue( source.getHighInputId(), TextContent);
+					readValue( source.getHighInputId(), textContent);
 				}
 				break;
 
 				case SourceInputTickerInit :
 				{
-					readValue( source.getInit(), TextContent);
+					readValue( source.getInit(), textContent);
 				}
 				break;
 
 				case SourceInputTickerStep :
 				{
-					readValue( source.getStep(), TextContent);
+					readValue( source.getStep(), textContent);
 				}
 				break;
 
 				case SourceInputTickerStore :
 				{
-					readValue( source.getStore(), TextContent);
+					readValue( source.getStore(), textContent);
 				}
 				break;
 
 				case SourceInputTickerTop :
 				{
-					readValue( source.getTop(), TextContent);
+					readValue( source.getTop(), textContent);
 				}
 				break;
 
 				case SourceInputTickerBottom :
 				{
-					readValue( source.getBottom(), TextContent);
+					readValue( source.getBottom(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1364,9 +1360,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case SourceMapInput :
 				{
@@ -1380,7 +1376,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -1397,9 +1393,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case SourceMapPoint :
 				{
@@ -1407,7 +1403,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -1422,9 +1418,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case SourceMixInputs :
 				{
@@ -1432,7 +1428,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 	}
@@ -1449,75 +1445,72 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
-				case SourceMixInput :
+				case SourceMixInput ->
 				{
 					pushHandler( new SourceTupelHandler( source.getInput( inputIndex++)));
 				}
-				break;
 
-				default : super.complexOpened( UseId); break;
+				default -> super.complexOpened( id);
 			}
  		}
 	}
 
 	private class SourceFollowerHandler extends UnknownTypeHandler
 	{
-		private Follower source;
+		private final Follower source;
 
-		public SourceFollowerHandler( Follower UseSource)
+		public SourceFollowerHandler( Follower useSource)
 		{
-			source = UseSource;
+			source = useSource;
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
-				case SourceFollowerTarget :
+				case SourceFollowerTarget ->
 				{
 					pushHandler( new SourceTupelHandler( source.getTarget()));
 				}
-				break;
 
-				case SourceFollowerStep :
+				case SourceFollowerStep ->
 				{
 					pushHandler( new SourceTupelHandler( source.getStep()));
 				}
-				break;
 
-				default : super.complexOpened( UseId); break;
+				default -> super.complexOpened( id);
 			}
  		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceFollowerTrigger :
 				{
-					readValue( source.getTriggerId(), TextContent);
+					readValue( source.getTriggerId(), textContent);
 				}
 				break;
 
 				case SourceFollowerTriggerLowLimit :
 				{
-					readValue( source.getTriggerLowLimit(), TextContent);
+					readValue( source.getTriggerLowLimit(), textContent);
 				}
 				break;
 
 				case SourceFollowerTriggerHighLimit :
 				{
-					readValue( source.getTriggerHighLimit(), TextContent);
+					readValue( source.getTriggerHighLimit(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1532,23 +1525,23 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceStoreInput :
 				{
-					readValue( source.getInput(), TextContent);
+					readValue( source.getInput(), textContent);
 				}
 				break;
 
 				case SourceStoreInit :
 				{
-					readValue( source.getInit(), TextContent);
+					readValue( source.getInit(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1563,71 +1556,71 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceTimerInitTime :
 				{
-					readValue( source.getInitTime(), TextContent);
+					readValue( source.getInitTime(), textContent);
 				}
 				break;
 
 				case SourceTimerCurrentTime :
 				{
-					readValue( source.getCurrentTime(), TextContent);
+					readValue( source.getCurrentTime(), textContent);
 				}
 				break;
 
 				case SourceTimerStore :
 				{
-					readValue( source.getStore(), TextContent);
+					readValue( source.getStore(), textContent);
 				}
 				break;
 
 				case SourceTimerReverse :
 				{
-					readValue( source.getReverse(), TextContent);
+					readValue( source.getReverse(), textContent);
 				}
 				break;
 
 				case SourceTimerTrigger :
 				{
-					readValue( source.getTrigger(), TextContent);
+					readValue( source.getTrigger(), textContent);
 				}
 				break;
 
 				case SourceTimerTriggerHighLimit :
 				{
-					readValue( source.getTriggerHighLimit(), TextContent);
+					readValue( source.getTriggerHighLimit(), textContent);
 				}
 				break;
 
 				case SourceTimerTriggerLowLimit :
 				{
-					readValue( source.getTriggerLowLimit(), TextContent);
+					readValue( source.getTriggerLowLimit(), textContent);
 				}
 				break;
 
 				case SourceTimerWarnLowTime :
 				{
-					readValue( source.getWarnLowTime(), TextContent);
+					readValue( source.getWarnLowTime(), textContent);
 				}
 				break;
 
 				case SourceTimerWarnCriticalTime :
 				{
-					readValue( source.getWarnCriticalTime(), TextContent);
+					readValue( source.getWarnCriticalTime(), textContent);
 				}
 				break;
 
 				case SourceTimerWarnPauseTime :
 				{
-					readValue( source.getWarnPauseTime(), TextContent);
+					readValue( source.getWarnPauseTime(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1642,9 +1635,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case SourceTrimmerInput :
 				{
@@ -1670,22 +1663,22 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceTrimmerReverse :
 				{
-					readValue( trimmer.getReverse(), TextContent);
+					readValue( trimmer.getReverse(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1702,17 +1695,17 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceTrimmerPoint :
 				{
-					readValue( trimmer.getPoint( pointIndex++), TextContent);
+					readValue( trimmer.getPoint( pointIndex++), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1727,17 +1720,17 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case SourceProxySlot :
 				{
-					readValue( source.getSlot(), TextContent);
+					readValue( source.getSlot(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1754,9 +1747,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case PPM :
 				{
@@ -1764,7 +1757,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 
@@ -1785,9 +1778,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexOpened( DesktopProtocol.Id UseId)
+		public void complexOpened( DesktopProtocol.Id id)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case ChannelMappings :
 				{
@@ -1795,34 +1788,34 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				default : super.complexOpened( UseId); break;
+				default : super.complexOpened( id); break;
 			}
  		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case PPMInverted :
 				{
-					readValue( ppm.getPPMInverted(), TextContent);
+					readValue( ppm.getPPMInverted(), textContent);
 				}
 				break;
 
 				case PPMCenter :
 				{
-					readValue( ppm.getPPMCenter(), TextContent);
+					readValue( ppm.getPPMCenter(), textContent);
 				}
 				break;
 
 				case PPMName :
 				{
-					readValue( ppm.getName(), TextContent);
+					readValue( ppm.getName(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
 		}
 	}
@@ -1839,17 +1832,17 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{			
-			switch( UseId)
+			switch( id)
 			{
 				case ChannelMapping :
 				{
-					readValue( channelMappings.getChannelMapping( channelIndex++), TextContent);
+					readValue( channelMappings.getChannelMapping( channelIndex++), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}
@@ -1864,23 +1857,23 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void valueRead( DesktopProtocol.Id UseId, String TextContent)
+		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{
-			switch( UseId)
+			switch( id)
 			{
 				case SourceTupelSource :
 				{
-					readValue( sourceTupel.getSourceId(), TextContent);
+					readValue( sourceTupel.getSourceId(), textContent);
 				}
 				break;
 
 				case SourceTupelVolume :
 				{
-					readValue( sourceTupel.getVolume(), TextContent);
+					readValue( sourceTupel.getVolume(), textContent);
 				}
 				break;
 
-				default : super.valueRead( UseId, TextContent); break;
+				default : super.valueRead( id, textContent); break;
 			}
  		}
 	}

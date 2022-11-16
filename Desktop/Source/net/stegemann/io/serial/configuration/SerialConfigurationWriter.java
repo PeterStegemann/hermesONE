@@ -36,11 +36,16 @@ public class SerialConfigurationWriter
 {
 	private final ConfigurationProgress configurationProgress;
 
-	private DesktopConnection connection;
+	private final DesktopConnection connection;
 
-	SerialConfigurationWriter( ConfigurationProgress useConfigurationProgress)
+	SerialConfigurationWriter
+	(
+		ConfigurationProgress useConfigurationProgress,
+		DesktopConnection useConnection
+	)
 	{
 		configurationProgress = useConfigurationProgress;
+		connection = useConnection;
     }
 
 	public void writeToPort
@@ -52,7 +57,6 @@ public class SerialConfigurationWriter
 		throws WriteException
 	{
 		TypedConnectionForwarder connectionForwarder = new TypedConnectionForwarder();
-		connection = new DesktopConnection();
 
 		if( connection.open( portName, connectionForwarder) == false)
 		{
@@ -76,14 +80,14 @@ public class SerialConfigurationWriter
 			configurationProgress.removeChangeListener( configurationListener);
 
 			connection.close();
-			connection = null;
 		}
 	}
 
-	private static class TypedConnectionForwarder implements TypedConnectionHandler
+	private static class TypedConnectionForwarder
+		implements TypedConnectionHandler
 	{
 		@Override
-		public void complexOpened( byte Id)
+		public void complexOpened( byte id)
 		{
 		}
 
@@ -93,101 +97,105 @@ public class SerialConfigurationWriter
 		}
 
 		@Override
-		public void valueRead( byte Id, String Value)
+		public void valueRead( byte id, String value)
 		{
 		}
 	}
 
-	private void exportConfiguration( Configuration UseConfiguration)
+	private void exportConfiguration( Configuration useConfiguration)
 		throws WriteException
 	{
 		connection.openComplex( Id.Configuration);
 
-			System UseSystem = UseConfiguration.getSystem();
+			System system = useConfiguration.getSystem();
 
- 			writeValue( Id.AnalogInputs, UseSystem.getAnalogInputs());
- 			writeValue( Id.DigitalInputs, UseSystem.getDigitalInputs());
- 			writeValue( Id.OutputChannels, UseSystem.getOutputChannels());
- 			writeValue( Id.Outputs, UseSystem.getOutputs());
+ 			writeValue( Id.AnalogInputs, system.getAnalogInputs());
+ 			writeValue( Id.DigitalInputs, system.getDigitalInputs());
+ 			writeValue( Id.OutputChannels, system.getOutputChannels());
+ 			writeValue( Id.Outputs, system.getOutputs());
 
- 			writeValue( Id.Owner, UseSystem.getOwner());
- 			writeValue( Id.SetupBacklight, UseSystem.getSetupBacklight());
- 			writeValue( Id.SetupBlankTime, UseSystem.getSetupBlankTime());
- 			writeValue( Id.StatusBacklight, UseSystem.getStatusBacklight());
- 			writeValue( Id.StatusContrast, UseSystem.getStatusContrast());
- 			writeValue( Id.StatusBlankTime, UseSystem.getStatusBlankTime());
- 			writeValue( Id.StatusInverted, UseSystem.getStatusInverted());
- 			writeValue( Id.SelectedModel, UseSystem.getSelectedModel());
+ 			writeValue( Id.Owner, system.getOwner());
+ 			writeValue( Id.SetupBacklight, system.getSetupBacklight());
+ 			writeValue( Id.SetupBlankTime, system.getSetupBlankTime());
+ 			writeValue( Id.StatusBacklight, system.getStatusBacklight());
+ 			writeValue( Id.StatusContrast, system.getStatusContrast());
+ 			writeValue( Id.StatusBlankTime, system.getStatusBlankTime());
+ 			writeValue( Id.StatusInverted, system.getStatusInverted());
+ 			writeValue( Id.SelectedModel, system.getSelectedModel());
 
- 			exportBattery( UseSystem.getBattery());
- 			exportCalibrations( UseSystem.getCalibrations());
- 			exportModels( UseConfiguration.getModels());
- 			exportTypes( UseConfiguration);
- 			exportSources( UseConfiguration.getSources());
- 			exportPPMs( UseSystem.getPPMs());
+ 			exportBattery( system.getBattery());
+ 			exportCalibrations( system.getCalibrations());
+ 			exportModels( useConfiguration.getModels());
+ 			exportTypes( useConfiguration);
+ 			exportSources( useConfiguration.getSources());
+ 			exportPPMs( system.getPPMs());
 
 		connection.closeComplex();
 	}
 
-	private void exportPPMs( PPMs UsePPMs) throws WriteException
+	private void exportPPMs( PPMs ppms)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.PPMs);
 
-			for( PPM UsePPM: UsePPMs)
+			for( PPM ppm: ppms)
 			{
-				exportPPM( UsePPM);
+				exportPPM( ppm);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportPPM( PPM UsePPM) throws WriteException
+	private void exportPPM( PPM ppm)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.PPM);
 
-			writeValue( Id.PPMInverted, UsePPM.getPPMInverted());
-			writeValue( Id.PPMCenter, UsePPM.getPPMCenter());
-			writeValue( Id.PPMName, UsePPM.getName());
+			writeValue( Id.PPMInverted, ppm.getPPMInverted());
+			writeValue( Id.PPMCenter, ppm.getPPMCenter());
+			writeValue( Id.PPMName, ppm.getName());
 
-			exportChannelMappings( UsePPM.getChannelMappings());
+			exportChannelMappings( ppm.getChannelMappings());
 
 		connection.closeComplex();
 	}
 
-	private void exportChannelMappings( ChannelMappings UseChannelMappings) throws WriteException
+	private void exportChannelMappings( ChannelMappings channelMappings)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.ChannelMappings);
 
-			for( Number CurrentChannelMapping: UseChannelMappings)
+			for( Number channelMapping: channelMappings)
 			{
-				writeValue( Id.ChannelMapping, CurrentChannelMapping);
+				writeValue( Id.ChannelMapping, channelMapping);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportSources( Sources UseSources) throws WriteException
+	private void exportSources( Sources sources)
+		throws WriteException
 	{
 		connection.openComplex( Id.Sources);
 
-			int SourceId = 0;
+			int sourceId = 0;
 
-			for( Source CurrentSource: UseSources)
+			for( Source source: sources)
 			{
-				// Fill with empty Sources until we reach the current Source id.
-				while( SourceId < CurrentSource.getId().getValue())
+				// Fill with empty sources until we reach the current source id.
+				while( sourceId < source.getId().getValue())
 				{
 					connection.openComplex( Id.Source);
 					connection.closeComplex();
 
-					SourceId++;
+					sourceId++;
 				}
 
-				exportSource( CurrentSource);
+				exportSource( source);
 
-				SourceId++;
+				sourceId++;
 
-				configurationProgress.setSourceCount( SourceId);
+				configurationProgress.setSourceCount( sourceId);
 			}
 
 		connection.closeComplex();
@@ -253,82 +261,88 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportSourceInputAnalog( Analog UseSource) throws WriteException
+	private void exportSourceInputAnalog( Analog source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceInputAnalog);
 
-			writeValue( Id.SourceInputAnalogInput, UseSource.getInputId());
+			writeValue( Id.SourceInputAnalogInput, source.getInputId());
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceInputButton( Button UseSource) throws WriteException
+	private void exportSourceInputButton( Button source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceInputButton);
 
-			writeValue( Id.SourceInputButtonInput, UseSource.getInputId());
-			writeValue( Id.SourceInputButtonInit, UseSource.getInit());
-			writeValue( Id.SourceInputButtonStore, UseSource.getStore());
-			writeValue( Id.SourceInputButtonToggle, UseSource.getToggle());
-			writeValue( Id.SourceInputButtonTop, UseSource.getTop());
-			writeValue( Id.SourceInputButtonBottom, UseSource.getBottom());
+			writeValue( Id.SourceInputButtonInput, source.getInputId());
+			writeValue( Id.SourceInputButtonInit, source.getInit());
+			writeValue( Id.SourceInputButtonStore, source.getStore());
+			writeValue( Id.SourceInputButtonToggle, source.getToggle());
+			writeValue( Id.SourceInputButtonTop, source.getTop());
+			writeValue( Id.SourceInputButtonBottom, source.getBottom());
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceInputRotary( Rotary UseSource) throws WriteException
+	private void exportSourceInputRotary( Rotary source)
+		throws WriteException
 	{
 		connection.openComplex( Id.SourceInputRotary);
 
-			writeValue( Id.SourceInputRotaryAInput, UseSource.getAInputId());
-			writeValue( Id.SourceInputRotaryBInput, UseSource.getBInputId());
-			writeValue( Id.SourceInputRotaryStore, UseSource.getStore());
-			writeValue( Id.SourceInputRotaryInit, UseSource.getInit());
-			writeValue( Id.SourceInputRotaryStep, UseSource.getStep());
-			writeValue( Id.SourceInputRotaryTop, UseSource.getTop());
-			writeValue( Id.SourceInputRotaryBottom, UseSource.getBottom());
+			writeValue( Id.SourceInputRotaryAInput, source.getAInputId());
+			writeValue( Id.SourceInputRotaryBInput, source.getBInputId());
+			writeValue( Id.SourceInputRotaryStore, source.getStore());
+			writeValue( Id.SourceInputRotaryInit, source.getInit());
+			writeValue( Id.SourceInputRotaryStep, source.getStep());
+			writeValue( Id.SourceInputRotaryTop, source.getTop());
+			writeValue( Id.SourceInputRotaryBottom, source.getBottom());
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceInputSwitch( Switch UseSource) throws WriteException
+	private void exportSourceInputSwitch( Switch source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceInputSwitch);
 
-			writeValue( Id.SourceInputSwitchLowInput, UseSource.getLowInputId());
-			writeValue( Id.SourceInputSwitchHighInput, UseSource.getHighInputId());
-			writeValue( Id.SourceInputSwitchTop, UseSource.getTop());
-			writeValue( Id.SourceInputSwitchBottom, UseSource.getBottom());
+			writeValue( Id.SourceInputSwitchLowInput, source.getLowInputId());
+			writeValue( Id.SourceInputSwitchHighInput, source.getHighInputId());
+			writeValue( Id.SourceInputSwitchTop, source.getTop());
+			writeValue( Id.SourceInputSwitchBottom, source.getBottom());
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceInputTicker( Ticker UseSource) throws WriteException
+	private void exportSourceInputTicker( Ticker source)
+		throws WriteException
 	{
 		connection.openComplex( Id.SourceInputTicker);
 
-			writeValue( Id.SourceInputTickerLowInput, UseSource.getLowInputId());
-			writeValue( Id.SourceInputTickerHighInput, UseSource.getHighInputId());
-			writeValue( Id.SourceInputTickerInit, UseSource.getInit());
-			writeValue( Id.SourceInputTickerStep, UseSource.getStep());
-			writeValue( Id.SourceInputTickerStore, UseSource.getStore());
-			writeValue( Id.SourceInputTickerTop, UseSource.getTop());
-			writeValue( Id.SourceInputTickerBottom, UseSource.getBottom());
+			writeValue( Id.SourceInputTickerLowInput, source.getLowInputId());
+			writeValue( Id.SourceInputTickerHighInput, source.getHighInputId());
+			writeValue( Id.SourceInputTickerInit, source.getInit());
+			writeValue( Id.SourceInputTickerStep, source.getStep());
+			writeValue( Id.SourceInputTickerStore, source.getStore());
+			writeValue( Id.SourceInputTickerTop, source.getTop());
+			writeValue( Id.SourceInputTickerBottom, source.getBottom());
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceMap( Map UseSource) throws WriteException
+	private void exportSourceMap( Map source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceMap);
 
-			exportSourceTupel( UseSource.getInput(), Id.SourceMapInput);
+			exportSourceTupel( source.getInput(), Id.SourceMapInput);
 
 			connection.openComplex( Id.SourceMapPoints);
 
-				for( SourceWithVolume Input: UseSource.getPoints())
+				for( SourceWithVolume input: source.getPoints())
 				{
-					exportSourceTupel( Input, Id.SourceMapPoint);
+					exportSourceTupel( input, Id.SourceMapPoint);
 				}
 
 			connection.closeComplex();
@@ -336,15 +350,16 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportSourceMix( Mix UseSource) throws WriteException
+	private void exportSourceMix( Mix source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceMix);
 
 			connection.openComplex( Id.SourceMixInputs);
 
-			for( SourceWithVolume Input: UseSource.getInputs())
+			for( SourceWithVolume input: source.getInputs())
 			{
-				exportSourceTupel( Input, Id.SourceMixInput);
+				exportSourceTupel( input, Id.SourceMixInput);
 			}
 
 			connection.closeComplex();
@@ -352,73 +367,78 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportSourceStore( Store UseSource) throws WriteException
+	private void exportSourceStore( Store source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceStore);
 
-			writeValue( Id.SourceStoreInput, UseSource.getInput());
-			writeValue( Id.SourceStoreInit, UseSource.getInit());
+			writeValue( Id.SourceStoreInput, source.getInput());
+			writeValue( Id.SourceStoreInit, source.getInit());
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceFollower( Follower UseSource) throws WriteException
+	private void exportSourceFollower( Follower source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceFollower);
 
-			exportSourceTupel( UseSource.getTarget(), Id.SourceFollowerTarget);
-			exportSourceTupel( UseSource.getStep(), Id.SourceFollowerStep);
+			exportSourceTupel( source.getTarget(), Id.SourceFollowerTarget);
+			exportSourceTupel( source.getStep(), Id.SourceFollowerStep);
 
-			writeValue( Id.SourceFollowerTrigger, UseSource.getTriggerId());
-			writeValue( Id.SourceFollowerTriggerLowLimit, UseSource.getTriggerLowLimit());
-			writeValue( Id.SourceFollowerTriggerHighLimit, UseSource.getTriggerHighLimit());
+			writeValue( Id.SourceFollowerTrigger, source.getTriggerId());
+			writeValue( Id.SourceFollowerTriggerLowLimit, source.getTriggerLowLimit());
+			writeValue( Id.SourceFollowerTriggerHighLimit, source.getTriggerHighLimit());
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceTimer( Timer UseSource) throws WriteException
+	private void exportSourceTimer( Timer source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceTimer);
 
-			writeValue( Id.SourceTimerInitTime, UseSource.getInitTime());
-			writeValue( Id.SourceTimerCurrentTime, UseSource.getCurrentTime());
+			writeValue( Id.SourceTimerInitTime, source.getInitTime());
+			writeValue( Id.SourceTimerCurrentTime, source.getCurrentTime());
 
-			writeValue( Id.SourceTimerStore, UseSource.getStore());
-			writeValue( Id.SourceTimerReverse, UseSource.getReverse());
+			writeValue( Id.SourceTimerStore, source.getStore());
+			writeValue( Id.SourceTimerReverse, source.getReverse());
 
-			writeValue( Id.SourceTimerTrigger, UseSource.getTrigger());
-			writeValue( Id.SourceTimerTriggerLowLimit, UseSource.getTriggerLowLimit());
-			writeValue( Id.SourceTimerTriggerHighLimit, UseSource.getTriggerHighLimit());
+			writeValue( Id.SourceTimerTrigger, source.getTrigger());
+			writeValue( Id.SourceTimerTriggerLowLimit, source.getTriggerLowLimit());
+			writeValue( Id.SourceTimerTriggerHighLimit, source.getTriggerHighLimit());
 
-			writeValue( Id.SourceTimerWarnLowTime, UseSource.getWarnLowTime());
-			writeValue( Id.SourceTimerWarnCriticalTime, UseSource.getWarnCriticalTime());
-			writeValue( Id.SourceTimerWarnPauseTime, UseSource.getWarnPauseTime());
+			writeValue( Id.SourceTimerWarnLowTime, source.getWarnLowTime());
+			writeValue( Id.SourceTimerWarnCriticalTime, source.getWarnCriticalTime());
+			writeValue( Id.SourceTimerWarnPauseTime, source.getWarnPauseTime());
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceTrimmer( Trim UseSource) throws WriteException
+	private void exportSourceTrimmer( Trim source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceTrimmer);
 
-			writeValue( Id.SourceTrimmerReverse, UseSource.getReverse());
+			writeValue( Id.SourceTrimmerReverse, source.getReverse());
 
-			exportSourceTupel( UseSource.getInput(), Id.SourceTrimmerInput);
-			exportSourceTupel( UseSource.getTrim(), Id.SourceTrimmerTrim);
-			exportSourceTupel( UseSource.getLimit(), Id.SourceTrimmerLimit);
+			exportSourceTupel( source.getInput(), Id.SourceTrimmerInput);
+			exportSourceTupel( source.getTrim(), Id.SourceTrimmerTrim);
+			exportSourceTupel( source.getLimit(), Id.SourceTrimmerLimit);
 
-			exportSourceTrimmerPoints( UseSource);
+			exportSourceTrimmerPoints( source);
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceTrimmerPoints( Trim UseSource) throws WriteException
+	private void exportSourceTrimmerPoints( Trim source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceTrimmerPoints);
 
-			for( int PointIndex = 0; PointIndex < Channel.POINTS; PointIndex++)
+			for( int pointIndex = 0; pointIndex < Channel.POINTS; pointIndex++)
 			{
-				Volume Point = UseSource.getPoint( PointIndex);
+				Volume Point = source.getPoint( pointIndex);
 
 				writeValue( Id.SourceTrimmerPoint, Point);
 			}
@@ -426,216 +446,220 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportSourceProxy( Proxy UseSource) throws WriteException
+	private void exportSourceProxy( Proxy source)
+	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceProxy);
 
-			writeValue( Id.SourceProxySlot, UseSource.getSlot());
+			writeValue( Id.SourceProxySlot, source.getSlot());
 
 		connection.closeComplex();
 	}
 
-	private void exportTypes( Configuration UseConfiguration) throws WriteException
+	private void exportTypes( Configuration configuration)
+		throws WriteException
 	{
 		connection.openComplex( Id.Types);
 
 			// TypeIds don't start with zero!
-			int TypeId = Model.TYPE_START;
+			int typeId = Model.TYPE_START;
 
-			Types UseTypes = UseConfiguration.getTypes();
+			Types types = configuration.getTypes();
 
-			for( Type CurrentType: UseTypes)
+			for( Type type: types)
 			{
 				// Fill with empty types until we reach the current type id.
-				while( TypeId < CurrentType.getId().getValue())
+				while( typeId < type.getId().getValue())
 				{
 					connection.openComplex( Id.Type);
 					connection.closeComplex();
 
-					TypeId++;
+					typeId++;
 				}
 
-				exportType( CurrentType);
+				exportType( type);
 
-				TypeId++;
+				typeId++;
 
-				configurationProgress.setTypeCount( TypeId);
+				configurationProgress.setTypeCount( typeId);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportType( Type UseType)
+	private void exportType( Type type)
 		throws WriteException
 	{
 		connection.openComplex( Id.Type);
 
-			writeValue( Id.TypeName, UseType.getName());
-			writeValue( Id.TypeState, Utility.convertTypeState( UseType.getState()));
+			writeValue( Id.TypeName, type.getName());
+			writeValue( Id.TypeState, Utility.convertTypeState( type.getState()));
 
 		connection.closeComplex();
 	}
 
-	private void exportModels( Models UseModels)
+	private void exportModels( Models models)
 		throws WriteException
 	{
 		connection.openComplex( Id.Models);
 
-			int ModelId = 0;
+			int modelId = 0;
 
-			for( Model CurrentModel: UseModels)
+			for( Model model: models)
 			{
 				// Fill with empty models until we reach the current model id.
-				while( ModelId < CurrentModel.getId().getValue())
+				while( modelId < model.getId().getValue())
 				{
 					connection.openComplex( Id.Model);
 					connection.closeComplex();
 
-					ModelId++;
+					modelId++;
 				}
 
-				exportModel( CurrentModel);
+				exportModel( model);
 
-				ModelId++;
+				modelId++;
 
-				configurationProgress.setModelCount( ModelId);
+				configurationProgress.setModelCount( modelId);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportModel( Model UseModel)
+	private void exportModel( Model model)
 		throws WriteException
 	{
 		connection.openComplex( Id.Model);
 
-			writeValue( Id.ModelName, UseModel.getName());
-			writeValue( Id.ModelState, Utility.convertModelState( UseModel.getState()));
-			writeValue( Id.ModelRFMode, UseModel.getRFMode());
-			writeValue( Id.ModelType, UseModel.getTypeId());
+			writeValue( Id.ModelName, model.getName());
+			writeValue( Id.ModelState, Utility.convertModelState( model.getState()));
+			writeValue( Id.ModelRFMode, model.getRFMode());
+			writeValue( Id.ModelType, model.getTypeId());
 
-			exportStatusSources( UseModel);
-			exportStatusTimes( UseModel);
-			exportChannels( UseModel.getChannels());
-			exportProxyReferences( UseModel.getProxyReferences());
+			exportStatusSources( model);
+			exportStatusTimes( model);
+			exportChannels( model.getChannels());
+			exportProxyReferences( model.getProxyReferences());
 
 		connection.closeComplex();
 	}
 
-	private void exportProxyReferences( ProxyReferences UseProxyReferences)
+	private void exportProxyReferences( ProxyReferences proxyReferences)
 		throws WriteException
 	{
 		connection.openComplex( Id.ModelProxyReferences);
 
-			for( SourceWithVolume CurrentProxyReference: UseProxyReferences)
+			for( SourceWithVolume proxyReference: proxyReferences)
 			{
-				exportSourceTupel( CurrentProxyReference, Id.ModelProxyReference);
+				exportSourceTupel( proxyReference, Id.ModelProxyReference);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportStatusSources( Model UseModel)
+	private void exportStatusSources( Model model)
 		throws WriteException
 	{
 		connection.openComplex( Id.StatusSources);
 
-			writeValue( Id.StatusSource, UseModel.getStatusSourceId( StatusSource.LEFT_SIDE));
-			writeValue( Id.StatusSource, UseModel.getStatusSourceId( StatusSource.LEFT_BOTTOM));
-			writeValue( Id.StatusSource, UseModel.getStatusSourceId( StatusSource.RIGHT_SIDE));
-			writeValue( Id.StatusSource, UseModel.getStatusSourceId( StatusSource.RIGHT_BOTTOM));
+			writeValue( Id.StatusSource, model.getStatusSourceId( StatusSource.LEFT_SIDE));
+			writeValue( Id.StatusSource, model.getStatusSourceId( StatusSource.LEFT_BOTTOM));
+			writeValue( Id.StatusSource, model.getStatusSourceId( StatusSource.RIGHT_SIDE));
+			writeValue( Id.StatusSource, model.getStatusSourceId( StatusSource.RIGHT_BOTTOM));
 
 		connection.closeComplex();
 	}
 
-	private void exportStatusTimes( Model UseModel)
+	private void exportStatusTimes( Model model)
 		throws WriteException
 	{
 		connection.openComplex( Id.StatusTimers);
 
-			writeValue( Id.StatusTimer, UseModel.getStatusTimeId( StatusTime.TOP));
-			writeValue( Id.StatusTimer, UseModel.getStatusTimeId( StatusTime.BOTTOM));
+			writeValue( Id.StatusTimer, model.getStatusTimeId( StatusTime.TOP));
+			writeValue( Id.StatusTimer, model.getStatusTimeId( StatusTime.BOTTOM));
 
 		connection.closeComplex();
 	}
 
-	private void exportChannels( Channels UseChannels)
+	private void exportChannels( Channels channels)
 		throws WriteException
 	{
 		connection.openComplex( Id.Channels);
 
-			for( Channel CurrentChannel: UseChannels)
+			for( Channel channel: channels)
 			{
-				exportChannel( CurrentChannel);
+				exportChannel( channel);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportChannel( Channel UseChannel)
+	private void exportChannel( Channel channel)
 		throws WriteException
 	{
 		connection.openComplex( Id.Channel);
 
-			writeValue( Id.ChannelName, UseChannel.getName());
-			writeValue( Id.ChannelReverse, UseChannel.getReverse());
-			writeValue( Id.ChannelMode, UseChannel.getMode());
+			writeValue( Id.ChannelName, channel.getName());
+			writeValue( Id.ChannelReverse, channel.getReverse());
+			writeValue( Id.ChannelMode, channel.getMode());
 
-			exportSourceTupel( UseChannel.getInput(), Id.ChannelInput);
-			exportSourceTupel( UseChannel.getTrim(), Id.ChannelTrim);
-			exportSourceTupel( UseChannel.getLimit(), Id.ChannelLimit);
+			exportSourceTupel( channel.getInput(), Id.ChannelInput);
+			exportSourceTupel( channel.getTrim(), Id.ChannelTrim);
+			exportSourceTupel( channel.getLimit(), Id.ChannelLimit);
 
-			exportChannelPoints( UseChannel);
+			exportChannelPoints( channel);
 
 		connection.closeComplex();
 	}
 
-	private void exportChannelPoints( Channel UseChannel)
+	private void exportChannelPoints( Channel channel)
 		throws WriteException
 	{
 		connection.openComplex( Id.ChannelPoints);
 
-			for( int PointIndex = 0; PointIndex < Channel.POINTS; PointIndex++)
+			for( int pointIndex = 0; pointIndex < Channel.POINTS; pointIndex++)
 			{
-				Volume Point = UseChannel.getPoint( PointIndex);
+				Volume point = channel.getPoint( pointIndex);
 
-				writeValue( Id.ChannelPoint, Point);
+				writeValue( Id.ChannelPoint, point);
 			}
 
 		connection.closeComplex();
 	}
 
-	private void exportSourceTupel( SourceWithVolume UseSourceTupel, DesktopProtocol.Id id)
+	private void exportSourceTupel( SourceWithVolume sourceTupel, DesktopProtocol.Id id)
 		throws WriteException
 	{
 		connection.openComplex( id);
 
-			writeValue( Id.SourceTupelSource, UseSourceTupel.getSourceId());
-			writeValue( Id.SourceTupelVolume, UseSourceTupel.getVolume());
+			writeValue( Id.SourceTupelSource, sourceTupel.getSourceId());
+			writeValue( Id.SourceTupelVolume, sourceTupel.getVolume());
 
 		connection.closeComplex();
 	}
 
-	private void exportBattery( Battery UseBattery) throws WriteException
+	private void exportBattery( Battery battery)
+		throws WriteException
 	{
 		connection.openComplex( Id.Battery);
 
-			writeValue( Id.BatteryWarnLowVoltage, UseBattery.getWarnLowVoltage());
-			writeValue( Id.BatteryWarnCriticalVoltage, UseBattery.getWarnCriticalVoltage());
-			writeValue( Id.BatteryMinimumVoltage, UseBattery.getMinimumVoltage());
-			writeValue( Id.BatteryMaximumVoltage, UseBattery.getMaximumVoltage());
-			writeValue( Id.BatteryCalibrationVoltage, UseBattery.getCalibrationVoltage());
+			writeValue( Id.BatteryWarnLowVoltage, battery.getWarnLowVoltage());
+			writeValue( Id.BatteryWarnCriticalVoltage, battery.getWarnCriticalVoltage());
+			writeValue( Id.BatteryMinimumVoltage, battery.getMinimumVoltage());
+			writeValue( Id.BatteryMaximumVoltage, battery.getMaximumVoltage());
+			writeValue( Id.BatteryCalibrationVoltage, battery.getCalibrationVoltage());
 
 		connection.closeComplex();
 	}
 
-	private void exportCalibrations( Calibrations UseCalibrations) throws WriteException
+	private void exportCalibrations( Calibrations calibrations)
+		throws WriteException
 	{
 		connection.openComplex( Id.Calibrations);
 
-			for( Calibration CurrentCalibration: UseCalibrations)
+			for( Calibration calibration: calibrations)
 			{
-				exportCalibration( CurrentCalibration);
+				exportCalibration( calibration);
 			}
 
 		connection.closeComplex();
@@ -652,8 +676,8 @@ public class SerialConfigurationWriter
 		});
 	}
 
-	private void complex( Id id, ThrowingFunction<WriteException> content)
-			throws WriteException
+	private void complex( Id id, ThrowingFunction< WriteException> content)
+		throws WriteException
 	{
 		connection.openComplex( id);
 

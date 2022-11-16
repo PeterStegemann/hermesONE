@@ -25,9 +25,9 @@ public class Raw_Serial //implements Runnable, SerialPortEventListener
 			Device = Arguments[ 0];
 		}
 
-		System.out.println( "Available ports: " + Ports.FindPorts());
+		System.out.println( "Available ports: " + Ports.findPorts());
 
-		SerialPort UsePort = Ports.OpenPort( Device);
+		SerialPort UsePort = Ports.openPort( Device);
 
 		UsePort.setFlowControlMode( SerialPort.FLOWCONTROL_NONE);
 		UsePort.setSerialPortParams( BaudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,

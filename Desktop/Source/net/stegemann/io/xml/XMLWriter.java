@@ -155,84 +155,88 @@ public class XMLWriter
 		exportConfiguration( configuration, document, configurationNode);
 	}
 
-	private void exportConfiguration( Configuration UseConfiguration, Document ConfigurationDocument,
-		Node ConfigurationNode)
+	private void exportConfiguration(
+		Configuration useConfiguration,
+		Document configurationDocument,
+		Node configurationNode
+	)
 	{
-		System UseSystem = UseConfiguration.getSystem();
+		System UseSystem = useConfiguration.getSystem();
 
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_ANALOG_INPUTS,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_ANALOG_INPUTS,
 			UseSystem.getAnalogInputs());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_DIGITAL_INPUTS,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_DIGITAL_INPUTS,
 			UseSystem.getDigitalInputs());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_OUTPUT_CHANNELS,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_OUTPUT_CHANNELS,
 			UseSystem.getOutputChannels());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_OUTPUTS,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_OUTPUTS,
 			UseSystem.getOutputs());
 
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_OWNER,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_OWNER,
 			UseSystem.getOwner());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_SETUP_BACKLIGHT,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_SETUP_BACKLIGHT,
 			UseSystem.getSetupBacklight());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_SETUP_BLANK_TIME,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_SETUP_BLANK_TIME,
 			UseSystem.getSetupBlankTime());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_BACKLIGHT,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_STATUS_BACKLIGHT,
 			UseSystem.getStatusBacklight());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_CONTRAST,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_STATUS_CONTRAST,
 			UseSystem.getStatusContrast());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_BLANK_TIME,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_STATUS_BLANK_TIME,
 			UseSystem.getStatusBlankTime());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_STATUS_INVERTED,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_STATUS_INVERTED,
 			UseSystem.getStatusInverted());
-		documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.SYSTEM_SELECTED_MODEL,
+		documentGenerator.appendNode( configurationDocument, configurationNode, Names.SYSTEM_SELECTED_MODEL,
 			UseSystem.getSelectedModel());
 
 		Node NewNode;
 
-		NewNode = ConfigurationDocument.createElement( Names.BATTERY);
-		ConfigurationNode.appendChild( NewNode);
+		NewNode = configurationDocument.createElement( Names.BATTERY);
+		configurationNode.appendChild( NewNode);
 
-		exportBattery( UseSystem.getBattery(), ConfigurationDocument, NewNode);
+		exportBattery( UseSystem.getBattery(), configurationDocument, NewNode);
 
-		NewNode = ConfigurationDocument.createElement( Names.CALIBRATIONS);
-		ConfigurationNode.appendChild( NewNode);
+		NewNode = configurationDocument.createElement( Names.CALIBRATIONS);
+		configurationNode.appendChild( NewNode);
 
-		exportCalibrations( UseSystem.getCalibrations(), ConfigurationDocument, NewNode);
+		exportCalibrations( UseSystem.getCalibrations(), configurationDocument, NewNode);
 
-		NewNode = ConfigurationDocument.createElement( Names.MODELS);
-		ConfigurationNode.appendChild( NewNode);
+		NewNode = configurationDocument.createElement( Names.MODELS);
+		configurationNode.appendChild( NewNode);
 
-		exportModels( UseConfiguration.getModels(), ConfigurationDocument, NewNode);
+		exportModels( useConfiguration.getModels(), configurationDocument, NewNode);
 
-		NewNode = ConfigurationDocument.createElement( Names.TYPES);
-		ConfigurationNode.appendChild( NewNode);
+		NewNode = configurationDocument.createElement( Names.TYPES);
+		configurationNode.appendChild( NewNode);
 
-		exportTypes( UseConfiguration, ConfigurationDocument, NewNode);
+		exportTypes( useConfiguration, configurationDocument, NewNode);
 
-		NewNode = ConfigurationDocument.createElement( Names.SOURCES);
-		ConfigurationNode.appendChild( NewNode);
+		NewNode = configurationDocument.createElement( Names.SOURCES);
+		configurationNode.appendChild( NewNode);
 
-		exportSources( UseConfiguration.getSources(), ConfigurationDocument, NewNode);
+		exportSources( useConfiguration.getSources(), configurationDocument, NewNode);
 
-		NewNode = ConfigurationDocument.createElement( Names.PPMS);
-		ConfigurationNode.appendChild( NewNode);
+		NewNode = configurationDocument.createElement( Names.PPMS);
+		configurationNode.appendChild( NewNode);
 
-		exportPPMs( UseSystem.getPPMs(), ConfigurationDocument, NewNode);
+		exportPPMs( UseSystem.getPPMs(), configurationDocument, NewNode);
 	}
 
-	private void exportPPMs( PPMs UsePPMs, Document ConfigurationDocument, Node ConfigurationNode)
+	private void exportPPMs( PPMs ppms, Document configurationDocument, Node configurationNode)
 	{
-		int PPMId = 0;
+		int ppmId = 0;
 
-		for( PPM CurrentPPM: UsePPMs)
+		for( PPM ppm: ppms)
 		{
-			ConfigurationNode.appendChild( ConfigurationDocument.createComment(
-				Names.PPM + " " + PPMId));
-			Node NewNode = ConfigurationDocument.createElement( Names.PPM);
-			ConfigurationNode.appendChild( NewNode);
+			configurationNode.appendChild(
+				configurationDocument.createComment( Names.PPM + " " + ppmId)
+			);
+			Node newNode = configurationDocument.createElement( Names.PPM);
+			configurationNode.appendChild( newNode);
 
-			exportPPM( CurrentPPM, ConfigurationDocument, NewNode);
+			exportPPM( ppm, configurationDocument, newNode);
 
-			PPMId++;
+			ppmId++;
 		}
 	}
 
@@ -256,8 +260,10 @@ public class XMLWriter
 	{
 		for( Number CurrentChannelMapping: UseChannelMappings)
 		{
-			documentGenerator.appendNode( ConfigurationDocument, ConfigurationNode, Names.PPM_CHANNEL_MAPPING,
-				CurrentChannelMapping);
+			documentGenerator.appendNode(
+				ConfigurationDocument, ConfigurationNode, Names.PPM_CHANNEL_MAPPING,
+				CurrentChannelMapping
+			);
 		}
 	}
 

@@ -7,15 +7,19 @@ public class TypedConnection
 {
 	private static final boolean Debug = true;
 
-	private TypedConnectionHandler handler;
-	private Connection connection = new Connection();
+	private final TypedConnectionHandler handler;
+	private final Connection connection;
 
-	public TypedConnection( TypedConnectionHandler handler)
+	public TypedConnection(
+		Connection connection,
+		TypedConnectionHandler handler
+	)
 	{
+		this.connection = connection;
 		this.handler = handler;
 	}
 
-	public boolean Open( String device)
+	public boolean open( String device)
 	{
 		return connection.open( device, 115200);
 	}
@@ -25,39 +29,41 @@ public class TypedConnection
 		connection.close();
 	}
 
-	public void writeCommand( byte Command) throws WriteException
+	public void writeCommand( byte command)
+		throws WriteException
 	{
 		connection.writeByte( TypedProtocol.T_Command);
-		connection.writeByte( Command);
+		connection.writeByte( command);
 	}
 
-	public byte readResponse() throws ReadException
+	public byte readResponse()
+	 	throws ReadException
 	{
 		return connection.readByte();
 	}
 
-	public void readItem( byte Type) throws ReadException
+	public void readItem( byte type)
+		throws ReadException
 	{
-		byte Id = connection.readByte();
+		byte id = connection.readByte();
 
-		switch( Type)
+		switch( type)
 		{
-			case TypedProtocol.T_Value :		readValue( Id);	break;
-			case TypedProtocol.T_Complex :	readComplex( Id);	break;
+			case TypedProtocol.T_Value -> readValue( id);
+			case TypedProtocol.T_Complex -> readComplex( id);
 
-			default :	throw new ReadException( "ReadItem unexpected type: " + Type);
+			default -> throw new ReadException( "ReadItem unexpected type: " + type);
 		}
 	}
 
-	void readValue( byte Id) throws ReadException
+	void readValue( byte id)
+	 	throws ReadException
 	{
-		boolean Loop = true;
-
 		byte[] Response = new byte[ 256];
 
 		int Count = 0;
 
-		while( Loop)
+		while( true)
 		{
 			byte Read = connection.readByte();
 
@@ -76,83 +82,88 @@ public class TypedConnection
 			Count++;
 		}
 
-		if( Debug)	System.out.println( "Read value " + Id + " " + new String( Response, 0, Count));
+		if( Debug)	System.out.println( "Read value " + id + " " + new String( Response, 0, Count));
 
 		if( handler != null)
 		{
-			handler.valueRead( Id, new String( Response, 0, Count));
+			handler.valueRead( id, new String( Response, 0, Count));
 		}
 	}
 
-	void readComplex( byte Id) throws ReadException
+	void readComplex( byte id)
+	 	throws ReadException
 	{
-		if( Debug)	System.out.println( "Reading complex open " + Id);
+		if( Debug)	System.out.println( "Reading complex open " + id);
 
 		if( handler != null)
 		{
-			handler.complexOpened( Id);
+			handler.complexOpened( id);
 		}
 
-		boolean Loop = true;
+		boolean loop = true;
 
-		while( Loop)
+		while( loop)
 		{
-			byte Type = connection.readByte();
+			byte type = connection.readByte();
 
-			switch( Type)
+			switch( type)
 			{
-				case TypedProtocol.T_State :
+				case TypedProtocol.T_State ->
 				{
-					byte State = connection.readByte();
+					byte state = connection.readByte();
 
-					throw new ReadException( "ReadComplex error: " + State);
+					throw new ReadException( "ReadComplex error: " + state);
 				}
 
-				case TypedProtocol.T_Value :
-				case TypedProtocol.T_Complex :		readItem( Type);	break;
-
-				case TypedProtocol.T_ComplexEnd :
+				case TypedProtocol.T_Value, TypedProtocol.T_Complex ->
 				{
-					if( Debug)	System.out.println( "Reading complex close " + Id);
+					readItem( type);
+				}
+
+				case TypedProtocol.T_ComplexEnd ->
+				{
+					if( Debug)	System.out.println( "Reading complex close " + id);
 
 					if( handler != null)
 					{
 						handler.complexClosed();
 					}
 
-					Loop = false;
+					loop = false;
 				}
-				break;
 
-				default : throw new ReadException( "ReadComplex unexpected type: " + Type);
+				default -> throw new ReadException( "ReadComplex unexpected type: " + type);
 			}
 		}
 	}
 
-	public void writeValue( byte Id, String Value) throws WriteException
+	public void writeValue( byte id, String value)
+	 	throws WriteException
 	{
-		if( Debug)	System.out.println( "Writing value " + Id + " " + Value);
+		if( Debug)	System.out.println( "Writing value " + id + " " + value);
 
 		connection.writeByte( TypedProtocol.T_Value);
-		connection.writeByte( Id);
+		connection.writeByte( id);
 
-		if( Value != null)
+		if( value != null)
 		{
-			connection.WriteString( Value);
+			connection.writeString( value);
 		}
 
 		connection.writeByte(( byte) 0);
 	}
 
-	public void openComplex( byte Id) throws WriteException
+	public void openComplex( byte id)
+		throws WriteException
 	{
-		if( Debug)	System.out.println( "Writing complex open " + Id);
+		if( Debug)	System.out.println( "Writing complex open " + id);
 
 		connection.writeByte( TypedProtocol.T_Complex);
-		connection.writeByte( Id);
+		connection.writeByte( id);
 	}
 
-	public void closeComplex() throws WriteException
+	public void closeComplex()
+	 	throws WriteException
 	{
 		if( Debug)	System.out.println( "Writing complex close");
 

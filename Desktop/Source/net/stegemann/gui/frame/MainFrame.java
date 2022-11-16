@@ -136,7 +136,7 @@ public class MainFrame extends JFrame implements ActionListener
 
 		CheckboxMenuItemGroup newPortGroup = new CheckboxMenuItemGroup();
 
-		for( String port: Ports.FindPorts())
+		for( String port: Ports.findPorts())
 		{
 			JCheckBoxMenuItem newMenuItem = new JCheckBoxMenuItem( port);
 			newPortGroup.add( newMenuItem);

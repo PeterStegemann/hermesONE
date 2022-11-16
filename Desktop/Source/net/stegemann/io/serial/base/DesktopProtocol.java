@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DesktopProtocol
 {
-	private static List< Id> idValues = Arrays.asList( Id.values());
+	private static final List< Id> idValues = Arrays.asList( Id.values());
 
 	public static Id enumFromByte( byte byteValue)
 	{
@@ -22,9 +22,9 @@ public class DesktopProtocol
 			enumValue = Id.Unknown;
 		}
 
-		// We keep the original byte value for debugging reasons, for example to identify values that
-		// get mapped to unknown.
-		enumValue.SetByteValue( byteValue);
+		// We keep the original byte value for debugging reasons, for example to identify values
+		// that get mapped to unknown.
+		enumValue.setByteValue( byteValue);
 
 		return enumValue; 
 	}
@@ -33,9 +33,7 @@ public class DesktopProtocol
 	{
 		int enumPosition = idValues.indexOf( enumValue);
 
-		byte value = ( byte) enumPosition;
-
-		return value;
+		return ( byte) enumPosition;
 	}
 
 	public enum Id
@@ -212,12 +210,12 @@ public class DesktopProtocol
 
 		public byte byteValue;
 
-		public void SetByteValue( byte byteValue)
+		public void setByteValue( byte byteValue)
 		{
 			this.byteValue = byteValue;
 		}
 
-		public byte GetByteValue()
+		public byte getByteValue()
 		{
 			return byteValue;
 		}

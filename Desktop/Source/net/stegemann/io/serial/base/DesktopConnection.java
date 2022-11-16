@@ -10,9 +10,9 @@ public class DesktopConnection
 
 	public boolean open( String device, TypedConnectionHandler handler)
 	{
-		connection = new TypedConnection( handler);
+		connection = BaseObjectFactory.typedConnection( handler);
 
-		return connection.Open( device);
+		return connection.open( device);
 	}
 
 	public void close()
@@ -21,7 +21,8 @@ public class DesktopConnection
 		connection = null;
 	}
 
-	public void ping() throws ReadException
+	public void ping()
+	 	throws ReadException
 	{
 		try
 		{
@@ -32,9 +33,9 @@ public class DesktopConnection
 			throw new ReadException( "Sending ping failed!", reason);
 		}
 
-		byte Type = connection.readResponse();
+		byte type = connection.readResponse();
 
-		switch( Type)
+		switch( type)
 		{
 			case TypedProtocol.T_State :
 			{
@@ -47,11 +48,12 @@ public class DesktopConnection
 			}
 			break;
 
-			default : throw new ReadException( "Ping unexpected type: " + Type);
+			default : throw new ReadException( "Ping unexpected type: " + type);
 		}
 	}
 
-	public void readConfiguration() throws ReadException
+	public void readConfiguration()
+		throws ReadException
 	{
 		try
 		{
@@ -82,7 +84,8 @@ public class DesktopConnection
 		}
 	}
 
-	public void writeConfiguration() throws WriteException
+	public void writeConfiguration()
+		throws WriteException
 	{
 		writeCommand( DesktopProtocol.Id.WriteConfiguration);
 
@@ -113,22 +116,26 @@ public class DesktopConnection
 		}
 	}
 
-	public void writeCommand( DesktopProtocol.Id command) throws WriteException
+	public void writeCommand( DesktopProtocol.Id command)
+		throws WriteException
 	{
 		connection.writeCommand( DesktopProtocol.byteFromEnum( command));		
 	}
 
-	public void openComplex( Id id) throws WriteException
+	public void openComplex( Id id)
+		throws WriteException
 	{
 		connection.openComplex( DesktopProtocol.byteFromEnum( id));
 	}
 
-	public void closeComplex() throws WriteException
+	public void closeComplex()
+		throws WriteException
 	{
 		connection.closeComplex();		
 	}
 
-	public void writeValue( DesktopProtocol.Id id, String value) throws WriteException
+	public void writeValue( DesktopProtocol.Id id, String value)
+		throws WriteException
 	{
 		connection.writeValue( DesktopProtocol.byteFromEnum( id), value);
 	}

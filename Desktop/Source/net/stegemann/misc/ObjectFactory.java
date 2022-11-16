@@ -6,13 +6,20 @@ import java.util.function.Supplier;
 
 public class ObjectFactory
 {
-	private static final Map<Supplier< ?>, Object> singletons = new HashMap<>();
+	private static final Map< String, Object> singletons = new HashMap<>();
 
 	public static < Type> Type singleton( Supplier< Type> supplier)
 	{
-		if( singletons.containsKey( supplier))
+		return( singleton( null, supplier));
+    }
+
+	public static < Type> Type singleton( Object parameter, Supplier< Type> supplier)
+	{
+		String key = System.identityHashCode( parameter) + "_" + System.identityHashCode( supplier);
+
+		if( singletons.containsKey( key))
 		{
-			Object object = singletons.get( supplier);
+			Object object = singletons.get( key);
 
 			// noinspection unchecked
 			return ( Type) object;
@@ -20,9 +27,9 @@ public class ObjectFactory
 		else
 		{
 			Type generated = supplier.get();
-			singletons.put(supplier, generated);
+			singletons.put( key, generated);
 
-			return generated;
+			return( generated);
 		}
-    }
+	}
 }

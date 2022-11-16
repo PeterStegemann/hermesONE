@@ -12,17 +12,17 @@ public class Connection
 {
 	private SerialPort port;
 
-	public boolean open( String Device, int BaudRate)
+	public boolean open( String device, int baudRate)
 	{
 		port = null;
 
 		try
 		{
-			port = Ports.OpenPort( Device);
+			port = Ports.openPort( device);
 		}
-		catch( PortInUseException e)
+		catch( PortInUseException reason)
 		{
-			e.printStackTrace();
+			reason.printStackTrace();
 		}
 
 		if( port == null)
@@ -33,12 +33,17 @@ public class Connection
 		try
 		{
 			port.setFlowControlMode( SerialPort.FLOWCONTROL_NONE);
-			port.setSerialPortParams( BaudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
-									  		  SerialPort.PARITY_NONE);
+			port.setSerialPortParams
+			(
+				baudRate,
+			 	SerialPort.DATABITS_8,
+			 	SerialPort.STOPBITS_1,
+			  	SerialPort.PARITY_NONE
+			);
 		}
-		catch( UnsupportedCommOperationException e)
+		catch( UnsupportedCommOperationException reason)
 		{
-			e.printStackTrace();
+			reason.printStackTrace();
 
 			port.close();
 
@@ -56,7 +61,8 @@ public class Connection
 		}
 	}
 
-	public byte readByte() throws ReadException
+	public byte readByte()
+	 	throws ReadException
 	{
 		byte value = internalReadByte();
 
@@ -73,69 +79,77 @@ public class Connection
 		return( value);
 	}
 
-	public void writeByte( byte value) throws WriteException
+	public void writeByte( byte value)
+	 	throws WriteException
 	{
 		internalWriteByte( value);
 
 		// Read echo.
-		byte Echo;
+		byte echo;
 
 		try
 		{
-			Echo = internalReadByte();
+			echo = internalReadByte();
 		}
 		catch( ReadException reason)
 		{
 			throw new WriteException( "Reading echo failed!", reason);
 		}
 
-		if( Echo != value)
+		if( echo != value)
 		{
-			throw new WriteException( "Echo doesn't match byte sent! ( " +  Echo +" !=" + value +
-									  " )");
+			throw new WriteException
+			(
+				"Echo doesn't match byte sent! ( " +  echo +" !=" + value + " )"
+			);
 		}
 	}
 
-	public void WriteWord( int Word) throws WriteException
+	@SuppressWarnings("unused")
+	public void writeWord( int word)
+		throws WriteException
 	{
-		writeByte(( byte)(( Word >> 8) & 0xff));
-		writeByte(( byte)( Word & 0xff));
+		writeByte(( byte)(( word >> 8) & 0xff));
+		writeByte(( byte)( word & 0xff));
 	}
 
-	public void WriteString( String UseString) throws WriteException
+	public void writeString( String string)
+		throws WriteException
 	{
-		byte[] Bytes = UseString.getBytes();
+		byte[] bytes = string.getBytes();
 
-		for( int Index = 0; Index < Bytes.length; Index++)
-		{
-			writeByte( Bytes[ Index]);
+		for( byte aByte: bytes){
+			writeByte( aByte);
 		}
 	}
 
-	private byte internalReadByte() throws ReadException
+	private byte internalReadByte()
+		throws ReadException
 	{
-		byte[] InputBytes = new byte[ 1];
+		byte[] inputBytes = new byte[ 1];
 
 		try
 		{
-			port.getInputStream().read( InputBytes);
+			// noinspection ResultOfMethodCallIgnored
+			port.getInputStream().read( inputBytes);
 		}
 		catch( IOException reason)
 		{
 			throw new ReadException( "Reading byte failed!", reason);
 		}
 
-		return InputBytes[ 0];
+		return inputBytes[ 0];
 	}
 
-	private void internalWriteByte( byte UseByte) throws WriteException
+	private void internalWriteByte( byte useByte)
+		throws WriteException
 	{
-		byte[] OutputBytes = new byte[ 1];
-		OutputBytes[ 0] = UseByte;
+		byte[] outputBytes = new byte[ 1];
+		outputBytes[ 0] = useByte;
 
 		try
 		{
-			port.getOutputStream().write( OutputBytes);
+			port.getOutputStream().write( outputBytes);
 		}
 		catch( IOException reason)
 		{

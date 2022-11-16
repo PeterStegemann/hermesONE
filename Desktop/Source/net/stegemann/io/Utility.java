@@ -7,9 +7,9 @@ import net.stegemann.configuration.Type.State;
 
 public class Utility
 {
-	public static Model.State convertModelState( String statestring)
+	public static Model.State convertModelState( String stateString)
 	{
-		return convertModelState( Integer.parseInt( statestring));
+		return convertModelState( Integer.parseInt( stateString));
 	}
 
 	/** Convert the model state number to the model state enum.
@@ -65,6 +65,7 @@ public class Utility
 		return state.ordinal();
 	}
 
+	@SuppressWarnings("unused")
 	public static RFMode convertModelRFMode( String rfModeString)
 	{
 		return convertModelRFMode( Integer.parseInt( rfModeString));
@@ -89,6 +90,7 @@ public class Utility
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public static int convertModelRFMode( RFMode rfMode)
 	{
 		return rfMode.ordinal();

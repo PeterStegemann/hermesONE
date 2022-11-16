@@ -10,21 +10,22 @@ import gnu.io.SerialPort;
 
 public class Ports
 {
-	@SuppressWarnings( "unchecked")
-	public static SerialPort OpenPort( String PortName) throws PortInUseException
+	public static SerialPort openPort( String portName)
+		throws PortInUseException
 	{
-		Enumeration< CommPortIdentifier> PortList = CommPortIdentifier.getPortIdentifiers();
+		@SuppressWarnings("unchecked")
+	 	Enumeration< CommPortIdentifier> portList = CommPortIdentifier.getPortIdentifiers();
 
-		while( PortList.hasMoreElements())
+		while( portList.hasMoreElements())
 		{
-			CommPortIdentifier PortId = PortList.nextElement();
+			CommPortIdentifier portId = portList.nextElement();
 
-			if( PortId.getPortType() == CommPortIdentifier.PORT_SERIAL)
+			if(
+				portId.getPortType() == CommPortIdentifier.PORT_SERIAL &&
+				portId.getName().equals( portName)
+			)
 			{
-				if( PortId.getName().equals( PortName))
-				{
-					return ( SerialPort) PortId.open( PortName, 2000);
-				}
+				return ( SerialPort) portId.open( portName, 2000);
 			}
 		}
 
@@ -32,22 +33,22 @@ public class Ports
 	}
 
 	@SuppressWarnings( "unchecked")
-	public static List< String> FindPorts()
+	public static List< String> findPorts()
 	{
-		ArrayList< String> Ports = new ArrayList< String>();
+		ArrayList< String> ports = new ArrayList<>();
 
-		Enumeration< CommPortIdentifier> PortList = CommPortIdentifier.getPortIdentifiers();
+		Enumeration< CommPortIdentifier> portList = CommPortIdentifier.getPortIdentifiers();
 
-		while( PortList.hasMoreElements())
+		while( portList.hasMoreElements())
 		{
-			CommPortIdentifier PortId = PortList.nextElement();
+			CommPortIdentifier portId = portList.nextElement();
 
-			if( PortId.getPortType() == CommPortIdentifier.PORT_SERIAL)
+			if( portId.getPortType() == CommPortIdentifier.PORT_SERIAL)
 			{
-				Ports.add( PortId.getName());
+				ports.add( portId.getName());
 			}
 		}
 
-		return Ports;
+		return ports;
 	}
 }

@@ -26,7 +26,7 @@ public class hermesONE_Serial //implements Runnable, SerialPortEventListener
 			UsePort = Arguments[ 0];
 		}
 
-		System.out.println( "Available ports: " + Ports.FindPorts());
+		System.out.println( "Available ports: " + Ports.findPorts());
 
 		TypedConnectionForwarder ConnectionForwarder = new TypedConnectionForwarder();
 		DesktopConnection UseConnection = new DesktopConnection();
@@ -54,9 +54,9 @@ public class hermesONE_Serial //implements Runnable, SerialPortEventListener
 	private class TypedConnectionForwarder implements TypedConnectionHandler
 	{
 		@Override
-		public void complexOpened( byte Id)
+		public void complexOpened( byte id)
 		{
-			System.err.println( "Complex opened: " + Id);
+			System.err.println( "Complex opened: " + id);
 		}
 
 		@Override
@@ -66,9 +66,9 @@ public class hermesONE_Serial //implements Runnable, SerialPortEventListener
 		}
 
 		@Override
-		public void valueRead( byte Id, String Value)
+		public void valueRead( byte id, String value)
 		{
-			System.err.println( "Value read: " + Id + " {" + Value + "}");
+			System.err.println( "Value read: " + id + " {" + value + "}");
 		}
 	}
 }
