@@ -1,12 +1,22 @@
 package net.stegemann.configuration;
 
+import lombok.Builder;
+import lombok.Getter;
 import net.stegemann.configuration.source.Sources;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+@Getter
+@Builder
 public class Configuration
 {
+	@ConfigurationField( name = Names.SYSTEM)
 	private final System system = new System();
+	@ConfigurationField( name = Names.TYPES, itemName = Names.TYPE)
 	private final Types types = new Types();
+	@ConfigurationField( name = Names.MODELS, itemName = Names.MODEL)
 	private final Models models = new Models();
+	@ConfigurationField( name = Names.SOURCES, itemName = Names.SOURCE)
 	private final Sources sources = new Sources();
 
 	public Configuration()
@@ -51,25 +61,5 @@ public class Configuration
 	{
 		system.fill();
 		models.fillChannels( system.getOutputChannels().getValue());
-	}
-
-	public System getSystem()
-	{
-		return system;
-	}
-
-	public Types getTypes()
-	{
-		return types;
-	}
-
-	public Models getModels()
-	{
-		return models;
-	}
-
-	public Sources getSources()
-	{
-		return sources;
 	}
 }

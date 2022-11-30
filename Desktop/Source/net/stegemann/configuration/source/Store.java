@@ -1,17 +1,24 @@
 package net.stegemann.configuration.source;
 
-import java.util.HashMap;
-
+import lombok.Getter;
 import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.type.Volume;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+import java.util.HashMap;
+
+@Getter
+@ConfigurationField( name = Names.SOURCE_STORE)
 public final class Store extends Source
 {
 	public static final int INIT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 200);
 
+	@ConfigurationField( name = Names.SOURCE_STORE_INPUT)
 	private final SourceId input;
+	@ConfigurationField( name = Names.SOURCE_STORE_INIT)
 	private final Volume init;
 
 	public Store()
@@ -62,15 +69,5 @@ public final class Store extends Source
 	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
 	{
 		input.replaceSource( sourcesMap);
-	}
-
-	public SourceId getInput()
-	{
-		return input;
-	}
-
-	public Volume getInit()
-	{
-		return init;
 	}
 }

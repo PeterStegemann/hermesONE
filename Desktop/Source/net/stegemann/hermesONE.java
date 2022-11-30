@@ -1,11 +1,11 @@
 package net.stegemann;
 // hermesONE configuration GUI
 
-import javax.swing.UIManager;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.controller.Controller;
 import net.stegemann.gui.frame.MainFrame;
+
+import javax.swing.*;
 
 public class hermesONE
 {
@@ -32,9 +32,10 @@ public class hermesONE
 		javax.swing.SwingUtilities.invokeLater(() -> new hermesONE().run());
 	}
 
-	private void run() {
+	private void run()
+	{
 		modelsFrame.set();
-		modelsFrame.setLocationRelativeTo(null);
+		modelsFrame.setLocationRelativeTo( null);
 		modelsFrame.open();
 	}
 }

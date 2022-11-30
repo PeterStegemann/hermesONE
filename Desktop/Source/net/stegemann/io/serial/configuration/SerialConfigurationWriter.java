@@ -1,35 +1,20 @@
 package net.stegemann.io.serial.configuration;
 
 import net.stegemann.configuration.*;
-import net.stegemann.configuration.Model.StatusTime;
 import net.stegemann.configuration.Model.StatusSource;
 import net.stegemann.configuration.System;
-import net.stegemann.configuration.source.Follower;
-import net.stegemann.configuration.source.Map;
-import net.stegemann.configuration.source.Mix;
-import net.stegemann.configuration.source.Proxy;
-import net.stegemann.configuration.source.Source;
-import net.stegemann.configuration.source.Sources;
-import net.stegemann.configuration.source.Store;
-import net.stegemann.configuration.source.Timer;
-import net.stegemann.configuration.source.Trim;
-import net.stegemann.configuration.source.input.Analog;
-import net.stegemann.configuration.source.input.Button;
-import net.stegemann.configuration.source.input.Rotary;
-import net.stegemann.configuration.source.input.Switch;
-import net.stegemann.configuration.source.input.Ticker;
-import net.stegemann.configuration.type.Bool;
+import net.stegemann.configuration.Model.StatusTime;
+import net.stegemann.configuration.source.*;
+import net.stegemann.configuration.source.input.*;
 import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.SourceWithVolume;
-import net.stegemann.configuration.type.Text;
-import net.stegemann.configuration.type.Volume;
+import net.stegemann.configuration.type.*;
 import net.stegemann.io.Utility;
 import net.stegemann.io.WriteException;
 import net.stegemann.io.serial.base.DesktopConnection;
 import net.stegemann.io.serial.base.DesktopProtocol;
 import net.stegemann.io.serial.base.DesktopProtocol.Id;
-import net.stegemann.misc.ChangeListener;
 import net.stegemann.io.serial.base.TypedConnectionHandler;
+import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ThrowingFunction;
 
 public class SerialConfigurationWriter
@@ -38,22 +23,14 @@ public class SerialConfigurationWriter
 
 	private final DesktopConnection connection;
 
-	SerialConfigurationWriter
-	(
-		ConfigurationProgress useConfigurationProgress,
-		DesktopConnection useConnection
-	)
+	SerialConfigurationWriter( ConfigurationProgress useConfigurationProgress, DesktopConnection useConnection)
 	{
 		configurationProgress = useConfigurationProgress;
 		connection = useConnection;
     }
 
-	public void writeToPort
-	(
-		Configuration configuration,
-		String portName,
-		ChangeListener< ConfigurationProgress> configurationListener
-	)
+	public void writeToPort( Configuration configuration, String portName,
+							 ChangeListener< ConfigurationProgress> configurationListener)
 		throws WriteException
 	{
 		TypedConnectionForwarder connectionForwarder = new TypedConnectionForwarder();
@@ -128,7 +105,7 @@ public class SerialConfigurationWriter
  			exportModels( useConfiguration.getModels());
  			exportTypes( useConfiguration);
  			exportSources( useConfiguration.getSources());
- 			exportPPMs( system.getPPMs());
+ 			exportPPMs( system.getPpms());
 
 		connection.closeComplex();
 	}
@@ -151,8 +128,8 @@ public class SerialConfigurationWriter
 	{
 		connection.openComplex( Id.PPM);
 
-			writeValue( Id.PPMInverted, ppm.getPPMInverted());
-			writeValue( Id.PPMCenter, ppm.getPPMCenter());
+			writeValue( Id.PPMInverted, ppm.getInverted());
+			writeValue( Id.PPMCenter, ppm.getCenter());
 			writeValue( Id.PPMName, ppm.getName());
 
 			exportChannelMappings( ppm.getChannelMappings());
@@ -253,9 +230,9 @@ public class SerialConfigurationWriter
 			{
 				exportSourceTimer(( Timer) source);
 			}
-			else if( source instanceof Trim)
+			else if( source instanceof Trimmer)
 			{
-				exportSourceTrimmer(( Trim) source);
+				exportSourceTrimmer((Trimmer) source);
 			}
 
 		connection.closeComplex();
@@ -386,7 +363,7 @@ public class SerialConfigurationWriter
 			exportSourceTupel( source.getTarget(), Id.SourceFollowerTarget);
 			exportSourceTupel( source.getStep(), Id.SourceFollowerStep);
 
-			writeValue( Id.SourceFollowerTrigger, source.getTriggerId());
+			writeValue( Id.SourceFollowerTrigger, source.getTrigger());
 			writeValue( Id.SourceFollowerTriggerLowLimit, source.getTriggerLowLimit());
 			writeValue( Id.SourceFollowerTriggerHighLimit, source.getTriggerHighLimit());
 
@@ -415,7 +392,7 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportSourceTrimmer( Trim source)
+	private void exportSourceTrimmer( Trimmer source)
 	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceTrimmer);
@@ -431,7 +408,7 @@ public class SerialConfigurationWriter
 		connection.closeComplex();
 	}
 
-	private void exportSourceTrimmerPoints( Trim source)
+	private void exportSourceTrimmerPoints( Trimmer source)
 	 	throws WriteException
 	{
 		connection.openComplex( Id.SourceTrimmerPoints);

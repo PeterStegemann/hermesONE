@@ -1,6 +1,6 @@
 package net.stegemann.configuration.type;
 
-public class Bool
+public class Bool implements ConfigurationValue
 {
 	private boolean value;
 
@@ -32,11 +32,6 @@ public class Bool
 		return value ? 1231 : 1237;
 	}
 
-	public boolean equals( boolean other)
-	{
-		return value == other;
-	}
-
 	@Override
 	public boolean equals( Object other)
 	{
@@ -63,6 +58,11 @@ public class Bool
 		return value == other.value;
 	}
 
+	public boolean equals( boolean other)
+	{
+		return value == other;
+	}
+
 	public void setValue( boolean value)
 	{
 		this.value = value;
@@ -73,11 +73,13 @@ public class Bool
 		return value;
 	}
 
+	@Override
 	public void setConfigurationValue( String stringValue)
 	{
 		value = Boolean.parseBoolean( stringValue);
 	}
 
+	@Override
 	public String getConfigurationValue()
 	{
 		return Boolean.toString( value);

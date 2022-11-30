@@ -1,21 +1,19 @@
 package net.stegemann.gui.panel.system;
 
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.GroupLayout;
-import javax.swing.JLabel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-
 import net.stegemann.configuration.PPM;
 import net.stegemann.gui.components.BoolComponent;
 import net.stegemann.gui.components.MilliSecondComponent;
 import net.stegemann.gui.components.TextComponent;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+
 public class PPMPanel extends Panel implements ActionListener
 {
+	@Serial
 	private static final long serialVersionUID = 9037123876874360654L;
 
 	private final PPM ppm;
@@ -96,8 +94,8 @@ public class PPMPanel extends Panel implements ActionListener
 
 	public void Set()
 	{
-	  	ppmCenter.attachValue( ppm.getPPMCenter());
-	  	invertedPPM.attachValue( ppm.getPPMInverted());
+	  	ppmCenter.attachValue( ppm.getCenter());
+	  	invertedPPM.attachValue( ppm.getInverted());
 	  	name.attachValue( ppm.getName());
 
 		channelMapping.set();

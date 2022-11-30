@@ -1,22 +1,29 @@
 package net.stegemann.configuration;
 
+import lombok.Getter;
 import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.Text;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
-public class PPM  extends ChangeObservable< PPM>
-					implements ChangeListener< Text>
+@Getter
+public class PPM extends ChangeObservable< PPM> implements ChangeListener< Text>
 {
 	public static final int PPM_CENTER_MINIMUM = -5;
 	public static final int PPM_CENTER_MAXIMUM = 5;
 
-	private final Bool ppmInverted = new Bool();
-	private final Number ppmCenter = new Number( PPM_CENTER_MINIMUM, PPM_CENTER_MAXIMUM);
+	@ConfigurationField( name = Names.PPM_INVERTED)
+	private final Bool inverted = new Bool();
+	@ConfigurationField( name = Names.PPM_CENTER)
+	private final Number center = new Number( PPM_CENTER_MINIMUM, PPM_CENTER_MAXIMUM);
+	@ConfigurationField( name = Names.PPM_NAME)
 	private final Text name;
 
+	@ConfigurationField( name = Names.PPM_CHANNEL_MAPPINGS, itemName = Names.PPM_CHANNEL_MAPPING)
 	private final ChannelMappings channelMappings = new ChannelMappings();
 
 	public PPM( String name, int outputChannels)
@@ -33,8 +40,8 @@ public class PPM  extends ChangeObservable< PPM>
 		StringBuffer Buffer = new StringBuffer();
 
 		Buffer.append( "PPM = {\n");
-		Buffer.append( " Inverted: " + ppmInverted + "\n");
-		Buffer.append( " Center: " + ppmCenter + "\n");
+		Buffer.append( " Inverted: " + inverted + "\n");
+		Buffer.append( " Center: " + center + "\n");
 		Buffer.append( " Name: " + name + "\n");
 		Buffer.append( channelMappings);
 		Buffer.append( "}\n");
@@ -46,8 +53,8 @@ public class PPM  extends ChangeObservable< PPM>
 	{
 		try
 		{
-			ppmInverted.setValue( false);
-			ppmCenter.setValue( 0);
+			inverted.setValue( false);
+			center.setValue( 0);
 
 			channelMappings.clear( outputChannels);
 		}
@@ -60,26 +67,6 @@ public class PPM  extends ChangeObservable< PPM>
 	public void fill( int outputChannels)
 	{
 		channelMappings.fill( outputChannels);
-	}
-
-	public Bool getPPMInverted()
-	{
-		return ppmInverted;
-	}
-
-	public Number getPPMCenter()
-	{
-		return ppmCenter;
-	}
-
-	public Text getName()
-	{
-		return name;
-	}
-
-	public ChannelMappings getChannelMappings()
-	{
-		return channelMappings;
 	}
 
 	@Override

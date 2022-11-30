@@ -1,8 +1,8 @@
 package net.stegemann.configuration.type;
 
-import java.util.HashMap;
-
 import net.stegemann.configuration.source.Source;
+
+import java.util.HashMap;
 
 public class SourceId extends Number
 {
@@ -21,7 +21,8 @@ public class SourceId extends Number
 		}
 	}
 
-	public SourceId( int value) throws ValueOutOfRangeException
+	public SourceId( int value)
+		throws ValueOutOfRangeException
 	{
 		super( Source.SOURCE_START, Source.SOURCE_NONE, value);
 	}

@@ -1,18 +1,7 @@
 package net.stegemann.controller;
 
-import net.stegemann.configuration.source.Follower;
-import net.stegemann.configuration.source.Map;
-import net.stegemann.configuration.source.Mix;
-import net.stegemann.configuration.source.Proxy;
-import net.stegemann.configuration.source.Source;
-import net.stegemann.configuration.source.Store;
-import net.stegemann.configuration.source.Timer;
-import net.stegemann.configuration.source.Trim;
-import net.stegemann.configuration.source.input.Analog;
-import net.stegemann.configuration.source.input.Button;
-import net.stegemann.configuration.source.input.Rotary;
-import net.stegemann.configuration.source.input.Switch;
-import net.stegemann.configuration.source.input.Ticker;
+import net.stegemann.configuration.source.*;
+import net.stegemann.configuration.source.input.*;
 
 public class SourceUtility
 {
@@ -84,7 +73,7 @@ public class SourceUtility
 		{
 			typeString = names[ 9];
 		}
-		else if( source instanceof Trim)
+		else if( source instanceof Trimmer)
 		{
 			typeString = names[ 10];
 		}
@@ -145,7 +134,7 @@ public class SourceUtility
 		}
 		else if( names[ 10].compareToIgnoreCase( typeName) == 0)
 		{
-			return new Trim();
+			return new Trimmer();
 		}
 
 		return null;

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class PPMs implements Iterable< PPM>
 {
-	private final List< PPM> ppms = new ArrayList< PPM>();
+	private final List< PPM> ppms = new ArrayList<>();
 
 	@Override
 	public String toString()

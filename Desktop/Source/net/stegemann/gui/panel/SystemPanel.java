@@ -1,16 +1,5 @@
 package net.stegemann.gui.panel;
 
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.GroupLayout;
-import javax.swing.JLabel;
-import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Models;
 import net.stegemann.configuration.PPMs;
@@ -18,12 +7,14 @@ import net.stegemann.configuration.type.Number;
 import net.stegemann.gui.Constants;
 import net.stegemann.gui.components.ModelIdComponent;
 import net.stegemann.gui.components.TextComponent;
-import net.stegemann.gui.panel.system.BatteryCalibrationPanel;
-import net.stegemann.gui.panel.system.BatteryWarnPanel;
-import net.stegemann.gui.panel.system.CalibrationsPanel;
-import net.stegemann.gui.panel.system.PPMPanel;
-import net.stegemann.gui.panel.system.SetupDisplayPanel;
-import net.stegemann.gui.panel.system.StatusDisplayPanel;
+import net.stegemann.gui.panel.system.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SystemPanel extends Panel implements ActionListener
 {
@@ -76,7 +67,7 @@ public class SystemPanel extends Panel implements ActionListener
 
 		MainTabPane.add( BatteryTabPane, "Batterie");
 
-		PPMs UsePPMs = configuration.getSystem().getPPMs();
+		PPMs UsePPMs = configuration.getSystem().getPpms();
 
 		for( int ppmCount = 0; ppmCount < UsePPMs.getPPMCount(); ppmCount++) {
 			PPMPanel ppm = new PPMPanel( UsePPMs.getPPM( ppmCount));

@@ -1,33 +1,16 @@
 package net.stegemann.gui.panel.source;
 
-import javax.swing.GroupLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
-import net.stegemann.configuration.source.Proxy;
-import net.stegemann.configuration.source.Source;
-import net.stegemann.configuration.source.Follower;
-import net.stegemann.configuration.source.Map;
-import net.stegemann.configuration.source.Mix;
-import net.stegemann.configuration.source.Store;
 import net.stegemann.configuration.source.Timer;
-import net.stegemann.configuration.source.Trim;
-import net.stegemann.configuration.source.input.Analog;
-import net.stegemann.configuration.source.input.Button;
-import net.stegemann.configuration.source.input.Rotary;
-import net.stegemann.configuration.source.input.Switch;
-import net.stegemann.configuration.source.input.Ticker;
+import net.stegemann.configuration.source.*;
+import net.stegemann.configuration.source.input.*;
+import net.stegemann.controller.SourceUtility;
 import net.stegemann.gui.Constants;
 import net.stegemann.gui.components.TextComponent;
-import net.stegemann.controller.SourceUtility;
-import net.stegemann.gui.panel.source.input.AnalogPanel;
-import net.stegemann.gui.panel.source.input.ButtonPanel;
-import net.stegemann.gui.panel.source.input.RotaryPanel;
-import net.stegemann.gui.panel.source.input.SwitchPanel;
-import net.stegemann.gui.panel.source.input.TickerPanel;
+import net.stegemann.gui.panel.source.input.*;
+
+import javax.swing.*;
 
 public class SourcePanel extends JPanel
 {
@@ -198,9 +181,9 @@ public class SourcePanel extends JPanel
 			timerPanel.set( UseModel, ( Timer) UseSource);
 			return timerPanel;
 		}
-		else if( UseSource instanceof Trim)
+		else if( UseSource instanceof Trimmer)
 		{
-			trimPanel.set( UseModel, ( Trim) UseSource);
+			trimPanel.set( UseModel, (Trimmer) UseSource);
 			return trimPanel;
 		}
 		else if( UseSource instanceof Proxy)

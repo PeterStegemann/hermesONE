@@ -11,29 +11,29 @@ public class hermesONE_Serial //implements Runnable, SerialPortEventListener
 //	SerialPort serialPort;
 //	Thread readThread;
 
-	public static void main( String[] Arguments)
+	public static void main( String[] arguments)
 	{
-		new hermesONE_Serial().Main( Arguments);
+		new hermesONE_Serial().Main( arguments);
 	}
 
 	public void Main( String[] Arguments)
 	{
 //		String defaultPort = "/dev/tty.PL2303-00001004";
-		String UsePort = "/dev/cu.usbserial-A1048A6Y";
+		String usePort = "/dev/cu.usbserial-A1048A6Y";
 
 		if( Arguments.length > 0)
 		{
-			UsePort = Arguments[ 0];
+			usePort = Arguments[ 0];
 		}
 
-		System.out.println( "Available ports: " + Ports.findPorts());
+		System.out.println( "Available ports: " + Ports.ports());
 
-		TypedConnectionForwarder ConnectionForwarder = new TypedConnectionForwarder();
+		TypedConnectionForwarder connectionForwarder = new TypedConnectionForwarder();
 		DesktopConnection UseConnection = new DesktopConnection();
 
-		if( UseConnection.open( UsePort, ConnectionForwarder) == false)
+		if( UseConnection.open( usePort, connectionForwarder) == false)
 		{
-			System.out.println( "Failed to open connection with port " + UsePort + ".");
+			System.out.println( "Failed to open connection with port " + usePort + ".");
 		}
 
 		try
@@ -44,14 +44,13 @@ public class hermesONE_Serial //implements Runnable, SerialPortEventListener
 		}
 		catch( ReadException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		UseConnection.close();
     }
 
-	private class TypedConnectionForwarder implements TypedConnectionHandler
+	private static class TypedConnectionForwarder implements TypedConnectionHandler
 	{
 		@Override
 		public void complexOpened( byte id)

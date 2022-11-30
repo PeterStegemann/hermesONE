@@ -1,0 +1,720 @@
+<Configuration>
+  <System>
+    <AnalogInputs>6</AnalogInputs>
+    <DigitalInputs>16</DigitalInputs>
+    <OutputChannels>9</OutputChannels>
+    <Outputs>2</Outputs>
+    <Owner>Peter Stegemann</Owner>
+    <SetupBacklight>50</SetupBacklight>
+    <SetupBlankTime>150</SetupBlankTime>
+    <StatusBacklight>50</StatusBacklight>
+    <StatusContrast>50</StatusContrast>
+    <StatusBlankTime>150</StatusBlankTime>
+    <StatusInverted>false</StatusInverted>
+    <SelectedModel>0</SelectedModel>
+    <Battery>
+      <BatteryWarnLowVoltage>60</BatteryWarnLowVoltage>
+      <BatteryWarnCriticalVoltage>60</BatteryWarnCriticalVoltage>
+      <BatteryMinimumVoltage>60</BatteryMinimumVoltage>
+      <BatteryMaximumVoltage>60</BatteryMaximumVoltage>
+      <BatteryCalibrationVoltage>60</BatteryCalibrationVoltage>
+    </Battery>
+    <Calibrations>
+      <!--Calibration 0-->
+      <Calibration>
+        <CalibrationHigh>0</CalibrationHigh>
+        <CalibrationCenter>0</CalibrationCenter>
+        <CalibrationLow>42</CalibrationLow>
+      </Calibration>
+      <!--Calibration 1-->
+      <Calibration>
+        <CalibrationHigh>0</CalibrationHigh>
+        <CalibrationCenter>0</CalibrationCenter>
+        <CalibrationLow>0</CalibrationLow>
+      </Calibration>
+      <!--Calibration 2-->
+      <Calibration>
+        <CalibrationHigh>0</CalibrationHigh>
+        <CalibrationCenter>0</CalibrationCenter>
+        <CalibrationLow>0</CalibrationLow>
+      </Calibration>
+      <!--Calibration 3-->
+      <Calibration>
+        <CalibrationHigh>0</CalibrationHigh>
+        <CalibrationCenter>0</CalibrationCenter>
+        <CalibrationLow>0</CalibrationLow>
+      </Calibration>
+      <!--Calibration 4-->
+      <Calibration>
+        <CalibrationHigh>0</CalibrationHigh>
+        <CalibrationCenter>0</CalibrationCenter>
+        <CalibrationLow>0</CalibrationLow>
+      </Calibration>
+      <!--Calibration 5-->
+      <Calibration>
+        <CalibrationHigh>0</CalibrationHigh>
+        <CalibrationCenter>0</CalibrationCenter>
+        <CalibrationLow>0</CalibrationLow>
+      </Calibration>
+    </Calibrations>
+    <PPMs>
+      <!--PPM 0-->
+      <PPM>
+        <Inverted>false</Inverted>
+        <Center>0</Center>
+        <Name>Modul 1</Name>
+        <ChannelMappings>
+          <!--ChannelMapping 0-->
+          <ChannelMapping>0</ChannelMapping>
+          <!--ChannelMapping 1-->
+          <ChannelMapping>1</ChannelMapping>
+          <!--ChannelMapping 2-->
+          <ChannelMapping>2</ChannelMapping>
+          <!--ChannelMapping 3-->
+          <ChannelMapping>3</ChannelMapping>
+          <!--ChannelMapping 4-->
+          <ChannelMapping>4</ChannelMapping>
+          <!--ChannelMapping 5-->
+          <ChannelMapping>5</ChannelMapping>
+          <!--ChannelMapping 6-->
+          <ChannelMapping>6</ChannelMapping>
+          <!--ChannelMapping 7-->
+          <ChannelMapping>7</ChannelMapping>
+          <!--ChannelMapping 8-->
+          <ChannelMapping>8</ChannelMapping>
+        </ChannelMappings>
+      </PPM>
+      <!--PPM 1-->
+      <PPM>
+        <Inverted>false</Inverted>
+        <Center>0</Center>
+        <Name>Modul 2</Name>
+        <ChannelMappings>
+          <!--ChannelMapping 0-->
+          <ChannelMapping>0</ChannelMapping>
+          <!--ChannelMapping 1-->
+          <ChannelMapping>1</ChannelMapping>
+          <!--ChannelMapping 2-->
+          <ChannelMapping>2</ChannelMapping>
+          <!--ChannelMapping 3-->
+          <ChannelMapping>3</ChannelMapping>
+          <!--ChannelMapping 4-->
+          <ChannelMapping>4</ChannelMapping>
+          <!--ChannelMapping 5-->
+          <ChannelMapping>5</ChannelMapping>
+          <!--ChannelMapping 6-->
+          <ChannelMapping>6</ChannelMapping>
+          <!--ChannelMapping 7-->
+          <ChannelMapping>7</ChannelMapping>
+          <!--ChannelMapping 8-->
+          <ChannelMapping>8</ChannelMapping>
+        </ChannelMappings>
+      </PPM>
+    </PPMs>
+  </System>
+  <Types>
+    <!--Type 0-->
+    <Type>
+      <TypeName>Type</TypeName>
+      <TypeState>1</TypeState>
+    </Type>
+  </Types>
+  <Models>
+    <!--Model 0-->
+    <Model>
+      <ModelName>Model</ModelName>
+      <ModelState>1</ModelState>
+      <ModelRFMode>0</ModelRFMode>
+      <ModelType>100</ModelType>
+      <ModelStatusSources>
+        <!--ModelStatusSource 0-->
+        <ModelStatusSource>65535</ModelStatusSource>
+        <!--ModelStatusSource 1-->
+        <ModelStatusSource>65535</ModelStatusSource>
+        <!--ModelStatusSource 2-->
+        <ModelStatusSource>65535</ModelStatusSource>
+        <!--ModelStatusSource 3-->
+        <ModelStatusSource>65535</ModelStatusSource>
+      </ModelStatusSources>
+      <ModelStatusTimes>
+        <!--ModelStatusTime 0-->
+        <ModelStatusTime>65535</ModelStatusTime>
+        <!--ModelStatusTime 1-->
+        <ModelStatusTime>65535</ModelStatusTime>
+      </ModelStatusTimes>
+      <Channels>
+        <!--Channel 0-->
+        <Channel>
+          <ChannelName>Kanal</ChannelName>
+          <ChannelReverse>false</ChannelReverse>
+          <ChannelMode>0</ChannelMode>
+          <ChannelInput>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelInput>
+          <ChannelTrim>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>2500</SourceTupelVolume>
+          </ChannelTrim>
+          <ChannelLimit>
+            <SourceTupelSourceId>65534</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelLimit>
+          <ChannelPoints>
+            <!--ChannelPoint 0-->
+            <ChannelPoint>-10000</ChannelPoint>
+            <!--ChannelPoint 1-->
+            <ChannelPoint>0</ChannelPoint>
+            <!--ChannelPoint 2-->
+            <ChannelPoint>10000</ChannelPoint>
+          </ChannelPoints>
+        </Channel>
+        <!--Channel 1-->
+        <Channel>
+          <ChannelName>Kanal</ChannelName>
+          <ChannelReverse>false</ChannelReverse>
+          <ChannelMode>0</ChannelMode>
+          <ChannelInput>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelInput>
+          <ChannelTrim>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>2500</SourceTupelVolume>
+          </ChannelTrim>
+          <ChannelLimit>
+            <SourceTupelSourceId>65534</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelLimit>
+          <ChannelPoints>
+            <!--ChannelPoint 0-->
+            <ChannelPoint>-10000</ChannelPoint>
+            <!--ChannelPoint 1-->
+            <ChannelPoint>0</ChannelPoint>
+            <!--ChannelPoint 2-->
+            <ChannelPoint>10000</ChannelPoint>
+          </ChannelPoints>
+        </Channel>
+        <!--Channel 2-->
+        <Channel>
+          <ChannelName>Kanal</ChannelName>
+          <ChannelReverse>false</ChannelReverse>
+          <ChannelMode>0</ChannelMode>
+          <ChannelInput>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelInput>
+          <ChannelTrim>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>2500</SourceTupelVolume>
+          </ChannelTrim>
+          <ChannelLimit>
+            <SourceTupelSourceId>65534</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelLimit>
+          <ChannelPoints>
+            <!--ChannelPoint 0-->
+            <ChannelPoint>-10000</ChannelPoint>
+            <!--ChannelPoint 1-->
+            <ChannelPoint>0</ChannelPoint>
+            <!--ChannelPoint 2-->
+            <ChannelPoint>10000</ChannelPoint>
+          </ChannelPoints>
+        </Channel>
+        <!--Channel 3-->
+        <Channel>
+          <ChannelName>Kanal</ChannelName>
+          <ChannelReverse>false</ChannelReverse>
+          <ChannelMode>0</ChannelMode>
+          <ChannelInput>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelInput>
+          <ChannelTrim>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>2500</SourceTupelVolume>
+          </ChannelTrim>
+          <ChannelLimit>
+            <SourceTupelSourceId>65534</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelLimit>
+          <ChannelPoints>
+            <!--ChannelPoint 0-->
+            <ChannelPoint>-10000</ChannelPoint>
+            <!--ChannelPoint 1-->
+            <ChannelPoint>0</ChannelPoint>
+            <!--ChannelPoint 2-->
+            <ChannelPoint>10000</ChannelPoint>
+          </ChannelPoints>
+        </Channel>
+        <!--Channel 4-->
+        <Channel>
+          <ChannelName>Kanal</ChannelName>
+          <ChannelReverse>false</ChannelReverse>
+          <ChannelMode>0</ChannelMode>
+          <ChannelInput>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelInput>
+          <ChannelTrim>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>2500</SourceTupelVolume>
+          </ChannelTrim>
+          <ChannelLimit>
+            <SourceTupelSourceId>65534</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelLimit>
+          <ChannelPoints>
+            <!--ChannelPoint 0-->
+            <ChannelPoint>-10000</ChannelPoint>
+            <!--ChannelPoint 1-->
+            <ChannelPoint>0</ChannelPoint>
+            <!--ChannelPoint 2-->
+            <ChannelPoint>10000</ChannelPoint>
+          </ChannelPoints>
+        </Channel>
+        <!--Channel 5-->
+        <Channel>
+          <ChannelName>Kanal</ChannelName>
+          <ChannelReverse>false</ChannelReverse>
+          <ChannelMode>0</ChannelMode>
+          <ChannelInput>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelInput>
+          <ChannelTrim>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>2500</SourceTupelVolume>
+          </ChannelTrim>
+          <ChannelLimit>
+            <SourceTupelSourceId>65534</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelLimit>
+          <ChannelPoints>
+            <!--ChannelPoint 0-->
+            <ChannelPoint>-10000</ChannelPoint>
+            <!--ChannelPoint 1-->
+            <ChannelPoint>0</ChannelPoint>
+            <!--ChannelPoint 2-->
+            <ChannelPoint>10000</ChannelPoint>
+          </ChannelPoints>
+        </Channel>
+        <!--Channel 6-->
+        <Channel>
+          <ChannelName>Kanal</ChannelName>
+          <ChannelReverse>false</ChannelReverse>
+          <ChannelMode>0</ChannelMode>
+          <ChannelInput>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelInput>
+          <ChannelTrim>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>2500</SourceTupelVolume>
+          </ChannelTrim>
+          <ChannelLimit>
+            <SourceTupelSourceId>65534</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelLimit>
+          <ChannelPoints>
+            <!--ChannelPoint 0-->
+            <ChannelPoint>-10000</ChannelPoint>
+            <!--ChannelPoint 1-->
+            <ChannelPoint>0</ChannelPoint>
+            <!--ChannelPoint 2-->
+            <ChannelPoint>10000</ChannelPoint>
+          </ChannelPoints>
+        </Channel>
+        <!--Channel 7-->
+        <Channel>
+          <ChannelName>Kanal</ChannelName>
+          <ChannelReverse>false</ChannelReverse>
+          <ChannelMode>0</ChannelMode>
+          <ChannelInput>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelInput>
+          <ChannelTrim>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>2500</SourceTupelVolume>
+          </ChannelTrim>
+          <ChannelLimit>
+            <SourceTupelSourceId>65534</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelLimit>
+          <ChannelPoints>
+            <!--ChannelPoint 0-->
+            <ChannelPoint>-10000</ChannelPoint>
+            <!--ChannelPoint 1-->
+            <ChannelPoint>0</ChannelPoint>
+            <!--ChannelPoint 2-->
+            <ChannelPoint>10000</ChannelPoint>
+          </ChannelPoints>
+        </Channel>
+        <!--Channel 8-->
+        <Channel>
+          <ChannelName>Kanal</ChannelName>
+          <ChannelReverse>false</ChannelReverse>
+          <ChannelMode>0</ChannelMode>
+          <ChannelInput>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelInput>
+          <ChannelTrim>
+            <SourceTupelSourceId>65535</SourceTupelSourceId>
+            <SourceTupelVolume>2500</SourceTupelVolume>
+          </ChannelTrim>
+          <ChannelLimit>
+            <SourceTupelSourceId>65534</SourceTupelSourceId>
+            <SourceTupelVolume>10000</SourceTupelVolume>
+          </ChannelLimit>
+          <ChannelPoints>
+            <!--ChannelPoint 0-->
+            <ChannelPoint>-10000</ChannelPoint>
+            <!--ChannelPoint 1-->
+            <ChannelPoint>0</ChannelPoint>
+            <!--ChannelPoint 2-->
+            <ChannelPoint>10000</ChannelPoint>
+          </ChannelPoints>
+        </Channel>
+      </Channels>
+      <ModelProxyReferences>
+        <!--ModelProxyReference 0-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 1-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 2-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 3-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 4-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 5-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 6-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 7-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 8-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 9-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 10-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 11-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 12-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 13-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 14-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 15-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 16-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 17-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 18-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 19-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 20-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 21-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 22-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 23-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+        <!--ModelProxyReference 24-->
+        <ModelProxyReference>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>30000</SourceTupelVolume>
+        </ModelProxyReference>
+      </ModelProxyReferences>
+    </Model>
+  </Models>
+  <Sources>
+    <!--Source 0-->
+    <SourceFollower>
+      <SourceName>net.stegemann.configuration.source.Follower</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceFollowerTarget>
+        <SourceTupelSourceId>65535</SourceTupelSourceId>
+        <SourceTupelVolume>0</SourceTupelVolume>
+      </SourceFollowerTarget>
+      <SourceFollowerStep>
+        <SourceTupelSourceId>65535</SourceTupelSourceId>
+        <SourceTupelVolume>0</SourceTupelVolume>
+      </SourceFollowerStep>
+      <SourceFollowerTrigger>65535</SourceFollowerTrigger>
+      <SourceFollowerTriggerLowLimit>0</SourceFollowerTriggerLowLimit>
+      <SourceFollowerTriggerHighLimit>0</SourceFollowerTriggerHighLimit>
+    </SourceFollower>
+    <!--Source 1-->
+    <SourceMap>
+      <SourceName>net.stegemann.configuration.source.Map</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceMapInput>
+        <SourceTupelSourceId>65535</SourceTupelSourceId>
+        <SourceTupelVolume>10000</SourceTupelVolume>
+      </SourceMapInput>
+      <SourceMapPoints>
+        <!--SourceMapPoint 0-->
+        <SourceMapPoint>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMapPoint>
+        <!--SourceMapPoint 1-->
+        <SourceMapPoint>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMapPoint>
+        <!--SourceMapPoint 2-->
+        <SourceMapPoint>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMapPoint>
+        <!--SourceMapPoint 3-->
+        <SourceMapPoint>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMapPoint>
+        <!--SourceMapPoint 4-->
+        <SourceMapPoint>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMapPoint>
+        <!--SourceMapPoint 5-->
+        <SourceMapPoint>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMapPoint>
+        <!--SourceMapPoint 6-->
+        <SourceMapPoint>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMapPoint>
+      </SourceMapPoints>
+    </SourceMap>
+    <!--Source 2-->
+    <SourceMix>
+      <SourceName>net.stegemann.configuration.source.Mix</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceMixInputs>
+        <!--SourceMixInput 0-->
+        <SourceMixInput>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMixInput>
+        <!--SourceMixInput 1-->
+        <SourceMixInput>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMixInput>
+        <!--SourceMixInput 2-->
+        <SourceMixInput>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMixInput>
+        <!--SourceMixInput 3-->
+        <SourceMixInput>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMixInput>
+        <!--SourceMixInput 4-->
+        <SourceMixInput>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMixInput>
+        <!--SourceMixInput 5-->
+        <SourceMixInput>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMixInput>
+        <!--SourceMixInput 6-->
+        <SourceMixInput>
+          <SourceTupelSourceId>65535</SourceTupelSourceId>
+          <SourceTupelVolume>0</SourceTupelVolume>
+        </SourceMixInput>
+      </SourceMixInputs>
+    </SourceMix>
+    <!--Source 3-->
+    <SourceProxy>
+      <SourceName>net.stegemann.configuration.source.Proxy</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceProxySlot>0</SourceProxySlot>
+    </SourceProxy>
+    <!--Source 4-->
+    <SourceStore>
+      <SourceName>net.stegemann.configuration.source.Store</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceStoreInput>65535</SourceStoreInput>
+      <SourceStoreInit>0</SourceStoreInit>
+    </SourceStore>
+    <!--Source 5-->
+    <SourceTimer>
+      <SourceName>net.stegemann.configuration.source.Timer</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceTimerInitTime>0</SourceTimerInitTime>
+      <SourceTimerCurrentTime>0</SourceTimerCurrentTime>
+      <SourceTimerStore>false</SourceTimerStore>
+      <SourceTimerReverse>false</SourceTimerReverse>
+      <SourceTimerTrigger>65535</SourceTimerTrigger>
+      <SourceTimerTriggerLowLimit>0</SourceTimerTriggerLowLimit>
+      <SourceTimerTriggerHighLimit>0</SourceTimerTriggerHighLimit>
+      <SourceTimerWarnLowTime>0</SourceTimerWarnLowTime>
+      <SourceTimerWarnCriticalTime>0</SourceTimerWarnCriticalTime>
+      <SourceTimerWarnPauseTime>0</SourceTimerWarnPauseTime>
+    </SourceTimer>
+    <!--Source 6-->
+    <SourceTrimmer>
+      <SourceName>net.stegemann.configuration.source.Trimmer</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceTrimmerReverse>false</SourceTrimmerReverse>
+      <SourceTrimmerInputSource>
+        <SourceTupelSourceId>65535</SourceTupelSourceId>
+        <SourceTupelVolume>10000</SourceTupelVolume>
+      </SourceTrimmerInputSource>
+      <SourceTrimmerTrimSource>
+        <SourceTupelSourceId>65535</SourceTupelSourceId>
+        <SourceTupelVolume>2500</SourceTupelVolume>
+      </SourceTrimmerTrimSource>
+      <SourceTrimmerLimitSource>
+        <SourceTupelSourceId>65534</SourceTupelSourceId>
+        <SourceTupelVolume>10000</SourceTupelVolume>
+      </SourceTrimmerLimitSource>
+      <SourceTrimmerPoints>
+        <!--SourceTrimmerPoint 0-->
+        <SourceTrimmerPoint>-30000</SourceTrimmerPoint>
+        <!--SourceTrimmerPoint 1-->
+        <SourceTrimmerPoint>0</SourceTrimmerPoint>
+        <!--SourceTrimmerPoint 2-->
+        <SourceTrimmerPoint>30000</SourceTrimmerPoint>
+      </SourceTrimmerPoints>
+    </SourceTrimmer>
+    <!--Source 7-->
+    <SourceInputAnalog>
+      <SourceName>net.stegemann.configuration.source.input.Analog</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceInputAnalogInput>0</SourceInputAnalogInput>
+    </SourceInputAnalog>
+    <!--Source 8-->
+    <SourceInputButton>
+      <SourceName>net.stegemann.configuration.source.input.Button</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceInputButtonInput>0</SourceInputButtonInput>
+      <SourceInputButtonInit>0</SourceInputButtonInit>
+      <SourceInputButtonStore>false</SourceInputButtonStore>
+      <SourceInputButtonToggle>false</SourceInputButtonToggle>
+      <SourceInputButtonTop>30000</SourceInputButtonTop>
+      <SourceInputButtonBottom>-30000</SourceInputButtonBottom>
+    </SourceInputButton>
+    <!--Source 9-->
+    <SourceInputRotary>
+      <SourceName>net.stegemann.configuration.source.input.Rotary</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceInputRotaryAInput>0</SourceInputRotaryAInput>
+      <SourceInputRotaryBInput>0</SourceInputRotaryBInput>
+      <SourceInputRotaryStore>false</SourceInputRotaryStore>
+      <SourceInputRotaryInit>0</SourceInputRotaryInit>
+      <SourceInputRotaryStep>1500</SourceInputRotaryStep>
+      <SourceInputRotaryTop>30000</SourceInputRotaryTop>
+      <SourceInputRotaryBottom>-30000</SourceInputRotaryBottom>
+    </SourceInputRotary>
+    <!--Source 10-->
+    <SourceInputSwitch>
+      <SourceName>net.stegemann.configuration.source.input.Switch</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceInputSwitchLowInput>0</SourceInputSwitchLowInput>
+      <SourceInputSwitchHighInput>0</SourceInputSwitchHighInput>
+      <SourceInputSwitchTop>30000</SourceInputSwitchTop>
+      <SourceInputSwitchBottom>-30000</SourceInputSwitchBottom>
+    </SourceInputSwitch>
+    <!--Source 11-->
+    <SourceInputTicker>
+      <SourceName>net.stegemann.configuration.source.input.Ticker</SourceName>
+      <SourceModel>0</SourceModel>
+      <SourceInputTickerLowInput>0</SourceInputTickerLowInput>
+      <SourceInputTickerHighInput>0</SourceInputTickerHighInput>
+      <SourceInputTickerInit>0</SourceInputTickerInit>
+      <SourceInputTickerStep>1500</SourceInputTickerStep>
+      <SourceInputTickerStore>false</SourceInputTickerStore>
+      <SourceInputTickerTop>30000</SourceInputTickerTop>
+      <SourceInputTickerBottom>-30000</SourceInputTickerBottom>
+    </SourceInputTicker>
+  </Sources>
+</Configuration>

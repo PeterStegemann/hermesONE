@@ -24,7 +24,7 @@ public class DesktopProtocol
 
 		// We keep the original byte value for debugging reasons, for example to identify values
 		// that get mapped to unknown.
-		enumValue.setByteValue( byteValue);
+		enumValue.byteValue( byteValue);
 
 		return enumValue; 
 	}
@@ -210,12 +210,12 @@ public class DesktopProtocol
 
 		public byte byteValue;
 
-		public void setByteValue( byte byteValue)
+		public void byteValue( byte byteValue)
 		{
 			this.byteValue = byteValue;
 		}
 
-		public byte getByteValue()
+		public byte byteValue()
 		{
 			return byteValue;
 		}

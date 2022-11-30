@@ -1,20 +1,32 @@
 package net.stegemann.configuration.source.input;
 
+import lombok.Getter;
 import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.type.Volume;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+@Getter
+@ConfigurationField( name = Names.SOURCE_INPUT_TICKER)
 public final class Ticker extends Input
 {
+	@ConfigurationField( name = Names.SOURCE_INPUT_TICKER_LOW_INPUT)
 	private final Number lowInputId;
+	@ConfigurationField( name = Names.SOURCE_INPUT_TICKER_HIGH_INPUT)
 	private final Number highInputId;
+	@ConfigurationField( name = Names.SOURCE_INPUT_TICKER_INIT)
 	private final Volume init;
+	@ConfigurationField( name = Names.SOURCE_INPUT_TICKER_STEP)
 	private final Volume step;
+	@ConfigurationField( name = Names.SOURCE_INPUT_TICKER_STORE)
 	private final Bool store;
+	@ConfigurationField( name = Names.SOURCE_INPUT_TICKER_TOP)
 	private final Volume top;
+	@ConfigurationField( name = Names.SOURCE_INPUT_TICKER_BOTTOM)
 	private final Volume bottom;
 
 	public Ticker()
@@ -26,16 +38,14 @@ public final class Ticker extends Input
 
 		try
 		{
-			step = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, STEP_SIGNAL_PER_VALUE,
-							   STEP_DEFAULT_VALUE);
-			top = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TOP_SIGNAL_PER_VALUE,
-							  TOP_DEFAULT_VALUE);
+			step = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, STEP_SIGNAL_PER_VALUE, STEP_DEFAULT_VALUE);
+			top = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TOP_SIGNAL_PER_VALUE,	TOP_DEFAULT_VALUE);
 			bottom = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, BOTTOM_SIGNAL_PER_VALUE,
 								 BOTTOM_DEFAULT_VALUE);
 		}
-		catch( ValueOutOfRangeException e)
+		catch( ValueOutOfRangeException reason)
 		{
-			throw new RuntimeException( e);
+			throw new RuntimeException( reason);
 		}
 	}
 
@@ -75,40 +85,5 @@ public final class Ticker extends Input
 	public Source clone()
 	{
 		return new Ticker( this);
-	}
-
-	public Number getLowInputId()
-	{
-		return lowInputId;
-	}
-
-	public Number getHighInputId()
-	{
-		return highInputId;
-	}
-
-	public Volume getInit()
-	{
-		return init;
-	}
-
-	public Volume getStep()
-	{
-		return step;
-	}
-
-	public Bool getStore()
-	{
-		return store;
-	}
-
-	public Number getTop()
-	{
-		return top;
-	}
-
-	public Number getBottom()
-	{
-		return bottom;
 	}
 }

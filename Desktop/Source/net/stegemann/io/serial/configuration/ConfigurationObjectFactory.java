@@ -3,29 +3,18 @@ package net.stegemann.io.serial.configuration;
 import net.stegemann.io.serial.base.BaseObjectFactory;
 import net.stegemann.misc.ObjectFactory;
 
-public final class ConfigurationObjectFactory
-	extends ObjectFactory
+public final class ConfigurationObjectFactory extends ObjectFactory
 {
 	public static SerialConfigurationReader serialConfigurationReader()
 	{
-		return singleton
-		(
-			() -> new SerialConfigurationReader(
-				configurationProgress(),
-				BaseObjectFactory.desktopConnection()
- 			)
-		);
+		return singleton(
+			() -> new SerialConfigurationReader( configurationProgress(), BaseObjectFactory.desktopConnection()));
 	}
 
 	public static SerialConfigurationWriter serialConfigurationWriter()
 	{
-		return singleton
-		(
-			() -> new SerialConfigurationWriter(
-				configurationProgress(),
-				BaseObjectFactory.desktopConnection()
-			)
-		);
+		return singleton(
+			() -> new SerialConfigurationWriter( configurationProgress(), BaseObjectFactory.desktopConnection()));
 	}
 
 	private static ConfigurationProgress configurationProgress()

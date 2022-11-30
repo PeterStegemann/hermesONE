@@ -4,8 +4,7 @@ import lombok.Getter;
 import net.stegemann.misc.ChangeObservable;
 
 @Getter
-public class ConfigurationProgress
-	extends ChangeObservable< ConfigurationProgress>
+public class ConfigurationProgress extends ChangeObservable< ConfigurationProgress>
 {
 	private int typeCount = 0;
 	private int modelCount = 0;

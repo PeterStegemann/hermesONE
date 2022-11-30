@@ -1,11 +1,11 @@
 package net.stegemann;
 
-import java.io.IOException;
-
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
 import net.stegemann.io.serial.base.Ports;
+
+import java.io.IOException;
 
 public class Raw_Serial //implements Runnable, SerialPortEventListener
 {
@@ -25,7 +25,7 @@ public class Raw_Serial //implements Runnable, SerialPortEventListener
 			Device = Arguments[ 0];
 		}
 
-		System.out.println( "Available ports: " + Ports.findPorts());
+		System.out.println( "Available ports: " + Ports.ports());
 
 		SerialPort UsePort = Ports.openPort( Device);
 

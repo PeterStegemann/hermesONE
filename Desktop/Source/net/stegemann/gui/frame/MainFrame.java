@@ -1,33 +1,27 @@
 package net.stegemann.gui.frame;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.Serial;
-
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.controller.Controller;
 import net.stegemann.gui.dialogs.ProgressDialog;
-import net.stegemann.gui.panel.MainPanel;
 import net.stegemann.gui.misc.CheckboxMenuItemGroup;
+import net.stegemann.gui.panel.MainPanel;
 import net.stegemann.io.ReadException;
 import net.stegemann.io.WriteException;
 import net.stegemann.io.serial.base.Ports;
-import net.stegemann.io.serial.configuration.ConfigurationObjectFactory;import net.stegemann.io.serial.configuration.SerialConfigurationReader;
+import net.stegemann.io.serial.configuration.ConfigurationObjectFactory;
+import net.stegemann.io.serial.configuration.SerialConfigurationReader;
 import net.stegemann.io.serial.configuration.SerialConfigurationWriter;
 import net.stegemann.io.xml.XMLObjectFactory;
 import net.stegemann.io.xml.XMLReader;
 import net.stegemann.io.xml.XMLWriter;
+
+import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
 
 public class MainFrame extends JFrame implements ActionListener
 {
@@ -136,7 +130,7 @@ public class MainFrame extends JFrame implements ActionListener
 
 		CheckboxMenuItemGroup newPortGroup = new CheckboxMenuItemGroup();
 
-		for( String port: Ports.findPorts())
+		for( String port: Ports.ports())
 		{
 			JCheckBoxMenuItem newMenuItem = new JCheckBoxMenuItem( port);
 			newPortGroup.add( newMenuItem);
@@ -353,10 +347,9 @@ public class MainFrame extends JFrame implements ActionListener
 		}
 
 		String portName = activeItem.getText();
-		ProgressDialog progressDialog =
-				new ProgressDialog( this, "Lese Konfiguration...");
+		ProgressDialog progressDialog = new ProgressDialog( this, "Lese Konfiguration...");
 
-		runWithProgress( progressDialog, () -> readConfiguration( portName, progressDialog ) );
+		runWithProgress( progressDialog, () -> readConfiguration( portName, progressDialog));
 
 		set();
 	}
@@ -393,8 +386,7 @@ public class MainFrame extends JFrame implements ActionListener
 		}
 
 		String portName = activeItem.getText();
-		ProgressDialog progressDialog =
-				new ProgressDialog( this, "Schreibe Konfiguration..." );
+		ProgressDialog progressDialog = new ProgressDialog( this, "Schreibe Konfiguration..." );
 
 		runWithProgress( progressDialog, () -> writeConfiguration( portName, progressDialog));
 
@@ -417,15 +409,19 @@ public class MainFrame extends JFrame implements ActionListener
 
 	private void runWithProgress( ProgressDialog progressDialog, Runnable runnable)
 	{
-		new Thread
-		(
-			() ->
+		new Thread(() ->
+		{
+			try
 			{
 				runnable.run();
-
-				progressDialog.close();
 			}
-		).start();
+			catch( Exception reason)
+			{
+				reason.printStackTrace();
+			}
+
+			progressDialog.close();
+		}).start();
 
 		progressDialog.open();
 	}

@@ -1,73 +1,112 @@
 package net.stegemann.io.xml;
 
-import net.stegemann.configuration.type.Bool;
-import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.Text;
+import net.stegemann.configuration.type.ConfigurationValue;
+import net.stegemann.io.WriteException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class DocumentGenerator
 {
-	public void appendNode
-	(
-		Document configurationDocument,
-	 	Node configurationNode,
-	 	String nodeTag,
-		Bool value
-	)
+	public Document createDocument()
+		throws WriteException
 	{
-		appendNode( configurationDocument, configurationNode, nodeTag, value.getConfigurationValue());
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+
+		try
+		{
+			builder = factory.newDocumentBuilder();
+		}
+		catch( ParserConfigurationException reason)
+		{
+			throw new WriteException( "Failed to create xml document builder.", reason);
+		}
+
+		return builder.newDocument();
 	}
 
-	public void appendNode
-	(
-		Document configurationDocument,
-	 	Node configurationNode,
-	 	String nodeTag,
-		Text value
-	)
+	public void storeDocument( Document document, String fileName)
+		throws WriteException
 	{
-		appendNode( configurationDocument, configurationNode, nodeTag, value.getConfigurationValue());
+ 	   	DOMSource domSource = new DOMSource( document);
+		StreamResult result = streamResult( fileName);
+		Transformer transformer = transformer();
+
+		try
+		{
+			transformer.transform( domSource, result);
+		}
+		catch( TransformerException reason)
+		{
+			throw new WriteException( "Failed to transform xml.", reason);
+		}
 	}
 
-	public void appendNode
-	(
-		Document configurationDocument,
-		Node configurationNode,
-		String nodeTag,
-		Number value
-	)
+	private Transformer transformer()
+		throws WriteException
 	{
-		appendNode( configurationDocument, configurationNode, nodeTag, value.getConfigurationValue());
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer;
+
+		try
+		{
+			transformer = transformerFactory.newTransformer();
+		}
+		catch( TransformerConfigurationException reason)
+		{
+			throw new WriteException( "Failed to create xml tranformer.", reason);
+		}
+
+		transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+		transformer.setOutputProperty( OutputKeys.INDENT, "yes");
+
+		return transformer;
 	}
 
-	public void appendNode
-	(
-		Document configurationDocument,
-		Node configurationNode,
-		String nodeTag,
-		int value
-	)
+	private StreamResult streamResult( String fileName)
+		throws WriteException
 	{
-		appendNode
-		(
-			configurationDocument,
-			configurationNode,
-			nodeTag,
-			java.lang.Integer.toString( value)
-		);
+		try
+		{
+			FileOutputStream resultFile = new FileOutputStream( fileName);
+
+			return new StreamResult( resultFile);
+		}
+		catch( IOException reason)
+		{
+			throw new WriteException( "Failed to create file '" + fileName + "'.", reason);
+		}
 	}
 
-	public void appendNode
-	(
-		Document configurationDocument,
-		Node configurationNode,
-		String nodeTag,
-		String value
-	)
+	public void appendNode( Document document, Node node, String nodeTag, ConfigurationValue value)
 	{
-		Node newNode = configurationDocument.createElement( nodeTag);
-		configurationNode.appendChild( newNode);
+		appendNode( document, node, nodeTag, value.getConfigurationValue());
+	}
+
+	public void appendNode( Document document,	Node node,	String nodeTag, int value)
+	{
+		appendNode( document, node, nodeTag, java.lang.Integer.toString( value));
+	}
+
+	public void appendNode( Document document,	Node node,	String nodeTag, Enum< ?> value)
+	{
+		appendNode( document, node, nodeTag, value.ordinal());
+	}
+
+	public void appendNode( Document document, Node node, String nodeTag, String value)
+	{
+		Node newNode = document.createElement( nodeTag);
+		node.appendChild( newNode);
 		newNode.setTextContent( value);
 	}
 }

@@ -4,11 +4,11 @@ public class Names
 {
 	public static final String CONFIGURATION							= "Configuration";
 
+	public static final String SYSTEM									= "System";
 	public static final String SYSTEM_ANALOG_INPUTS						= "AnalogInputs";
 	public static final String SYSTEM_DIGITAL_INPUTS					= "DigitalInputs";
 	public static final String SYSTEM_OUTPUT_CHANNELS					= "OutputChannels";
 	public static final String SYSTEM_OUTPUTS							= "Outputs";
-
 	public static final String SYSTEM_OWNER								= "Owner";
 	public static final String SYSTEM_SETUP_BACKLIGHT					= "SetupBacklight";
 	public static final String SYSTEM_SETUP_BLANK_TIME					= "SetupBlankTime";
@@ -45,13 +45,10 @@ public class Names
 	public static final String MODEL_RF_MODE							= "ModelRFMode";
 	public static final String MODEL_NAME								= "ModelName";
 	public static final String MODEL_TYPE								= "ModelType";
-
 	public static final String MODEL_STATUS_SOURCES						= "ModelStatusSources";
 	public static final String MODEL_STATUS_SOURCE						= "ModelStatusSource";
-
 	public static final String MODEL_STATUS_TIMES						= "ModelStatusTimes";
 	public static final String MODEL_STATUS_TIME						= "ModelStatusTime";
-
 	public static final String MODEL_PROXY_REFERENCES					= "ModelProxyReferences";
 	public static final String MODEL_PROXY_REFERENCE					= "ModelProxyReference";
 
@@ -73,9 +70,9 @@ public class Names
 
 	public static final String SOURCES									= "Sources";
 	public static final String SOURCE									= "Source";
-	public static final String SOURCE_TYPE								= "SourceType";
 	public static final String SOURCE_NAME								= "SourceName";
 	public static final String SOURCE_MODEL								= "SourceModel";
+
 	public static final String SOURCE_TUPEL_SOURCE_ID					= "SourceTupelSourceId";
 	public static final String SOURCE_TUPEL_VOLUME						= "SourceTupelVolume";
 
@@ -128,7 +125,6 @@ public class Names
 	public static final String SOURCE_STORE_INIT						= "SourceStoreInit";
 
 	public static final String SOURCE_TIMER 							= "SourceTimer";
-//	public static final String SOURCE_TIMER_INPUT 						= "SourceTimerInput";
 	public static final String SOURCE_TIMER_INIT_TIME 					= "SourceTimerInitTime";
 	public static final String SOURCE_TIMER_CURRENT_TIME 				= "SourceTimerCurrentTime";
 	public static final String SOURCE_TIMER_STORE 						= "SourceTimerStore";
@@ -148,7 +144,6 @@ public class Names
 	public static final String SOURCE_FOLLOWER_TRIGGER_HIGH_LIMIT		= "SourceFollowerTriggerHighLimit";
 
 	public static final String SOURCE_TRIMMER							= "SourceTrimmer";
-	public static final String SOURCE_TRIMMER_NAME						= "SourceTrimmerName";
 	public static final String SOURCE_TRIMMER_INPUT_SOURCE				= "SourceTrimmerInputSource";
 	public static final String SOURCE_TRIMMER_POINTS					= "SourceTrimmerPoints";
 	public static final String SOURCE_TRIMMER_POINT						= "SourceTrimmerPoint";

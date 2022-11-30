@@ -2,7 +2,7 @@ package net.stegemann.configuration.type;
 
 import net.stegemann.misc.ChangeObservable;
 
-public class Number extends ChangeObservable< Number>
+public class Number extends ChangeObservable< Number> implements ConfigurationValue
 {
 	private int minimum = Integer.MIN_VALUE;
 	private int maximum = Integer.MAX_VALUE;
@@ -100,7 +100,8 @@ public class Number extends ChangeObservable< Number>
 		return value == other.value;
 	}
 
-	public void setValue( Number value) throws ValueOutOfRangeException
+	public void setValue( Number value)
+ 		throws ValueOutOfRangeException
 	{
 		if( value != null)
 		{
@@ -108,12 +109,13 @@ public class Number extends ChangeObservable< Number>
 		}
 	}
 
-	public void setValue( int Value) throws ValueOutOfRangeException
+	public void setValue( int Value)
+		throws ValueOutOfRangeException
 	{
 		if(( Value > maximum) || ( Value < minimum))
 		{
-			throw new ValueOutOfRangeException( "Value " + Value + " not in range (" + minimum +
-														   " < " + maximum + ")");
+			throw new ValueOutOfRangeException(
+				"Value " + Value + " not in range (" + minimum + " < " + maximum + ")");
 		}
 
 		value = Value;
@@ -126,12 +128,14 @@ public class Number extends ChangeObservable< Number>
 		return value;
 	}
 
+	@Override
 	public void setConfigurationValue( String stringValue)
-			throws ValueOutOfRangeException, NumberFormatException
+		throws ValueOutOfRangeException, NumberFormatException
 	{
 		setValue( Integer.parseInt( stringValue));
 	}
 
+	@Override
 	public String getConfigurationValue()
 	{
 		return Integer.toString( value);

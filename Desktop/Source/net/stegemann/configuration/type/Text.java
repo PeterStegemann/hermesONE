@@ -2,7 +2,7 @@ package net.stegemann.configuration.type;
 
 import net.stegemann.misc.ChangeObservable;
 
-public class Text extends ChangeObservable< Text>
+public class Text extends ChangeObservable< Text> implements ConfigurationValue
 {
 	private String value;
 
@@ -92,11 +92,13 @@ public class Text extends ChangeObservable< Text>
 		return value;
 	}
 
+	@Override
 	public void setConfigurationValue( String value)
 	{
 		setValue( value);
 	}
 
+	@Override
 	public String getConfigurationValue()
 	{
 		return value;

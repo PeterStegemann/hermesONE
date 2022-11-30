@@ -1,8 +1,12 @@
 package net.stegemann.configuration;
 
+import lombok.Getter;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+@Getter
 public class Battery
 {
 	public static final int VOLTAGE_MINIMUM = 0;
@@ -10,12 +14,16 @@ public class Battery
 	public static final int CALIBRATION_VOLTAGE_MINIMUM = 0;
 	public static final int CALIBRATION_VOLTAGE_MAXIMUM = 180;
 
+	@ConfigurationField( name = Names.BATTERY_WARN_LOW_VOLTAGE)
 	private final Number warnLowVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
+	@ConfigurationField( name = Names.BATTERY_WARN_CRITICAL_VOLTAGE)
 	private final Number warnCriticalVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
+	@ConfigurationField( name = Names.BATTERY_MINIMUM_VOLTAGE)
 	private final Number minimumVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
+	@ConfigurationField( name = Names.BATTERY_MAXIMUM_VOLTAGE)
 	private final Number maximumVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
-	private final Number calibrationVoltage = new Number( CALIBRATION_VOLTAGE_MINIMUM,
-														  CALIBRATION_VOLTAGE_MAXIMUM);
+	@ConfigurationField( name = Names.BATTERY_CALIBRATION_VOLTAGE)
+	private final Number calibrationVoltage = new Number( CALIBRATION_VOLTAGE_MINIMUM, CALIBRATION_VOLTAGE_MAXIMUM);
 
 	@Override
 	public String toString()
@@ -47,30 +55,5 @@ public class Battery
 		{
 			throw new RuntimeException( reason);
 		}
-	}
-
-	public Number getWarnLowVoltage()
-	{
-		return warnLowVoltage;
-	}
-
-	public Number getWarnCriticalVoltage()
-	{
-		return warnCriticalVoltage;
-	}
-
-	public Number getMinimumVoltage()
-	{
-		return minimumVoltage;
-	}
-
-	public Number getMaximumVoltage()
-	{
-		return maximumVoltage;
-	}
-
-	public Number getCalibrationVoltage()
-	{
-		return calibrationVoltage;
 	}
 }

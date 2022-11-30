@@ -1,12 +1,12 @@
 package net.stegemann.io.serial.base;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 public class Ports
 {
@@ -33,19 +33,19 @@ public class Ports
 	}
 
 	@SuppressWarnings( "unchecked")
-	public static List< String> findPorts()
+	public static List< String> ports()
 	{
 		ArrayList< String> ports = new ArrayList<>();
 
-		Enumeration< CommPortIdentifier> portList = CommPortIdentifier.getPortIdentifiers();
+		Enumeration< CommPortIdentifier> portIdentifiers = CommPortIdentifier.getPortIdentifiers();
 
-		while( portList.hasMoreElements())
+		while( portIdentifiers.hasMoreElements())
 		{
-			CommPortIdentifier portId = portList.nextElement();
+			CommPortIdentifier portIdentifier = portIdentifiers.nextElement();
 
-			if( portId.getPortType() == CommPortIdentifier.PORT_SERIAL)
+			if( portIdentifier.getPortType() == CommPortIdentifier.PORT_SERIAL)
 			{
-				ports.add( portId.getName());
+				ports.add( portIdentifier.getName());
 			}
 		}
 

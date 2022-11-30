@@ -1,54 +1,24 @@
 package net.stegemann.io.xml;
 
-import java.io.IOException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import net.stegemann.configuration.Battery;
-import net.stegemann.configuration.Calibration;
-import net.stegemann.configuration.Calibrations;
-import net.stegemann.configuration.Channel;
-import net.stegemann.configuration.ChannelMappings;
-import net.stegemann.configuration.Channels;
-import net.stegemann.configuration.Configuration;
-import net.stegemann.configuration.Model;
-import net.stegemann.configuration.Models;
-import net.stegemann.configuration.PPM;
-import net.stegemann.configuration.PPMs;
-import net.stegemann.configuration.ProxyReferences;
-import net.stegemann.configuration.System;
-import net.stegemann.configuration.Type;
-import net.stegemann.configuration.Types;
+import net.stegemann.configuration.*;
 import net.stegemann.configuration.Model.StatusSource;
+import net.stegemann.configuration.System;
 import net.stegemann.configuration.Model.StatusTime;
-import net.stegemann.configuration.source.Follower;
-import net.stegemann.configuration.source.Map;
-import net.stegemann.configuration.source.Mix;
-import net.stegemann.configuration.source.Proxy;
-import net.stegemann.configuration.source.Source;
-import net.stegemann.configuration.source.Sources;
-import net.stegemann.configuration.source.Store;
-import net.stegemann.configuration.source.Timer;
-import net.stegemann.configuration.source.Trim;
-import net.stegemann.configuration.source.input.Analog;
-import net.stegemann.configuration.source.input.Button;
-import net.stegemann.configuration.source.input.Rotary;
-import net.stegemann.configuration.source.input.Switch;
-import net.stegemann.configuration.source.input.Ticker;
-import net.stegemann.configuration.type.Bool;
+import net.stegemann.configuration.source.*;
+import net.stegemann.configuration.source.input.*;
 import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.SourceWithVolume;
-import net.stegemann.configuration.type.Text;
-import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.type.*;
 import net.stegemann.io.ReadException;
 import net.stegemann.io.Utility;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 public class XMLReader
 {
@@ -129,13 +99,13 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			boolean SystemResult = true;
 
 			if(( UseMode == Mode.All) || ( UseMode == Mode.System))
 			{
-				SystemResult = importSystemNode( UseSystem, NodeName, TextContent, ChildNode);
+				SystemResult = importSystemNode( UseSystem, NodeName, textContent, ChildNode);
 			}
 
 			boolean ModelResult = true;
@@ -147,7 +117,7 @@ public class XMLReader
 
 			if(( SystemResult == false) && ( ModelResult == false))
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
@@ -176,56 +146,56 @@ public class XMLReader
 		return true;
 	}
 
-	private boolean importSystemNode( System UseSystem, String NodeName, String TextContent,
+	private boolean importSystemNode( System UseSystem, String NodeName, String textContent,
 		Node ChildNode)
 	{
 		if( Names.SYSTEM_ANALOG_INPUTS.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getAnalogInputs(), TextContent);
+			readValue( UseSystem.getAnalogInputs(), textContent);
 		}
 		else if( Names.SYSTEM_DIGITAL_INPUTS.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getDigitalInputs(), TextContent);
+			readValue( UseSystem.getDigitalInputs(), textContent);
 		}
 		else if( Names.SYSTEM_OUTPUT_CHANNELS.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getOutputChannels(), TextContent);
+			readValue( UseSystem.getOutputChannels(), textContent);
 		}
 		else if( Names.SYSTEM_OUTPUTS.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getOutputs(), TextContent);
+			readValue( UseSystem.getOutputs(), textContent);
 		}
 		else if( Names.SYSTEM_OWNER.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getOwner(), TextContent);
+			readValue( UseSystem.getOwner(), textContent);
 		}
 		else if( Names.SYSTEM_SETUP_BACKLIGHT.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getSetupBacklight(), TextContent);
+			readValue( UseSystem.getSetupBacklight(), textContent);
 		}
 		else if( Names.SYSTEM_SETUP_BLANK_TIME.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getSetupBlankTime(), TextContent);
+			readValue( UseSystem.getSetupBlankTime(), textContent);
 		}
 		else if( Names.SYSTEM_STATUS_BACKLIGHT.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getStatusBacklight(), TextContent);
+			readValue( UseSystem.getStatusBacklight(), textContent);
 		}
 		else if( Names.SYSTEM_STATUS_CONTRAST.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getStatusContrast(), TextContent);
+			readValue( UseSystem.getStatusContrast(), textContent);
 		}
 		else if( Names.SYSTEM_STATUS_BLANK_TIME.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getStatusBlankTime(), TextContent);
+			readValue( UseSystem.getStatusBlankTime(), textContent);
 		}
 		else if( Names.SYSTEM_STATUS_INVERTED.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getStatusInverted(), TextContent);
+			readValue( UseSystem.getStatusInverted(), textContent);
 		}
 		else if( Names.SYSTEM_SELECTED_MODEL.compareToIgnoreCase( NodeName) == 0)
 		{
-			readValue( UseSystem.getSelectedModel(), TextContent);
+			readValue( UseSystem.getSelectedModel(), textContent);
 		}
 		else if( Names.BATTERY.compareToIgnoreCase( NodeName) == 0)
 		{
@@ -237,7 +207,7 @@ public class XMLReader
 		}
 		else if( Names.PPMS.compareToIgnoreCase( NodeName) == 0)
 		{
-			importPPMs( UseSystem.getPPMs(), getChildNodes( ChildNode));
+			importPPMs( UseSystem.getPpms(), getChildNodes( ChildNode));
 		}		
 		else
 		{
@@ -268,32 +238,32 @@ public class XMLReader
 		}
 	}
 
-	private void importPPM( PPM UsePPM, IterableNodeList ChildNodes)
+	private void importPPM( PPM ppm, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.PPM_INVERTED.compareToIgnoreCase( NodeName) == 0)
+			if( Names.PPM_INVERTED.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UsePPM.getPPMInverted(), TextContent);
+				readValue( ppm.getInverted(), textContent);
 			}
-			else if( Names.PPM_CENTER.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.PPM_CENTER.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UsePPM.getPPMCenter(), TextContent);
+				readValue( ppm.getCenter(), textContent);
 			}
-			else if( Names.PPM_NAME.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.PPM_NAME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UsePPM.getName(), TextContent);
+				readValue( ppm.getName(), textContent);
 			}
-			else if( Names.PPM_CHANNEL_MAPPINGS.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.PPM_CHANNEL_MAPPINGS.compareToIgnoreCase( nodeName) == 0)
 			{
-				importChannelMappings( UsePPM.getChannelMappings(), getChildNodes( ChildNode));
+				importChannelMappings( ppm.getChannelMappings(), getChildNodes( childNode));
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName);
+				java.lang.System.out.println( nodeName);
 			}
 		}
 	}
@@ -305,13 +275,13 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.PPM_CHANNEL_MAPPING.compareToIgnoreCase( NodeName) == 0)
 			{
 				Number NewChannelMapping = new Number( 0, 16);
 
-				readValue( NewChannelMapping, TextContent);
+				readValue( NewChannelMapping, textContent);
 
 				UseChannelMappings.setChannelMapping( ChannelIndex, NewChannelMapping);
 
@@ -324,37 +294,36 @@ public class XMLReader
 		}
 	}
 
-
 	private void importBattery( Battery UseBattery, IterableNodeList ChildNodes)
 	{
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.BATTERY_WARN_LOW_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseBattery.getWarnLowVoltage(), TextContent);
+				readValue( UseBattery.getWarnLowVoltage(), textContent);
 			}
 			else if( Names.BATTERY_WARN_CRITICAL_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseBattery.getWarnCriticalVoltage(), TextContent);
+				readValue( UseBattery.getWarnCriticalVoltage(), textContent);
 			}
 			else if( Names.BATTERY_MINIMUM_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseBattery.getMinimumVoltage(), TextContent);
+				readValue( UseBattery.getMinimumVoltage(), textContent);
 			}
 			else if( Names.BATTERY_MAXIMUM_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseBattery.getMaximumVoltage(), TextContent);
+				readValue( UseBattery.getMaximumVoltage(), textContent);
 			}
 			else if( Names.BATTERY_CALIBRATION_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseBattery.getCalibrationVoltage(), TextContent);
+				readValue( UseBattery.getCalibrationVoltage(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 	}
@@ -389,23 +358,23 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.CALIBRATION_HIGH.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseCalibration.getHigh(), TextContent);
+				readValue( UseCalibration.getHigh(), textContent);
 			}
 			else if( Names.CALIBRATION_CENTER.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseCalibration.getCenter(), TextContent);
+				readValue( UseCalibration.getCenter(), textContent);
 			}
 			else if( Names.CALIBRATION_LOW.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseCalibration.getLow(), TextContent);
+				readValue( UseCalibration.getLow(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 	}
@@ -454,23 +423,23 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.MODEL_NAME.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseModel.getName(), TextContent);
+				readValue( UseModel.getName(), textContent);
 			}
 			else if( Names.MODEL_STATE.compareToIgnoreCase( NodeName) == 0)
 			{
-				UseModel.setState( Utility.convertModelState( TextContent));
+				UseModel.setState( Utility.convertModelState( textContent));
 			}
 			else if( Names.MODEL_RF_MODE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseModel.getRFMode(), TextContent);
+				readValue( UseModel.getRFMode(), textContent);
 			}
 			else if( Names.MODEL_TYPE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseModel.getTypeId(), TextContent);
+				readValue( UseModel.getTypeId(), textContent);
 			}
 			else if( Names.MODEL_STATUS_SOURCES.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -490,7 +459,7 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 	}
@@ -501,19 +470,19 @@ public class XMLReader
 
 		for( Node ChildNode: ChildNodes)
 		{
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 			String NodeName = ChildNode.getNodeName();
 
 			if( Names.MODEL_STATUS_SOURCE.compareToIgnoreCase( NodeName) == 0)
 			{
 				readValue( UseModel.getStatusSourceId( StatusSource.values()[ StatusSourceIndex]),
-						TextContent);
+						textContent);
 
 				StatusSourceIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}		
 	}
@@ -524,20 +493,20 @@ public class XMLReader
 
 		for( Node ChildNode: ChildNodes)
 		{
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			String NodeName = ChildNode.getNodeName();
 
 			if( Names.MODEL_STATUS_TIME.compareToIgnoreCase( NodeName) == 0)
 			{
 				readValue( UseModel.getStatusTimeId( StatusTime.values()[ StatusTimeIndex]),
-						TextContent);
+						textContent);
 
 				StatusTimeIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}		
 	}
@@ -572,11 +541,11 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.CHANNEL_NAME.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseChannel.getName(), TextContent);
+				readValue( UseChannel.getName(), textContent);
 			}
 			else if( Names.CHANNEL_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -592,11 +561,11 @@ public class XMLReader
 			}
 			else if( Names.CHANNEL_REVERSE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseChannel.getReverse(), TextContent);
+				readValue( UseChannel.getReverse(), textContent);
 			}
 			else if( Names.CHANNEL_MODE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseChannel.getMode(), TextContent);
+				readValue( UseChannel.getMode(), textContent);
 			}
 			else if( Names.CHANNEL_POINTS.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -604,7 +573,7 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 	}
@@ -616,17 +585,17 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.CHANNEL_POINT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseChannel.getPoint( ChannelPointIndex), TextContent);
+				readValue( UseChannel.getPoint( ChannelPointIndex), textContent);
 
 				ChannelPointIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}		
 	}
@@ -638,7 +607,7 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.MODEL_PROXY_REFERENCE.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -649,7 +618,7 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}		
 	}
@@ -659,19 +628,19 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_TUPEL_SOURCE_ID.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSourceTupel.getSourceId(), TextContent);
+				readValue( UseSourceTupel.getSourceId(), textContent);
 			}
 			else if( Names.SOURCE_TUPEL_VOLUME.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSourceTupel.getVolume(), TextContent);
+				readValue( UseSourceTupel.getVolume(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 	}
@@ -719,19 +688,19 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.TYPE_NAME.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseType.getName(), TextContent);
+				readValue( UseType.getName(), textContent);
 			}
 			else if( Names.TYPE_STATE.compareToIgnoreCase( NodeName) == 0)
 			{
-				UseType.setState( Utility.convertTypeState( TextContent));
+				UseType.setState( Utility.convertTypeState( textContent));
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 	}
@@ -783,15 +752,15 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_NAME.compareToIgnoreCase( NodeName) == 0)
 			{
-				Name = TextContent;
+				Name = textContent;
 			}
 			else if( Names.SOURCE_MODEL.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( ModelId, TextContent);
+				readValue( ModelId, textContent);
 			}
 			else if( Names.SOURCE_INPUT_ANALOG.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -835,7 +804,7 @@ public class XMLReader
 			}
 			else if( Names.SOURCE_TRIMMER.compareToIgnoreCase( NodeName) == 0)
 			{
-				UseSource = importSourceTrimmer( new Trim(), getChildNodes( ChildNode));
+				UseSource = importSourceTrimmer( new Trimmer(), getChildNodes( ChildNode));
 			}
 			else if( Names.SOURCE_PROXY.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -843,7 +812,7 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
@@ -861,15 +830,15 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_INPUT_ANALOG_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getInputId(), TextContent);
+				readValue( UseSource.getInputId(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
@@ -881,35 +850,35 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_INPUT_BUTTON_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getInputId(), TextContent);
+				readValue( UseSource.getInputId(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_BUTTON_INIT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getInit(), TextContent);
+				readValue( UseSource.getInit(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_BUTTON_STORE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getStore(), TextContent);
+				readValue( UseSource.getStore(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_BUTTON_TOGGLE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getToggle(), TextContent);
+				readValue( UseSource.getToggle(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_BUTTON_TOP.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getTop(), TextContent);
+				readValue( UseSource.getTop(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_BUTTON_BOTTOM.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getBottom(), TextContent);
+				readValue( UseSource.getBottom(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
@@ -921,39 +890,39 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_INPUT_ROTARY_A_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getAInputId(), TextContent);
+				readValue( UseSource.getAInputId(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_ROTARY_B_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getBInputId(), TextContent);
+				readValue( UseSource.getBInputId(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_ROTARY_STORE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getStore(), TextContent);
+				readValue( UseSource.getStore(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_ROTARY_INIT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getInit(), TextContent);
+				readValue( UseSource.getInit(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_ROTARY_STEP.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getStep(), TextContent);
+				readValue( UseSource.getStep(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_ROTARY_TOP.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getTop(), TextContent);
+				readValue( UseSource.getTop(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_ROTARY_BOTTOM.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getBottom(), TextContent);
+				readValue( UseSource.getBottom(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
@@ -965,27 +934,27 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_INPUT_SWITCH_LOW_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getLowInputId(), TextContent);
+				readValue( UseSource.getLowInputId(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_SWITCH_HIGH_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getHighInputId(), TextContent);
+				readValue( UseSource.getHighInputId(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_SWITCH_TOP.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getTop(), TextContent);
+				readValue( UseSource.getTop(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_SWITCH_BOTTOM.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getBottom(), TextContent);
+				readValue( UseSource.getBottom(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
@@ -997,67 +966,67 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_INPUT_TICKER_LOW_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getLowInputId(), TextContent);
+				readValue( UseSource.getLowInputId(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_TICKER_HIGH_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getHighInputId(), TextContent);
+				readValue( UseSource.getHighInputId(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_TICKER_INIT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getInit(), TextContent);
+				readValue( UseSource.getInit(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_TICKER_STEP.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getStep(), TextContent);
+				readValue( UseSource.getStep(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_TICKER_STORE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getStore(), TextContent);
+				readValue( UseSource.getStore(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_TICKER_TOP.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getTop(), TextContent);
+				readValue( UseSource.getTop(), textContent);
 			}
 			else if( Names.SOURCE_INPUT_TICKER_BOTTOM.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getBottom(), TextContent);
+				readValue( UseSource.getBottom(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
 		return UseSource;		
 	}
 
-	private Source importSourceMap( Map UseSource, IterableNodeList ChildNodes)
+	private Source importSourceMap( Map map, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_MAP_INPUT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_MAP_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseSource.getInput(), getChildNodes( ChildNode));
+				importSourceTupel( map.getInput(), getChildNodes( childNode));
 			}
-			else if( Names.SOURCE_MAP_POINTS.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_MAP_POINTS.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceMapPoints( UseSource, getChildNodes( ChildNode));
+				importSourceMapPoints( map, getChildNodes( childNode));
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return map;
 	}
 
 	private void importSourceMapPoints( Map UseSource, IterableNodeList ChildNodes)
@@ -1066,7 +1035,7 @@ public class XMLReader
 
 		for( Node ChildNode: ChildNodes)
 		{
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 			String NodeName = ChildNode.getNodeName();
 
 			if( Names.SOURCE_MAP_POINT.compareToIgnoreCase( NodeName) == 0)
@@ -1077,7 +1046,7 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 	}
@@ -1087,7 +1056,7 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_MIX_INPUTS.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -1095,7 +1064,7 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
@@ -1108,7 +1077,7 @@ public class XMLReader
 
 		for( Node ChildNode: ChildNodes)
 		{
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 			String NodeName = ChildNode.getNodeName();
 
 			if( Names.SOURCE_MIX_INPUT.compareToIgnoreCase( NodeName) == 0)
@@ -1119,7 +1088,7 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 	}
@@ -1129,59 +1098,59 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_STORE_INPUT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getInput(), TextContent);
+				readValue( UseSource.getInput(), textContent);
 			}
 			else if( Names.SOURCE_STORE_INIT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getInit(), TextContent);
+				readValue( UseSource.getInit(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
 		return UseSource;		
 	}
 
-	private Source importSourceFollower( Follower UseSource, IterableNodeList ChildNodes)
+	private Source importSourceFollower( Follower follower, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_FOLLOWER_TARGET.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_FOLLOWER_TARGET.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseSource.getTarget(), getChildNodes( ChildNode));
+				importSourceTupel( follower.getTarget(), getChildNodes( childNode));
 			}
-			else if( Names.SOURCE_FOLLOWER_STEP.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_FOLLOWER_STEP.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseSource.getStep(), getChildNodes( ChildNode));
+				importSourceTupel( follower.getStep(), getChildNodes( childNode));
 			}
-			else if( Names.SOURCE_FOLLOWER_TRIGGER.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_FOLLOWER_TRIGGER.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getTriggerId(), TextContent);
+				readValue( follower.getTrigger(), textContent);
 			}
-			else if( Names.SOURCE_FOLLOWER_TRIGGER_LOW_LIMIT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_FOLLOWER_TRIGGER_LOW_LIMIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getTriggerLowLimit(), TextContent);
+				readValue( follower.getTriggerLowLimit(), textContent);
 			}
-			else if( Names.SOURCE_FOLLOWER_TRIGGER_HIGH_LIMIT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_FOLLOWER_TRIGGER_HIGH_LIMIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getTriggerHighLimit(), TextContent);
+				readValue( follower.getTriggerHighLimit(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return follower;
 	}
 
 	private Source importSourceTimer( Timer UseSource, IterableNodeList ChildNodes)
@@ -1189,63 +1158,63 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_TIMER_INIT_TIME.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getInitTime(), TextContent);
+				readValue( UseSource.getInitTime(), textContent);
 			}
 			else if( Names.SOURCE_TIMER_CURRENT_TIME.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getCurrentTime(), TextContent);
+				readValue( UseSource.getCurrentTime(), textContent);
 			}
 			else if( Names.SOURCE_TIMER_REVERSE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getReverse(), TextContent);
+				readValue( UseSource.getReverse(), textContent);
 			}
 			else if( Names.SOURCE_TIMER_STORE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getStore(), TextContent);
+				readValue( UseSource.getStore(), textContent);
 			}
 			else if( Names.SOURCE_TIMER_TRIGGER.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getTrigger(), TextContent);
+				readValue( UseSource.getTrigger(), textContent);
 			}
 			else if( Names.SOURCE_TIMER_TRIGGER_LOW_LIMIT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getTriggerLowLimit(), TextContent);
+				readValue( UseSource.getTriggerLowLimit(), textContent);
 			}
 			else if( Names.SOURCE_TIMER_TRIGGER_HIGH_LIMIT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getTriggerHighLimit(), TextContent);
+				readValue( UseSource.getTriggerHighLimit(), textContent);
 			}
 			else if( Names.SOURCE_TIMER_WARN_LOW_TIME.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getWarnLowTime(), TextContent);
+				readValue( UseSource.getWarnLowTime(), textContent);
 			}
 			else if( Names.SOURCE_TIMER_WARN_CRITICAL_TIME.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getWarnCriticalTime(), TextContent);
+				readValue( UseSource.getWarnCriticalTime(), textContent);
 			}
 			else if( Names.SOURCE_TIMER_WARN_PAUSE_TIME.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getWarnPauseTime(), TextContent);
+				readValue( UseSource.getWarnPauseTime(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
 		return UseSource;		
 	}
 
-	private Source importSourceTrimmer( Trim UseSource, IterableNodeList ChildNodes)
+	private Source importSourceTrimmer(Trimmer UseSource, IterableNodeList ChildNodes)
 	{
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_TRIMMER_INPUT_SOURCE.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -1261,7 +1230,7 @@ public class XMLReader
 			}
 			else if( Names.SOURCE_TRIMMER_REVERSE.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getReverse(), TextContent);
+				readValue( UseSource.getReverse(), textContent);
 			}
 			else if( Names.SOURCE_TRIMMER_POINTS.compareToIgnoreCase( NodeName) == 0)
 			{
@@ -1269,31 +1238,31 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
 		return UseSource;		
 	}
 
-	private void importSourceTrimmerPoints( Trim UseSource, IterableNodeList ChildNodes)
+	private void importSourceTrimmerPoints(Trimmer trim, IterableNodeList childNodes)
 	{
-		int PointIndex = 0;
+		int pointIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String TextContent = ChildNode.getTextContent();
-			String NodeName = ChildNode.getNodeName();
+			String textContent = childNode.getTextContent();
+			String nodeName = childNode.getNodeName();
 
-			if( Names.SOURCE_TRIMMER_POINT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_TRIMMER_POINT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getPoint( PointIndex), TextContent);
+				readValue( trim.getPoint( pointIndex), textContent);
 
-				PointIndex++;
+				pointIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
@@ -1303,15 +1272,15 @@ public class XMLReader
 		for( Node ChildNode: ChildNodes)
 		{
 			String NodeName = ChildNode.getNodeName();
-			String TextContent = ChildNode.getTextContent();
+			String textContent = ChildNode.getTextContent();
 
 			if( Names.SOURCE_PROXY_SLOT.compareToIgnoreCase( NodeName) == 0)
 			{
-				readValue( UseSource.getSlot(), TextContent);
+				readValue( UseSource.getSlot(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + TextContent);
+				java.lang.System.out.println( NodeName + " " + textContent);
 			}
 		}
 
@@ -1323,23 +1292,23 @@ public class XMLReader
 		return new IterableNodeList( UseNode.getChildNodes());
 	}
 
-	private void readValue( Bool Value, String TextContent)
+	private void readValue( Bool value, String textContent)
 	{
-		Value.setConfigurationValue( TextContent);		
+		value.setConfigurationValue( textContent);		
 	}
 
-	private void readValue( Text Value, String TextContent)
+	private void readValue( Text value, String textContent)
 	{
-		Value.setConfigurationValue( TextContent);
+		value.setConfigurationValue( textContent);
 	}
 
-	private void readValue( Number Value, String TextContent)
+	private void readValue( Number value, String textContent)
 	{
 		try
 		{
-			Value.setConfigurationValue( TextContent);
+			value.setConfigurationValue( textContent);
 		}
-		catch( NumberFormatException | ValueOutOfRangeException ignored )
+		catch( NumberFormatException | ValueOutOfRangeException ignored)
 		{
 		}
 	}

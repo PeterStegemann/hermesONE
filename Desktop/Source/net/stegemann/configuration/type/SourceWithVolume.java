@@ -1,16 +1,30 @@
 package net.stegemann.configuration.type;
 
+import lombok.Getter;
+import net.stegemann.configuration.Signal;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
+
 import java.util.HashMap;
 
+@Getter
 public class SourceWithVolume
 {
+	@ConfigurationField( name = Names.SOURCE_TUPEL_SOURCE_ID)
 	private final SourceId sourceId;
+	@ConfigurationField( name = Names.SOURCE_TUPEL_VOLUME)
 	private final Volume volume;
 
 	public SourceWithVolume( int minimum, int maximum, int signalPerValue)
 	{
 		sourceId = new SourceId();
 		volume = new Volume( minimum, maximum, signalPerValue);
+	}
+
+	public SourceWithVolume( int signalPerValue, int value)
+			throws ValueOutOfRangeException
+	{
+		this( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, signalPerValue, value);
 	}
 
 	public SourceWithVolume( int minimum, int maximum, int signalPerValue, int value)
@@ -29,14 +43,14 @@ public class SourceWithVolume
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "SourceWithVolume = {\n");
-		Buffer.append(  " SourceId: " + sourceId + "\n");
-		Buffer.append(  " Volume: " + volume + "\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+		return String.format( """
+				SourceWithVolume
+				{
+				  SourceId: %s
+				  Volume: %s
+				}
+				""",
+				sourceId, volume);
 	}
 
 	@Override
@@ -91,15 +105,5 @@ public class SourceWithVolume
 	public void replaceSource( HashMap< SourceId, SourceId> sourcesMap)
 	{
 		sourceId.replaceSource( sourcesMap);
-	}
-
-	public SourceId getSourceId()
-	{
-		return sourceId;
-	}
-
-	public Volume getVolume()
-	{
-		return volume;
 	}
 }

@@ -1,10 +1,12 @@
 package net.stegemann.configuration.source;
 
-import java.util.HashMap;
-
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.util.ConfigurationField;
 
+import java.util.HashMap;
+
+@ConfigurationField( ignore = true)
 public final class Fixed extends Source
 {
 	public Fixed()
@@ -13,7 +15,7 @@ public final class Fixed extends Source
 		{
 			getId().setValue( Source.SOURCE_FIXED);
 		}
-		catch( ValueOutOfRangeException e) {}
+		catch( ValueOutOfRangeException ignored) {}
 
 		getName().setValue( "<Fest>");
 	}
@@ -26,13 +28,13 @@ public final class Fixed extends Source
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Fixed = {\n");
-		Buffer.append( super.toString());
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+		return String.format( """
+				Fixed
+				{
+					%s
+				}
+				""",
+				super.toString());
 	}
 
 	@Override
@@ -47,14 +49,14 @@ public final class Fixed extends Source
 	}
 
 	@Override
-	public int compareTo( Source Other)
+	public int compareTo( Source other)
 	{
-		if( Other instanceof Empty)
+		if( other instanceof Empty)
 		{
 			return 1;
 		}
 
-		if( Other instanceof Fixed)
+		if( other instanceof Fixed)
 		{
 			return 0;
 		}

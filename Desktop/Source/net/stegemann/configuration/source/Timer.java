@@ -1,33 +1,48 @@
 package net.stegemann.configuration.source;
 
-import java.util.HashMap;
-
+import lombok.Getter;
 import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.Volume;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+import java.util.HashMap;
+
+@Getter
+@ConfigurationField( name = Names.SOURCE_TIMER)
 public final class Timer extends Source
 {
 	public static final int TIME_MAXIMUM_VALUE = ( 5 * 60 * 60);
 
 	public static final int TRIGGER_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 200);
 
+	@ConfigurationField( name = Names.SOURCE_TIMER_INIT_TIME)
 	private final Number initTime;
+	@ConfigurationField( name = Names.SOURCE_TIMER_CURRENT_TIME)
 	private final Number currentTime;
 
+	@ConfigurationField( name = Names.SOURCE_TIMER_STORE)
+	private final Bool store;
+	@ConfigurationField( name = Names.SOURCE_TIMER_REVERSE)
+	private final Bool reverse;
+
+	@ConfigurationField( name = Names.SOURCE_TIMER_TRIGGER)
 	private final SourceId trigger;
 
+	@ConfigurationField( name = Names.SOURCE_TIMER_TRIGGER_LOW_LIMIT)
 	private final Volume triggerLowLimit;
+	@ConfigurationField( name = Names.SOURCE_TIMER_TRIGGER_HIGH_LIMIT)
 	private final Volume triggerHighLimit;
 
+	@ConfigurationField( name = Names.SOURCE_TIMER_WARN_LOW_TIME)
 	private final Number warnLowTime;
+	@ConfigurationField( name = Names.SOURCE_TIMER_WARN_CRITICAL_TIME)
 	private final Number warnCriticalTime;
+	@ConfigurationField( name = Names.SOURCE_TIMER_WARN_PAUSE_TIME)
 	private final Number warnPauseTime;
-
-	private final Bool store;
-	private final Bool reverse;
 
 	public Timer()
 	{
@@ -36,10 +51,8 @@ public final class Timer extends Source
 
 		trigger = new SourceId();
 
-		triggerLowLimit = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE,
-									  TRIGGER_SIGNAL_PER_VALUE);
-		triggerHighLimit = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE,
-									   TRIGGER_SIGNAL_PER_VALUE);
+		triggerLowLimit = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TRIGGER_SIGNAL_PER_VALUE);
+		triggerHighLimit = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TRIGGER_SIGNAL_PER_VALUE);
 
 		warnLowTime = new Number( 0, TIME_MAXIMUM_VALUE);
 		warnCriticalTime = new Number( 0, TIME_MAXIMUM_VALUE);
@@ -101,55 +114,5 @@ public final class Timer extends Source
 	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
 	{
 		trigger.replaceSource( sourcesMap);
-	}
-
-	public Number getInitTime()
-	{
-		return initTime;
-	}
-
-	public Number getCurrentTime()
-	{
-		return currentTime;
-	}
-
-	public Number getTrigger()
-	{
-		return trigger;
-	}
-
-	public Volume getTriggerLowLimit()
-	{
-		return triggerLowLimit;
-	}
-
-	public Volume getTriggerHighLimit()
-	{
-		return triggerHighLimit;
-	}
-
-	public Number getWarnLowTime()
-	{
-		return warnLowTime;
-	}
-
-	public Number getWarnCriticalTime()
-	{
-		return warnCriticalTime;
-	}
-
-	public Number getWarnPauseTime()
-	{
-		return warnPauseTime;
-	}
-
-	public Bool getStore()
-	{
-		return store;
-	}
-
-	public Bool getReverse()
-	{
-		return reverse;
 	}
 }

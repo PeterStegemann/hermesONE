@@ -1,18 +1,17 @@
 package net.stegemann.configuration;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
-public class Types extends ChangeObservable< Types>
-					 implements Iterable< Type>, ChangeListener< Type>
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class Types extends ChangeObservable< Types> implements Iterable< Type>, ChangeListener< Type>
 {
-	private final List< Type> types = new ArrayList< Type>();
+	private final List< Type> types = new ArrayList<>();
 
 	@Override
 	public String toString()

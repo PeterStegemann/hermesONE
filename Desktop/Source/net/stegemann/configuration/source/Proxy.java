@@ -1,17 +1,23 @@
 package net.stegemann.configuration.source;
 
-import java.util.HashMap;
-
+import lombok.Getter;
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+import java.util.HashMap;
+
+@Getter
+@ConfigurationField( name = Names.SOURCE_PROXY)
 public final class Proxy extends Source
 {
 	public static final int SLOT_MINIMUM = 0;
 	public static final int SLOT_MAXIMUM = ( SLOT_MINIMUM + Model.PROXIES - 1);
 
+	@ConfigurationField( name = Names.SOURCE_PROXY_SLOT)
 	private final Number slot;
 
 	public Proxy()
@@ -55,10 +61,5 @@ public final class Proxy extends Source
 	@Override
 	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
 	{
-	}
-
-	public Number getSlot()
-	{
-		return slot;
 	}
 }

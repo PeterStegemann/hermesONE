@@ -1,14 +1,14 @@
 package net.stegemann.configuration;
 
+import net.stegemann.configuration.type.Number;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.stegemann.configuration.type.Number;
-
 public class ChannelMappings implements Iterable< Number>
 {
-	private final List< Number> channelMappings = new ArrayList< Number>();
+	private final List< Number> channelMappings = new ArrayList<>();
 
 	@Override
 	public String toString()
@@ -41,10 +41,10 @@ public class ChannelMappings implements Iterable< Number>
 			return;
 		}
 
-		// fill up missing channel mappings.
-		for( int ChannelMapping = channelMappings.size(); ChannelMapping < outputChannels; ChannelMapping++)
+		// Fill up missing channel mappings.
+		for( int channelMapping = channelMappings.size(); channelMapping < outputChannels; channelMapping++)
 		{
-			channelMappings.add( new Number( ChannelMapping));
+			channelMappings.add( new Number( channelMapping));
 		}
 	}
 
@@ -75,9 +75,9 @@ public class ChannelMappings implements Iterable< Number>
 		return channelMappings.size();
 	}
 
-	private class ChannelMappingsIterator implements Iterator< Number>
+	private static class ChannelMappingsIterator implements Iterator< Number>
 	{
-		private Iterator< Number> iterator;
+		private final Iterator< Number> iterator;
 
 		public ChannelMappingsIterator( ChannelMappings channelMappings)
 		{

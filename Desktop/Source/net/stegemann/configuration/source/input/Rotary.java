@@ -1,20 +1,32 @@
 package net.stegemann.configuration.source.input;
 
+import lombok.Getter;
 import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.type.Volume;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+@Getter
+@ConfigurationField( name = Names.SOURCE_INPUT_ROTARY)
 public final class Rotary extends Input
 {
+	@ConfigurationField( name = Names.SOURCE_INPUT_ROTARY_A_INPUT)
 	private final Number aInputId;
+	@ConfigurationField( name = Names.SOURCE_INPUT_ROTARY_B_INPUT)
 	private final Number bInputId;
+	@ConfigurationField( name = Names.SOURCE_INPUT_ROTARY_STORE)
 	private final Bool store;
+	@ConfigurationField( name = Names.SOURCE_INPUT_ROTARY_INIT)
 	private final Volume init;
+	@ConfigurationField( name = Names.SOURCE_INPUT_ROTARY_STEP)
 	private final Volume step;
+	@ConfigurationField( name = Names.SOURCE_INPUT_ROTARY_TOP)
 	private final Volume top;
+	@ConfigurationField( name = Names.SOURCE_INPUT_ROTARY_BOTTOM)
 	private final Volume bottom;
 
 	public Rotary()
@@ -33,9 +45,9 @@ public final class Rotary extends Input
 			bottom = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, BOTTOM_SIGNAL_PER_VALUE,
 								 BOTTOM_DEFAULT_VALUE);
 		}
-		catch( ValueOutOfRangeException e)
+		catch( ValueOutOfRangeException reason)
 		{
-			throw new RuntimeException( e);
+			throw new RuntimeException( reason);
 		}
 	}
 
@@ -75,40 +87,5 @@ public final class Rotary extends Input
 	public Source clone()
 	{
 		return new Rotary( this);
-	}
-
-	public Number getAInputId()
-	{
-		return aInputId;
-	}
-
-	public Number getBInputId()
-	{
-		return bInputId;
-	}
-
-	public Bool getStore()
-	{
-		return store;
-	}
-
-	public Number getInit()
-	{
-		return init;
-	}
-
-	public Number getStep()
-	{
-		return step;
-	}
-
-	public Number getTop()
-	{
-		return top;
-	}
-
-	public Number getBottom()
-	{
-		return bottom;
 	}
 }

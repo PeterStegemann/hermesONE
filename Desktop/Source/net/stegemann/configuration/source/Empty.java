@@ -1,10 +1,12 @@
 package net.stegemann.configuration.source;
 
-import java.util.HashMap;
-
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.util.ConfigurationField;
 
+import java.util.HashMap;
+
+@ConfigurationField( ignore = true)
 public final class Empty extends Source
 {
 	public Empty()
@@ -13,7 +15,7 @@ public final class Empty extends Source
 		{
 			getId().setValue( Source.SOURCE_NONE);
 		}
-		catch( ValueOutOfRangeException e) {}
+		catch( ValueOutOfRangeException ignored) {}
 
 		getName().setValue( "<Leer>");
 	}
@@ -26,13 +28,13 @@ public final class Empty extends Source
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Empty = {\n");
-		Buffer.append( super.toString());
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+		return String.format( """
+				Empty
+				{
+					%s
+				}
+				""",
+				super.toString());
 	}
 
 	@Override

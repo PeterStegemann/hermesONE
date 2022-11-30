@@ -37,18 +37,17 @@ public class DesktopConnection
 
 		switch( type)
 		{
-			case TypedProtocol.T_State :
+			case TypedProtocol.T_State ->
 			{
-				DesktopProtocol.Id id = DesktopProtocol.enumFromByte( connection.readResponse());
+				Id id = DesktopProtocol.enumFromByte( connection.readResponse());
 
-				if( id != DesktopProtocol.Id.Ok)
+				if( id != Id.Ok)
 				{
 					throw new ReadException( "Pong: " + id);
 				}
 			}
-			break;
 
-			default : throw new ReadException( "Ping unexpected type: " + type);
+			default -> throw new ReadException( "Ping unexpected type: " + type);
 		}
 	}
 
@@ -69,18 +68,17 @@ public class DesktopConnection
 
 		switch( type)
 		{
-			case TypedProtocol.T_State :
+			case TypedProtocol.T_State ->
 			{
-				DesktopProtocol.Id Id = DesktopProtocol.enumFromByte( connection.readResponse());
+				Id id = DesktopProtocol.enumFromByte( connection.readResponse());
 
-				if( Id != DesktopProtocol.Id.Ok)
+				if( id != DesktopProtocol.Id.Ok)
 				{
-					throw new ReadException( "ReadConfiguration error: " + Id);
+					throw new ReadException( "ReadConfiguration error: " + id);
 				}
 			}
-			break;
 
-			default : connection.readItem( type);
+			default -> connection.readItem( type);
 		}
 	}
 
@@ -92,22 +90,19 @@ public class DesktopConnection
 		try
 		{
 			// Get acknowledge.
-			byte Type = connection.readResponse();
+			byte type = connection.readResponse();
 
-			switch( Type)
+			switch( type)
 			{
-				case TypedProtocol.T_State :
+				case TypedProtocol.T_State ->
 				{
-					DesktopProtocol.Id id = DesktopProtocol.enumFromByte( connection.readResponse());
+					Id id = DesktopProtocol.enumFromByte( connection.readResponse());
 
-					if( id != DesktopProtocol.Id.Ok)
+					if( id != Id.Ok)
 					{
 						throw new WriteException( "WriteConfiguration error: " + id);
 					}
 				}
-				break;
-
-				default : break;
 			}
 		}
 		catch( ReadException reason)

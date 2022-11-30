@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Calibrations implements Iterable< Calibration>
 {
-	private final List< Calibration> calibrations = new ArrayList< Calibration>();
+	private final List< Calibration> calibrations = new ArrayList<>();
 
 	@Override
 	public String toString()
@@ -15,9 +15,9 @@ public class Calibrations implements Iterable< Calibration>
 
 		Buffer.append( "Calibrations = {\n");
 
-		for( Calibration Calibration: calibrations)
+		for( Calibration calibration: calibrations)
 		{
-			Buffer.append( Calibration);
+			Buffer.append( calibration);
 		}
 
 		Buffer.append( "}\n");
@@ -77,9 +77,9 @@ public class Calibrations implements Iterable< Calibration>
 		return calibrations.size();
 	}
 
-	private class CalibrationsIterator implements Iterator< Calibration>
+	private static class CalibrationsIterator implements Iterator< Calibration>
 	{
-		private Iterator< Calibration> iterator;
+		private final Iterator< Calibration> iterator;
 
 		public CalibrationsIterator( Calibrations calibrations)
 		{

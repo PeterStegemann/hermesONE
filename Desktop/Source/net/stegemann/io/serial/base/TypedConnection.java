@@ -5,15 +5,15 @@ import net.stegemann.io.WriteException;
 
 public class TypedConnection
 {
-	private static final boolean Debug = true;
+	private static final boolean debug = true;
+
+	private static final int BAUD_RATE = 115200;
+	private static final int RECEIVE_TIMEOUT = 1000;
 
 	private final TypedConnectionHandler handler;
 	private final Connection connection;
 
-	public TypedConnection(
-		Connection connection,
-		TypedConnectionHandler handler
-	)
+	public TypedConnection( Connection connection, TypedConnectionHandler handler)
 	{
 		this.connection = connection;
 		this.handler = handler;
@@ -21,7 +21,7 @@ public class TypedConnection
 
 	public boolean open( String device)
 	{
-		return connection.open( device, 115200);
+		return connection.open( device, BAUD_RATE, RECEIVE_TIMEOUT);
 	}
 
 	public void close()
@@ -82,7 +82,7 @@ public class TypedConnection
 			Count++;
 		}
 
-		if( Debug)	System.out.println( "Read value " + id + " " + new String( Response, 0, Count));
+		if(debug)	System.out.println( "Read value " + id + " " + new String( Response, 0, Count));
 
 		if( handler != null)
 		{
@@ -93,7 +93,7 @@ public class TypedConnection
 	void readComplex( byte id)
 	 	throws ReadException
 	{
-		if( Debug)	System.out.println( "Reading complex open " + id);
+		if(debug)	System.out.println( "Reading complex open " + id);
 
 		if( handler != null)
 		{
@@ -122,7 +122,7 @@ public class TypedConnection
 
 				case TypedProtocol.T_ComplexEnd ->
 				{
-					if( Debug)	System.out.println( "Reading complex close " + id);
+					if(debug)	System.out.println( "Reading complex close " + id);
 
 					if( handler != null)
 					{
@@ -140,7 +140,7 @@ public class TypedConnection
 	public void writeValue( byte id, String value)
 	 	throws WriteException
 	{
-		if( Debug)	System.out.println( "Writing value " + id + " " + value);
+		if(debug)	System.out.println( "Writing value " + id + " " + value);
 
 		connection.writeByte( TypedProtocol.T_Value);
 		connection.writeByte( id);
@@ -156,7 +156,7 @@ public class TypedConnection
 	public void openComplex( byte id)
 		throws WriteException
 	{
-		if( Debug)	System.out.println( "Writing complex open " + id);
+		if(debug)	System.out.println( "Writing complex open " + id);
 
 		connection.writeByte( TypedProtocol.T_Complex);
 		connection.writeByte( id);
@@ -165,7 +165,7 @@ public class TypedConnection
 	public void closeComplex()
 	 	throws WriteException
 	{
-		if( Debug)	System.out.println( "Writing complex close");
+		if(debug)	System.out.println( "Writing complex close");
 
 		connection.writeByte( TypedProtocol.T_ComplexEnd);
 	}

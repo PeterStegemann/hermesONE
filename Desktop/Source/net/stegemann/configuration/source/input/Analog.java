@@ -1,10 +1,16 @@
 package net.stegemann.configuration.source.input;
 
+import lombok.Getter;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+@Getter
+@ConfigurationField( name = Names.SOURCE_INPUT_ANALOG)
 public final class Analog extends Input
 {
+	@ConfigurationField( name = Names.SOURCE_INPUT_ANALOG_INPUT)
 	private final Number inputId;
 
 	public Analog()
@@ -36,10 +42,5 @@ public final class Analog extends Input
 	public Source clone()
 	{
 		return new Analog( this);
-	}
-
-	public Number getInputId()
-	{
-		return inputId;
 	}
 }

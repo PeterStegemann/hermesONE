@@ -1,18 +1,16 @@
 package net.stegemann.configuration.source;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
-public class Sources extends ChangeObservable< Sources>
-				  implements Iterable< Source>, ChangeListener< Source>
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+public class Sources extends ChangeObservable< Sources> implements Iterable< Source>, ChangeListener< Source>
 {
-	private final List< Source> sources = new ArrayList< Source>();
+	private final List< Source> sources = new ArrayList<>();
 
 	@Override
 	public String toString()
@@ -40,7 +38,7 @@ public class Sources extends ChangeObservable< Sources>
 	@Override
 	public Iterator< Source> iterator()
 	{
-		return new SourcesIterator( this);
+		return new SourcesIterator(this);
 	}
 
 	public void clear()
@@ -144,9 +142,9 @@ public class Sources extends ChangeObservable< Sources>
 		return sources.size();
 	}
 
-	private class SourcesIterator implements Iterator< Source>
+	private static class SourcesIterator implements Iterator< Source>
 	{
-		private Iterator< Source> iterator;
+		private final Iterator< Source> iterator;
 
 		public SourcesIterator( Sources sources)
 		{

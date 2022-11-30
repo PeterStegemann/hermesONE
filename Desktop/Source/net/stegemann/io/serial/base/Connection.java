@@ -1,18 +1,18 @@
 package net.stegemann.io.serial.base;
 
-import java.io.IOException;
-
-import net.stegemann.io.ReadException;
-import net.stegemann.io.WriteException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
+import net.stegemann.io.ReadException;
+import net.stegemann.io.WriteException;
+
+import java.io.IOException;
 
 public class Connection
 {
 	private SerialPort port;
 
-	public boolean open( String device, int baudRate)
+	public boolean open( String device, int baudRate, int receiveTimeout)
 	{
 		port = null;
 
@@ -33,13 +33,8 @@ public class Connection
 		try
 		{
 			port.setFlowControlMode( SerialPort.FLOWCONTROL_NONE);
-			port.setSerialPortParams
-			(
-				baudRate,
-			 	SerialPort.DATABITS_8,
-			 	SerialPort.STOPBITS_1,
-			  	SerialPort.PARITY_NONE
-			);
+			port.setSerialPortParams( baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+			port.enableReceiveTimeout( receiveTimeout);
 		}
 		catch( UnsupportedCommOperationException reason)
 		{
@@ -76,7 +71,13 @@ public class Connection
 			throw new ReadException( "Writing echo failed!", reason);
 		}
 
-		return( value);
+		return value;
+	}
+
+	public void writeByte( Enum<?> value)
+		throws WriteException
+	{
+		writeByte(( byte) value.ordinal());
 	}
 
 	public void writeByte( byte value)
@@ -98,10 +99,7 @@ public class Connection
 
 		if( echo != value)
 		{
-			throw new WriteException
-			(
-				"Echo doesn't match byte sent! ( " +  echo +" !=" + value + " )"
-			);
+			throw new WriteException( "Echo doesn't match byte sent! ( " +  echo +" !=" + value + " )");
 		}
 	}
 
@@ -118,7 +116,8 @@ public class Connection
 	{
 		byte[] bytes = string.getBytes();
 
-		for( byte aByte: bytes){
+		for( byte aByte: bytes)
+		{
 			writeByte( aByte);
 		}
 	}

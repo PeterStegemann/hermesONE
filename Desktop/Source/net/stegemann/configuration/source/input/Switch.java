@@ -1,16 +1,25 @@
 package net.stegemann.configuration.source.input;
 
+import lombok.Getter;
 import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.type.Volume;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+@Getter
+@ConfigurationField( name = Names.SOURCE_INPUT_SWITCH)
 public final class Switch extends Input
 {
+	@ConfigurationField( name = Names.SOURCE_INPUT_SWITCH_LOW_INPUT)
 	private final Number lowInputId;
+	@ConfigurationField( name = Names.SOURCE_INPUT_SWITCH_HIGH_INPUT)
 	private final Number highInputId;
+	@ConfigurationField( name = Names.SOURCE_INPUT_SWITCH_TOP)
 	private final Volume top;
+	@ConfigurationField( name = Names.SOURCE_INPUT_SWITCH_BOTTOM)
 	private final Volume bottom;
 
 	public Switch()
@@ -61,25 +70,5 @@ public final class Switch extends Input
 	public Source clone()
 	{
 		return new Switch( this);
-	}
-
-	public Number getLowInputId()
-	{
-		return lowInputId;
-	}
-
-	public Number getHighInputId()
-	{
-		return highInputId;
-	}
-
-	public Number getTop()
-	{
-		return top;
-	}
-
-	public Number getBottom()
-	{
-		return bottom;
 	}
 }

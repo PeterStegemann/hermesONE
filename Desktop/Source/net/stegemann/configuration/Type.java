@@ -2,6 +2,8 @@ package net.stegemann.configuration;
 
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.Text;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
@@ -14,7 +16,9 @@ public class Type extends ChangeObservable< Type> implements ChangeListener< Tex
 	}
 
 	private final Number id;
+	@ConfigurationField( name = Names.TYPE_NAME)
 	private final Text name;
+	@ConfigurationField( name = Names.TYPE_STATE)
 	private State state;
 
 	public Type()
@@ -49,6 +53,7 @@ public class Type extends ChangeObservable< Type> implements ChangeListener< Tex
 		return Buffer.toString();
 	}
 
+	@SuppressWarnings("MethodDoesntCallSuperMethod")
 	@Override
 	public Type clone()
 	{

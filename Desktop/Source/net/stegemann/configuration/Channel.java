@@ -1,20 +1,20 @@
 package net.stegemann.configuration;
 
-import java.util.HashMap;
-
+import lombok.Getter;
 import net.stegemann.configuration.source.Source;
-import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.SourceId;
-import net.stegemann.configuration.type.SourceWithVolume;
-import net.stegemann.configuration.type.Text;
-import net.stegemann.configuration.type.ValueOutOfRangeException;
-import net.stegemann.configuration.type.Volume;
+import net.stegemann.configuration.type.*;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
-public class Channel extends ChangeObservable< Channel>
-				  implements ChangeListener< Text>
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+@Getter
+public class Channel extends ChangeObservable< Channel> implements ChangeListener< Text>
 {
 	public static final int INPUT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
 	public static final int TRIM_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
@@ -30,16 +30,23 @@ public class Channel extends ChangeObservable< Channel>
 	public static final int MODE_WARP = 0;
 	public static final int MODE_CLIP = 1;
 
+	@ConfigurationField( name = Names.CHANNEL_NAME)
 	private final Text name;
 
+	@ConfigurationField( name = Names.CHANNEL_REVERSE)
+	private final Bool reverse;
+	@ConfigurationField( name = Names.CHANNEL_MODE)
+	private final Number mode;
+
+	@ConfigurationField( name = Names.CHANNEL_INPUT)
 	private final SourceWithVolume input;
+	@ConfigurationField( name = Names.CHANNEL_TRIM)
 	private final SourceWithVolume trim;
+	@ConfigurationField( name = Names.CHANNEL_LIMIT)
 	private final SourceWithVolume limit;
 
-	private final Number mode;
-	private final Bool reverse;
-
-	private final Volume points[] = new Volume[ POINTS];
+	@ConfigurationField( name = Names.CHANNEL_POINTS, itemName = Names.CHANNEL_POINT)
+	private final List< Volume> points = new ArrayList<>();
 
 	public Channel()
 	{
@@ -72,15 +79,14 @@ public class Channel extends ChangeObservable< Channel>
 
 		for( int Index = 0; Index < POINTS; Index++)
 		{
-			points[ Index] = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE,
-										 POINT_SIGNAL_PER_VALUE);
+			points.add( new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, INPUT_SIGNAL_PER_VALUE));
 		}
 
 		try
 		{
-			points[ 0].setValue( -100);
-			points[ 1].setValue( 0);
-			points[ 2].setValue( 100);
+			points.get( 0).setValue( -100);
+			points.get( 1).setValue( 0);
+			points.get( 2).setValue( 100);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
@@ -100,9 +106,9 @@ public class Channel extends ChangeObservable< Channel>
 		mode = new Number( other.mode);
 		reverse = new Bool( other.reverse);
 
-		for( int Count = 0; Count < points.length; Count++)
+		for( Volume otherPoint: other.points)
 		{
-			points[ Count] = new Volume( other.points[ Count]);
+			points.add( new Volume( otherPoint));
 		}
 	}
 
@@ -144,38 +150,8 @@ public class Channel extends ChangeObservable< Channel>
 		notifyChange( this);
 	}
 
-	public Text getName()
-	{
-		return name;
-	}
-
-	public SourceWithVolume getInput()
-	{
-		return input;
-	}
-
-	public SourceWithVolume getTrim()
-	{
-		return trim;
-	}
-
-	public SourceWithVolume getLimit()
-	{
-		return limit;
-	}
-
-	public Bool getReverse()
-	{
-		return reverse;
-	}
-
-	public Number getMode()
-	{
-		return mode;
-	}
-
 	public Volume getPoint( int Index)
 	{
-		return points[ Index];
+		return points.get( Index);
 	}
 }

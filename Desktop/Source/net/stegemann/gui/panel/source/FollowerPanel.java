@@ -1,8 +1,5 @@
 package net.stegemann.gui.panel.source;
 
-import javax.swing.GroupLayout;
-import javax.swing.JLabel;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.Signal;
@@ -11,8 +8,12 @@ import net.stegemann.gui.components.NumberSliderComponent;
 import net.stegemann.gui.components.source.SourceComponent;
 import net.stegemann.gui.components.source.SourceWithVolumeComponent;
 
+import javax.swing.*;
+import java.io.Serial;
+
 public class FollowerPanel extends SpecificSourcePanel
 {
+	@Serial
 	private static final long serialVersionUID = 6553089473965508349L;
 
 	private final SourceWithVolumeComponent target;
@@ -21,9 +22,9 @@ public class FollowerPanel extends SpecificSourcePanel
 	private final NumberSliderComponent triggerLowLimit;
 	private final NumberSliderComponent triggerHighLimit;
 
-	public FollowerPanel( Configuration UseConfiguration)
+	public FollowerPanel( Configuration configuration)
 	{
-		super( UseConfiguration);
+		super( configuration);
 
 		JLabel TargetLabel = new JLabel( "Soll:");
 		target = new SourceWithVolumeComponent( Signal.MINIMUM_VALUE / Follower.TARGET_SIGNAL_PER_VALUE,
@@ -114,17 +115,17 @@ public class FollowerPanel extends SpecificSourcePanel
 		);
 	}
 
-	public void set( Model UseModel, Follower UseSource)
+	public void set( Model model, Follower follower)
 	{
-		super.set( UseModel, UseSource);
+		super.set( model, follower);
 
-		target.set( sourcesViewWithFixed, UseSource.getTarget());
-		step.set( sourcesViewWithFixed, UseSource.getStep());
+		target.set( sourcesViewWithFixed, follower.getTarget());
+		step.set( sourcesViewWithFixed, follower.getStep());
 
 		trigger.setSourcesView( sourcesViewWithoutFixed);
-		trigger.attachValue( UseSource.getTriggerId());
+		trigger.attachValue( follower.getTrigger());
 
-		triggerLowLimit.attachValue( UseSource.getTriggerLowLimit());
-		triggerHighLimit.attachValue( UseSource.getTriggerHighLimit());
+		triggerLowLimit.attachValue( follower.getTriggerLowLimit());
+		triggerHighLimit.attachValue( follower.getTriggerHighLimit());
 	}
 }

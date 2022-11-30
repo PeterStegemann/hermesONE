@@ -2,7 +2,7 @@ package net.stegemann.configuration.type;
 
 public class Volume extends Number
 {
-	private int signalPerValue;
+	private final int signalPerValue;
 
 	public Volume( int minimum, int maximum, int signalPerValue)
 	{
@@ -82,8 +82,8 @@ public class Volume extends Number
 	}
 
 	@Override
-	public void setConfigurationValue( String StringValue) throws ValueOutOfRangeException,
-																  NumberFormatException
+	public void setConfigurationValue( String StringValue)
+		throws ValueOutOfRangeException, NumberFormatException
 	{
 		setValue( Integer.parseInt( StringValue) / signalPerValue);
 	}

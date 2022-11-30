@@ -1,18 +1,17 @@
 package net.stegemann.configuration;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
-public class Models extends ChangeObservable< Models>
-					  implements Iterable< Model>, ChangeListener< Model>
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class Models extends ChangeObservable< Models> implements Iterable< Model>, ChangeListener< Model>
 {
-	private final List< Model> models = new ArrayList< Model>();
+	private final List< Model> models = new ArrayList<>();
 
 	@Override
 	public String toString()
@@ -67,9 +66,9 @@ public class Models extends ChangeObservable< Models>
 	/**
 	 * Insert is like add, but it will assign a new id to the model.
 	 * 
-	 * @param NewModel The model to insert.
+	 * @param model The model to insert.
 	 *
-	 * @return
+	 * @return The model
 	 */
 	public Model insertModel( Model model)
 	{

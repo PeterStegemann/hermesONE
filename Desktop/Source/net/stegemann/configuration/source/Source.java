@@ -1,14 +1,19 @@
 package net.stegemann.configuration.source;
 
-import java.util.HashMap;
-
+import lombok.Getter;
 import net.stegemann.configuration.Named;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.Text;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
+import java.util.HashMap;
+
+@Getter
+@ConfigurationField( name = Names.SOURCE)
 public abstract class Source extends ChangeObservable< Source>
 						  implements ChangeListener< Text>, Comparable< Source>, Named
 {
@@ -19,7 +24,9 @@ public abstract class Source extends ChangeObservable< Source>
 	public static final int SOURCE_END = SOURCE_NONE;
 
 	private final SourceId id = new SourceId();
+	@ConfigurationField( name = Names.SOURCE_NAME)
 	private final Text name;
+	@ConfigurationField( name = Names.SOURCE_MODEL)
 	private Number model = null;
 
 	protected Source()
@@ -40,15 +47,15 @@ public abstract class Source extends ChangeObservable< Source>
 	@Override
 	public String toString()
 	{
-		StringBuilder builder = new StringBuilder();
-
-		builder.append( "Source = {\n");
-		builder.append(  " Id: " + id + "\n");
-		builder.append(  " Name: " + name + "\n");
-		builder.append(  " Model Id: " + model + "\n");
-		builder.append( "}\n");
-
-		return builder.toString();
+		return String.format( """
+				Source
+				{
+					Id: %s
+					Name: %s
+					Model Id: %s
+				}
+				""",
+				id, name, model);
 	}
 
 	@Override
@@ -74,11 +81,6 @@ public abstract class Source extends ChangeObservable< Source>
 	public void setModel( Number model)
 	{
 		this.model = model;
-	}
-
-	public Number getModel()
-	{
-		return model;
 	}
 
 	public abstract void replaceSources( HashMap< SourceId, SourceId> sourcesMap);

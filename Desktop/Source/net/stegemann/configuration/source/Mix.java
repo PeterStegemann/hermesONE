@@ -1,27 +1,32 @@
 package net.stegemann.configuration.source;
 
+import lombok.Getter;
+import net.stegemann.configuration.Signal;
+import net.stegemann.configuration.type.SourceId;
+import net.stegemann.configuration.type.SourceWithVolume;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.stegemann.configuration.Signal;
-import net.stegemann.configuration.type.SourceId;
-import net.stegemann.configuration.type.SourceWithVolume;
-
+@Getter
+@ConfigurationField( name = Names.SOURCE_MIX)
 public final class Mix extends Source
 {
 	public static final int INPUT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
 
 	public static final int INPUTS = 7;
 
-	private final List< SourceWithVolume> inputs = new ArrayList< SourceWithVolume>();
+	@ConfigurationField( name = Names.SOURCE_MIX_INPUTS, itemName = Names.SOURCE_MIX_INPUT)
+	private final List< SourceWithVolume> inputs = new ArrayList<>();
 
 	public Mix()
 	{
 		for( int Count = 0; Count < INPUTS; Count++)
 		{
-			inputs.add( new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE,
-											  INPUT_SIGNAL_PER_VALUE));
+			inputs.add( new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, INPUT_SIGNAL_PER_VALUE));
 		}
 	}
 
@@ -68,13 +73,8 @@ public final class Mix extends Source
 		}
 	}
 
-	public SourceWithVolume getInput( int Index)
+	public SourceWithVolume getInput( int index)
 	{
-		return inputs.get( Index);
-	}
-
-	public List< SourceWithVolume> getInputs()
-	{
-		return inputs;
+		return inputs.get( index);
 	}
 }

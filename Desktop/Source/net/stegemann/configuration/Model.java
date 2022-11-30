@@ -1,15 +1,17 @@
 package net.stegemann.configuration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.Text;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Model extends ChangeObservable< Model> implements ChangeListener< Text>, Named
 {
@@ -54,13 +56,21 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 	public final static Number Global;
 
 	private final Number id;
+	@ConfigurationField( name = Names.MODEL_NAME)
 	private final Text name;
+	@ConfigurationField( name = Names.MODEL_STATE)
 	private State state;
+	@ConfigurationField( name = Names.MODEL_RF_MODE)
 	private final Number rfMode;
+	@ConfigurationField( name = Names.MODEL_TYPE)
 	private final Number typeId;
-	private final Channels channels;
+	@ConfigurationField( name = Names.MODEL_STATUS_SOURCES, itemName = Names.MODEL_STATUS_SOURCE)
 	private final List< SourceId> statusSourceIds = new ArrayList<>();
+	@ConfigurationField( name = Names.MODEL_STATUS_TIMES, itemName = Names.MODEL_STATUS_TIME)
 	private final List< SourceId> statusTimeIds = new ArrayList<>();
+	@ConfigurationField( name = Names.CHANNELS, itemName = Names.CHANNEL)
+	private final Channels channels;
+	@ConfigurationField( name = Names.MODEL_PROXY_REFERENCES, itemName = Names.MODEL_PROXY_REFERENCE)
 	private final ProxyReferences proxyReferences;
 
 	static

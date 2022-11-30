@@ -1,22 +1,21 @@
 package net.stegemann.configuration;
 
+import net.stegemann.configuration.type.SourceId;
+import net.stegemann.misc.ChangeListener;
+import net.stegemann.misc.ChangeObservable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import net.stegemann.configuration.type.SourceId;
-import net.stegemann.misc.ChangeListener;
-import net.stegemann.misc.ChangeObservable;
-
-public class Channels extends ChangeObservable< Channels>
-						 implements Iterable< Channel>, ChangeListener< Channel>
+public class Channels extends ChangeObservable< Channels> implements Iterable< Channel>, ChangeListener< Channel>
 {
-	private final List< Channel> channels = new ArrayList< Channel>();
+	private final List< Channel> channels = new ArrayList<>();
 
-	public Channels( int Size)
+	public Channels( int size)
 	{
-		fill( Size);
+		fill( size);
 	}
 
 	public Channels( Channels UseChannels)

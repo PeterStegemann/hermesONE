@@ -1,15 +1,15 @@
 package net.stegemann.configuration;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.SourceWithVolume;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class ProxyReferences extends ChangeObservable< ProxyReferences>
 						  implements Iterable< SourceWithVolume>, ChangeListener< SourceWithVolume>
@@ -18,7 +18,7 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 
 	private static final int DEFAULT_PROXY_REFERENCE_VOLUME = 100;
 
-	private final List< SourceWithVolume> proxyReferences = new ArrayList< SourceWithVolume>();
+	private final List< SourceWithVolume> proxyReferences = new ArrayList<>();
 
 	public ProxyReferences( int Proxies)
 	{
@@ -51,7 +51,7 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 	}
 
 	@Override
-	public void hasChanged( SourceWithVolume Object)
+	public void hasChanged( SourceWithVolume object)
 	{
 		notifyChange( this);
 	}
@@ -59,7 +59,7 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 	@Override
 	public Iterator< SourceWithVolume> iterator()
 	{
-		return new ProxyReferenceIterator( this);
+		return new ProxyReferenceIterator(this);
 	}
 
 	public void fill( int size)
@@ -102,9 +102,9 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 		{
 			return proxyReferences.get( Index);
 		}
-		catch( IndexOutOfBoundsException Reason)
+		catch( IndexOutOfBoundsException reason)
 		{
-			return( null);
+			return null;
 		}
 	}
 
@@ -116,9 +116,9 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 		}
 	}
 
-	private class ProxyReferenceIterator implements Iterator< SourceWithVolume>
+	private static class ProxyReferenceIterator implements Iterator< SourceWithVolume>
 	{
-		private Iterator< SourceWithVolume> iterator;
+		private final Iterator< SourceWithVolume> iterator;
 
 		public ProxyReferenceIterator( ProxyReferences UseProxies)
 		{

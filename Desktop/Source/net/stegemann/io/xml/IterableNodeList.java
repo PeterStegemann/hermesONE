@@ -1,12 +1,13 @@
 package net.stegemann.io.xml;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class IterableNodeList implements Iterable< Node>
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class IterableNodeList
+	implements Iterable< Node>
 {
 	private final NodeList nodeList;
 
@@ -25,13 +26,13 @@ public class IterableNodeList implements Iterable< Node>
 			@Override
 			public boolean hasNext()
 			{
-				return getNode() != null;
+				return node() != null;
 			}
 
 			@Override
 			public Node next()
 			{
-				Node node = getNode();
+				Node node = node();
 
 				if( node == null)
 				{
@@ -48,11 +49,11 @@ public class IterableNodeList implements Iterable< Node>
 			 *
 			 * @return Node
 			 */
-			private Node getNode()
+			private Node node()
 			{
 				Node node;
 
-				while(( node = nodeList.item( nodeIndex )) != null)
+				while(( node = nodeList.item( nodeIndex)) != null)
 				{
 					if( node.getNodeType() == Node.ELEMENT_NODE)
 					{

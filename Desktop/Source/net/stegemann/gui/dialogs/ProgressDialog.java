@@ -1,24 +1,14 @@
 package net.stegemann.gui.dialogs;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.io.Serial;
-
-import javax.swing.GroupLayout;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.LayoutStyle.ComponentPlacement;
-
 import net.stegemann.io.serial.configuration.ConfigurationProgress;
 import net.stegemann.misc.ChangeListener;
 
-public class ProgressDialog 
-	extends JDialog
-	implements ChangeListener< ConfigurationProgress>
+import javax.swing.*;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.*;
+import java.io.Serial;
+
+public class ProgressDialog extends JDialog implements ChangeListener< ConfigurationProgress>
 {
 	@Serial
 	private static final long serialVersionUID = 108509389789556744L;
@@ -27,8 +17,8 @@ public class ProgressDialog
 	private final JLabel modelsValue = new JLabel( "0");
 	private final JLabel sourcesValue = new JLabel( "0");
 
-	// This flag is set on close and is respected by open, just for the case that close is called
-	// before open. In that case, open won't do anything.
+	// This flag is set on close and is respected by open, just for the case that close is called before open. In that
+	// case, open won't do anything.
 	private boolean gone = false;
 
 	public ProgressDialog( JFrame parent, String text)
@@ -115,7 +105,7 @@ public class ProgressDialog
 		);
 	}
 
-	public synchronized void open()
+	public void open()
 	{
 		if( gone == true)
 		{
@@ -140,11 +130,11 @@ public class ProgressDialog
 		setVisible( true);
 	}
 
-	public synchronized void close()
+	public void close()
 	{
-		gone = true;
+		setVisible( false);
 
-	    setVisible( false);
+		gone = true;
 	}
 
 	@Override

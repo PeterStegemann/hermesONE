@@ -1,47 +1,22 @@
 package net.stegemann.io.serial.configuration;
 
-import java.util.ArrayList;
-
-import net.stegemann.configuration.Battery;
-import net.stegemann.configuration.Calibration;
-import net.stegemann.configuration.Calibrations;
-import net.stegemann.configuration.Channel;
-import net.stegemann.configuration.ChannelMappings;
-import net.stegemann.configuration.Channels;
-import net.stegemann.configuration.Configuration;
-import net.stegemann.configuration.Model;
-import net.stegemann.configuration.Models;
-import net.stegemann.configuration.PPM;
-import net.stegemann.configuration.PPMs;
-import net.stegemann.configuration.ProxyReferences;
-import net.stegemann.configuration.System;
-import net.stegemann.configuration.Type;
-import net.stegemann.configuration.Types;
+import net.stegemann.configuration.*;
 import net.stegemann.configuration.Model.StatusSource;
+import net.stegemann.configuration.System;
 import net.stegemann.configuration.Model.StatusTime;
-import net.stegemann.configuration.source.Source;
-import net.stegemann.configuration.source.Follower;
-import net.stegemann.configuration.source.Map;
-import net.stegemann.configuration.source.Mix;
-import net.stegemann.configuration.source.Proxy;
-import net.stegemann.configuration.source.Store;
-import net.stegemann.configuration.source.Timer;
-import net.stegemann.configuration.source.Sources;
-import net.stegemann.configuration.source.Trim;
-import net.stegemann.configuration.source.input.Analog;
-import net.stegemann.configuration.source.input.Button;
-import net.stegemann.configuration.source.input.Rotary;
-import net.stegemann.configuration.source.input.Switch;
-import net.stegemann.configuration.source.input.Ticker;
-import net.stegemann.configuration.type.Bool;
+import net.stegemann.configuration.source.*;
+import net.stegemann.configuration.source.input.*;
 import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.SourceWithVolume;
-import net.stegemann.configuration.type.Text;
-import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.type.*;
 import net.stegemann.io.ReadException;
 import net.stegemann.io.Utility;
-import net.stegemann.io.serial.base.*;
+import net.stegemann.io.serial.base.DesktopConnection;
+import net.stegemann.io.serial.base.DesktopConnectionHandler;
+import net.stegemann.io.serial.base.DesktopProtocol;
+import net.stegemann.io.serial.base.TypedConnectionHandler;
 import net.stegemann.misc.ChangeListener;
+
+import java.util.ArrayList;
 
 public class SerialConfigurationReader
 {
@@ -50,20 +25,14 @@ public class SerialConfigurationReader
 
 	private final ArrayList< TypedConnectionHandler> handlerStack = new ArrayList<>();
 
-	SerialConfigurationReader(
-		ConfigurationProgress useConfigurationProgress,
-		DesktopConnection useConnection
-	)
+	SerialConfigurationReader( ConfigurationProgress useConfigurationProgress, DesktopConnection useConnection)
 	{
 		configurationProgress = useConfigurationProgress;
 		connection = useConnection;
     }
 
-	public void readFromPort(
-		Configuration configuration,
-		String portName,
-		ChangeListener< ConfigurationProgress> configurationListener
-	)
+	public void readFromPort( Configuration configuration, String portName,
+							  ChangeListener< ConfigurationProgress> configurationListener)
 		throws ReadException
 	{
 		TypedConnectionForwarder connectionForwarder = new TypedConnectionForwarder();
@@ -146,7 +115,7 @@ public class SerialConfigurationReader
 		@Override
 		public void valueRead( DesktopProtocol.Id id, String textContent)
 		{
-			java.lang.System.out.println( "Unknown value " + id.getByteValue() + " {" + textContent + "}");
+			java.lang.System.out.println( "Unknown value " + id.byteValue() + " {" + textContent + "}");
  		}
 
 		protected void readValue( Number value, String textContent)
@@ -215,34 +184,22 @@ public class SerialConfigurationReader
 			switch( id)
 			{
 				case Battery ->
-				{
 					pushHandler( new BatteryHandler( UseSystem.getBattery()));
-				}
 
 				case Calibrations ->
-				{
 					pushHandler( new CalibrationsHandler( UseSystem.getCalibrations()));
-				}
 
 				case Models ->
-				{
 					pushHandler( new ModelsHandler( configuration.getModels(), configuration));
-				}
 
 				case Types ->
-				{
 					pushHandler( new TypesHandler( configuration.getTypes(), configuration));
-				}
 
 				case Sources ->
-				{
 					pushHandler( new SourcesHandler( configuration.getSources(), configuration));
-				}
 
 				case PPMs ->
-				{
-					pushHandler( new PPMsHandler( UseSystem.getPPMs()));
-				}
+			 		pushHandler( new PPMsHandler( UseSystem.getPpms()));
 
 				default -> super.complexOpened( id);
 			}
@@ -422,11 +379,11 @@ public class SerialConfigurationReader
 
 	private class CalibrationHandler extends UnknownTypeHandler
 	{
-		private Calibration calibration;
+		private final Calibration calibration;
 
-		public CalibrationHandler( Calibration UseCalibration)
+		public CalibrationHandler( Calibration useCalibration)
 		{
-			calibration = UseCalibration;
+			calibration = useCalibration;
 		}
 
 		@Override
@@ -1053,7 +1010,7 @@ public class SerialConfigurationReader
 
 				case SourceTrimmer :
 				{
-					Trim NewSource = new Trim();
+					Trimmer NewSource = new Trimmer();
 					newSource = NewSource;
 
 					pushHandler( new SourceTrimmerHandler( NewSource));
@@ -1492,146 +1449,134 @@ public class SerialConfigurationReader
 		{			
 			switch( id)
 			{
-				case SourceFollowerTrigger :
-				{
-					readValue( source.getTriggerId(), textContent);
-				}
-				break;
-
-				case SourceFollowerTriggerLowLimit :
-				{
-					readValue( source.getTriggerLowLimit(), textContent);
-				}
-				break;
-
-				case SourceFollowerTriggerHighLimit :
-				{
-					readValue( source.getTriggerHighLimit(), textContent);
-				}
-				break;
-
-				default : super.valueRead( id, textContent); break;
-			}
- 		}
-	}
-
-	private class SourceStoreHandler extends UnknownTypeHandler
-	{
-		private Store source;
-
-		public SourceStoreHandler( Store UseSource)
-		{
-			source = UseSource;
-		}
-
-		@Override
-		public void valueRead( DesktopProtocol.Id id, String textContent)
-		{			
-			switch( id)
-			{
-				case SourceStoreInput :
-				{
-					readValue( source.getInput(), textContent);
-				}
-				break;
-
-				case SourceStoreInit :
-				{
-					readValue( source.getInit(), textContent);
-				}
-				break;
-
-				default : super.valueRead( id, textContent); break;
-			}
- 		}
-	}
-
-	private class SourceTimerHandler extends UnknownTypeHandler
-	{
-		private Timer source;
-
-		public SourceTimerHandler( Timer UseSource)
-		{
-			source = UseSource;
-		}
-
-		@Override
-		public void valueRead( DesktopProtocol.Id id, String textContent)
-		{			
-			switch( id)
-			{
-				case SourceTimerInitTime :
-				{
-					readValue( source.getInitTime(), textContent);
-				}
-				break;
-
-				case SourceTimerCurrentTime :
-				{
-					readValue( source.getCurrentTime(), textContent);
-				}
-				break;
-
-				case SourceTimerStore :
-				{
-					readValue( source.getStore(), textContent);
-				}
-				break;
-
-				case SourceTimerReverse :
-				{
-					readValue( source.getReverse(), textContent);
-				}
-				break;
-
-				case SourceTimerTrigger :
+				case SourceFollowerTrigger ->
 				{
 					readValue( source.getTrigger(), textContent);
 				}
-				break;
 
-				case SourceTimerTriggerHighLimit :
+				case SourceFollowerTriggerLowLimit ->
+			 	{
+					readValue( source.getTriggerLowLimit(), textContent);
+				}
+
+				case SourceFollowerTriggerHighLimit ->
 				{
 					readValue( source.getTriggerHighLimit(), textContent);
 				}
-				break;
 
-				case SourceTimerTriggerLowLimit :
-				{
-					readValue( source.getTriggerLowLimit(), textContent);
-				}
-				break;
-
-				case SourceTimerWarnLowTime :
-				{
-					readValue( source.getWarnLowTime(), textContent);
-				}
-				break;
-
-				case SourceTimerWarnCriticalTime :
-				{
-					readValue( source.getWarnCriticalTime(), textContent);
-				}
-				break;
-
-				case SourceTimerWarnPauseTime :
-				{
-					readValue( source.getWarnPauseTime(), textContent);
-				}
-				break;
-
-				default : super.valueRead( id, textContent); break;
+				default -> super.valueRead( id, textContent);
 			}
  		}
 	}
 
-	private class SourceTrimmerHandler extends UnknownTypeHandler
+	private class SourceStoreHandler
+		extends UnknownTypeHandler
 	{
-		private Trim trimmer;
+		private final Store source;
 
-		public SourceTrimmerHandler( Trim UseTrimmer)
+		public SourceStoreHandler( Store useSource)
 		{
-			trimmer = UseTrimmer;
+			source = useSource;
+		}
+
+		@Override
+		public void valueRead( DesktopProtocol.Id id, String textContent)
+		{			
+			switch( id)
+			{
+				case SourceStoreInput ->
+				{
+					readValue( source.getInput(), textContent);
+				}
+
+				case SourceStoreInit ->
+				{
+					readValue( source.getInit(), textContent);
+				}
+
+				default -> super.valueRead( id, textContent);
+			}
+ 		}
+	}
+
+	private class SourceTimerHandler
+		extends UnknownTypeHandler
+	{
+		private final Timer source;
+
+		public SourceTimerHandler( Timer useSource)
+		{
+			source = useSource;
+		}
+
+		@Override
+		public void valueRead( DesktopProtocol.Id id, String textContent)
+		{			
+			switch( id)
+			{
+				case SourceTimerInitTime ->
+				{
+					readValue( source.getInitTime(), textContent);
+				}
+
+				case SourceTimerCurrentTime ->
+			 	{
+					readValue( source.getCurrentTime(), textContent);
+				}
+
+				case SourceTimerStore ->
+				{
+					readValue( source.getStore(), textContent);
+				}
+
+				case SourceTimerReverse ->
+				{
+					readValue( source.getReverse(), textContent);
+				}
+
+				case SourceTimerTrigger ->
+				{
+					readValue( source.getTrigger(), textContent);
+				}
+
+				case SourceTimerTriggerHighLimit ->
+				{
+					readValue( source.getTriggerHighLimit(), textContent);
+				}
+
+				case SourceTimerTriggerLowLimit ->
+				{
+					readValue( source.getTriggerLowLimit(), textContent);
+				}
+
+				case SourceTimerWarnLowTime ->
+				{
+					readValue( source.getWarnLowTime(), textContent);
+				}
+
+				case SourceTimerWarnCriticalTime ->
+				{
+					readValue( source.getWarnCriticalTime(), textContent);
+				}
+
+				case SourceTimerWarnPauseTime ->
+				{
+					readValue( source.getWarnPauseTime(), textContent);
+				}
+
+				default -> super.valueRead( id, textContent);
+			}
+ 		}
+	}
+
+	private class SourceTrimmerHandler
+		extends UnknownTypeHandler
+	{
+		private final Trimmer trimmer;
+
+		public SourceTrimmerHandler( Trimmer useTrimmer)
+		{
+			trimmer = useTrimmer;
 		}
 
 		@Override
@@ -1639,31 +1584,27 @@ public class SerialConfigurationReader
 		{
 			switch( id)
 			{
-				case SourceTrimmerInput :
+				case SourceTrimmerInput ->
 				{
 					pushHandler( new SourceTupelHandler( trimmer.getInput()));
 				}
-				break;
 
-				case SourceTrimmerTrim :
+				case SourceTrimmerTrim ->
 				{
 					pushHandler( new SourceTupelHandler( trimmer.getTrim()));
 				}
-				break;
 
-				case SourceTrimmerLimit :
+				case SourceTrimmerLimit ->
 				{
 					pushHandler( new SourceTupelHandler( trimmer.getLimit()));
 				}
-				break;
 
-				case SourceTrimmerPoints :
+				case SourceTrimmerPoints ->
 				{
 					pushHandler( new SourceTrimmerPointsHandler( trimmer));
 				}
-				break;
 
-				default : super.complexOpened( id); break;
+				default -> super.complexOpened( id);
 			}
  		}
 
@@ -1685,10 +1626,10 @@ public class SerialConfigurationReader
 
 	private class SourceTrimmerPointsHandler extends UnknownTypeHandler
 	{
-		private Trim trimmer;
+		private Trimmer trimmer;
 		private int pointIndex;
 
-		public SourceTrimmerPointsHandler( Trim UseTrimmer)
+		public SourceTrimmerPointsHandler( Trimmer UseTrimmer)
 		{
 			trimmer = UseTrimmer;
 			pointIndex = 0;
@@ -1799,13 +1740,13 @@ public class SerialConfigurationReader
 			{
 				case PPMInverted :
 				{
-					readValue( ppm.getPPMInverted(), textContent);
+					readValue( ppm.getInverted(), textContent);
 				}
 				break;
 
 				case PPMCenter :
 				{
-					readValue( ppm.getPPMCenter(), textContent);
+					readValue( ppm.getCenter(), textContent);
 				}
 				break;
 
@@ -1849,11 +1790,11 @@ public class SerialConfigurationReader
 
 	private class SourceTupelHandler extends UnknownTypeHandler
 	{
-		private SourceWithVolume sourceTupel;
+		private final SourceWithVolume sourceTupel;
 
-		public SourceTupelHandler( SourceWithVolume UseSourceTupel)
+		public SourceTupelHandler( SourceWithVolume useSourceTupel)
 		{
-			sourceTupel = UseSourceTupel;
+			sourceTupel = useSourceTupel;
 		}
 
 		@Override
@@ -1878,7 +1819,8 @@ public class SerialConfigurationReader
  		}
 	}
 
-	private TypedConnectionHandler pushHandler( TypedConnectionHandler connectionHandler)
+	@SuppressWarnings("UnusedReturnValue")
+ 	private TypedConnectionHandler pushHandler( TypedConnectionHandler connectionHandler)
 	{
 		handlerStack.add( 0, connectionHandler);
 		

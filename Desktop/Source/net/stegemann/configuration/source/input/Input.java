@@ -1,10 +1,10 @@
 package net.stegemann.configuration.source.input;
 
-import java.util.HashMap;
-
 import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.SourceId;
+
+import java.util.HashMap;
 
 public abstract class Input extends Source
 {

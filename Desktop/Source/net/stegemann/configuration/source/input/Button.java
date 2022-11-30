@@ -1,19 +1,30 @@
 package net.stegemann.configuration.source.input;
 
+import lombok.Getter;
 import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.type.Volume;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.io.xml.Names;
 
+@Getter
+@ConfigurationField( name = Names.SOURCE_INPUT_BUTTON)
 public final class Button extends Input
 {
+	@ConfigurationField( name = Names.SOURCE_INPUT_BUTTON_INPUT)
 	private final Number inputId;
+	@ConfigurationField( name = Names.SOURCE_INPUT_BUTTON_INIT)
 	private final Volume init;
+	@ConfigurationField( name = Names.SOURCE_INPUT_BUTTON_STORE)
 	private final Bool store;
+	@ConfigurationField( name = Names.SOURCE_INPUT_BUTTON_TOGGLE)
 	private final Bool toggle;
+	@ConfigurationField( name = Names.SOURCE_INPUT_BUTTON_TOP)
 	private final Volume top;
+	@ConfigurationField( name = Names.SOURCE_INPUT_BUTTON_BOTTOM)
 	private final Volume bottom;
 
 	public Button()
@@ -70,35 +81,5 @@ public final class Button extends Input
 	public Source clone()
 	{
 		return new Button( this);
-	}
-
-	public Number getInputId()
-	{
-		return inputId;
-	}
-
-	public Volume getInit()
-	{
-		return init;
-	}
-
-	public Bool getStore()
-	{
-		return store;
-	}
-
-	public Bool getToggle()
-	{
-		return toggle;
-	}
-
-	public Number getTop()
-	{
-		return top;
-	}
-
-	public Number getBottom()
-	{
-		return bottom;
 	}
 }

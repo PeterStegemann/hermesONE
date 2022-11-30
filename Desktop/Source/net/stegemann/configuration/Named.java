@@ -4,5 +4,5 @@ import net.stegemann.configuration.type.Text;
 
 public interface Named
 {
-	public Text getName();
+	Text getName();
 }
