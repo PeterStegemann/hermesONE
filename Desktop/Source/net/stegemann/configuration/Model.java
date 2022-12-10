@@ -1,5 +1,7 @@
 package net.stegemann.configuration;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.Text;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Getter
 public class Model extends ChangeObservable< Model> implements ChangeListener< Text>, Named
 {
 	public enum State
@@ -58,6 +61,7 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 	private final Number id;
 	@ConfigurationField( name = Names.MODEL_NAME)
 	private final Text name;
+	@Setter
 	@ConfigurationField( name = Names.MODEL_STATE)
 	private State state;
 	@ConfigurationField( name = Names.MODEL_RF_MODE)
@@ -195,40 +199,16 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 		channels.fill( size);
 	}
 
-	public Number getId()
-	{
-		return id;
-	}
-
 	@Override
 	public Text getName()
 	{
 		return name;
 	}
 
-	public void setState( State state)
+	@Override
+	public Number getId()
 	{
-		this.state = state;		
-	}
-
-	public State getState()
-	{
-		return state;
-	}
-
-	public Number getRFMode()
-	{
-		return rfMode;
-	}
-
-	public Number getTypeId()
-	{
-		return typeId;
-	}
-
-	public Channels getChannels()
-	{
-		return channels;
+		return id;
 	}
 
 	public SourceId getStatusSourceId( StatusSource index)
@@ -239,11 +219,6 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 	public SourceId getStatusTimeId( StatusTime index)
 	{
 		return statusTimeIds.get( index.ordinal());
-	}
-
-	public ProxyReferences getProxyReferences()
-	{
-		return proxyReferences;
 	}
 
 	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)

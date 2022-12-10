@@ -69,7 +69,7 @@ class XMLWriterTest
 		class TestClass
 		{
 			@ConfigurationField( name = "testName")
-			private final Number testField = new Number();
+			private final Number testField = new Number( 10);
 		}
 
 		Document document = mock( Document.class);

@@ -1,19 +1,20 @@
 package net.stegemann.gui.components;
 
-import java.awt.Dimension;
+import net.stegemann.configuration.type.Number;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
-import javax.swing.JComboBox;
-
-import net.stegemann.configuration.type.Number;
+import java.io.Serial;
 
 public class ChannelModeComponent extends JComboBox< String> implements FocusListener
 {
+	@Serial
 	private static final long serialVersionUID = -989093797363852764L;
 
-	private static String[] CHANNEL_MODES =
+	private static final String[] CHANNEL_MODES =
 	{
 		"Kurve",
 		"Abschneiden"

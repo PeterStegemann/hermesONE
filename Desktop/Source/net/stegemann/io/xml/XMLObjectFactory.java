@@ -6,7 +6,7 @@ public final class XMLObjectFactory extends ObjectFactory
 {
 	public static XMLReader xmlReader()
 	{
-		return singleton( XMLReader::new);
+		return singleton(() -> new XMLReader( documentGenerator()));
 	}
 
 	public static XMLWriter xmlWriter()

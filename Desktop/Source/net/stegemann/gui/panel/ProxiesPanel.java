@@ -1,24 +1,12 @@
 package net.stegemann.gui.panel;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.source.Proxy;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.source.Sources;
 import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.view.SourcesView;
 import net.stegemann.configuration.view.SourcesView.HasEmpty;
 import net.stegemann.configuration.view.SourcesView.HasFixed;
@@ -29,8 +17,17 @@ import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.SourcesComboBoxModel;
 import net.stegemann.gui.panel.source.SourcePanel;
 
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+
 public class ProxiesPanel extends JPanel implements ActionListener, ListSelectionListener
 {
+	@Serial
 	private static final long serialVersionUID = 2832719260884140511L;
 
 	private final Controller controller;
@@ -124,38 +121,47 @@ public class ProxiesPanel extends JPanel implements ActionListener, ListSelectio
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent event)
 	{
-		int SelectedSourceIndex = proxiesList.getSelectedIndex();
+		int selectedIndex = proxiesList.getSelectedIndex();
 
-		if( e.getSource() == addButton)
+		if( event.getSource() == addButton)
 		{
-			Proxy NewProxy = controller.addProxy( typeId);
+			Proxy proxy;
 
-			if( NewProxy == null)
+			try
+			{
+				proxy = controller.addProxy( typeId);
+			}
+			catch (ValueOutOfRangeException reason)
+			{
+				throw new RuntimeException( reason);
+			}
+
+			if( proxy == null)
 			{
 				return;
 			}
 
 			// Move selection to new proxy.
 			proxiesView.rescan();
-			proxiesList.setSelectedIndex( proxiesView.getSourceIndexFromId( NewProxy.getId()));
+			proxiesList.setSelectedIndex( proxiesView.getSourceIndexFromId( proxy.getId()));
 		}
-		else if( e.getSource() == removeButton)
+		else if( event.getSource() == removeButton)
 		{
-			controller.removeProxy( proxiesView.getFullSourceIndex( SelectedSourceIndex));
+			controller.removeProxy( proxiesView.getFullSourceIndex( selectedIndex));
 
-			if( SelectedSourceIndex > 0)
+			if( selectedIndex > 0)
 			{
-				proxiesList.setSelectedIndex( SelectedSourceIndex - 1);
+				proxiesList.setSelectedIndex( selectedIndex - 1);
 			}
 		}
 
-		if( SelectedSourceIndex == proxiesList.getSelectedIndex())
+		if( selectedIndex == proxiesList.getSelectedIndex())
 		{
 			// In this case, valueChanged wasn't triggered, so we set the panel here.
 			proxiesView.rescan();
-			proxyPanel.set( model, proxiesView.getSourceFromIndex( SelectedSourceIndex));
+			proxyPanel.set( model, proxiesView.getSourceFromIndex( selectedIndex));
 		}
 	}
 }

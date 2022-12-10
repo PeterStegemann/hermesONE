@@ -46,18 +46,20 @@ public class SourceId extends Number
 
 	public void replaceSource( HashMap< SourceId, SourceId> sourcesMap)
 	{
-		SourceId NewSourceId = sourcesMap.get( this);
+		SourceId newSourceId = sourcesMap.get( this);
 
-		if( NewSourceId != null)
+		if( newSourceId == null)
 		{
-			try
-			{
-				setValue( NewSourceId.getValue());
-			}
-			catch( ValueOutOfRangeException reason)
-			{
-				throw new RuntimeException( reason);
-			}
+			return;
+		}
+
+		try
+		{
+			setValue( newSourceId.getValue());
+		}
+		catch( ValueOutOfRangeException reason)
+		{
+			throw new RuntimeException( reason);
 		}
 	}
 }

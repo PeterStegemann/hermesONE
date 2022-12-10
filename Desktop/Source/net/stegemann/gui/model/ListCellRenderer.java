@@ -1,23 +1,25 @@
 package net.stegemann.gui.model;
 
-import java.awt.Component;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JList;
-
 import net.stegemann.configuration.Named;
 
-public class ListCellRenderer<T extends Named> extends DefaultListCellRenderer
+import javax.swing.*;
+import java.awt.*;
+import java.io.Serial;
+
+public class ListCellRenderer< T extends Named> extends DefaultListCellRenderer
 {
+	@Serial
 	private static final long serialVersionUID = -2225391241430953553L;
 
 	@Override
-   public Component getListCellRendererComponent( JList<?> List, Object Value, int Index,
-   	boolean IsSelected, boolean CellHasFocus)
+	public Component getListCellRendererComponent( JList<?> list, Object value, int index,
+												   boolean isSelected, boolean cellHasFocus)
 	{
 		@SuppressWarnings( "unchecked")
-		String TextValue = Value == null ? null : (( T) Value).getName().getValue();
+		String textValue = value == null ? null : (( T) value).getName().getValue();
+		int idValue = value == null ? -1 : (( T) value).getId().getValue();
 
-		return super.getListCellRendererComponent( List, TextValue, Index, IsSelected, CellHasFocus);
-	}	
+		return super.getListCellRendererComponent( list, textValue + " (" + idValue + ")", index,
+												   isSelected, cellHasFocus);
+	}
 }

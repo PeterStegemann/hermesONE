@@ -1,17 +1,14 @@
 package net.stegemann.gui.frame;
 
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-import java.awt.MenuShortcut;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;import java.io.Serial;
-
-import javax.swing.JFrame;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
 import net.stegemann.gui.panel.StatusPanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
 
 public class StatusSourcesFrame extends JFrame implements ActionListener
 {
@@ -51,7 +48,7 @@ public class StatusSourcesFrame extends JFrame implements ActionListener
 		setMenuBar( NewMenuBar);
 	}
 
-	public void Set( Model UseModel)
+	public void set(Model UseModel)
 	{
 		if( UseModel == null)
 		{

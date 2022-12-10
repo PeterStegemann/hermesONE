@@ -1,14 +1,5 @@
 package net.stegemann.gui.panel;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
 import net.stegemann.controller.Controller;
@@ -19,8 +10,14 @@ import net.stegemann.gui.components.TypeIdComponent;
 import net.stegemann.gui.frame.StatusSourcesFrame;
 import net.stegemann.gui.panel.SourcesPanel.PanelType;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+
 public class ModelPanel extends JPanel implements ActionListener
 {
+	@Serial
 	private static final long serialVersionUID = -4564059407785726681L;
 
 	private final Configuration configuration;
@@ -38,9 +35,9 @@ public class ModelPanel extends JPanel implements ActionListener
 
 	private final StatusSourcesFrame statusSources;
 
-	public ModelPanel( Controller UseController)
+	public ModelPanel( Controller controller)
 	{
-		configuration = UseController.getConfiguration();
+		configuration = controller.getConfiguration();
 
 		statusSources = new StatusSourcesFrame( configuration);
 
@@ -58,10 +55,10 @@ public class ModelPanel extends JPanel implements ActionListener
 		statusSourcesButton = new JButton( "Status...");
 		statusSourcesButton.addActionListener( this);
 
-		globalSourcesPanel = new SourcesPanel( PanelType.GLOBAL, UseController);
-		typeSourcesPanel = new SourcesPanel( PanelType.TYPE, UseController);
-		modelSourcesPanel = new SourcesPanel( PanelType.MODEL, UseController);
-		proxiesPanel = new ProxiesPanel( UseController);
+		globalSourcesPanel = new SourcesPanel( PanelType.GLOBAL, controller);
+		typeSourcesPanel = new SourcesPanel( PanelType.TYPE, controller);
+		modelSourcesPanel = new SourcesPanel( PanelType.MODEL, controller);
+		proxiesPanel = new ProxiesPanel( controller);
 		channelsPanel = new ChannelsPanel( configuration);
 
 		JTabbedPane SourcesPane = new JTabbedPane();
@@ -78,17 +75,21 @@ public class ModelPanel extends JPanel implements ActionListener
 //		Layout.setAutoCreateGaps( true);
 		Layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-			.addGroup( Layout.createSequentialGroup()
-				.addComponent( NameLabel)
-				.addComponent( name)
-				.addComponent( TypeLabel)
-				.addComponent( typeId)
-				.addComponent( RFModeLabel)
-				.addComponent( rfMode)
-				.addComponent( statusSourcesButton)
-			)
-			.addComponent( SourcesPane)
+		Layout.setHorizontalGroup
+		(
+			Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+				.addGroup
+				(
+					Layout.createSequentialGroup()
+						.addComponent( NameLabel)
+						.addComponent( name)
+						.addComponent( TypeLabel)
+						.addComponent( typeId)
+						.addComponent( RFModeLabel)
+						.addComponent( rfMode)
+						.addComponent( statusSourcesButton)
+				)
+				.addComponent( SourcesPane)
 		);
 
 		Layout.setVerticalGroup( Layout.createSequentialGroup()
@@ -119,29 +120,29 @@ public class ModelPanel extends JPanel implements ActionListener
 		);
 	}
 
-	public void Set( Model UseModel)
+	public void set( Model model)
 	{
-		statusSources.Set( UseModel);
+		statusSources.set( model);
 
-		if( UseModel == null)
+		if( model == null)
 		{
 			setVisible( false);
 
 			return;
 		}
 
-		name.attachValue( UseModel.getName());
+		name.attachValue( model.getName());
 
 		typeId.SetTypes( configuration.getTypes());
-		typeId.attachValue( UseModel.getTypeId());
+		typeId.attachValue( model.getTypeId());
 
-		rfMode.attachValue( UseModel.getRFMode());
+		rfMode.attachValue( model.getRfMode());
 
-		globalSourcesPanel.set( UseModel);
-		typeSourcesPanel.set( UseModel);
-		modelSourcesPanel.set( UseModel);
-		proxiesPanel.set( UseModel);
-		channelsPanel.set( UseModel);
+		globalSourcesPanel.set( model);
+		typeSourcesPanel.set( model);
+		modelSourcesPanel.set( model);
+		proxiesPanel.set( model);
+		channelsPanel.set( model);
 
 		setVisible( true);
 	}

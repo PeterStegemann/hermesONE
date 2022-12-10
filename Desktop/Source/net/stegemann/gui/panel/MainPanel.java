@@ -1,25 +1,6 @@
 package net.stegemann.gui.panel;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import net.stegemann.configuration.Configuration;
-import net.stegemann.configuration.Model;
-import net.stegemann.configuration.Models;
-import net.stegemann.configuration.Type;
-import net.stegemann.configuration.Types;
+import net.stegemann.configuration.*;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.view.ModelsView;
 import net.stegemann.controller.Controller;
@@ -30,9 +11,18 @@ import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.ModelsViewComboBoxModel;
 import net.stegemann.gui.model.TypesComboBoxModel;
 
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+
 public class MainPanel extends JPanel
 				    implements ActionListener, ListSelectionListener
 {
+	@Serial
 	private static final long serialVersionUID = -4538240657987172398L;
 
 	private final Controller controller;
@@ -55,10 +45,10 @@ public class MainPanel extends JPanel
 
 	private final JButton systemButton;
 
-	public MainPanel( Controller UseController)
+	public MainPanel( Controller useController)
 	{
-		controller = UseController;
-		configuration = UseController.getConfiguration();
+		controller = useController;
+		configuration = useController.getConfiguration();
 		
 		systemButton = new JButton( "System...");
 		systemButton.addActionListener( this);
@@ -105,7 +95,7 @@ public class MainPanel extends JPanel
 		removeModelButton = new JButton( "-");
 		removeModelButton.addActionListener( this);
 
-		modelPanel = new ModelPanel( UseController);
+		modelPanel = new ModelPanel( useController);
 
 		// Layout elements.
 		GroupLayout Layout = new GroupLayout( this);
@@ -180,13 +170,13 @@ public class MainPanel extends JPanel
 		);
 	}
 
-	public void Set()
+	public void set()
 	{
-		net.stegemann.configuration.System UseSystem = configuration.getSystem();
+		net.stegemann.configuration.System system = configuration.getSystem();
 		Types UseTypes = configuration.getTypes();
 		Models UseModels = configuration.getModels();
 
-		Number SelectedModel = UseSystem.getSelectedModel();
+		Number SelectedModel = system.getSelectedModel();
 		Model UseModel = UseModels.getModelFromId( SelectedModel);
 
 		typesList.setModel( new TypesComboBoxModel( UseTypes));
@@ -210,33 +200,35 @@ public class MainPanel extends JPanel
 	@Override
 	public void valueChanged( ListSelectionEvent e)
 	{
-		if( e.getValueIsAdjusting() == false)
+		if( e.getValueIsAdjusting() == true)
 		{
-			if( e.getSource() == modelsList)
-			{
-				modelPanel.Set( modelsView.getModelFromIndex( modelsList.getSelectedIndex()));
-			}
-			else if( e.getSource() == typesList)
-			{
-				typeChanged();
-			}
+			return;
+		}
+
+		if( e.getSource() == modelsList)
+		{
+			modelPanel.set( modelsView.getModelFromIndex( modelsList.getSelectedIndex()));
+		}
+		else if( e.getSource() == typesList)
+		{
+			typeChanged();
 		}
 	}
 
 	private void typeChanged()
 	{
-		Models UseModels = configuration.getModels();
-		Types UseTypes = configuration.getTypes();
+		Models models = configuration.getModels();
+		Types types = configuration.getTypes();
 
-		modelPanel.Set( null);
+		modelPanel.set( null);
 
-		Type SelectedType = UseTypes.getTypeFromIndex( typesList.getSelectedIndex());
+		Type SelectedType = types.getTypeFromIndex( typesList.getSelectedIndex());
 
 		if( SelectedType != null)
 		{
-			Number SelectedTypeId = SelectedType.getId();
+			Number selectedTypeId = SelectedType.getId();
 
-			modelsView = new ModelsView( UseModels, SelectedTypeId);
+			modelsView = new ModelsView( models, selectedTypeId);
 			modelsList.setModel( new ModelsViewComboBoxModel( modelsView));
 
 			typeName.attachValue( SelectedType.getName());
@@ -248,38 +240,38 @@ public class MainPanel extends JPanel
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent event)
 	{
-		Types UseTypes = configuration.getTypes();
+		Types types = configuration.getTypes();
 
-		if( e.getSource() == systemButton)
+		if( event.getSource() == systemButton)
 		{
-			SystemFrame System = new SystemFrame( configuration);
+			SystemFrame systemFrame = new SystemFrame( configuration);
 
-			System.Set();
-			System.setLocationRelativeTo( this);
-			System.Open();
+			systemFrame.set();
+			systemFrame.setLocationRelativeTo( this);
+			systemFrame.open();
 		}
-		else if(( e.getSource() == addTypeButton) ||
-				( e.getSource() == cloneTypeButton) ||
-				( e.getSource() == removeTypeButton))
+		else if(( event.getSource() == addTypeButton) ||
+				( event.getSource() == cloneTypeButton) ||
+				( event.getSource() == removeTypeButton))
 		{
-			int SelectedTypeIndex = typesList.getSelectedIndex();
+			int selectedIndex = typesList.getSelectedIndex();
 
-			if( e.getSource() == addTypeButton)
+			if( event.getSource() == addTypeButton)
 			{
-				Type NewType = controller.addType();
+				Type type = controller.addType();
 
-				if( NewType == null)
+				if( type == null)
 				{
 					return;
 				}
 
-				typesList.setSelectedIndex( UseTypes.getIndexFromId( NewType.getId()));
+				typesList.setSelectedIndex( types.getIndexFromId( type.getId()));
 			}
-			else if( e.getSource() == cloneTypeButton)
+			else if( event.getSource() == cloneTypeButton)
 			{
-				Type NewType = controller.cloneType( SelectedTypeIndex);
+				Type NewType = controller.cloneType( selectedIndex);
 
 				if( NewType == null)
 				{
@@ -287,15 +279,15 @@ public class MainPanel extends JPanel
 				}
 
 				// Select new type.
-				typesList.setSelectedIndex( UseTypes.getIndexFromId( NewType.getId()));
+				typesList.setSelectedIndex( types.getIndexFromId( NewType.getId()));
 			}
-			else if( e.getSource() == removeTypeButton)
+			else if( event.getSource() == removeTypeButton)
 			{
-				controller.removeType( SelectedTypeIndex);
+				controller.removeType( selectedIndex);
 
-				if( SelectedTypeIndex > 0)
+				if( selectedIndex > 0)
 				{
-					typesList.setSelectedIndex( SelectedTypeIndex - 1);
+					typesList.setSelectedIndex( selectedIndex - 1);
 				}
 				else
 				{
@@ -303,43 +295,43 @@ public class MainPanel extends JPanel
 				}
 			}
 
-			if( SelectedTypeIndex == typesList.getSelectedIndex())
+			if( selectedIndex == typesList.getSelectedIndex())
 			{
 				// In this case, valueChanged wasn't triggered, so we set the panel here.
 				typeChanged();
 			}
 		}
-		else if(( e.getSource() == addModelButton) ||
-				( e.getSource() == cloneModelButton) ||
-				( e.getSource() == removeModelButton))
+		else if(( event.getSource() == addModelButton) ||
+				( event.getSource() == cloneModelButton) ||
+				( event.getSource() == removeModelButton))
 		{
-			int SelectedTypeIndex = typesList.getSelectedIndex();
-			int SelectedModelIndex = modelsList.getSelectedIndex();
+			int selectedTypeIndex = typesList.getSelectedIndex();
+			int selectedModelIndex = modelsList.getSelectedIndex();
 
-			if( e.getSource() == addModelButton)
+			if( event.getSource() == addModelButton)
 			{
-				Type Type = UseTypes.getTypeFromIndex( SelectedTypeIndex);
+				Type type = types.getTypeFromIndex( selectedTypeIndex);
 
-				if( Type == null)
+				if( type == null)
 				{
 					return;
 				}
 
-				Model NewModel = controller.addModel( Type.getId());
+				Model model = controller.addModel( type.getId());
 
-				if( NewModel == null)
+				if( model == null)
 				{
 					return;
 				}
 
 				// Select new model.
 				modelsView.rescan();
-				modelsList.setSelectedIndex( modelsView.getModelIndexFromId( NewModel.getId()));
+				modelsList.setSelectedIndex( modelsView.getModelIndexFromId( model.getId()));
 			}
-			else if( e.getSource() == cloneModelButton)
+			else if( event.getSource() == cloneModelButton)
 			{
 				Model NewModel =
-					controller.cloneModel( modelsView.getFullModelIndex( SelectedModelIndex));
+					controller.cloneModel( modelsView.getFullModelIndex( selectedModelIndex));
 
 				if( NewModel == null)
 				{
@@ -350,22 +342,22 @@ public class MainPanel extends JPanel
 				modelsView.rescan();
 				modelsList.setSelectedIndex( modelsView.getModelIndexFromId( NewModel.getId()));
 			}
-			else if( e.getSource() == removeModelButton)
+			else if( event.getSource() == removeModelButton)
 			{
-				controller.removeModel( modelsView.getFullModelIndex( SelectedModelIndex));
+				controller.removeModel( modelsView.getFullModelIndex( selectedModelIndex));
 
 				// Model selection one position up.
-				if( SelectedModelIndex > 0)
+				if( selectedModelIndex > 0)
 				{
-					modelsList.setSelectedIndex( SelectedModelIndex - 1);
+					modelsList.setSelectedIndex( selectedModelIndex - 1);
 				}
 			}
 
-			if( SelectedModelIndex == modelsList.getSelectedIndex())
+			if( selectedModelIndex == modelsList.getSelectedIndex())
 			{
 				// In this case, valueChanged wasn't triggered, so we set the panel here.
 				modelsView.rescan();
-				modelPanel.Set( modelsView.getModelFromIndex( SelectedModelIndex));
+				modelPanel.set( modelsView.getModelFromIndex( selectedModelIndex));
 			}
 		}
 	}

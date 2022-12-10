@@ -8,20 +8,19 @@ import net.stegemann.configuration.source.*;
 import net.stegemann.configuration.source.input.*;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.*;
+import net.stegemann.io.DocumentException;
 import net.stegemann.io.ReadException;
 import net.stegemann.io.Utility;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 
 public class XMLReader
 {
+	private static final boolean debug = false;
+
+	private final DocumentGenerator documentGenerator;
+
 	public enum Mode
 	{
 		All,
@@ -29,211 +28,190 @@ public class XMLReader
 		Models
 	}
 
-	public void readFromFile( Configuration UseConfiguration, String FileName, Mode UseMode)
-		throws ReadException
+	XMLReader( DocumentGenerator documentGenerator)
 	{
-		DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder Builder;
-
-		try
-		{
-			Builder = Factory.newDocumentBuilder();
-		}
-		catch( ParserConfigurationException Reason)
-		{
-			throw new ReadException( "Failed to create xml document builder.", Reason);
-		}
-
-		Document ConfigurationDocument;
-
-		try
-		{
-			ConfigurationDocument = Builder.parse( FileName);
-		}
-		catch( SAXException Reason)
-		{
-			throw new ReadException( "Failed to parse xml document '" + FileName + "'.", Reason);
-		}
-		catch( IOException Reason)
-		{
-			throw new ReadException( "Failed to read xml document '" + FileName + "'.", Reason);
-		}
-
-		if( UseMode == Mode.All)
-		{
-			UseConfiguration.clear();
-		}
-		else if( UseMode == Mode.Models)
-		{
-			UseConfiguration.clearModels();
-		}
-		else if( UseMode == Mode.System)
-		{
-			UseConfiguration.clearSystem();
-		}
-
-		interpretDocument( UseConfiguration, ConfigurationDocument, UseMode);
+		this.documentGenerator = documentGenerator;
 	}
 
-	private void interpretDocument( Configuration UseConfiguration, Document ConfigurationDocument,
-			Mode UseMode)
+	public void readFromFile( Configuration configuration, String fileName, Mode mode)
+		throws DocumentException
+	{
+		Document document = documentGenerator.readDocument( fileName);
+
+		if( mode == Mode.All)
+		{
+			configuration.clear();
+		}
+		else if( mode == Mode.Models)
+		{
+			configuration.clearModels();
+		}
+		else if( mode == Mode.System)
+		{
+			configuration.clearSystem();
+		}
+
+		interpretDocument( configuration, document, mode);
+	}
+
+	private void interpretDocument( Configuration configuration, Document document, Mode mode)
 		throws ReadException
 	{
-		NodeList ChildNodes = ConfigurationDocument.getChildNodes();
+		NodeList childNodes = document.getChildNodes();
 
-		Node ConfigurationNode = ChildNodes.item( 0);
+		Node node = childNodes.item( 0);
 
-		if( ConfigurationNode == null)
+		if( node == null)
 		{
 			throw new ReadException( "No configuration node found, invalid configuration.");
 		}
 
-		importConfiguration( UseConfiguration, getChildNodes( ConfigurationNode), UseMode);
+		importConfiguration( configuration, getChildNodes( node), mode);
 	}
 
-	private void importConfiguration( Configuration UseConfiguration, IterableNodeList ChildNodes,
-		Mode UseMode)
+	private void importConfiguration( Configuration configuration, IterableNodeList childNodes, Mode mode)
 	{
-		System UseSystem = UseConfiguration.getSystem();
-
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			boolean SystemResult = true;
+			boolean systemResult = true;
 
-			if(( UseMode == Mode.All) || ( UseMode == Mode.System))
+			if(( mode == Mode.All) || ( mode == Mode.System))
 			{
-				SystemResult = importSystemNode( UseSystem, NodeName, textContent, ChildNode);
+				if( Names.SYSTEM.compareToIgnoreCase( nodeName) == 0)
+				{
+					importSystem( configuration.getSystem(), getChildNodes( childNode));
+				}
+				else
+				{
+					systemResult = false;
+				}
 			}
 
-			boolean ModelResult = true;
+			boolean modelResult = true;
 
-			if(( UseMode == Mode.All) || ( UseMode == Mode.Models))
+			if(( mode == Mode.All) || ( mode == Mode.Models))
 			{
-				ModelResult = importModelNode( UseConfiguration, NodeName, ChildNode);
+				if( Names.MODELS.compareToIgnoreCase( nodeName) == 0)
+				{
+					importModels( configuration.getModels(), getChildNodes( childNode));
+				}
+				else if( Names.TYPES.compareToIgnoreCase( nodeName) == 0)
+				{
+					importTypes( configuration.getTypes(), getChildNodes( childNode));
+				}
+				else if( Names.SOURCES.compareToIgnoreCase( nodeName) == 0)
+				{
+					importSources( configuration.getSources(), getChildNodes( childNode));
+				}
+				else
+				{
+					modelResult = false;
+				}
 			}
 
-			if(( SystemResult == false) && ( ModelResult == false))
+			if(( systemResult == false) && ( modelResult == false))
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		UseConfiguration.fill();
+		configuration.fill();
 	}
 
-	private boolean importModelNode( Configuration UseConfiguration, String NodeName, Node ChildNode)
+	private void importSystem( System system, IterableNodeList childNodes)
 	{
-		if( Names.MODELS.compareToIgnoreCase( NodeName) == 0)
+		for( Node childNode: childNodes)
 		{
-			importModels( UseConfiguration.getModels(), getChildNodes( ChildNode));
-		}
-		else if( Names.TYPES.compareToIgnoreCase( NodeName) == 0)
-		{
-			importTypes( UseConfiguration.getTypes(), getChildNodes( ChildNode));
-		}
-		else if( Names.SOURCES.compareToIgnoreCase( NodeName) == 0)
-		{
-			importSources( UseConfiguration.getSources(), getChildNodes( ChildNode));
-		}
-		else
-		{
-			return false;
-		}
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-		return true;
-	}
-
-	private boolean importSystemNode( System UseSystem, String NodeName, String textContent,
-		Node ChildNode)
-	{
-		if( Names.SYSTEM_ANALOG_INPUTS.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getAnalogInputs(), textContent);
-		}
-		else if( Names.SYSTEM_DIGITAL_INPUTS.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getDigitalInputs(), textContent);
-		}
-		else if( Names.SYSTEM_OUTPUT_CHANNELS.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getOutputChannels(), textContent);
-		}
-		else if( Names.SYSTEM_OUTPUTS.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getOutputs(), textContent);
-		}
-		else if( Names.SYSTEM_OWNER.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getOwner(), textContent);
-		}
-		else if( Names.SYSTEM_SETUP_BACKLIGHT.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getSetupBacklight(), textContent);
-		}
-		else if( Names.SYSTEM_SETUP_BLANK_TIME.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getSetupBlankTime(), textContent);
-		}
-		else if( Names.SYSTEM_STATUS_BACKLIGHT.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getStatusBacklight(), textContent);
-		}
-		else if( Names.SYSTEM_STATUS_CONTRAST.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getStatusContrast(), textContent);
-		}
-		else if( Names.SYSTEM_STATUS_BLANK_TIME.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getStatusBlankTime(), textContent);
-		}
-		else if( Names.SYSTEM_STATUS_INVERTED.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getStatusInverted(), textContent);
-		}
-		else if( Names.SYSTEM_SELECTED_MODEL.compareToIgnoreCase( NodeName) == 0)
-		{
-			readValue( UseSystem.getSelectedModel(), textContent);
-		}
-		else if( Names.BATTERY.compareToIgnoreCase( NodeName) == 0)
-		{
-			importBattery( UseSystem.getBattery(), getChildNodes( ChildNode));
-		}
-		else if( Names.CALIBRATIONS.compareToIgnoreCase( NodeName) == 0)
-		{
-			importCalibrations( UseSystem.getCalibrations(), getChildNodes( ChildNode));
-		}
-		else if( Names.PPMS.compareToIgnoreCase( NodeName) == 0)
-		{
-			importPPMs( UseSystem.getPpms(), getChildNodes( ChildNode));
-		}		
-		else
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	private void importPPMs( PPMs UsePPMs, IterableNodeList ChildNodes)
-	{
-		int PPMId = 0;
-
-		for( Node ChildNode: ChildNodes)
-		{
-			String NodeName = ChildNode.getNodeName();
-
-			if( Names.PPM.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SYSTEM_ANALOG_INPUTS.compareToIgnoreCase( nodeName) == 0)
 			{
-				importPPM( UsePPMs.getPPM( PPMId), getChildNodes( ChildNode));
-
-				PPMId++;
+				readValue( system.getAnalogInputs(), textContent);
+			}
+			else if( Names.SYSTEM_DIGITAL_INPUTS.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getDigitalInputs(), textContent);
+			}
+			else if( Names.SYSTEM_OUTPUT_CHANNELS.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getOutputChannels(), textContent);
+			}
+			else if( Names.SYSTEM_OUTPUTS.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getOutputs(), textContent);
+			}
+			else if( Names.SYSTEM_OWNER.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getOwner(), textContent);
+			}
+			else if( Names.SYSTEM_SETUP_BACKLIGHT.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getSetupBacklight(), textContent);
+			}
+			else if( Names.SYSTEM_SETUP_BLANK_TIME.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getSetupBlankTime(), textContent);
+			}
+			else if( Names.SYSTEM_STATUS_BACKLIGHT.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getStatusBacklight(), textContent);
+			}
+			else if( Names.SYSTEM_STATUS_CONTRAST.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getStatusContrast(), textContent);
+			}
+			else if( Names.SYSTEM_STATUS_BLANK_TIME.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getStatusBlankTime(), textContent);
+			}
+			else if( Names.SYSTEM_STATUS_INVERTED.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getStatusInverted(), textContent);
+			}
+			else if( Names.SYSTEM_SELECTED_MODEL.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( system.getSelectedModel(), textContent);
+			}
+			else if( Names.BATTERY.compareToIgnoreCase( nodeName) == 0)
+			{
+				importBattery( system.getBattery(), getChildNodes( childNode));
+			}
+			else if( Names.CALIBRATIONS.compareToIgnoreCase( nodeName) == 0)
+			{
+				importCalibrations( system.getCalibrations(), getChildNodes( childNode));
+			}
+			else if( Names.PPMS.compareToIgnoreCase( nodeName) == 0)
+			{
+				importPPMs( system.getPpms(), getChildNodes( childNode));
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
+			}
+		}
+	}
+
+	private void importPPMs( PPMs ppms, IterableNodeList childNodes)
+	{
+		int ppmId = 0;
+
+		for( Node childNode: childNodes)
+		{
+			String nodeName = childNode.getNodeName();
+
+			if( Names.PPM.compareToIgnoreCase( nodeName) == 0)
+			{
+				importPPM( ppms.getPPM( ppmId), getChildNodes( childNode));
+
+				ppmId++;
+			}
+			else
+			{
+				if( debug) java.lang.System.out.println( nodeName);
 			}
 		}
 	}
@@ -263,84 +241,84 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( nodeName);
+				if( debug) java.lang.System.out.println( nodeName);
 			}
 		}
 	}
 
-	private void importChannelMappings( ChannelMappings UseChannelMappings, IterableNodeList ChildNodes)
+	private void importChannelMappings( ChannelMappings channelMappings, IterableNodeList childNodes)
 	{
-		int ChannelIndex = 0;
+		int channelIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.PPM_CHANNEL_MAPPING.compareToIgnoreCase( NodeName) == 0)
+			if( Names.PPM_CHANNEL_MAPPING.compareToIgnoreCase( nodeName) == 0)
 			{
-				Number NewChannelMapping = new Number( 0, 16);
+				Number channelMapping = new Number( ChannelMappings.MINIMUM_VALUE, ChannelMappings.MAXIMUM_VALUE);
 
-				readValue( NewChannelMapping, textContent);
+				readValue( channelMapping, textContent);
 
-				UseChannelMappings.setChannelMapping( ChannelIndex, NewChannelMapping);
+				channelMappings.setChannelMapping( channelIndex, channelMapping);
 
-				ChannelIndex++;
+				channelIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName);
+				if( debug) java.lang.System.out.println( nodeName);
 			}
 		}
 	}
 
-	private void importBattery( Battery UseBattery, IterableNodeList ChildNodes)
+	private void importBattery( Battery battery, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.BATTERY_WARN_LOW_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
+			if( Names.BATTERY_WARN_LOW_VOLTAGE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseBattery.getWarnLowVoltage(), textContent);
+				readValue( battery.getWarnLowVoltage(), textContent);
 			}
-			else if( Names.BATTERY_WARN_CRITICAL_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.BATTERY_WARN_CRITICAL_VOLTAGE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseBattery.getWarnCriticalVoltage(), textContent);
+				readValue( battery.getWarnCriticalVoltage(), textContent);
 			}
-			else if( Names.BATTERY_MINIMUM_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.BATTERY_MINIMUM_VOLTAGE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseBattery.getMinimumVoltage(), textContent);
+				readValue( battery.getMinimumVoltage(), textContent);
 			}
-			else if( Names.BATTERY_MAXIMUM_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.BATTERY_MAXIMUM_VOLTAGE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseBattery.getMaximumVoltage(), textContent);
+				readValue( battery.getMaximumVoltage(), textContent);
 			}
-			else if( Names.BATTERY_CALIBRATION_VOLTAGE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.BATTERY_CALIBRATION_VOLTAGE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseBattery.getCalibrationVoltage(), textContent);
+				readValue( battery.getCalibrationVoltage(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
 
-	private void importCalibrations( Calibrations UseCalibrations, IterableNodeList ChildNodes)
+	private void importCalibrations( Calibrations UseCalibrations, IterableNodeList childNodes)
 	{
 		int CalibrationIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
+			String nodeName = childNode.getNodeName();
 
-			if( Names.CALIBRATION.compareToIgnoreCase( NodeName) == 0)
+			if( Names.CALIBRATION.compareToIgnoreCase( nodeName) == 0)
 			{
 				Calibration NewCalibration = new Calibration();
 
-				importCalibration( NewCalibration, getChildNodes( ChildNode));
+				importCalibration( NewCalibration, getChildNodes( childNode));
 
 				UseCalibrations.setCalibration( CalibrationIndex, NewCalibration);
 
@@ -348,246 +326,240 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName);
+				if( debug) java.lang.System.out.println( nodeName);
 			}
 		}
 	}
 
-	private void importCalibration( Calibration UseCalibration, IterableNodeList ChildNodes)
+	private void importCalibration( Calibration UseCalibration, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.CALIBRATION_HIGH.compareToIgnoreCase( NodeName) == 0)
+			if( Names.CALIBRATION_HIGH.compareToIgnoreCase( nodeName) == 0)
 			{
 				readValue( UseCalibration.getHigh(), textContent);
 			}
-			else if( Names.CALIBRATION_CENTER.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.CALIBRATION_CENTER.compareToIgnoreCase( nodeName) == 0)
 			{
 				readValue( UseCalibration.getCenter(), textContent);
 			}
-			else if( Names.CALIBRATION_LOW.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.CALIBRATION_LOW.compareToIgnoreCase( nodeName) == 0)
 			{
 				readValue( UseCalibration.getLow(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
 
-	private void importModels( Models UseModels, IterableNodeList ChildNodes)
+	private void importModels( Models models, IterableNodeList childNodes)
 	{
-		int ModelId = 0;
+		int modelId = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
+			String nodeName = childNode.getNodeName();
 
-			if( Names.MODEL.compareToIgnoreCase( NodeName) == 0)
+			if( Names.MODEL.compareToIgnoreCase( nodeName) == 0)
 			{
-				Model NewModel = new Model();
+				Model newModel = new Model();
 
-				importModel( NewModel, getChildNodes( ChildNode));
+				importModel( newModel, getChildNodes( childNode));
 
 				// Don't add empty models to the array.
-				if( NewModel.getState() == Model.State.USED)
+				if( newModel.getState() == Model.State.USED)
 				{
 					try
 					{
-						NewModel.getId().setValue( ModelId);
+						newModel.getId().setValue( modelId);
 
-						UseModels.addModel( NewModel);
+						models.addModel( newModel);
 					}
-					catch( Exception Reason)
+					catch( Exception reason)
 					{
-						java.lang.System.err.println( "Error inserting model: " + Reason.getMessage());
+						java.lang.System.err.println( "Error inserting model: " + reason.getMessage());
 					}
 				}
 
 				// Always count up model id, it doesn't matter if a model was skipped.
-				ModelId++;
+				modelId++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName);
+				if( debug) java.lang.System.out.println( nodeName);
 			}
 		}
 	}
 
-	private void importModel( Model UseModel, IterableNodeList ChildNodes)
+	private void importModel( Model model, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.MODEL_NAME.compareToIgnoreCase( NodeName) == 0)
+			if( Names.MODEL_NAME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseModel.getName(), textContent);
+				readValue( model.getName(), textContent);
 			}
-			else if( Names.MODEL_STATE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.MODEL_STATE.compareToIgnoreCase( nodeName) == 0)
 			{
-				UseModel.setState( Utility.convertModelState( textContent));
+				model.setState( Utility.convertModelState( textContent));
 			}
-			else if( Names.MODEL_RF_MODE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.MODEL_RF_MODE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseModel.getRFMode(), textContent);
+				readValue( model.getRfMode(), textContent);
 			}
-			else if( Names.MODEL_TYPE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.MODEL_TYPE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseModel.getTypeId(), textContent);
+				readValue( model.getTypeId(), textContent);
 			}
-			else if( Names.MODEL_STATUS_SOURCES.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.MODEL_STATUS_SOURCES.compareToIgnoreCase( nodeName) == 0)
 			{
-				importStatusSources( UseModel, getChildNodes( ChildNode));
+				importStatusSources( model, getChildNodes( childNode));
 			}
-			else if( Names.MODEL_STATUS_TIMES.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.MODEL_STATUS_TIMES.compareToIgnoreCase( nodeName) == 0)
 			{
-				importStatusTimes( UseModel, getChildNodes( ChildNode));
+				importStatusTimes( model, getChildNodes( childNode));
 			}
-			else if( Names.CHANNELS.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.CHANNELS.compareToIgnoreCase( nodeName) == 0)
 			{
-				importChannels( UseModel.getChannels(), getChildNodes( ChildNode));
+				importChannels( model.getChannels(), getChildNodes( childNode));
 			}
-			else if( Names.MODEL_PROXY_REFERENCES.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.MODEL_PROXY_REFERENCES.compareToIgnoreCase( nodeName) == 0)
 			{
-				importProxySources( UseModel.getProxyReferences(), getChildNodes( ChildNode));
+				importProxySources( model.getProxyReferences(), getChildNodes( childNode));
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
 
-	private void importStatusSources( Model UseModel, IterableNodeList ChildNodes)
+	private void importStatusSources( Model model, IterableNodeList childNodes)
 	{
-		int StatusSourceIndex = 0;
+		int statusSourceIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String textContent = ChildNode.getTextContent();
-			String NodeName = ChildNode.getNodeName();
+			String textContent = childNode.getTextContent();
+			String nodeName = childNode.getNodeName();
 
-			if( Names.MODEL_STATUS_SOURCE.compareToIgnoreCase( NodeName) == 0)
+			if( Names.MODEL_STATUS_SOURCE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseModel.getStatusSourceId( StatusSource.values()[ StatusSourceIndex]),
-						textContent);
+				readValue( model.getStatusSourceId( StatusSource.values()[ statusSourceIndex]), textContent);
 
-				StatusSourceIndex++;
+				statusSourceIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}		
 	}
 
-	private void importStatusTimes( Model UseModel, IterableNodeList ChildNodes)
+	private void importStatusTimes( Model model, IterableNodeList childNodes)
 	{
 		int StatusTimeIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String textContent = ChildNode.getTextContent();
+			String textContent = childNode.getTextContent();
 
-			String NodeName = ChildNode.getNodeName();
+			String nodeName = childNode.getNodeName();
 
-			if( Names.MODEL_STATUS_TIME.compareToIgnoreCase( NodeName) == 0)
+			if( Names.MODEL_STATUS_TIME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseModel.getStatusTimeId( StatusTime.values()[ StatusTimeIndex]),
-						textContent);
+				readValue( model.getStatusTimeId( StatusTime.values()[ StatusTimeIndex]), textContent);
 
 				StatusTimeIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}		
 	}
 
-	private void importChannels( Channels UseChannels, IterableNodeList ChildNodes)
+	private void importChannels( Channels channels, IterableNodeList childNodes)
 	{
-		int ChannelIndex = 0;
+		int channelIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
+			String nodeName = childNode.getNodeName();
 
-			if( Names.CHANNEL.compareToIgnoreCase( NodeName) == 0)
+			if( Names.CHANNEL.compareToIgnoreCase( nodeName) == 0)
 			{
-				Channel NewChannel = new Channel();
+				Channel channel = channels.addChannel( channelIndex++);
 
-				importChannel( NewChannel, getChildNodes( ChildNode));
-
-				UseChannels.setChannel( ChannelIndex, NewChannel);
-
-				ChannelIndex++;
+				importChannel( channel, getChildNodes( childNode));
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName);
+				if( debug) java.lang.System.out.println( nodeName);
 			}
 		}
 	}		
 
-	private void importChannel( Channel UseChannel, IterableNodeList ChildNodes)
+	private void importChannel( Channel UseChannel, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.CHANNEL_NAME.compareToIgnoreCase( NodeName) == 0)
+			if( Names.CHANNEL_NAME.compareToIgnoreCase( nodeName) == 0)
 			{
 				readValue( UseChannel.getName(), textContent);
 			}
-			else if( Names.CHANNEL_INPUT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.CHANNEL_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseChannel.getInput(), getChildNodes( ChildNode));
+				importSourceTupel( UseChannel.getInput(), getChildNodes( childNode));
 			}
-			else if( Names.CHANNEL_TRIM.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.CHANNEL_TRIM.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseChannel.getTrim(), getChildNodes( ChildNode));
+				importSourceTupel( UseChannel.getTrim(), getChildNodes( childNode));
 			}
-			else if( Names.CHANNEL_LIMIT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.CHANNEL_LIMIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseChannel.getLimit(), getChildNodes( ChildNode));
+				importSourceTupel( UseChannel.getLimit(), getChildNodes( childNode));
 			}
-			else if( Names.CHANNEL_REVERSE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.CHANNEL_REVERSE.compareToIgnoreCase( nodeName) == 0)
 			{
 				readValue( UseChannel.getReverse(), textContent);
 			}
-			else if( Names.CHANNEL_MODE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.CHANNEL_MODE.compareToIgnoreCase( nodeName) == 0)
 			{
 				readValue( UseChannel.getMode(), textContent);
 			}
-			else if( Names.CHANNEL_POINTS.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.CHANNEL_POINTS.compareToIgnoreCase( nodeName) == 0)
 			{
-				importChannelPoints( UseChannel, getChildNodes( ChildNode));
+				importChannelPoints( UseChannel, getChildNodes( childNode));
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
 
-	private void importChannelPoints( Channel UseChannel, IterableNodeList ChildNodes)
+	private void importChannelPoints( Channel UseChannel, IterableNodeList childNodes)
 	{
 		int ChannelPointIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.CHANNEL_POINT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.CHANNEL_POINT.compareToIgnoreCase( nodeName) == 0)
 			{
 				readValue( UseChannel.getPoint( ChannelPointIndex), textContent);
 
@@ -595,417 +567,405 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}		
 	}
 
-	private void importProxySources( ProxyReferences UseProxySources, IterableNodeList ChildNodes)
+	private void importProxySources( ProxyReferences UseProxySources, IterableNodeList childNodes)
 	{
 		int ProxyReferenceIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.MODEL_PROXY_REFERENCE.compareToIgnoreCase( NodeName) == 0)
+			if( Names.MODEL_PROXY_REFERENCE.compareToIgnoreCase( nodeName) == 0)
 			{
 				importSourceTupel( UseProxySources.GetProxyReferenceFromIndex( ProxyReferenceIndex),
-						getChildNodes( ChildNode));
+						           getChildNodes( childNode));
 
 				ProxyReferenceIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}		
 	}
 
-	private void importSourceTupel( SourceWithVolume UseSourceTupel, IterableNodeList ChildNodes)
+	private void importSourceTupel( SourceWithVolume sourceTupel, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_TUPEL_SOURCE_ID.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_TUPEL_SOURCE_ID.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSourceTupel.getSourceId(), textContent);
+				readValue( sourceTupel.getSourceId(), textContent);
 			}
-			else if( Names.SOURCE_TUPEL_VOLUME.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TUPEL_VOLUME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSourceTupel.getVolume(), textContent);
+				readValue( sourceTupel.getVolume(), textContent);
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
 
-	private void importTypes( Types UseTypes, IterableNodeList ChildNodes)
+	private void importTypes( Types types, IterableNodeList childNodes)
 	{
 		// TypeIds don't start with zero!
-		int TypeId = Model.TYPE_START;
+		int typeId = Model.TYPE_START;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
+			String nodeName = childNode.getNodeName();
 
-			if( Names.TYPE.compareToIgnoreCase( NodeName) == 0)
+			if( Names.TYPE.compareToIgnoreCase( nodeName) == 0)
 			{
-				Type NewType = new Type();
+				Type type = new Type();
 
-				importType( NewType, getChildNodes( ChildNode));
+				importType( type, getChildNodes( childNode));
 
-				if( NewType.getState() == Type.State.USED)
+				if( type.getState() == Type.State.USED)
 				{
 					try
 					{
-						NewType.getId().setValue( TypeId);
+						type.getId().setValue( typeId);
 
-						UseTypes.addType( NewType);
+						types.addType( type);
 					}
-					catch( Exception ignored)
-					{
-					}
+					catch( ValueOutOfRangeException ignored) {}
 				}
 
 				// Always count up type id, it doesn't matter if a type was skipped.
-				TypeId++;
+				typeId++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName);
+				if( debug) java.lang.System.out.println( nodeName);
 			}
 		}
 	}
 
-	private void importType( Type UseType, IterableNodeList ChildNodes)
+	private void importType( Type type, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.TYPE_NAME.compareToIgnoreCase( NodeName) == 0)
+			if( Names.TYPE_NAME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseType.getName(), textContent);
+				readValue( type.getName(), textContent);
 			}
-			else if( Names.TYPE_STATE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.TYPE_STATE.compareToIgnoreCase( nodeName) == 0)
 			{
-				UseType.setState( Utility.convertTypeState( textContent));
+				type.setState( Utility.convertTypeState( textContent));
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
 
-	private void importSources( Sources UseSources, IterableNodeList ChildNodes)
+	private void importSources( Sources sources, IterableNodeList childNodes)
 	{
-		int SourceId = 0;
+		int sourceId = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
+			String nodeName = childNode.getNodeName();
+			Source source = importSource( childNode);
 
-			if( Names.SOURCE.compareToIgnoreCase( NodeName) == 0)
+			if( source != null)
 			{
-				Source NewSource = importSource( getChildNodes( ChildNode));
-
-				if(( NewSource != null) /*&& ( NewSource.GetType() != Source.Type.EMPTY)*/)
+				try
 				{
-					try
-					{
-						NewSource.getId().setValue( SourceId);
+					source.getId().setValue( sourceId);
 
-						UseSources.addSource( NewSource);
-					}
-					catch( Exception Reason)
-					{
-						java.lang.System.err.println( "Error reading type id for type: " +
-								Reason.getMessage());
-					}
+					sources.addSource( source);
 				}
+				catch( ValueOutOfRangeException ignored) {}
 
 				// Always count up source id, it doesn't matter if a source was skipped.
-				SourceId++;
+				sourceId++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName);
+				if( debug) java.lang.System.out.println( nodeName);
 			}
 		}
 	}
 
-	private Source importSource( IterableNodeList ChildNodes)
+	private Source importSource( Node childNode)
 	{
-		Source UseSource = null;
+		Source source = null;
 
-		String Name = null;
-		Number ModelId = new Number( Model.MODEL_START, Model.MODEL_NONE);
+		String nodeName = childNode.getNodeName();
+		String textContent = childNode.getTextContent();
 
-		for( Node ChildNode: ChildNodes)
+		if( Names.SOURCE_INPUT_ANALOG.compareToIgnoreCase( nodeName) == 0)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
-
-			if( Names.SOURCE_NAME.compareToIgnoreCase( NodeName) == 0)
-			{
-				Name = textContent;
-			}
-			else if( Names.SOURCE_MODEL.compareToIgnoreCase( NodeName) == 0)
-			{
-				readValue( ModelId, textContent);
-			}
-			else if( Names.SOURCE_INPUT_ANALOG.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceInputAnalog( new Analog(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_INPUT_BUTTON.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceInputButton( new Button(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_INPUT_ROTARY.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceInputRotary( new Rotary(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_INPUT_SWITCH.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceInputSwitch( new Switch(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_INPUT_TICKER.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceInputTicker( new Ticker(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_MAP.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceMap( new Map(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_MIX.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceMix( new Mix(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_STORE.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceStore( new Store(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_FOLLOWER.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource =	importSourceFollower( new Follower(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_TIMER.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource =	importSourceTimer( new Timer(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_TRIMMER.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceTrimmer( new Trimmer(), getChildNodes( ChildNode));
-			}
-			else if( Names.SOURCE_PROXY.compareToIgnoreCase( NodeName) == 0)
-			{
-				UseSource = importSourceProxy( new Proxy(), getChildNodes( ChildNode));
-			}
-			else
-			{
-				java.lang.System.out.println( NodeName + " " + textContent);
-			}
+			source = importSourceInputAnalog( new Analog(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_INPUT_BUTTON.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceInputButton( new Button(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_INPUT_ROTARY.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceInputRotary( new Rotary(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_INPUT_SWITCH.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceInputSwitch( new Switch(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_INPUT_TICKER.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceInputTicker( new Ticker(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_MAP.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceMap( new Map(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_MIX.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceMix( new Mix(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_STORE.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceStore( new Store(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_FOLLOWER.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceFollower( new Follower(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_TIMER.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceTimer( new Timer(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_TRIMMER.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceTrimmer( new Trimmer(), getChildNodes( childNode));
+		}
+		else if( Names.SOURCE_PROXY.compareToIgnoreCase( nodeName) == 0)
+		{
+			source = importSourceProxy( new Proxy(), getChildNodes( childNode));
+		}
+		else
+		{
+			if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 		}
 
-		if(( UseSource != null) && ( Name != null))
-		{
-			readValue( UseSource.getName(), Name);
-			UseSource.setModel( ModelId);
-		}
-
-		return UseSource;
+		return source;
 	}
 
-	private Source importSourceInputAnalog( Analog UseSource, IterableNodeList ChildNodes)
+	private boolean importSourceValue( Source source, String nodeName, String textContent)
 	{
-		for( Node ChildNode: ChildNodes)
+		if( Names.SOURCE_NAME.compareToIgnoreCase( nodeName) == 0)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
-
-			if( Names.SOURCE_INPUT_ANALOG_INPUT.compareToIgnoreCase( NodeName) == 0)
-			{
-				readValue( UseSource.getInputId(), textContent);
-			}
-			else
-			{
-				java.lang.System.out.println( NodeName + " " + textContent);
-			}
+			readValue( source.getName(), textContent);
+		}
+		else if( Names.SOURCE_MODEL.compareToIgnoreCase( nodeName) == 0)
+		{
+			readValue( source.getModel(), textContent);
+		}
+		else
+		{
+			return false;
 		}
 
-		return UseSource;		
+		return true;
 	}
 
-	private Source importSourceInputButton( Button UseSource, IterableNodeList ChildNodes)
+	private Source importSourceInputAnalog( Analog source, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_INPUT_BUTTON_INPUT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_INPUT_ANALOG_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getInputId(), textContent);
+				readValue( source.getInputId(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_BUTTON_INIT.compareToIgnoreCase( NodeName) == 0)
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				readValue( UseSource.getInit(), textContent);
-			}
-			else if( Names.SOURCE_INPUT_BUTTON_STORE.compareToIgnoreCase( NodeName) == 0)
-			{
-				readValue( UseSource.getStore(), textContent);
-			}
-			else if( Names.SOURCE_INPUT_BUTTON_TOGGLE.compareToIgnoreCase( NodeName) == 0)
-			{
-				readValue( UseSource.getToggle(), textContent);
-			}
-			else if( Names.SOURCE_INPUT_BUTTON_TOP.compareToIgnoreCase( NodeName) == 0)
-			{
-				readValue( UseSource.getTop(), textContent);
-			}
-			else if( Names.SOURCE_INPUT_BUTTON_BOTTOM.compareToIgnoreCase( NodeName) == 0)
-			{
-				readValue( UseSource.getBottom(), textContent);
-			}
-			else
-			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return source;		
 	}
 
-	private Source importSourceInputRotary( Rotary UseSource, IterableNodeList ChildNodes)
+	private Source importSourceInputButton( Button source, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_INPUT_ROTARY_A_INPUT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_INPUT_BUTTON_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getAInputId(), textContent);
+				readValue( source.getInputId(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_ROTARY_B_INPUT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_BUTTON_INIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getBInputId(), textContent);
+				readValue( source.getInit(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_ROTARY_STORE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_BUTTON_STORE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getStore(), textContent);
+				readValue( source.getStore(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_ROTARY_INIT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_BUTTON_TOGGLE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getInit(), textContent);
+				readValue( source.getToggle(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_ROTARY_STEP.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_BUTTON_TOP.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getStep(), textContent);
+				readValue( source.getTop(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_ROTARY_TOP.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_BUTTON_BOTTOM.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getTop(), textContent);
+				readValue( source.getBottom(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_ROTARY_BOTTOM.compareToIgnoreCase( NodeName) == 0)
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				readValue( UseSource.getBottom(), textContent);
-			}
-			else
-			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return source;		
 	}
 
-	private Source importSourceInputSwitch( Switch UseSource, IterableNodeList ChildNodes)
+	private Source importSourceInputRotary( Rotary source, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_INPUT_SWITCH_LOW_INPUT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_INPUT_ROTARY_A_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getLowInputId(), textContent);
+				readValue( source.getAInputId(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_SWITCH_HIGH_INPUT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_ROTARY_B_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getHighInputId(), textContent);
+				readValue( source.getBInputId(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_SWITCH_TOP.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_ROTARY_STORE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getTop(), textContent);
+				readValue( source.getStore(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_SWITCH_BOTTOM.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_ROTARY_INIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getBottom(), textContent);
+				readValue( source.getInit(), textContent);
 			}
-			else
+			else if( Names.SOURCE_INPUT_ROTARY_STEP.compareToIgnoreCase( nodeName) == 0)
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				readValue( source.getStep(), textContent);
+			}
+			else if( Names.SOURCE_INPUT_ROTARY_TOP.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( source.getTop(), textContent);
+			}
+			else if( Names.SOURCE_INPUT_ROTARY_BOTTOM.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( source.getBottom(), textContent);
+			}
+			else if( !importSourceValue( source, nodeName, textContent))
+			{
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return source;		
 	}
 
-	private Source importSourceInputTicker( Ticker UseSource, IterableNodeList ChildNodes)
+	private Source importSourceInputSwitch( Switch source, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_INPUT_TICKER_LOW_INPUT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_INPUT_SWITCH_LOW_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getLowInputId(), textContent);
+				readValue( source.getLowInputId(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_TICKER_HIGH_INPUT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_SWITCH_HIGH_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getHighInputId(), textContent);
+				readValue( source.getHighInputId(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_TICKER_INIT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_SWITCH_TOP.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getInit(), textContent);
+				readValue( source.getTop(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_TICKER_STEP.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_INPUT_SWITCH_BOTTOM.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getStep(), textContent);
+				readValue( source.getBottom(), textContent);
 			}
-			else if( Names.SOURCE_INPUT_TICKER_STORE.compareToIgnoreCase( NodeName) == 0)
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				readValue( UseSource.getStore(), textContent);
-			}
-			else if( Names.SOURCE_INPUT_TICKER_TOP.compareToIgnoreCase( NodeName) == 0)
-			{
-				readValue( UseSource.getTop(), textContent);
-			}
-			else if( Names.SOURCE_INPUT_TICKER_BOTTOM.compareToIgnoreCase( NodeName) == 0)
-			{
-				readValue( UseSource.getBottom(), textContent);
-			}
-			else
-			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return source;		
 	}
 
-	private Source importSourceMap( Map map, IterableNodeList childNodes)
+	private Source importSourceInputTicker( Ticker source, IterableNodeList childNodes)
+	{
+		for( Node childNode: childNodes)
+		{
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
+
+			if( Names.SOURCE_INPUT_TICKER_LOW_INPUT.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( source.getLowInputId(), textContent);
+			}
+			else if( Names.SOURCE_INPUT_TICKER_HIGH_INPUT.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( source.getHighInputId(), textContent);
+			}
+			else if( Names.SOURCE_INPUT_TICKER_INIT.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( source.getInit(), textContent);
+			}
+			else if( Names.SOURCE_INPUT_TICKER_STEP.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( source.getStep(), textContent);
+			}
+			else if( Names.SOURCE_INPUT_TICKER_STORE.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( source.getStore(), textContent);
+			}
+			else if( Names.SOURCE_INPUT_TICKER_TOP.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( source.getTop(), textContent);
+			}
+			else if( Names.SOURCE_INPUT_TICKER_BOTTOM.compareToIgnoreCase( nodeName) == 0)
+			{
+				readValue( source.getBottom(), textContent);
+			}
+			else if( !importSourceValue( source, nodeName, textContent))
+			{
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
+			}
+		}
+
+		return source;		
+	}
+
+	private Source importSourceMap( Map source, IterableNodeList childNodes)
 	{
 		for( Node childNode: childNodes)
 		{
@@ -1014,110 +974,110 @@ public class XMLReader
 
 			if( Names.SOURCE_MAP_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( map.getInput(), getChildNodes( childNode));
+				importSourceTupel( source.getInput(), getChildNodes( childNode));
 			}
 			else if( Names.SOURCE_MAP_POINTS.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceMapPoints( map, getChildNodes( childNode));
+				importSourceMapPoints( source, getChildNodes( childNode));
 			}
-			else
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				java.lang.System.out.println( nodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return map;
+		return source;
 	}
 
-	private void importSourceMapPoints( Map UseSource, IterableNodeList ChildNodes)
+	private void importSourceMapPoints( Map source, IterableNodeList childNodes)
 	{
 		int PointIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String textContent = ChildNode.getTextContent();
-			String NodeName = ChildNode.getNodeName();
+			String textContent = childNode.getTextContent();
+			String nodeName = childNode.getNodeName();
 
-			if( Names.SOURCE_MAP_POINT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_MAP_POINT.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseSource.getPoint( PointIndex), getChildNodes( ChildNode));
+				importSourceTupel( source.getPoint( PointIndex), getChildNodes( childNode));
 
 				PointIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
 
-	private Source importSourceMix( Mix UseSource, IterableNodeList ChildNodes)
+	private Source importSourceMix( Mix source, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_MIX_INPUTS.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_MIX_INPUTS.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceMixInputs( UseSource, getChildNodes( ChildNode));
+				importSourceMixInputs( source, getChildNodes( childNode));
 			}
-			else
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return source;		
 	}
 
-	private void importSourceMixInputs( Mix UseSource, IterableNodeList ChildNodes)
+	private void importSourceMixInputs( Mix source, IterableNodeList childNodes)
 	{
 		int InputIndex = 0;
 
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String textContent = ChildNode.getTextContent();
-			String NodeName = ChildNode.getNodeName();
+			String textContent = childNode.getTextContent();
+			String nodeName = childNode.getNodeName();
 
-			if( Names.SOURCE_MIX_INPUT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_MIX_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseSource.getInput( InputIndex), getChildNodes( ChildNode));
+				importSourceTupel( source.getInput( InputIndex), getChildNodes( childNode));
 
 				InputIndex++;
 			}
 			else
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
 
-	private Source importSourceStore( Store UseSource, IterableNodeList ChildNodes)
+	private Source importSourceStore( Store source, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_STORE_INPUT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_STORE_INPUT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getInput(), textContent);
+				readValue( source.getInput(), textContent);
 			}
-			else if( Names.SOURCE_STORE_INIT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_STORE_INIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getInit(), textContent);
+				readValue( source.getInit(), textContent);
 			}
-			else
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return source;		
 	}
 
-	private Source importSourceFollower( Follower follower, IterableNodeList childNodes)
+	private Source importSourceFollower( Follower source, IterableNodeList childNodes)
 	{
 		for( Node childNode: childNodes)
 		{
@@ -1126,123 +1086,123 @@ public class XMLReader
 
 			if( Names.SOURCE_FOLLOWER_TARGET.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( follower.getTarget(), getChildNodes( childNode));
+				importSourceTupel( source.getTarget(), getChildNodes( childNode));
 			}
 			else if( Names.SOURCE_FOLLOWER_STEP.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( follower.getStep(), getChildNodes( childNode));
+				importSourceTupel( source.getStep(), getChildNodes( childNode));
 			}
 			else if( Names.SOURCE_FOLLOWER_TRIGGER.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( follower.getTrigger(), textContent);
+				readValue( source.getTrigger(), textContent);
 			}
 			else if( Names.SOURCE_FOLLOWER_TRIGGER_LOW_LIMIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( follower.getTriggerLowLimit(), textContent);
+				readValue( source.getTriggerLowLimit(), textContent);
 			}
 			else if( Names.SOURCE_FOLLOWER_TRIGGER_HIGH_LIMIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( follower.getTriggerHighLimit(), textContent);
+				readValue( source.getTriggerHighLimit(), textContent);
 			}
-			else
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				java.lang.System.out.println( nodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return follower;
+		return source;
 	}
 
-	private Source importSourceTimer( Timer UseSource, IterableNodeList ChildNodes)
+	private Source importSourceTimer( Timer source, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_TIMER_INIT_TIME.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_TIMER_INIT_TIME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getInitTime(), textContent);
+				readValue( source.getInitTime(), textContent);
 			}
-			else if( Names.SOURCE_TIMER_CURRENT_TIME.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TIMER_CURRENT_TIME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getCurrentTime(), textContent);
+				readValue( source.getCurrentTime(), textContent);
 			}
-			else if( Names.SOURCE_TIMER_REVERSE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TIMER_REVERSE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getReverse(), textContent);
+				readValue( source.getReverse(), textContent);
 			}
-			else if( Names.SOURCE_TIMER_STORE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TIMER_STORE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getStore(), textContent);
+				readValue( source.getStore(), textContent);
 			}
-			else if( Names.SOURCE_TIMER_TRIGGER.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TIMER_TRIGGER.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getTrigger(), textContent);
+				readValue( source.getTrigger(), textContent);
 			}
-			else if( Names.SOURCE_TIMER_TRIGGER_LOW_LIMIT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TIMER_TRIGGER_LOW_LIMIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getTriggerLowLimit(), textContent);
+				readValue( source.getTriggerLowLimit(), textContent);
 			}
-			else if( Names.SOURCE_TIMER_TRIGGER_HIGH_LIMIT.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TIMER_TRIGGER_HIGH_LIMIT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getTriggerHighLimit(), textContent);
+				readValue( source.getTriggerHighLimit(), textContent);
 			}
-			else if( Names.SOURCE_TIMER_WARN_LOW_TIME.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TIMER_WARN_LOW_TIME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getWarnLowTime(), textContent);
+				readValue( source.getWarnLowTime(), textContent);
 			}
-			else if( Names.SOURCE_TIMER_WARN_CRITICAL_TIME.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TIMER_WARN_CRITICAL_TIME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getWarnCriticalTime(), textContent);
+				readValue( source.getWarnCriticalTime(), textContent);
 			}
-			else if( Names.SOURCE_TIMER_WARN_PAUSE_TIME.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TIMER_WARN_PAUSE_TIME.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getWarnPauseTime(), textContent);
+				readValue( source.getWarnPauseTime(), textContent);
 			}
-			else
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return source;		
 	}
 
-	private Source importSourceTrimmer(Trimmer UseSource, IterableNodeList ChildNodes)
+	private Source importSourceTrimmer(Trimmer source, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_TRIMMER_INPUT_SOURCE.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_TRIMMER_INPUT_SOURCE.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseSource.getInput(), getChildNodes( ChildNode));
+				importSourceTupel( source.getInput(), getChildNodes( childNode));
 			}
-			else if( Names.SOURCE_TRIMMER_TRIM_SOURCE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TRIMMER_TRIM_SOURCE.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseSource.getTrim(), getChildNodes( ChildNode));
+				importSourceTupel( source.getTrim(), getChildNodes( childNode));
 			}
-			else if( Names.SOURCE_TRIMMER_LIMIT_SOURCE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TRIMMER_LIMIT_SOURCE.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseSource.getLimit(), getChildNodes( ChildNode));
+				importSourceTupel( source.getLimit(), getChildNodes( childNode));
 			}
-			else if( Names.SOURCE_TRIMMER_REVERSE.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TRIMMER_REVERSE.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getReverse(), textContent);
+				readValue( source.getReverse(), textContent);
 			}
-			else if( Names.SOURCE_TRIMMER_POINTS.compareToIgnoreCase( NodeName) == 0)
+			else if( Names.SOURCE_TRIMMER_POINTS.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTrimmerPoints( UseSource, getChildNodes( ChildNode));
+				importSourceTrimmerPoints( source, getChildNodes( childNode));
 			}
-			else
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return source;		
 	}
 
 	private void importSourceTrimmerPoints(Trimmer trim, IterableNodeList childNodes)
@@ -1262,29 +1222,29 @@ public class XMLReader
 			}
 			else
 			{
-				java.lang.System.out.println( nodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 	}
 
-	private Source importSourceProxy( Proxy UseSource, IterableNodeList ChildNodes)
+	private Source importSourceProxy( Proxy source, IterableNodeList childNodes)
 	{
-		for( Node ChildNode: ChildNodes)
+		for( Node childNode: childNodes)
 		{
-			String NodeName = ChildNode.getNodeName();
-			String textContent = ChildNode.getTextContent();
+			String nodeName = childNode.getNodeName();
+			String textContent = childNode.getTextContent();
 
-			if( Names.SOURCE_PROXY_SLOT.compareToIgnoreCase( NodeName) == 0)
+			if( Names.SOURCE_PROXY_SLOT.compareToIgnoreCase( nodeName) == 0)
 			{
-				readValue( UseSource.getSlot(), textContent);
+				readValue( source.getSlot(), textContent);
 			}
-			else
+			else if( !importSourceValue( source, nodeName, textContent))
 			{
-				java.lang.System.out.println( NodeName + " " + textContent);
+				if( debug) java.lang.System.out.println( nodeName + " " + textContent);
 			}
 		}
 
-		return UseSource;		
+		return source;		
 	}
 
 	private IterableNodeList getChildNodes( Node UseNode)
@@ -1308,8 +1268,6 @@ public class XMLReader
 		{
 			value.setConfigurationValue( textContent);
 		}
-		catch( NumberFormatException | ValueOutOfRangeException ignored)
-		{
-		}
+		catch( NumberFormatException | ValueOutOfRangeException ignored) {}
 	}
 }

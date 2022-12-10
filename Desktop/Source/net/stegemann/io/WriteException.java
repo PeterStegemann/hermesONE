@@ -2,7 +2,7 @@ package net.stegemann.io;
 
 import java.io.Serial;
 
-public class WriteException extends Exception
+public class WriteException extends DocumentException
 {
 	@Serial
 	private static final long serialVersionUID = -6323577888763997277L;

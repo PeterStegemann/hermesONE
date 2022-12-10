@@ -5,6 +5,7 @@ import net.stegemann.controller.Controller;
 import net.stegemann.gui.dialogs.ProgressDialog;
 import net.stegemann.gui.misc.CheckboxMenuItemGroup;
 import net.stegemann.gui.panel.MainPanel;
+import net.stegemann.io.DocumentException;
 import net.stegemann.io.ReadException;
 import net.stegemann.io.WriteException;
 import net.stegemann.io.serial.base.Ports;
@@ -196,7 +197,7 @@ public class MainFrame extends JFrame implements ActionListener
 
 	public void set()
 	{
-		modelsPanel.Set();
+		modelsPanel.set();
 
 		pack();
 
@@ -262,14 +263,9 @@ public class MainFrame extends JFrame implements ActionListener
 
 			try
 			{
-				configurationReader.readFromFile
-				(
-					configuration,
-					lastDirectory + lastFile,
-			 		mode
-				);
+				configurationReader.readFromFile( configuration, lastDirectory + lastFile, mode);
 			}
-			catch( ReadException reason)
+			catch( DocumentException reason)
 			{
 				System.out.println( "Failed opening configuration, reason: " + reason.getMessage());
 
@@ -321,7 +317,7 @@ public class MainFrame extends JFrame implements ActionListener
 		{
 			configurationWriter.writeToFile( configuration, lastDirectory + lastFile);
 		}
-		catch( WriteException reason)
+		catch( DocumentException reason)
 		{
 			System.out.println( "Failed writing configuration, reason: " + reason.getMessage());
 

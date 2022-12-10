@@ -1,25 +1,26 @@
 package net.stegemann.gui.model;
 
-import javax.swing.AbstractListModel;
-import javax.swing.ComboBoxModel;
-
 import net.stegemann.configuration.Type;
 import net.stegemann.configuration.Types;
 import net.stegemann.misc.ChangeListener;
 
+import javax.swing.*;
+import java.io.Serial;
+
 public class TypesComboBoxModel extends AbstractListModel< Type>
-									  implements ComboBoxModel< Type>, ChangeListener< Types>
+                             implements ComboBoxModel< Type>, ChangeListener< Types>
 {
+	@Serial
 	private static final long serialVersionUID = -6662717312228924299L;
 
 	private final Types types;
 	private Object selectedItem = null;
 
-	public TypesComboBoxModel( Types types)
+	public TypesComboBoxModel( Types useTypes)
 	{
-		this.types = types;
+		types = useTypes;
 
-		types.addChangeListener( this);
+		useTypes.addChangeListener( this);
 	}
 
 	@Override
@@ -29,9 +30,9 @@ public class TypesComboBoxModel extends AbstractListModel< Type>
 	}
 
 	@Override
-	public void setSelectedItem( Object selectedItem)
+	public void setSelectedItem( Object useSelectedItem)
 	{
-		this.selectedItem = selectedItem;
+		selectedItem = useSelectedItem;
 	}
 
 	@Override
@@ -49,8 +50,6 @@ public class TypesComboBoxModel extends AbstractListModel< Type>
 	@Override
 	public void hasChanged( Types object)
 	{
-		System.out.println("TypesComboBoxModel.hasChanged: " + object);
-
 		fireContentsChanged( this, 0, getSize() - 1);
 	}
 }

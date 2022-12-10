@@ -1,5 +1,7 @@
 package net.stegemann.configuration;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.Text;
 import net.stegemann.configuration.util.ConfigurationField;
@@ -18,6 +20,8 @@ public class Type extends ChangeObservable< Type> implements ChangeListener< Tex
 	private final Number id;
 	@ConfigurationField( name = Names.TYPE_NAME)
 	private final Text name;
+	@Getter
+	@Setter
 	@ConfigurationField( name = Names.TYPE_STATE)
 	private State state;
 
@@ -66,29 +70,20 @@ public class Type extends ChangeObservable< Type> implements ChangeListener< Tex
 		notifyChange( this);
 	}
 
-	@Override
-	public Text getName()
-	{
-		return name;
-	}
-
-	public void setState( State UseState)
-	{
-		this.state = UseState;		
-	}
-
-	public State getState()
-	{
-		return state;
-	}
-
 	/**
 	 * Get unique type id for reference by models and sources. 
 	 *
 	 * @return Type id.
 	 */
+	@Override
 	public Number getId()
 	{
 		return id;
+	}
+
+	@Override
+	public Text getName()
+	{
+		return name;
 	}
 }

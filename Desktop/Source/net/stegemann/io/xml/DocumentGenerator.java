@@ -1,9 +1,12 @@
 package net.stegemann.io.xml;
 
 import net.stegemann.configuration.type.ConfigurationValue;
+import net.stegemann.io.DocumentException;
+import net.stegemann.io.ReadException;
 import net.stegemann.io.WriteException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,21 +20,31 @@ import java.io.IOException;
 public class DocumentGenerator
 {
 	public Document createDocument()
-		throws WriteException
+		throws DocumentException
 	{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
+		return documentBuilder().newDocument();
+	}
+
+	public Document readDocument( String fileName)
+		throws DocumentException
+	{
+		DocumentBuilder builder = documentBuilder();
+		Document document;
 
 		try
 		{
-			builder = factory.newDocumentBuilder();
+			document = builder.parse( fileName);
 		}
-		catch( ParserConfigurationException reason)
+		catch( SAXException reason)
 		{
-			throw new WriteException( "Failed to create xml document builder.", reason);
+			throw new ReadException( "Failed to parse xml document '" + fileName + "'.", reason);
+		}
+		catch( IOException reason)
+		{
+			throw new ReadException( "Failed to read xml document '" + fileName + "'.", reason);
 		}
 
-		return builder.newDocument();
+		return document;
 	}
 
 	public void storeDocument( Document document, String fileName)
@@ -49,6 +62,24 @@ public class DocumentGenerator
 		{
 			throw new WriteException( "Failed to transform xml.", reason);
 		}
+	}
+
+	private DocumentBuilder documentBuilder()
+		throws DocumentException
+	{
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+
+		try
+		{
+			builder = factory.newDocumentBuilder();
+		}
+		catch( ParserConfigurationException reason)
+		{
+			throw new DocumentException( "Failed to create xml document builder.", reason);
+		}
+
+		return builder;
 	}
 
 	private Transformer transformer()

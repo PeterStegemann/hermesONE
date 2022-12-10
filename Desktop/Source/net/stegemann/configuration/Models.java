@@ -72,30 +72,30 @@ public class Models extends ChangeObservable< Models> implements Iterable< Model
 	 */
 	public Model insertModel( Model model)
 	{
-		int FreeId = 0;
+		int freeId = 0;
 
 		// Find free model index.
-		for( Model CurrentModel: models)
+		for( Model currentModel: models)
 		{
-			if( CurrentModel.getId().equals( FreeId) == false)
+			if( currentModel.getId().equals( freeId) == false)
 			{
 				// Here's a gap.
 				break;
 			}
 
-			FreeId++;
+			freeId++;
 		}
 
 		try
 		{ 
-			model.getId().setValue( FreeId);
+			model.getId().setValue( freeId);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
 			return null;
 		}
 
-		models.add( FreeId, model);
+		models.add( freeId, model);
 
 		model.addChangeListener( this);
 		notifyChange( this);
@@ -150,7 +150,7 @@ public class Models extends ChangeObservable< Models> implements Iterable< Model
 
 	/** Get the index of a model in this container from its id.
 	 * 
-	 * @param Id The id of the model.
+	 * @param id The id of the model.
 	 * 
 	 * @return The index in this container.
 	 */

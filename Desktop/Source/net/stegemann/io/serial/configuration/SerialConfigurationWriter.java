@@ -510,7 +510,7 @@ public class SerialConfigurationWriter
 
 			writeValue( Id.ModelName, model.getName());
 			writeValue( Id.ModelState, Utility.convertModelState( model.getState()));
-			writeValue( Id.ModelRFMode, model.getRFMode());
+			writeValue( Id.ModelRFMode, model.getRfMode());
 			writeValue( Id.ModelType, model.getTypeId());
 
 			exportStatusSources( model);

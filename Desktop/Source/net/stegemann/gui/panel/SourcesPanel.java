@@ -1,25 +1,11 @@
 package net.stegemann.gui.panel;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.Serial;
-
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.source.Sources;
 import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.view.SourcesView;
 import net.stegemann.configuration.view.SourcesView.HasEmpty;
 import net.stegemann.configuration.view.SourcesView.HasFixed;
@@ -31,17 +17,25 @@ import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.SourcesComboBoxModel;
 import net.stegemann.gui.panel.source.SourcePanel;
 
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
+
 public class SourcesPanel extends JPanel implements ActionListener, ListSelectionListener
 {
+	@Serial
+	private static final long serialVersionUID = 2773055623640369468L;
+
 	public enum PanelType
 	{
 		GLOBAL,
 		TYPE,
 		MODEL
 	}
-
-	@Serial
-	private static final long serialVersionUID = 2773055623640369468L;
 
 	private final Controller controller;
 	private final Configuration configuration;
@@ -153,19 +147,20 @@ public class SourcesPanel extends JPanel implements ActionListener, ListSelectio
 		{
 			Object[] options = SourceUtility.getSelectableTypeNames();
 
-			String typeName = ( String) JOptionPane.showInputDialog
-			(
-				this,
-				null,
-				"Neuen Mischer Typ auswählen...",
-				JOptionPane.PLAIN_MESSAGE,
-				null,
-				options,
-				options[ 0]
-			);
+			String typeName = ( String) JOptionPane.showInputDialog(
+				this, null, "Neuen Mischer Typ auswählen...",
+				JOptionPane.PLAIN_MESSAGE, null, options, options[ 0]);
 
-			Source newSource =
-				controller.addSource( SourceUtility.createSourceForTypeName( typeName), modelId);
+			Source newSource;
+
+			try
+			{
+				newSource = controller.addSource( SourceUtility.createSourceForTypeName( typeName), modelId);
+			}
+			catch( ValueOutOfRangeException reason)
+			{
+				throw new RuntimeException( reason);
+			}
 
 			if( newSource == null)
 			{
@@ -178,8 +173,7 @@ public class SourcesPanel extends JPanel implements ActionListener, ListSelectio
 		}
 		else if( actionEvent.getSource() == cloneButton)
 		{
-			Source newSource =
-				controller.cloneSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
+			Source newSource = controller.cloneSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
 
 			if( newSource == null)
 			{
@@ -239,23 +233,8 @@ public class SourcesPanel extends JPanel implements ActionListener, ListSelectio
 		sourcePanel.set( model, sourcesView.getSourceFromIndex( sourcesList.getSelectedIndex()));
 	}
 
-	private SourcesView sourcesView
-	(
-		Sources sources,
-		PickGlobals pickGlobals,
-		Number typeId,
-		Number modelId
-	)
+	private SourcesView sourcesView( Sources sources, PickGlobals pickGlobals, Number typeId, Number modelId)
 	{
-		return new SourcesView
-		(
-			sources,
-			pickGlobals,
-			typeId,
-			modelId,
-			HasEmpty.No,
-			HasFixed.No,
-			HasProxies.No
-		);
+		return new SourcesView( sources, pickGlobals, typeId, modelId, HasEmpty.No, HasFixed.No, HasProxies.No);
 	}
 }

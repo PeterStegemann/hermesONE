@@ -540,7 +540,7 @@ public class SerialConfigurationReader
 
 				case ModelRFMode :
 				{
-					readValue( model.getRFMode(), textContent);
+					readValue( model.getRfMode(), textContent);
 				}
 				break;
 
@@ -611,12 +611,12 @@ public class SerialConfigurationReader
 
 	private class ChannelsHandler extends UnknownTypeHandler
 	{
-		private Channels channels;
+		private final Channels channels;
 		private int channelIndex;
 
-		public ChannelsHandler( Channels UseChannels)
+		public ChannelsHandler( Channels useChannels)
 		{
-			channels = UseChannels;
+			channels = useChannels;
 			channelIndex = 0;
 		}
 
@@ -625,24 +625,21 @@ public class SerialConfigurationReader
 		{
 			switch( id)
 			{
-				case Channel :
+				case Channel ->
 				{
-					Channel NewChannel = new Channel();
+					Channel channel = channels.addChannel( channelIndex++);
 
-					channels.setChannel( channelIndex++, NewChannel);
-
-					pushHandler( new ChannelHandler( NewChannel));
+					pushHandler( new ChannelHandler( channel));
 				}
-				break;
 
-				default : super.complexOpened( id); break;
+				default -> super.complexOpened( id);
 			}
  		}
 	}
 
 	private class ChannelHandler extends UnknownTypeHandler
 	{
-		private Channel channel;
+		private final Channel channel;
 
 		public ChannelHandler( Channel UseChannel)
 		{

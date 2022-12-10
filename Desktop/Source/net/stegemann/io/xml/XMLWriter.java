@@ -5,7 +5,7 @@ import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.Text;
 import net.stegemann.configuration.util.ConfigurationField;
-import net.stegemann.io.WriteException;
+import net.stegemann.io.DocumentException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
 
 public class XMLWriter
 {
-	private static final boolean debug = true;
+	private static final boolean debug = false;
 
 	private final DocumentGenerator documentGenerator;
 
@@ -23,7 +23,7 @@ public class XMLWriter
 	}
 
 	public void writeToFile( Configuration configuration, String fileName)
-		throws WriteException
+		throws DocumentException
 	{
 		Document document = documentGenerator.createDocument();
 

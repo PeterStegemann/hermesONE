@@ -2,7 +2,7 @@ package net.stegemann.io;
 
 import java.io.Serial;
 
-public class ReadException extends Exception
+public class ReadException extends DocumentException
 {
 	@Serial
 	private static final long serialVersionUID = -6359511165210375059L;

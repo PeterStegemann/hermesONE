@@ -1,20 +1,12 @@
 package net.stegemann.configuration.view;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import net.stegemann.configuration.Model;
-import net.stegemann.configuration.source.Empty;
-import net.stegemann.configuration.source.Fixed;
-import net.stegemann.configuration.source.Proxy;
-import net.stegemann.configuration.source.Source;
-import net.stegemann.configuration.source.Sources;
+import net.stegemann.configuration.source.*;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
+
+import java.util.*;
 
 public class SourcesView extends ChangeObservable< SourcesView>
 					  implements Iterable< Source>, ChangeListener< Sources>
@@ -89,17 +81,8 @@ public class SourcesView extends ChangeObservable< SourcesView>
 	 * @param hasFixed Sources will contain the fixed source element.
 	 * @param hasProxies Sources will contain proxies.
 	 */
-	public SourcesView
-	(
-		Sources sources,
-		PickGlobals pickGlobals,
-		Number typeId,
-		Number modelId,
-		Class< ?> type,
-		HasEmpty hasEmpty,
-		HasFixed hasFixed,
-		HasProxies hasProxies
-	)
+	public SourcesView( Sources sources, PickGlobals pickGlobals, Number typeId, Number modelId, Class< ?> type,
+						HasEmpty hasEmpty, HasFixed hasFixed, HasProxies hasProxies)
 	{
 		baseSources = sources;
 		baseSources.addChangeListener( this);
@@ -143,7 +126,7 @@ public class SourcesView extends ChangeObservable< SourcesView>
 	@Override
 	public Iterator< Source> iterator()
 	{
-		return new SourcesViewIterator( this );
+		return new SourcesViewIterator( this);
 	}
 
 	private boolean isMatchingSource( Source source)
@@ -169,9 +152,11 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		Number sourceModelId = source.getModel();
 
 		boolean isMatching =
-			((( pickGlobals == PickGlobals.Yes) && ( sourceModelId.equals( Model.MODEL_GLOBAL))) ||
-			 (( typeId != null) && ( sourceModelId.equals( typeId))) ||
-		     ((this.modelId != null) && ( sourceModelId.equals( this.modelId))));
+		(
+			(( pickGlobals == PickGlobals.Yes) && ( sourceModelId.equals( Model.MODEL_GLOBAL))) ||
+		 	(( typeId != null) && ( sourceModelId.equals( typeId))) ||
+		 	(( modelId != null) && ( sourceModelId.equals( modelId)))
+		);
 
 		return isMatching;
 	}
@@ -194,12 +179,12 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		}
 
 		// Copy references to all matching sources.
-		for( Source CurrentSource: baseSources)
+		for( Source source: baseSources)
 		{
 			// Match if the source is global, same type or same model.
-			if( isMatchingSource( CurrentSource) == true)
+			if( isMatchingSource( source) == true)
 			{
-				sortedSources.add( CurrentSource);
+				sortedSources.add( source);
 			}
 		}
 
@@ -209,16 +194,16 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		notifyChange( this);
 	}
 
-	public Source getSourceFromIndex( int Index)
+	public Source getSourceFromIndex( int index)
 	{
-		if( Index == -1)
+		if( index == -1)
 		{
 			return null;
 		}
 
 		try
 		{
-			return sources.get( Index);
+			return sources.get( index);
 		}
 		catch( IndexOutOfBoundsException reason)
 		{
@@ -226,18 +211,18 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		}
 	}
 
-	public int getFullSourceIndex( int Index)
+	public int getFullSourceIndex( int index)
 	{
-		if( Index == -1)
+		if( index == -1)
 		{
 			return -1;
 		}
 
 		try
 		{
-			Source Source = sources.get( Index);
+			Source source = sources.get( index);
 
-			return baseSources.getIndexFromSource( Source);
+			return baseSources.getIndexFromSource( source);
 		}
 		catch( IndexOutOfBoundsException reason)
 		{
@@ -247,28 +232,28 @@ public class SourcesView extends ChangeObservable< SourcesView>
 
 	public Number getSourceIdFromIndex( int Index)
 	{
-		Source CurrentSource = getSourceFromIndex( Index);
+		Source source = getSourceFromIndex( Index);
 
-		if( CurrentSource == null)
+		if( source == null)
 		{
 			return null;
 		}
 
-		return CurrentSource.getId();
+		return source.getId();
 	}
 
-	public int getSourceIndexFromId( Number Id)
+	public int getSourceIndexFromId( Number sourceId)
 	{
-		int Index = 0;
+		int index = 0;
 
-		for( Source CurrentSource: sources)
+		for( Source source: sources)
 		{
-			if( CurrentSource.getId().equals( Id))
+			if( source.getId().equals( sourceId))
 			{
-				return( Index);
+				return index;
 			}
 
-			Index++;
+			index++;
 		}
 
 		return -1;

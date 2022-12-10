@@ -63,49 +63,46 @@ public class Channels extends ChangeObservable< Channels> implements Iterable< C
 		return channels.iterator();
 	}
 
-	public void fill( int Size)
+	public void fill( int size)
 	{
-		if( Size <= channels.size())
+		// Fill up missing channels.
+		while( size > channels.size())
 		{
-			return;
-		}
-
-		// fill up missing channels.
-		int Fill = Size - channels.size();
-
-		while( Fill > 0)
-		{
-			channels.add( new Channel());
-
-			Fill--;
+			addChannel();
 		}
 	}
 
-	public Channel addChannel( Channel UseChannel)
+	public Channel addChannel()
 	{
-		channels.add( UseChannel);
+		Channel channel = new Channel( channels.size());
 
-		UseChannel.addChangeListener( this);
+		channels.add( channel);
+
+		channel.addChangeListener( this);
 		notifyChange( this);
 
-		return UseChannel;
+		return channel;
 	}
 
-	public void setChannel( int Index, Channel UseChannel)
+	public Channel addChannel( int index)
 	{
-		fill( Index + 1);
+		fill( index);
 	
-		Channel OldChannel = channels.get( Index);
+		Channel oldChannel = channels.get( index);
 
-		if( OldChannel != null)
+		if( oldChannel != null)
 		{
-			OldChannel.removeChangeListener( this);
+			oldChannel.removeChangeListener( this);
 		}
 
-		channels.set( Index, UseChannel);	
+		Channel newChannel = new Channel( index);
 
-		UseChannel.addChangeListener( this);
+		channels.set( index, newChannel);
+
+		newChannel.addChangeListener( this);
 		notifyChange( this);
+
+		return newChannel;
 	}
 
 	public Channel getChannelFromIndex( int Index)

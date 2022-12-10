@@ -57,30 +57,30 @@ public class Types extends ChangeObservable< Types> implements Iterable< Type>, 
 
 	public Type insertType( Type type)
 	{
-		int FreeId = Model.TYPE_START;
+		int freeId = Model.TYPE_START;
 
 		// Find free type index.
-		for( Type CurrentType: types)
+		for( Type currentType: types)
 		{
-			if( CurrentType.getId().equals( FreeId) == false)
+			if( currentType.getId().equals( freeId) == false)
 			{
 				// Here's a gap.
 				break;
 			}
 
-			FreeId++;
+			freeId++;
 		}
 
 		try
 		{
-			type.getId().setValue( FreeId);
+			type.getId().setValue( freeId);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
 			return null;
 		}
 
-		types.add(( FreeId - Model.TYPE_START), type);
+		types.add(( freeId - Model.TYPE_START), type);
 
 		type.addChangeListener( this);
 		notifyChange( this);

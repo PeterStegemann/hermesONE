@@ -48,26 +48,18 @@ public class Channel extends ChangeObservable< Channel> implements ChangeListene
 	@ConfigurationField( name = Names.CHANNEL_POINTS, itemName = Names.CHANNEL_POINT)
 	private final List< Volume> points = new ArrayList<>();
 
-	public Channel()
+	public Channel( int id)
 	{
-		this( "Kanal");
-	}
-
-	public Channel( String name)
-	{
-		this.name = new Text( name);
-		this.name.addChangeListener( this);
+		name = new Text( "Kanal " + ( id + 1));
+		name.addChangeListener( this);
 
 		reverse = new Bool();
 
 		try
 		{
-			input = new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE,
-										  INPUT_SIGNAL_PER_VALUE, DEFAULT_INPUT_VOLUME);
-			trim = new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE,
-										 TRIM_SIGNAL_PER_VALUE, DEFAULT_TRIM_VOLUME);
-			limit = new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE,
-										  LIMIT_SIGNAL_PER_VALUE, DEFAULT_LIMIT_VOLUME);
+			input = new SourceWithVolume( INPUT_SIGNAL_PER_VALUE, DEFAULT_INPUT_VOLUME);
+			trim = new SourceWithVolume( TRIM_SIGNAL_PER_VALUE, DEFAULT_TRIM_VOLUME);
+			limit = new SourceWithVolume( LIMIT_SIGNAL_PER_VALUE, DEFAULT_LIMIT_VOLUME);
 			limit.getSourceId().setValue( Source.SOURCE_FIXED);
 
 			mode = new Number( MODE_WARP, MODE_CLIP, MODE_WARP);
@@ -79,7 +71,7 @@ public class Channel extends ChangeObservable< Channel> implements ChangeListene
 
 		for( int Index = 0; Index < POINTS; Index++)
 		{
-			points.add( new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, INPUT_SIGNAL_PER_VALUE));
+			points.add( new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, POINT_SIGNAL_PER_VALUE));
 		}
 
 		try

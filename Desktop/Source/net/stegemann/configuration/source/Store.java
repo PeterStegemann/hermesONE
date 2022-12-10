@@ -14,7 +14,7 @@ import java.util.HashMap;
 @ConfigurationField( name = Names.SOURCE_STORE)
 public final class Store extends Source
 {
-	public static final int INIT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 200);
+	public static final int INIT_SIGNAL_PER_VALUE = Signal.VALUE_RANGE / 200;
 
 	@ConfigurationField( name = Names.SOURCE_STORE_INPUT)
 	private final SourceId input;

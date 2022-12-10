@@ -1,6 +1,7 @@
 package net.stegemann.configuration;
 
 import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.type.ValueOutOfRangeException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,6 +9,9 @@ import java.util.List;
 
 public class ChannelMappings implements Iterable< Number>
 {
+	public static final int MINIMUM_VALUE = 0;
+	public static final int MAXIMUM_VALUE = 15;
+
 	private final List< Number> channelMappings = new ArrayList<>();
 
 	@Override
@@ -44,7 +48,12 @@ public class ChannelMappings implements Iterable< Number>
 		// Fill up missing channel mappings.
 		for( int channelMapping = channelMappings.size(); channelMapping < outputChannels; channelMapping++)
 		{
-			channelMappings.add( new Number( channelMapping));
+			try
+			{
+				channelMappings.add(
+						new Number( ChannelMappings.MINIMUM_VALUE, ChannelMappings.MAXIMUM_VALUE, channelMapping));
+			}
+			catch( ValueOutOfRangeException ignored) {}
 		}
 	}
 

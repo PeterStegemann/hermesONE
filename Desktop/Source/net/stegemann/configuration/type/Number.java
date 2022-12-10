@@ -33,7 +33,7 @@ public class Number extends ChangeObservable< Number> implements ConfigurationVa
 	}
 
 	public Number( int minimum, int maximum, int value) 
-			throws ValueOutOfRangeException
+		throws ValueOutOfRangeException
 	{
 		this.minimum = minimum;
 		this.maximum = maximum;

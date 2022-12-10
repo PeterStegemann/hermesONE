@@ -1,12 +1,6 @@
 package net.stegemann.controller;
 
-import java.util.HashMap;
-
-import net.stegemann.configuration.Configuration;
-import net.stegemann.configuration.Model;
-import net.stegemann.configuration.Models;
-import net.stegemann.configuration.Type;
-import net.stegemann.configuration.Types;
+import net.stegemann.configuration.*;
 import net.stegemann.configuration.source.Proxy;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.source.Sources;
@@ -20,6 +14,8 @@ import net.stegemann.configuration.view.SourcesView.HasEmpty;
 import net.stegemann.configuration.view.SourcesView.HasFixed;
 import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
+
+import java.util.HashMap;
 
 public class Controller
 {
@@ -37,25 +33,25 @@ public class Controller
 
 	public Model addModel( Number TypeId)
 	{
-		Models UseModels = configuration.getModels();
-		Model NewModel = new Model();
+		Models models = configuration.getModels();
+		Model model = new Model();
 
-		NewModel.setState( Model.State.USED);
+		model.setState( Model.State.USED);
 
-		UseModels.insertModel( NewModel);
+		models.insertModel( model);
 
 		try
 		{
-			NewModel.getTypeId().setValue( TypeId);
+			model.getTypeId().setValue( TypeId);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
 			throw new RuntimeException( reason);
 		}
 
-		NewModel.getName().setValue( "Modell " + NewModel.getId().getValue());
+		model.getName().setValue( "Modell " + model.getId().getValue());
 
-		return NewModel;
+		return model;
 	}
 
 	public Model cloneModel( int index)
@@ -277,6 +273,7 @@ public class Controller
 	}
 
 	public Source addSource( Source source, Number modelId)
+		throws ValueOutOfRangeException
 	{
 		if( source == null)
 		{
@@ -313,23 +310,30 @@ public class Controller
 	{
 		Sources UseSources = configuration.getSources();
 
-		Source NewSource = source.clone();
+		Source newSource = source.clone();
 
-		UseSources.insertSource( NewSource);
+		UseSources.insertSource( newSource);
 
 		if( model != null)
 		{
 			// Move the source to another model.
-			NewSource.setModel( model);
+			try
+			{
+				newSource.setModel( model);
+			}
+			catch( ValueOutOfRangeException reason)
+			{
+				throw new RuntimeException( reason);
+			}
 		}
 		else
 		{
 			// Keep the source in the same model, but give it a new name.
-			Text Name = NewSource.getName();
-			Name.setValue( Name.getValue() + " " + NewSource.getId().getValue());
+			Text name = newSource.getName();
+			name.setValue( name.getValue() + " " + newSource.getId().getValue());
 		}
 
-		return NewSource;
+		return newSource;
 	}
 
 	public void removeSource( int Index)
@@ -354,10 +358,11 @@ public class Controller
 	}
 
 	public Proxy addProxy( Number modelId)
+		throws ValueOutOfRangeException
 	{
-		int NewSlot = findEmptySlot();
+		int newSlot = findEmptySlot();
 
-		if( NewSlot == -1)
+		if( newSlot == -1)
 		{
 			return null;
 		}
@@ -366,7 +371,7 @@ public class Controller
 
 		try
 		{
-			NewProxy.getSlot().setValue( NewSlot);
+			NewProxy.getSlot().setValue( newSlot);
 		}
 		catch( ValueOutOfRangeException Reason)
 		{

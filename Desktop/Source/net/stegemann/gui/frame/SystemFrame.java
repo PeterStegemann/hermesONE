@@ -1,16 +1,13 @@
 package net.stegemann.gui.frame;
 
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-import java.awt.MenuShortcut;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;import java.io.Serial;
-
-import javax.swing.JFrame;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.gui.panel.SystemPanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
 
 public class SystemFrame extends JFrame implements ActionListener
 {
@@ -50,7 +47,7 @@ public class SystemFrame extends JFrame implements ActionListener
 		setMenuBar( NewMenuBar);
 	}
 
-	public void Set()
+	public void set()
 	{
 		system.Set();
 
@@ -59,7 +56,7 @@ public class SystemFrame extends JFrame implements ActionListener
 		setMinimumSize( getPreferredSize());
 	}
 
-	public void Open()
+	public void open()
 	{
 		// Display the window.
 		setVisible( true);

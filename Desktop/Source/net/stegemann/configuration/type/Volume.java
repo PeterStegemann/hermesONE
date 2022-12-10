@@ -1,14 +1,22 @@
 package net.stegemann.configuration.type;
 
+import net.stegemann.configuration.Signal;
+
 public class Volume extends Number
 {
 	private final int signalPerValue;
 
-	public Volume( int minimum, int maximum, int signalPerValue)
+	public Volume( int useSignalPerValue)
+		throws ValueOutOfRangeException
 	{
-		super( minimum / signalPerValue, maximum / signalPerValue);
+		this( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, useSignalPerValue);
+	}
 
-		this.signalPerValue = signalPerValue;
+	public Volume( int minimum, int maximum, int useSignalPerValue)
+	{
+		super( minimum / useSignalPerValue, maximum / useSignalPerValue);
+
+		this.signalPerValue = useSignalPerValue;
 	}
 
 	public Volume( int minimum, int maximum, int signalPerValue, int value)

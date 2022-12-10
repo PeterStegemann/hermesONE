@@ -1,10 +1,12 @@
 package net.stegemann.configuration.source;
 
 import lombok.Getter;
+import net.stegemann.configuration.Model;
 import net.stegemann.configuration.Named;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.Text;
+import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
@@ -27,7 +29,7 @@ public abstract class Source extends ChangeObservable< Source>
 	@ConfigurationField( name = Names.SOURCE_NAME)
 	private final Text name;
 	@ConfigurationField( name = Names.SOURCE_MODEL)
-	private Number model = null;
+	private final Number model = new Number( Model.MODEL_START, Model.MODEL_GLOBAL);
 
 	protected Source()
 	{
@@ -39,7 +41,14 @@ public abstract class Source extends ChangeObservable< Source>
 	protected Source( Source other)
 	{
 		name = new Text( other.name);
-		model = other.model;
+		try
+		{
+			model.setValue( other.model);
+		}
+		catch( ValueOutOfRangeException reason)
+		{
+			throw new RuntimeException( reason);
+		}
 
 		name.addChangeListener( this);
 	}
@@ -67,20 +76,10 @@ public abstract class Source extends ChangeObservable< Source>
 		notifyChange( this);
 	}
 
-	public SourceId getId()
+	public void setModel( Number newModel)
+		throws ValueOutOfRangeException
 	{
-		return id;
-	}
-
-	@Override
-	public Text getName()
-	{
-		return name;
-	}
-
-	public void setModel( Number model)
-	{
-		this.model = model;
+		model.setValue( newModel);
 	}
 
 	public abstract void replaceSources( HashMap< SourceId, SourceId> sourcesMap);

@@ -1,19 +1,20 @@
 package net.stegemann.gui.components;
 
-import java.awt.Dimension;
+import net.stegemann.configuration.type.Number;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
-import javax.swing.JComboBox;
-
-import net.stegemann.configuration.type.Number;
+import java.io.Serial;
 
 public class RFModeComponent extends JComboBox< String> implements FocusListener
 {
+	@Serial
 	private static final long serialVersionUID = -4858016417587291366L;
 
-	private static String[] rfModeNames =
+	private static final String[] rfModeNames =
 	{
 		"Keins",
 		"Modul 1",
@@ -46,7 +47,7 @@ public class RFModeComponent extends JComboBox< String> implements FocusListener
 		{
 			rfMode.setValue( getSelectedIndex());
 		}
-		catch( Exception Reason)
+		catch( Exception ignored)
 		{
 			// Ignore bad input and revert to old.
 		}
