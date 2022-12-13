@@ -19,7 +19,10 @@ public class ProgressDialog extends JDialog implements ChangeListener< Configura
 
 	// This flag is set on close and is respected by open, just for the case that close is called before open. In that
 	// case, open won't do anything.
-	private boolean gone = false;
+	private volatile boolean gone = false;
+	// We can't lock because setVisible( true) blocking, but it might happen that we close and open run at the same
+	// time. That's why we keep closing until the open flag is set to false.
+	private volatile boolean open = false;
 
 	public ProgressDialog( JFrame parent, String text)
 	{
@@ -107,8 +110,12 @@ public class ProgressDialog extends JDialog implements ChangeListener< Configura
 
 	public void open()
 	{
+		open = true;
+
 		if( gone == true)
 		{
+			open = false;
+
 			return;
 		}
 
@@ -128,13 +135,29 @@ public class ProgressDialog extends JDialog implements ChangeListener< Configura
 		}
 
 		setVisible( true);
+
+		open = false;
 	}
 
 	public void close()
 	{
-		setVisible( false);
-
 		gone = true;
+
+		while( open == true)
+		{
+			setVisible( false);
+
+			if( open == true)
+			{
+				try
+				{
+					Thread.sleep( 100);
+				}
+				catch (InterruptedException ignored)
+				{
+				}
+			}
+		}
 	}
 
 	@Override

@@ -72,14 +72,13 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 		}
 
 		// Fill up missing proxy slots.
-		int Fill = size - proxyReferences.size();
+		int fill = size - proxyReferences.size();
 
-		while( Fill > 0)
+		while( fill > 0)
 		{
 			try
 			{
-				proxyReferences.add( new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE,
-														   PROXY_REFERENCE_SIGNAL_PER_VALUE,
+				proxyReferences.add( new SourceWithVolume( PROXY_REFERENCE_SIGNAL_PER_VALUE,
 														   DEFAULT_PROXY_REFERENCE_VOLUME));
 			}
 			catch( ValueOutOfRangeException reason)
@@ -87,7 +86,7 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 				throw new RuntimeException( reason);
 			}
 
-			Fill--;
+			fill--;
 		}
 	}
 

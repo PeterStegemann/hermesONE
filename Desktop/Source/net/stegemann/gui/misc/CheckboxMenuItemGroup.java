@@ -1,15 +1,14 @@
 package net.stegemann.gui.misc;
 
+import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JCheckBoxMenuItem;
-
 public class CheckboxMenuItemGroup implements ItemListener
 {
-	private List< JCheckBoxMenuItem> menuItems = new ArrayList< JCheckBoxMenuItem>();
+	private final List< JCheckBoxMenuItem> menuItems = new ArrayList<>();
 	private ItemListener listener = null;
 
 	public void add( JCheckBoxMenuItem MenuItem)
@@ -20,11 +19,11 @@ public class CheckboxMenuItemGroup implements ItemListener
 
 	public JCheckBoxMenuItem getActiveItem()
 	{
-		for( JCheckBoxMenuItem MenuItem: menuItems)
+		for( JCheckBoxMenuItem menuItem: menuItems)
 		{
-			if( MenuItem.getState() == true)
+			if( menuItem.getState() == true)
 			{
-				return MenuItem;
+				return menuItem;
 			}
 		}
 
@@ -33,11 +32,11 @@ public class CheckboxMenuItemGroup implements ItemListener
 
 	public JCheckBoxMenuItem get( String Text)
 	{
-		for( JCheckBoxMenuItem MenuItem: menuItems)
+		for( JCheckBoxMenuItem menuItem: menuItems)
 		{
-			if( Text.compareTo( MenuItem.getText()) == 0)
+			if( Text.compareTo( menuItem.getText()) == 0)
 			{
-				return MenuItem;
+				return menuItem;
 			}
 		}
 
@@ -45,28 +44,28 @@ public class CheckboxMenuItemGroup implements ItemListener
 	}
 
 	@Override
-	public void itemStateChanged( ItemEvent CurrentEvent)
+	public void itemStateChanged( ItemEvent event)
 	{
-		if( CurrentEvent.getStateChange() == ItemEvent.SELECTED)
+		if( event.getStateChange() == ItemEvent.SELECTED)
 		{
 			// Unselect other items.
-			for( JCheckBoxMenuItem MenuItem: menuItems)
+			for( JCheckBoxMenuItem menuItem: menuItems)
 			{
-				if( CurrentEvent.getSource() != MenuItem)
+				if( event.getSource() != menuItem)
 				{
-					MenuItem.setState( false);
+					menuItem.setState( false);
 				}
 			}
 		}
 
 		if( listener != null)
 		{
-			listener.itemStateChanged( CurrentEvent);
+			listener.itemStateChanged( event);
 		}
 	}
 
-	public void addActionListener( ItemListener Listener)
+	public void addActionListener( ItemListener useListener)
 	{
-		listener = Listener;
+		listener = useListener;
 	}
 }

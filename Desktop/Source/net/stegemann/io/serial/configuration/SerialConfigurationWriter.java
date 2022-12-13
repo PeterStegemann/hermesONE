@@ -40,6 +40,7 @@ public class SerialConfigurationWriter
 			throw new WriteException( "Failed to open connection with port " + portName + ".");
 		}
 
+		configurationProgress.reset();
 		configurationProgress.addChangeListener( configurationListener);
 
 		try

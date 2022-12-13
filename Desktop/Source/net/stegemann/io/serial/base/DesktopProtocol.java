@@ -22,8 +22,8 @@ public class DesktopProtocol
 			enumValue = Id.Unknown;
 		}
 
-		// We keep the original byte value for debugging reasons, for example to identify values
-		// that get mapped to unknown.
+		// We keep the original byte value for debugging reasons, for example to identify values that get mapped to
+		// unknown.
 		enumValue.byteValue( byteValue);
 
 		return enumValue; 

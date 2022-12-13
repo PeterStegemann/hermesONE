@@ -189,7 +189,7 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 	}
 
 	@Override
-	public void hasChanged( Text Object)
+	public void hasChanged( Text object)
 	{
 		notifyChange( this);
 	}
@@ -226,36 +226,36 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 		channels.replaceSources( sourcesMap);
 		proxyReferences.replaceSources( sourcesMap);
 
-		for( SourceId OldSourceId: statusSourceIds)
+		for( SourceId oldSourceId: statusSourceIds)
 		{
-			SourceId NewSourceId = sourcesMap.get( OldSourceId);
+			SourceId newSourceId = sourcesMap.get( oldSourceId);
 
-			if( NewSourceId != null)
+			if( newSourceId != null)
 			{
 				try
 				{
-					OldSourceId.setValue( NewSourceId.getValue());
+					oldSourceId.setValue( newSourceId.getValue());
 				}
-				catch( ValueOutOfRangeException Reason)
+				catch( ValueOutOfRangeException reason)
 				{
-					throw new RuntimeException( Reason);
+					throw new RuntimeException( reason);
 				}
 			}
 		}
 
-		for( SourceId OldSourceId: statusTimeIds)
+		for( SourceId oldSourceId: statusTimeIds)
 		{
-			SourceId NewSourceId = sourcesMap.get( OldSourceId);
+			SourceId newSourceId = sourcesMap.get( oldSourceId);
 
-			if( NewSourceId != null)
+			if( newSourceId != null)
 			{
 				try
 				{
-					OldSourceId.setValue( NewSourceId.getValue());
+					oldSourceId.setValue( newSourceId.getValue());
 				}
-				catch( ValueOutOfRangeException Reason)
+				catch( ValueOutOfRangeException reason)
 				{
-					throw new RuntimeException( Reason);
+					throw new RuntimeException( reason);
 				}
 			}
 		}

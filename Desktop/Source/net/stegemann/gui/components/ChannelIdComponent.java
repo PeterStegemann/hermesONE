@@ -1,19 +1,20 @@
 package net.stegemann.gui.components;
 
-import java.awt.Dimension;
+import net.stegemann.configuration.type.Number;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
-import javax.swing.JComboBox;
-
-import net.stegemann.configuration.type.Number;
+import java.io.Serial;
 
 public class ChannelIdComponent extends JComboBox< String> implements FocusListener
 {
+	@Serial
 	private static final long serialVersionUID = -7383136374736538998L;
 
-	private static String[] CHANNEL_IDS =
+	private static final String[] CHANNEL_IDS =
 	{
 		"1",
 		"2",
@@ -38,9 +39,9 @@ public class ChannelIdComponent extends JComboBox< String> implements FocusListe
 		addFocusListener( this);
 	}
 
-	public void attachValue( Number UseChannelId)
+	public void attachValue( Number useChannelId)
 	{
-		channelId = UseChannelId;
+		channelId = useChannelId;
 
 		setSelectedIndex( channelId.getValue());
 	}

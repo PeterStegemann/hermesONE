@@ -1,20 +1,21 @@
 package net.stegemann.gui.components;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
-import javax.swing.JComboBox;
-
 import net.stegemann.configuration.Type;
 import net.stegemann.configuration.Types;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.TypesComboBoxModel;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.io.Serial;
+
 public class TypeIdComponent extends JComboBox< Type> implements FocusListener
 {
+	@Serial
 	private static final long serialVersionUID = -3436590634303978847L;
 
 	private Types types;
@@ -27,7 +28,7 @@ public class TypeIdComponent extends JComboBox< Type> implements FocusListener
 		addActionListener( this);
 		addFocusListener( this);
 
-		setRenderer( new ListCellRenderer<Type>());
+		setRenderer( new ListCellRenderer< Type>());
 	}
 
 	public void SetTypes( Types UseTypes)
@@ -37,9 +38,9 @@ public class TypeIdComponent extends JComboBox< Type> implements FocusListener
 		setModel( new TypesComboBoxModel( types));
 	}
 
-	public void attachValue( Number UseNumber)
+	public void attachValue( Number useNumber)
 	{
-		typeId = UseNumber;
+		typeId = useNumber;
 
 		setSelectedIndex( types.getIndexFromId( typeId));
 	}
@@ -59,18 +60,18 @@ public class TypeIdComponent extends JComboBox< Type> implements FocusListener
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent event)
 	{
 		setFromComboBox();
 	}
 
 	@Override
-	public void focusGained( FocusEvent e)
+	public void focusGained( FocusEvent event)
 	{
 	}
 
 	@Override
-	public void focusLost( FocusEvent e)
+	public void focusLost( FocusEvent event)
 	{
 		setFromComboBox();
 	}

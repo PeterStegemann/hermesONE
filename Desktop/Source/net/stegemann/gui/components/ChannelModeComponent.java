@@ -32,9 +32,9 @@ public class ChannelModeComponent extends JComboBox< String> implements FocusLis
 		addFocusListener( this);
 	}
 
-	public void attachValue( Number UseMode)
+	public void attachValue( Number useMode)
 	{
-		mode = UseMode;
+		mode = useMode;
 
 		setSelectedIndex( mode.getValue());
 	}
@@ -45,7 +45,7 @@ public class ChannelModeComponent extends JComboBox< String> implements FocusLis
 		{
 			mode.setValue( getSelectedIndex());
 		}
-		catch( Exception Reason)
+		catch( Exception ignored)
 		{
 			// Ignore bad input and revert to old.
 		}
@@ -54,18 +54,18 @@ public class ChannelModeComponent extends JComboBox< String> implements FocusLis
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent event)
 	{
 		setFromComboBox();
 	}
 
 	@Override
-	public void focusGained( FocusEvent e)
+	public void focusGained( FocusEvent event)
 	{
 	}
 
 	@Override
-	public void focusLost( FocusEvent e)
+	public void focusLost( FocusEvent event)
 	{
 		setFromComboBox();
 	}

@@ -1,14 +1,14 @@
 package net.stegemann.configuration.view;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.Models;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ModelsView extends ChangeObservable< ModelsView>
 					 implements Iterable< Model>, ChangeListener< Models>

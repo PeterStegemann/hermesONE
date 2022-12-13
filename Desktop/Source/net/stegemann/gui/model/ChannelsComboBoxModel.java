@@ -1,25 +1,26 @@
 package net.stegemann.gui.model;
 
-import javax.swing.AbstractListModel;
-import javax.swing.ComboBoxModel;
-
 import net.stegemann.configuration.Channel;
 import net.stegemann.configuration.Channels;
 import net.stegemann.misc.ChangeListener;
 
+import javax.swing.*;
+import java.io.Serial;
+
 public class ChannelsComboBoxModel extends AbstractListModel< Channel>
-										  implements ComboBoxModel< Channel>, ChangeListener< Channels>
+								implements ComboBoxModel< Channel>, ChangeListener< Channels>
 {
+	@Serial
 	private static final long serialVersionUID = 4147331814088951705L;
 
 	private final Channels channels;
 	private Object selectedItem = null;
 
-	public ChannelsComboBoxModel( Channels UseChannels)
+	public ChannelsComboBoxModel( Channels useChannels)
 	{
-		this.channels = UseChannels;
+		channels = useChannels;
 
-		UseChannels.addChangeListener( this);
+		useChannels.addChangeListener( this);
 	}
 
 	@Override
@@ -29,15 +30,15 @@ public class ChannelsComboBoxModel extends AbstractListModel< Channel>
 	}
 
 	@Override
-	public void setSelectedItem( Object SelectedItem)
+	public void setSelectedItem( Object useSelectedItem)
 	{
-		this.selectedItem = SelectedItem;
+		selectedItem = useSelectedItem;
 	}
 
 	@Override
-	public Channel getElementAt( int Index)
+	public Channel getElementAt( int index)
 	{
-		return channels.getChannelFromIndex( Index);
+		return channels.getChannelFromIndex( index);
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class ChannelsComboBoxModel extends AbstractListModel< Channel>
 	}
 
 	@Override
-	public void hasChanged( Channels UseChannels)
+	public void hasChanged( Channels useChannels)
 	{
 		fireContentsChanged( this, 0, getSize() - 1);
 	}

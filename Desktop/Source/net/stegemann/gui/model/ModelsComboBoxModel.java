@@ -1,25 +1,26 @@
 package net.stegemann.gui.model;
 
-import javax.swing.AbstractListModel;
-import javax.swing.ComboBoxModel;
-
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.Models;
 import net.stegemann.misc.ChangeListener;
 
+import javax.swing.*;
+import java.io.Serial;
+
 public class ModelsComboBoxModel extends AbstractListModel< Model>
-										implements ComboBoxModel< Model>, ChangeListener< Models>
+							  implements ComboBoxModel< Model>, ChangeListener< Models>
 {
+	@Serial
 	private static final long serialVersionUID = 1088277604809645591L;
 
 	private final Models models;
 	private Object selectedItem = null;
 
-	public ModelsComboBoxModel( Models models)
+	public ModelsComboBoxModel( Models useModels)
 	{
-		this.models = models;
+		models = useModels;
 
-		models.addChangeListener( this);
+		useModels.addChangeListener( this);
 	}
 
 	@Override
@@ -29,9 +30,9 @@ public class ModelsComboBoxModel extends AbstractListModel< Model>
 	}
 
 	@Override
-	public void setSelectedItem( Object selectedItem)
+	public void setSelectedItem( Object useSelectedItem)
 	{
-		this.selectedItem = selectedItem;
+		selectedItem = useSelectedItem;
 	}
 
 	@Override

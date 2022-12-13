@@ -70,7 +70,7 @@ public class PPM extends ChangeObservable< PPM> implements ChangeListener< Text>
 	}
 
 	@Override
-	public void hasChanged( Text Object)
+	public void hasChanged( Text object)
 	{
 		notifyChange( this);
 	}

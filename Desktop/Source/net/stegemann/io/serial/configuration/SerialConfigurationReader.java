@@ -43,7 +43,8 @@ public class SerialConfigurationReader
 		}
 
 		configuration.clear();
-		
+
+		configurationProgress.reset();
 		configurationProgress.addChangeListener( configurationListener);
 
 		pushHandler( new StartHandler( configuration));

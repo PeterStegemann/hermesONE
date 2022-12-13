@@ -1,10 +1,13 @@
 package net.stegemann.gui.components.source;
 
+import java.io.Serial;
+
 public class DigitalInputIdComponent extends InputIdComponent
 {
+	@Serial
 	private static final long serialVersionUID = 4853364146846291274L;
 
-	private static String[] digitalInputNames =
+	private static final String[] digitalInputNames =
 	{
 		"H0",
 		"H1",

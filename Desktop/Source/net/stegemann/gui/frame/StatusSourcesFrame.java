@@ -66,14 +66,13 @@ public class StatusSourcesFrame extends JFrame implements ActionListener
 
 	public void open()
 	{
-		// Display the window.
 		setVisible( true);
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent event)
 	{
-		if( e.getSource() == closeMenuItem)
+		if( event.getSource() == closeMenuItem)
 		{
 			setVisible( false);
 		}

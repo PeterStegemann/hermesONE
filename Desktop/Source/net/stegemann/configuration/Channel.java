@@ -137,13 +137,13 @@ public class Channel extends ChangeObservable< Channel> implements ChangeListene
 	}
 
 	@Override
-	public void hasChanged( Text Object)
+	public void hasChanged( Text object)
 	{
 		notifyChange( this);
 	}
 
-	public Volume getPoint( int Index)
+	public Volume getPoint( int index)
 	{
-		return points.get( Index);
+		return points.get( index);
 	}
 }

@@ -1,16 +1,17 @@
 package net.stegemann.gui.components.source;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
-import javax.swing.JComboBox;
-
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.io.Serial;
+
 public class InputIdComponent extends JComboBox< String> implements FocusListener
 {
+	@Serial
 	private static final long serialVersionUID = -1954851470198264943L;
 
 	private Number inputId;
@@ -36,7 +37,7 @@ public class InputIdComponent extends JComboBox< String> implements FocusListene
 		{
 			inputId.setValue( getSelectedIndex());
 		}
-		catch( ValueOutOfRangeException reason)
+		catch( ValueOutOfRangeException ignored)
 		{
 			// Ignore bad input and revert to old.
 		}
@@ -45,18 +46,18 @@ public class InputIdComponent extends JComboBox< String> implements FocusListene
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent event)
 	{
 		setFromComboBox();
 	}
 
 	@Override
-	public void focusGained( FocusEvent e)
+	public void focusGained( FocusEvent event)
 	{
 	}
 
 	@Override
-	public void focusLost( FocusEvent e)
+	public void focusLost( FocusEvent event)
 	{
 		setFromComboBox();
 	}

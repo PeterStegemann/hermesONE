@@ -1,16 +1,13 @@
 package net.stegemann.gui.frame;
 
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
-import java.awt.MenuShortcut;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;import java.io.Serial;
-
-import javax.swing.JFrame;
-
 import net.stegemann.configuration.ChannelMappings;
 import net.stegemann.gui.panel.system.ChannelMappingsPanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
 
 public class ChannelMappingsFrame extends JFrame implements ActionListener
 {
@@ -34,18 +31,18 @@ public class ChannelMappingsFrame extends JFrame implements ActionListener
 
 	private void addMenus()
 	{
-		MenuBar NewMenuBar = new MenuBar();
-		Menu NewMenu;
+		MenuBar newMenuBar = new MenuBar();
+		Menu newMenu;
 
-		NewMenu = new Menu( "Fenster");
+		newMenu = new Menu( "Fenster");
 
 		closeMenuItem = new MenuItem( "Schliessen", new MenuShortcut( 'W'));
 		closeMenuItem.addActionListener( this); 
-		NewMenu.add( closeMenuItem);
+		newMenu.add( closeMenuItem);
 
-		NewMenuBar.add( NewMenu);
+		newMenuBar.add( newMenu);
 
-		setMenuBar( NewMenuBar);
+		setMenuBar( newMenuBar);
 	}
 
 	public void set()
@@ -60,16 +57,15 @@ public class ChannelMappingsFrame extends JFrame implements ActionListener
 		setMinimumSize( getPreferredSize());
 	}
 
-	public void Show()
+	public void open()
 	{
-		// Display the window.
 		setVisible( true);
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent event)
 	{
-		if( e.getSource() == closeMenuItem)
+		if( event.getSource() == closeMenuItem)
 		{
 			setVisible( false);
 		}

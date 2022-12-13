@@ -1,12 +1,5 @@
 package net.stegemann.gui.components.source;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-
-import javax.swing.JComboBox;
-
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
@@ -14,8 +7,16 @@ import net.stegemann.configuration.view.SourcesView;
 import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.SourcesComboBoxModel;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.io.Serial;
+
 public class SourceComponent extends JComboBox< Source> implements FocusListener
 {
+	@Serial
 	private static final long serialVersionUID = -1954851470198264943L;
 
 	private SourcesView sourcesView;
@@ -28,21 +29,21 @@ public class SourceComponent extends JComboBox< Source> implements FocusListener
 		addActionListener( this);
 		addFocusListener( this);
 
-		setRenderer( new ListCellRenderer<Source>());
+		setRenderer( new ListCellRenderer< Source>());
 	}
 
-	public void setSourcesView( SourcesView UseSourcesView)
+	public void setSourcesView( SourcesView useSourcesView)
 	{
-		this.sourcesView = UseSourcesView;
+		sourcesView = useSourcesView;
 
-		setModel( new SourcesComboBoxModel( UseSourcesView));
+		setModel( new SourcesComboBoxModel( useSourcesView));
 	}
 
-	public void attachValue( Number SourceId)
+	public void attachValue( Number useSourceId)
 	{
-		this.sourceId = SourceId;
+		sourceId = useSourceId;
 
-		setSelectedIndex( sourcesView.getSourceIndexFromId( SourceId));
+		setSelectedIndex( sourcesView.getSourceIndexFromId( useSourceId));
 	}
 
 	private void setFromComboBox()
@@ -51,7 +52,7 @@ public class SourceComponent extends JComboBox< Source> implements FocusListener
 		{
 			sourceId.setValue( sourcesView.getSourceIdFromIndex( getSelectedIndex()));
 		}
-		catch( ValueOutOfRangeException reason)
+		catch( ValueOutOfRangeException ignored)
 		{
 			// Ignore bad input and revert to old.
 		}
@@ -60,18 +61,18 @@ public class SourceComponent extends JComboBox< Source> implements FocusListener
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent event)
 	{
 		setFromComboBox();
 	}
 
 	@Override
-	public void focusGained( FocusEvent e)
+	public void focusGained( FocusEvent event)
 	{
 	}
 
 	@Override
-	public void focusLost( FocusEvent e)
+	public void focusLost( FocusEvent event)
 	{
 		setFromComboBox();
 	}

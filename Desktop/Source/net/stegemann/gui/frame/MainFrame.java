@@ -166,11 +166,11 @@ public class MainFrame extends JFrame implements ActionListener
 		}
 	}
 
-	private JMenuItem addMenuItem( JMenu Parent, String Text)
+	private JMenuItem addMenuItem( JMenu parent, String text)
 	{
-		JMenuItem NewMenuItem = new JMenuItem( Text);
+		JMenuItem NewMenuItem = new JMenuItem( text);
 		NewMenuItem.addActionListener( this); 
-		Parent.add( NewMenuItem);
+		parent.add( NewMenuItem);
 
 		return NewMenuItem;
 	}

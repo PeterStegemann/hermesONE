@@ -1,13 +1,12 @@
 package net.stegemann.gui.components;
 
+import net.stegemann.configuration.type.Number;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
-import javax.swing.JTextField;
-
-import net.stegemann.configuration.type.Number;
 
 public class NumberComponent extends JTextField implements ActionListener, FocusListener
 {
@@ -15,18 +14,18 @@ public class NumberComponent extends JTextField implements ActionListener, Focus
 
 	private Number value;
 
-	public NumberComponent( int Columns)
+	public NumberComponent( int columns)
 	{
-		super( Columns);
+		super( columns);
 
 		setHorizontalAlignment( JTextField.RIGHT);
 		addActionListener( this);
 		addFocusListener( this);
 	}
 
-	public void attachValue( Number UseValue)
+	public void attachValue( Number useValue)
 	{
-		value = UseValue;
+		value = useValue;
 
 		setText( Integer.toString( value.getValue()));
 	}
@@ -37,7 +36,7 @@ public class NumberComponent extends JTextField implements ActionListener, Focus
 		{
 			value.setValue( Integer.parseInt( getText()));
 		}
-		catch( Exception Reason)
+		catch( Exception ignored)
 		{
 			// Ignore bad input and revert to old.
 		}

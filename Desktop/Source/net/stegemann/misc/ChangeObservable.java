@@ -33,13 +33,12 @@ public class ChangeObservable< Type>
 	{
 		synchronized( observers)
 		{
-			for( ChangeListener< Type> CurrentListener: observers.keySet())
+			for( ChangeListener< Type> currentListener: observers.keySet())
 			{
-				// The listener might have vanished, so check that. Not sure whether this really
-				// applies here.
-				if( CurrentListener != null)
+				// The listener might have vanished, so check that. Not sure whether this really applies here.
+				if( currentListener != null)
 				{
-					CurrentListener.hasChanged( changedObject);
+					currentListener.hasChanged( changedObject);
 				}
 			}
 		}

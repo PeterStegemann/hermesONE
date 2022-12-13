@@ -18,9 +18,9 @@ public class Channels extends ChangeObservable< Channels> implements Iterable< C
 		fill( size);
 	}
 
-	public Channels( Channels UseChannels)
+	public Channels( Channels otherChannels)
 	{
-		for( Channel otherChannel: UseChannels.channels)
+		for( Channel otherChannel: otherChannels.channels)
 		{
 			channels.add( new Channel( otherChannel));
 		}
@@ -33,9 +33,9 @@ public class Channels extends ChangeObservable< Channels> implements Iterable< C
 
 		Buffer.append( "Channels = {\n");
 
-		for( Channel Channel: channels)
+		for( Channel channel: channels)
 		{
-			Buffer.append( Channel);
+			Buffer.append( channel);
 		}
 
 		Buffer.append( "}\n");
@@ -44,16 +44,16 @@ public class Channels extends ChangeObservable< Channels> implements Iterable< C
 	}
 
 	@Override
-	public void hasChanged( Channel UseChannel)
+	public void hasChanged( Channel channel)
 	{
 		notifyChange( this);
 	}
 
-	public void replaceSources( HashMap< SourceId, SourceId> SourcesMap)
+	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
 	{
-		for( Channel Channel: channels)
+		for( Channel channel: channels)
 		{
-			Channel.replaceSources( SourcesMap);
+			channel.replaceSources( sourcesMap);
 		}
 	}
 
@@ -105,26 +105,26 @@ public class Channels extends ChangeObservable< Channels> implements Iterable< C
 		return newChannel;
 	}
 
-	public Channel getChannelFromIndex( int Index)
+	public Channel getChannelFromIndex( int index)
 	{
-		if( Index == -1)
+		if( index == -1)
 		{
 			return null;
 		}
 
 		try
 		{
-			return channels.get( Index);
+			return channels.get( index);
 		}
-		catch( IndexOutOfBoundsException Reason)
+		catch( IndexOutOfBoundsException ignored)
 		{
 			return null;
 		}
 	}
 
-	public int getChannelIndexFromChannel( Channel UseChannel)
+	public int getChannelIndexFromChannel( Channel channel)
 	{
-		return( channels.indexOf( UseChannel));
+		return( channels.indexOf( channel));
 	}
 
 	public int getChannelCount()

@@ -37,14 +37,14 @@ public class Volume extends Number
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Volume = {\n");
-		Buffer.append( super.toString());
-		Buffer.append(  " SignalPerValue: " + signalPerValue + "\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+		return String.format(
+    		"""
+				Volume
+				{
+					%s SignalPerValue: %s
+				}
+				""",
+				super.toString(), signalPerValue);
 	}
 
 	@Override

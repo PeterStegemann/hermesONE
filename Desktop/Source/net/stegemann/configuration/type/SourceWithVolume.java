@@ -22,7 +22,7 @@ public class SourceWithVolume
 	}
 
 	public SourceWithVolume( int signalPerValue, int value)
-			throws ValueOutOfRangeException
+		throws ValueOutOfRangeException
 	{
 		this( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, signalPerValue, value);
 	}

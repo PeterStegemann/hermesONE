@@ -109,16 +109,16 @@ public class Number extends ChangeObservable< Number> implements ConfigurationVa
 		}
 	}
 
-	public void setValue( int Value)
+	public void setValue( int useValue)
 		throws ValueOutOfRangeException
 	{
-		if(( Value > maximum) || ( Value < minimum))
+		if(( useValue > maximum) || ( useValue < minimum))
 		{
 			throw new ValueOutOfRangeException(
-				"Value " + Value + " not in range (" + minimum + " < " + maximum + ")");
+				"Value " + useValue + " not in range (" + minimum + " < " + maximum + ")");
 		}
 
-		value = Value;
+		value = useValue;
 
 		notifyChange( this);
 	}

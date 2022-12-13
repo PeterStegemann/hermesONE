@@ -1,14 +1,15 @@
 package net.stegemann.gui.components.source;
 
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-
 import net.stegemann.configuration.type.SourceWithVolume;
 import net.stegemann.configuration.view.SourcesView;
 import net.stegemann.gui.components.NumberSliderComponent;
 
+import javax.swing.*;
+import java.io.Serial;
+
 public class SourceWithVolumeComponent extends JPanel
 {
+	@Serial
 	private static final long serialVersionUID = -5575143340428100254L;
 
 	private final SourceComponent sourceId;
@@ -16,17 +17,17 @@ public class SourceWithVolumeComponent extends JPanel
 
 	private boolean compact;
 
-	public SourceWithVolumeComponent( int Minimum, int Maximum)
+	public SourceWithVolumeComponent( int minimum, int maximum)
 	{
 		sourceId = new SourceComponent();
-		volume = new NumberSliderComponent( Minimum, Maximum);
+		volume = new NumberSliderComponent( minimum, maximum);
 
 		setCompact( false);
 	}
 
-	public void set( SourcesView UseSourcesView, SourceWithVolume sourceTupel)
+	public void set( SourcesView sourcesView, SourceWithVolume sourceTupel)
 	{
-		sourceId.setSourcesView( UseSourcesView);
+		sourceId.setSourcesView( sourcesView);
 		sourceId.attachValue( sourceTupel.getSourceId());
 		volume.attachValue( sourceTupel.getVolume());
 	}

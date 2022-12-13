@@ -69,26 +69,27 @@ public class Controller
 
 	private Model cloneModel( Model model, Number type, HashMap< SourceId, SourceId> typeSourcesMap)
 	{
-		Models UseModels = configuration.getModels();
+		Models models = configuration.getModels();
 
-		Model NewModel = model.clone();
+		Model newModel = model.clone();
+
 		try
 		{
-			NewModel.getTypeId().setValue( type);
+			newModel.getTypeId().setValue( type);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
 			throw new RuntimeException( reason);
 		}
 
-		UseModels.insertModel( NewModel);
+		models.insertModel( newModel);
 
 		// Give the cloned model a new name.
-		Text Name = NewModel.getName();
-		Name.setValue( Name.getValue() + " " + NewModel.getId().getValue());
+		Text name = newModel.getName();
+		name.setValue( name.getValue() + " " + newModel.getId().getValue());
 
 		// Also copy the sources for this model.
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
 		// Map of all the sources that get cloned for this model. We need this later to change the
 		// references.
@@ -97,178 +98,172 @@ public class Controller
 		// Add the type mappings.
 		sourcesMap.putAll( typeSourcesMap);
 
-		SourcesView ModelSourcesView =
-			new SourcesView( UseSources, PickGlobals.No, null, model.getId(), HasEmpty.No,
-							 HasFixed.No, HasProxies.Yes);
+		SourcesView ModelSourcesView = new SourcesView( sources, PickGlobals.No, null, model.getId(),
+														HasEmpty.No, HasFixed.No, HasProxies.Yes);
 
-		for( Source UseSource: ModelSourcesView)
+		for( Source source: ModelSourcesView)
 		{
-			Source NewSource = cloneSource( UseSource, NewModel.getId());
+			Source newSource = cloneSource( source, newModel.getId());
 
-			sourcesMap.put( UseSource.getId(), NewSource.getId());
+			sourcesMap.put( source.getId(), newSource.getId());
 		}
 
 		// Now adjust the source references in the new sources and the model.
-		SourcesView NewModelSourcesView =
-			new SourcesView( UseSources, PickGlobals.No, null, NewModel.getId(), HasEmpty.No,
-							 HasFixed.No, HasProxies.Yes);
+		SourcesView newModelSourcesView = new SourcesView( sources, PickGlobals.No, null, newModel.getId(),
+														   HasEmpty.No, HasFixed.No, HasProxies.Yes);
 
-		for( Source UseSource: NewModelSourcesView)
+		for( Source source: newModelSourcesView)
 		{
-			UseSource.replaceSources( sourcesMap);
+			source.replaceSources( sourcesMap);
 		}
 
-		NewModel.replaceSources( sourcesMap);
+		newModel.replaceSources( sourcesMap);
 
-		return NewModel;
+		return newModel;
 	}
 
 	public void removeModel( int index)
 	{
-		Models UseModels = configuration.getModels();
-		Model SelectedModel = UseModels.getModelFromIndex( index);
+		Models models = configuration.getModels();
+		Model selectedModel = models.getModelFromIndex( index);
 
-		if( SelectedModel == null)
+		if( selectedModel == null)
 		{
 			return;
 		}
 
-		removeModel( SelectedModel);
+		removeModel( selectedModel);
 	}
 	
 	private void removeModel( Model model)
 	{
-		Models UseModels = configuration.getModels();
+		Models models = configuration.getModels();
 
-		UseModels.removeModel( model);
+		models.removeModel( model);
 
 		// Also remove the sources for this model.
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
-		SourcesView ModelSourcesView =
-			new SourcesView( UseSources, PickGlobals.No, null, model.getId(), HasEmpty.No,
-							 HasFixed.No, HasProxies.Yes);
+		SourcesView modelSourcesView = new SourcesView( sources, PickGlobals.No, null, model.getId(),
+														HasEmpty.No, HasFixed.No, HasProxies.Yes);
 
-		for( Source UseSource: ModelSourcesView)
+		for( Source source: modelSourcesView)
 		{
-			removeSource( UseSource);
+			removeSource( source);
 		}
 	}
 
 	public Type addType()
 	{
-		Types UseTypes = configuration.getTypes();
-		Type NewType = new Type();
+		Types types = configuration.getTypes();
+		Type newType = new Type();
 
-		UseTypes.insertType( NewType);
+		types.insertType( newType);
 
-		NewType.getName().setValue( "Typ " + ( NewType.getId().getValue() - Model.TYPE_START));
+		newType.getName().setValue( "Typ " + ( newType.getId().getValue() - Model.TYPE_START));
 
-		return NewType;
+		return newType;
 	}
 
 	public Type cloneType( int index)
 	{
-		Types UseTypes = configuration.getTypes();
-		Type SelectedType = UseTypes.getTypeFromIndex( index);
+		Types types = configuration.getTypes();
+		Type selectedType = types.getTypeFromIndex( index);
 
-		if( SelectedType == null)
+		if( selectedType == null)
 		{
 			return null;
 		}
 
-		return cloneType( SelectedType);
+		return cloneType( selectedType);
 	}
 
 	private Type cloneType( Type type)
 	{
-		Types UseTypes = configuration.getTypes();
+		Types types = configuration.getTypes();
 
-		Type NewType = type.clone();
-		UseTypes.insertType( NewType);
+		Type newType = type.clone();
+		types.insertType( newType);
 
-		Text Name = NewType.getName();
-		Name.setValue( Name.getValue() + " " + ( NewType.getId().getValue() - Model.TYPE_START));
+		Text name = newType.getName();
+		name.setValue( name.getValue() + " " + ( newType.getId().getValue() - Model.TYPE_START));
 
 		// Also clone the sources for this type.
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
 		// Map of all the source ids that get cloned for this type.
-		HashMap< SourceId, SourceId> SourcesMap = new HashMap<>();
+		HashMap< SourceId, SourceId> sourcesMap = new HashMap<>();
 
-		SourcesView TypeSourcesView =
-			new SourcesView( UseSources, PickGlobals.No, type.getId(), null, HasEmpty.No,
-							 HasFixed.No, HasProxies.Yes);
+		SourcesView typeSourcesView = new SourcesView( sources, PickGlobals.No, type.getId(), null,
+													   HasEmpty.No, HasFixed.No, HasProxies.Yes);
 
-		for( Source UseSource: TypeSourcesView)
+		for( Source source: typeSourcesView)
 		{
-			Source NewSource = cloneSource( UseSource, NewType.getId());
+			Source NewSource = cloneSource( source, newType.getId());
 
-			SourcesMap.put( UseSource.getId(), NewSource.getId());
+			sourcesMap.put( source.getId(), NewSource.getId());
 		}
 
 		// Now adjust the source references in the new sources.
-		SourcesView NewTypeSourcesView =
-			new SourcesView( UseSources, PickGlobals.No, NewType.getId(), null, HasEmpty.No,
-							 HasFixed.No, HasProxies.Yes);
+		SourcesView newTypeSourcesView = new SourcesView( sources, PickGlobals.No, newType.getId(), null,
+														  HasEmpty.No, HasFixed.No, HasProxies.Yes);
 
-		for( Source UseSource: NewTypeSourcesView)
+		for( Source source: newTypeSourcesView)
 		{
-			UseSource.replaceSources( SourcesMap);
+			source.replaceSources( sourcesMap);
 		}
 
 		// Also clone all the models of this type.
-		Models UseModels = configuration.getModels();
+		Models models = configuration.getModels();
 
-		ModelsView TypeModelsView =	new ModelsView( UseModels, type.getId());
+		ModelsView typeModelsView =	new ModelsView( models, type.getId());
 
-		for( Model UseModel: TypeModelsView.toArray())
+		for( Model model: typeModelsView.toArray())
 		{
-			cloneModel( UseModel, NewType.getId(), SourcesMap);
+			cloneModel( model, newType.getId(), sourcesMap);
 		}
 
-		return NewType;
+		return newType;
 	}
 
 	public void removeType( int index)
 	{
-		Types UseTypes = configuration.getTypes();
-		Type SelectedType = UseTypes.getTypeFromIndex( index);
+		Types types = configuration.getTypes();
+		Type selectedType = types.getTypeFromIndex( index);
 
-		if( SelectedType == null)
+		if( selectedType == null)
 		{
 			return;
 		}
 
-		removeType( SelectedType);
+		removeType( selectedType);
 	}
 
 	private void removeType( Type type)
 	{
-		Types UseTypes = configuration.getTypes();
+		Types types = configuration.getTypes();
 
-		UseTypes.removeType( type);
+		types.removeType( type);
 
 		// Also remove the sources for this type.
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
-		SourcesView TypeSourcesView =
-			new SourcesView( UseSources, PickGlobals.No, type.getId(), null, HasEmpty.No,
-							 HasFixed.No, HasProxies.Yes);
+		SourcesView typeSourcesView = new SourcesView( sources, PickGlobals.No, type.getId(), null,
+													   HasEmpty.No, HasFixed.No, HasProxies.Yes);
 
-		for( Source UseSource: TypeSourcesView)
+		for( Source source: typeSourcesView)
 		{
-			removeSource( UseSource);
+			removeSource( source);
 		}
 
 		// Also remove all the models of this type.
-		Models UseModels = configuration.getModels();
+		Models models = configuration.getModels();
 
-		ModelsView TypeModelsView =	new ModelsView( UseModels, type.getId());
+		ModelsView typeModelsView =	new ModelsView( models, type.getId());
 
-		for( Model UseModel: TypeModelsView.toArray())
+		for( Model model: typeModelsView.toArray())
 		{
-			removeModel( UseModel);
+			removeModel( model);
 		}
 	}
 
@@ -282,37 +277,36 @@ public class Controller
 
 		source.setModel( modelId);
 
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
-		UseSources.insertSource( source);
+		sources.insertSource( source);
 
-		source.getName().setValue( SourceUtility.getTypeNameForSource( source) + " " +
-								   source.getId().getValue());
+		source.getName().setValue( SourceUtility.getTypeNameForSource( source) + " " + source.getId().getValue());
 
 		return source;
 	}
 
 	public Source cloneSource( int index)
 	{
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
-		Source SelectedSource = UseSources.getSourceFromIndex( index);
+		Source selectedSource = sources.getSourceFromIndex( index);
 
-		if( SelectedSource == null)
+		if( selectedSource == null)
 		{
 			return null;
 		}
 
-		return cloneSource( SelectedSource, null);
+		return cloneSource( selectedSource, null);
 	}
 
 	private Source cloneSource( Source source, Number model)
 	{
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
 		Source newSource = source.clone();
 
-		UseSources.insertSource( newSource);
+		sources.insertSource( newSource);
 
 		if( model != null)
 		{
@@ -338,23 +332,23 @@ public class Controller
 
 	public void removeSource( int Index)
 	{
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
-		Source SelectedSource = UseSources.getSourceFromIndex( Index);
+		Source selectedSource = sources.getSourceFromIndex( Index);
 
-		if( SelectedSource == null)
+		if( selectedSource == null)
 		{
 			return;
 		}
 
-		removeSource( SelectedSource);
+		removeSource( selectedSource);
 	}
 	
 	private void removeSource( Source source)
 	{
-		Sources UseSources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
-		UseSources.removeSource( source);		
+		sources.removeSource( source);
 	}
 
 	public Proxy addProxy( Number modelId)
@@ -367,63 +361,63 @@ public class Controller
 			return null;
 		}
 
-		Proxy NewProxy = new Proxy();
+		Proxy proxy = new Proxy();
 
 		try
 		{
-			NewProxy.getSlot().setValue( newSlot);
+			proxy.getSlot().setValue( newSlot);
 		}
-		catch( ValueOutOfRangeException Reason)
+		catch( ValueOutOfRangeException reason)
 		{
-			throw new RuntimeException( Reason);
+			throw new RuntimeException( reason);
 		}
 
 		// TODO: Clean this proxy slot for all models.
 
-		addSource( NewProxy, modelId);
+		addSource( proxy, modelId);
 
-		return NewProxy;
+		return proxy;
 	}
 
 	private int findEmptySlot()
 	{
 		boolean[] availableProxies = new boolean[ Model.PROXIES];
 
-		for( int CurrentProxyId = 0; CurrentProxyId < Model.PROXIES; CurrentProxyId++)
+		for( int currentProxyId = 0; currentProxyId < Model.PROXIES; currentProxyId++)
 		{
-			availableProxies[ CurrentProxyId] = true;
+			availableProxies[ currentProxyId] = true;
 		}
 
 		// Loop sources.
-		for( Source CurrentSource: configuration.getSources())
+		for( Source currentSource: configuration.getSources())
 		{
-			if( CurrentSource.getClass() == Proxy.class)
+			if( currentSource.getClass() == Proxy.class)
 			{
-				Proxy CurrentProxy = ( Proxy) CurrentSource;
+				Proxy currentProxy = ( Proxy) currentSource;
 
-				int Slot = CurrentProxy.getSlot().getValue();
+				int slot = currentProxy.getSlot().getValue();
 
 				// Better ignore invalid slots.
-				if( Slot < Model.PROXIES)
+				if( slot < Model.PROXIES)
 				{
-					availableProxies[ Slot] = false;
+					availableProxies[ slot] = false;
 				}
 			}
 		}
 
-		for( int CurrentProxyId = 0; CurrentProxyId < Model.PROXIES; CurrentProxyId++)
+		for( int currentProxyId = 0; currentProxyId < Model.PROXIES; currentProxyId++)
 		{
-			if( availableProxies[ CurrentProxyId] == true)
+			if( availableProxies[ currentProxyId] == true)
 			{
-				return CurrentProxyId;
+				return currentProxyId;
 			}
 		}
 
 		return -1;
 	}
 
-	public void removeProxy( int Index)
+	public void removeProxy( int index)
 	{
-		removeSource( Index);
+		removeSource( index);
 	}
 }

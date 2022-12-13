@@ -6,30 +6,39 @@ import net.stegemann.misc.ChangeObservable;
 @Getter
 public class ConfigurationProgress extends ChangeObservable< ConfigurationProgress>
 {
-	private int typeCount = 0;
-	private int modelCount = 0;
-	private int sourceCount = 0;
+	private int typeCount;
+	private int modelCount;
+	private int sourceCount;
 
-	ConfigurationProgress()	{}
-
-	public void setTypeCount( int typeCount)
+	ConfigurationProgress()
 	{
-		this.typeCount = typeCount;
+		reset();
+	}
+
+	public void setTypeCount( int useTypeCount)
+	{
+		typeCount = useTypeCount;
 		
 		notifyChange( this);
 	}
 
-	public void setModelCount( int modelCount)
+	public void setModelCount( int useModelCount)
 	{
-		this.modelCount = modelCount;
+		modelCount = useModelCount;
 	
 		notifyChange( this);
 	}
 
-	public void setSourceCount( int sourceCount)
+	public void setSourceCount( int useSourceCount)
 	{
-		this.sourceCount = sourceCount;
+		sourceCount = useSourceCount;
 	
 		notifyChange( this);
+	}
+
+	public void reset() {
+		typeCount = 0;
+		modelCount = 0;
+		sourceCount = 0;
 	}
 }
