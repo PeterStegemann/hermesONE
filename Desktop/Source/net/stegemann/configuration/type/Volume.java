@@ -37,14 +37,12 @@ public class Volume extends Number
 	@Override
 	public String toString()
 	{
-		return String.format(
-    		"""
-				Volume
-				{
-					%s SignalPerValue: %s
-				}
-				""",
-				super.toString(), signalPerValue);
+		return """
+			Volume
+			{
+				%s SignalPerValue: %s
+			}
+			""".formatted( super.toString(), signalPerValue);
 	}
 
 	@Override

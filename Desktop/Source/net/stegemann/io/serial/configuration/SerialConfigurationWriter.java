@@ -70,7 +70,7 @@ public class SerialConfigurationWriter
 		}
 
 		@Override
-		public void complexClosed()
+		public void complexClosed( byte id)
 		{
 		}
 

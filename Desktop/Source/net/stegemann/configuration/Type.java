@@ -9,6 +9,7 @@ import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
+@Getter
 public class Type extends ChangeObservable< Type> implements ChangeListener< Text>, Named
 {
 	public enum State
@@ -20,7 +21,6 @@ public class Type extends ChangeObservable< Type> implements ChangeListener< Tex
 	private final Number id;
 	@ConfigurationField( name = Names.TYPE_NAME)
 	private final Text name;
-	@Getter
 	@Setter
 	@ConfigurationField( name = Names.TYPE_STATE)
 	private State state;
@@ -70,20 +70,9 @@ public class Type extends ChangeObservable< Type> implements ChangeListener< Tex
 		notifyChange( this);
 	}
 
-	/**
-	 * Get unique type id for reference by models and sources. 
-	 *
-	 * @return Type id.
-	 */
 	@Override
-	public Number getId()
+	public Number getModel()
 	{
 		return id;
-	}
-
-	@Override
-	public Text getName()
-	{
-		return name;
 	}
 }

@@ -52,15 +52,14 @@ public class Number extends ChangeObservable< Number> implements ConfigurationVa
 	@Override
 	public String toString()
 	{
-		StringBuilder builder = new StringBuilder();
-
-		builder.append( "Number = {\n");
-		builder.append( " Minimum: " + minimum + "\n");
-		builder.append( " Maximum: " + maximum + "\n");
-		builder.append( " Value: " + value + "\n");
-		builder.append( "}\n");
-
-		return builder.toString();
+		return 	"""
+			Number =
+			{
+				Minimum: %s
+				Maximum: %s
+				Value: %s
+			}
+			""".formatted( minimum, maximum, value);
 	}
 
 	@Override

@@ -1,9 +1,5 @@
 package net.stegemann.gui.panel.source;
 
-import java.awt.Dimension;
-
-import javax.swing.JPanel;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.source.Source;
@@ -15,8 +11,13 @@ import net.stegemann.configuration.view.SourcesView.HasFixed;
 import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.Serial;
+
 public class SpecificSourcePanel extends JPanel
 {
+	@Serial
 	private static final long serialVersionUID = 7581521960156885148L;
 
 	protected final Configuration configuration;
@@ -50,11 +51,9 @@ public class SpecificSourcePanel extends JPanel
 		}
 
 		sourcesViewWithoutFixed =
-			new SourcesView( sources, PickGlobals.Yes, typeId, modelId, HasEmpty.Yes, HasFixed.No,
-							 	  HasProxies.Yes);
+			new SourcesView( sources, PickGlobals.Yes, typeId, modelId, HasEmpty.Yes, HasFixed.No, HasProxies.Yes);
 		sourcesViewWithFixed =
-			new SourcesView( sources, PickGlobals.Yes, typeId, modelId, HasEmpty.Yes, HasFixed.Yes,
-							 	  HasProxies.Yes);
+			new SourcesView( sources, PickGlobals.Yes, typeId, modelId, HasEmpty.Yes, HasFixed.Yes, HasProxies.Yes);
 
 		setVisible( true);
 }

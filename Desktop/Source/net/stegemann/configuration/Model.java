@@ -200,13 +200,7 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 	}
 
 	@Override
-	public Text getName()
-	{
-		return name;
-	}
-
-	@Override
-	public Number getId()
+	public Number getModel()
 	{
 		return id;
 	}

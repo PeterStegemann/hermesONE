@@ -12,8 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class XMLWriterIntegrationTest extends AbstractXMLIntegrationTest
 {
@@ -39,6 +38,6 @@ class XMLWriterIntegrationTest extends AbstractXMLIntegrationTest
 
 		String result = Files.readString( Path.of( RESULT_XML));
 
-		assertThat( result, equalTo( expected));
+		assertEquals(expected, result);
 	}
 }

@@ -21,7 +21,7 @@ public class Calibration
 	@Override
 	public String toString()
 	{
-		return String.format("""
+		return String.format( """
 				Calibration =
 				{
 					High: %s

@@ -5,6 +5,7 @@ import net.stegemann.configuration.type.Text;
 
 public interface Named
 {
-	Text getName();
 	Number getId();
+	Text getName();
+	Number getModel();
 }

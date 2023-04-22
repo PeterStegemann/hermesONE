@@ -49,9 +49,9 @@ public final class Empty extends Source
 	}
 
 	@Override
-	public int compareTo( Source Other)
+	public int compareTo( Source other)
 	{
-		if( Other instanceof Empty)
+		if( other instanceof Empty)
 		{
 			return 0;
 		}

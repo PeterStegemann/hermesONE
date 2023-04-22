@@ -152,11 +152,9 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		Number sourceModelId = source.getModel();
 
 		boolean isMatching =
-		(
 			(( pickGlobals == PickGlobals.Yes) && ( sourceModelId.equals( Model.MODEL_GLOBAL))) ||
 		 	(( typeId != null) && ( sourceModelId.equals( typeId))) ||
-		 	(( modelId != null) && ( sourceModelId.equals( modelId)))
-		);
+		 	(( modelId != null) && ( sourceModelId.equals( modelId)));
 
 		return isMatching;
 	}
@@ -205,7 +203,7 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		{
 			return sources.get( index);
 		}
-		catch( IndexOutOfBoundsException reason)
+		catch( IndexOutOfBoundsException ignored)
 		{
 			return null;
 		}

@@ -5,7 +5,7 @@ import net.stegemann.io.WriteException;
 
 public class TypedConnection
 {
-	private static final boolean debug = true;
+	private static final boolean debug = false;
 
 	private static final int BAUD_RATE = 115200;
 	private static final int RECEIVE_TIMEOUT = 1000;
@@ -82,7 +82,7 @@ public class TypedConnection
 			Count++;
 		}
 
-		if(debug)	System.out.println( "Read value " + id + " " + new String( Response, 0, Count));
+		debug("Read value " + id + " " + new String( Response, 0, Count));
 
 		if( handler != null)
 		{
@@ -93,7 +93,7 @@ public class TypedConnection
 	void readComplex( byte id)
 	 	throws ReadException
 	{
-		if(debug)	System.out.println( "Reading complex open " + id);
+		debug("Reading complex open " + id);
 
 		if( handler != null)
 		{
@@ -122,11 +122,11 @@ public class TypedConnection
 
 				case TypedProtocol.T_ComplexEnd ->
 				{
-					if(debug)	System.out.println( "Reading complex close " + id);
+					debug("Reading complex close " + id);
 
 					if( handler != null)
 					{
-						handler.complexClosed();
+						handler.complexClosed( id);
 					}
 
 					loop = false;
@@ -140,7 +140,7 @@ public class TypedConnection
 	public void writeValue( byte id, String value)
 	 	throws WriteException
 	{
-		if(debug)	System.out.println( "Writing value " + id + " " + value);
+		debug( "Writing value " + id + " " + value);
 
 		connection.writeByte( TypedProtocol.T_Value);
 		connection.writeByte( id);
@@ -156,7 +156,7 @@ public class TypedConnection
 	public void openComplex( byte id)
 		throws WriteException
 	{
-		if(debug)	System.out.println( "Writing complex open " + id);
+		debug( "Writing complex open " + id);
 
 		connection.writeByte( TypedProtocol.T_Complex);
 		connection.writeByte( id);
@@ -165,8 +165,16 @@ public class TypedConnection
 	public void closeComplex()
 	 	throws WriteException
 	{
-		if(debug)	System.out.println( "Writing complex close");
+		debug( "Writing complex close");
 
 		connection.writeByte( TypedProtocol.T_ComplexEnd);
+	}
+
+	private static void debug( String text)
+	{
+		if( debug)
+		{
+			System.out.println( text);
+		}
 	}
 }

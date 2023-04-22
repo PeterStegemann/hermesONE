@@ -20,8 +20,10 @@ public class ListCellRenderer< T extends Named> extends DefaultListCellRenderer
 
 		String textValue = value == null ? null : namedValue.getName().getValue();
 		int idValue = value == null ? -1 : namedValue.getId().getValue();
+		int modelValue = value == null ? -1 : namedValue.getModel().getValue();
 
-		return super.getListCellRendererComponent( list, textValue + " (" + idValue + ")", index,
-												   isSelected, cellHasFocus);
+//		textValue = textValue + " (" + modelValue + "/" + idValue + ")";
+
+		return super.getListCellRendererComponent( list, textValue, index, isSelected, cellHasFocus);
 	}
 }

@@ -5,8 +5,7 @@ import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.io.DocumentException;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class XMLReaderIntegrationTest extends AbstractXMLIntegrationTest
 {
@@ -20,6 +19,6 @@ public class XMLReaderIntegrationTest extends AbstractXMLIntegrationTest
 
         xmlReader.readFromFile( configuration, TEST_CONFIGURATION_XML, XMLReader.Mode.All);
 
-        assertThat( configuration.toString(), equalTo( configuration().toString()));
+        assertEquals( configuration().toString(), configuration.toString());
     }
 }

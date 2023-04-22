@@ -59,9 +59,9 @@ public class hermesONE_Serial //implements Runnable, SerialPortEventListener
 		}
 
 		@Override
-		public void complexClosed()
+		public void complexClosed( byte id)
 		{
-			System.err.println( "Complex closed");
+			System.err.println( "Complex closed: " + id);
 		}
 
 		@Override

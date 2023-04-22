@@ -1,14 +1,15 @@
 package net.stegemann.gui.panel.source.input;
 
-import javax.swing.GroupLayout;
-import javax.swing.JLabel;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.source.input.Analog;
 import net.stegemann.gui.components.source.AnalogInputIdComponent;
 
+import javax.swing.*;
+import java.io.Serial;
+
 public class AnalogPanel extends TypePanel
 {
+	@Serial
 	private static final long serialVersionUID = 1327889084392277200L;
 
 	private final AnalogInputIdComponent inputId;

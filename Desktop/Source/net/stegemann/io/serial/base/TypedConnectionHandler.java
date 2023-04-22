@@ -4,7 +4,7 @@ public interface TypedConnectionHandler
 {
 	void complexOpened( byte id);
 
-	void complexClosed();
+	void complexClosed( byte id);
 
 	void valueRead( byte id, String value);
 }

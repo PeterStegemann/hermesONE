@@ -122,7 +122,7 @@ public class TimeSliderComponent extends JPanel implements ActionListener, Chang
 				value.setValue( Utility.parseTime( Text));
 			}
 		}
-		catch( Exception Reason)
+		catch( Exception ignored)
 		{
 			// Ignore bad input and revert to old.
 		}

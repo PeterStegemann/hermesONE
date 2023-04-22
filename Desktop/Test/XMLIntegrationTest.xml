@@ -150,7 +150,7 @@
       <Channels>
         <!--Channel 0-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 1</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -167,16 +167,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 1-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 2</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -193,16 +193,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 2-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 3</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -219,16 +219,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 3-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 4</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -245,16 +245,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 4-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 5</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -271,16 +271,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 5-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 6</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -297,16 +297,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 6-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 7</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -323,16 +323,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 7-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 8</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -349,16 +349,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 8-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 9</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -375,11 +375,11 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
       </Channels>
@@ -536,7 +536,7 @@
       <Channels>
         <!--Channel 0-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 1</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -553,16 +553,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 1-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 2</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -579,16 +579,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 2-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 3</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -605,16 +605,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 3-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 4</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -631,16 +631,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 4-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 5</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -657,16 +657,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 5-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 6</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -683,16 +683,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 6-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 7</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -709,16 +709,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 7-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 8</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -735,16 +735,16 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
         <!--Channel 8-->
         <Channel>
-          <ChannelName>Kanal</ChannelName>
+          <ChannelName>Kanal 9</ChannelName>
           <ChannelReverse>false</ChannelReverse>
           <ChannelMode>0</ChannelMode>
           <ChannelInput>
@@ -761,11 +761,11 @@
           </ChannelLimit>
           <ChannelPoints>
             <!--ChannelPoint 0-->
-            <ChannelPoint>-10000</ChannelPoint>
+            <ChannelPoint>-30000</ChannelPoint>
             <!--ChannelPoint 1-->
             <ChannelPoint>0</ChannelPoint>
             <!--ChannelPoint 2-->
-            <ChannelPoint>10000</ChannelPoint>
+            <ChannelPoint>30000</ChannelPoint>
           </ChannelPoints>
         </Channel>
       </Channels>

@@ -41,6 +41,7 @@ public abstract class Source extends ChangeObservable< Source>
 	protected Source( Source other)
 	{
 		name = new Text( other.name);
+
 		try
 		{
 			model.setValue( other.model);
@@ -85,13 +86,13 @@ public abstract class Source extends ChangeObservable< Source>
 	public abstract void replaceSources( HashMap< SourceId, SourceId> sourcesMap);
 
 	@Override
-	public int compareTo( Source Other)
+	public int compareTo( Source other)
 	{
-		if(( Other instanceof Empty) || ( Other instanceof Fixed))
+		if(( other instanceof Empty) || ( other instanceof Fixed))
 		{
 			return 1;
 		}
 
-		return name.getValue().compareToIgnoreCase( Other.name.getValue());
+		return name.getValue().compareToIgnoreCase( other.name.getValue());
 	}
 }

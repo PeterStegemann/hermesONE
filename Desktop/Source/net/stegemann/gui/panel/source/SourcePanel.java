@@ -11,9 +11,11 @@ import net.stegemann.gui.components.TextComponent;
 import net.stegemann.gui.panel.source.input.*;
 
 import javax.swing.*;
+import java.io.Serial;
 
 public class SourcePanel extends JPanel
 {
+	@Serial
 	private static final long serialVersionUID = 6054122898469856987L;
 
 	private final TextComponent name;
@@ -207,7 +209,5 @@ public class SourcePanel extends JPanel
 		}
 
 		name.attachValue( null);
-
-		return;
 	}
 }

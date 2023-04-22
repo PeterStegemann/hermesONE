@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 public class SerialConfigurationReader
 {
+	private static final boolean debug = false;
+
 	private final ConfigurationProgress configurationProgress;
 	private final DesktopConnection connection;
 
@@ -81,9 +83,9 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexClosed()
+		public void complexClosed( byte id)
 		{
-			handlerStack.get( 0).complexClosed();
+			handlerStack.get( 0).complexClosed( id);
 
 			handlerStack.remove( 0);
 
@@ -109,7 +111,7 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexClosed()
+		public void complexClosed( DesktopProtocol.Id id)
 		{
 		}
 
@@ -156,13 +158,9 @@ public class SerialConfigurationReader
 		{
 			switch( id)
 			{
-				case Configuration :
-				{
-					pushHandler( new ConfigurationHandler( configuration));
-				}
-				break;
+				case Configuration -> pushHandler( new ConfigurationHandler( configuration));
 
-				default : super.complexOpened( id); break;
+				default -> super.complexOpened( id);
 			}
  		}
 	}
@@ -184,30 +182,19 @@ public class SerialConfigurationReader
 
 			switch( id)
 			{
-				case Battery ->
-					pushHandler( new BatteryHandler( UseSystem.getBattery()));
-
-				case Calibrations ->
-					pushHandler( new CalibrationsHandler( UseSystem.getCalibrations()));
-
-				case Models ->
-					pushHandler( new ModelsHandler( configuration.getModels(), configuration));
-
-				case Types ->
-					pushHandler( new TypesHandler( configuration.getTypes(), configuration));
-
-				case Sources ->
-					pushHandler( new SourcesHandler( configuration.getSources(), configuration));
-
-				case PPMs ->
-			 		pushHandler( new PPMsHandler( UseSystem.getPpms()));
+				case Battery -> pushHandler( new BatteryHandler( UseSystem.getBattery()));
+				case Calibrations -> pushHandler( new CalibrationsHandler( UseSystem.getCalibrations()));
+				case Models -> pushHandler( new ModelsHandler( configuration.getModels(), configuration));
+				case Types -> pushHandler( new TypesHandler( configuration.getTypes(), configuration));
+				case Sources -> pushHandler( new SourcesHandler( configuration.getSources(), configuration));
+				case PPMs -> pushHandler( new PPMsHandler( UseSystem.getPpms()));
 
 				default -> super.complexOpened( id);
 			}
  		}
 
 		@Override
-		public void complexClosed()
+		public void complexClosed( DesktopProtocol.Id id)
 		{
 			configuration.fill();
 		}
@@ -506,7 +493,7 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexClosed()
+		public void complexClosed( DesktopProtocol.Id id)
 		{
 			if( model.getState() == Model.State.USED)
 			{
@@ -753,8 +740,7 @@ public class SerialConfigurationReader
 			{
 				case ModelProxyReference :
 				{
-					pushHandler( new SourceTupelHandler( proxyReferences.GetProxyReferenceFromIndex(
-						proxyIndex++)));
+					pushHandler( new SourceTupelHandler( proxyReferences.GetProxyReferenceFromIndex(proxyIndex++)));
 				}
 				break;
 
@@ -822,7 +808,7 @@ public class SerialConfigurationReader
 		}
 
 		@Override
-		public void complexClosed()
+		public void complexClosed( DesktopProtocol.Id id)
 		{
 			if( type.getState() == Type.State.USED)
 			{
@@ -874,13 +860,9 @@ public class SerialConfigurationReader
 		{
 			switch( id)
 			{
-				case Source :
-				{
-					pushHandler( new SourceHandler( sources, sourceId++, configuration));
-				}
-				break;
+				case Source -> pushHandler( new SourceHandler( sources, sourceId++, configuration));
 
-				default : super.complexOpened( id); break;
+				default -> super.complexOpened(id);
 			}
  		}
 	}
@@ -893,7 +875,7 @@ public class SerialConfigurationReader
 
 		private Source newSource = null;
 		private String name = null;
-		private Number modelId = new Number( Model.MODEL_START, Model.MODEL_NONE);
+		private final Number modelId = new Number( Model.MODEL_START, Model.MODEL_NONE);
 
 		public SourceHandler( Sources UseSources, int UseSourceId, Configuration configuration)
 		{
@@ -1020,7 +1002,7 @@ public class SerialConfigurationReader
  		}
 
 		@Override
-		public void complexClosed()
+		public void complexClosed( DesktopProtocol.Id id)
 		{
 			if(( newSource != null) && ( name != null)/*&& ( NewSource.GetType() != Source.Type.EMPTY)*/)
 			{
@@ -1030,11 +1012,13 @@ public class SerialConfigurationReader
 					readValue( newSource.getName(), name);
 					newSource.setModel( modelId);
 
+					debug( id + "'" + newSource.getId().getValue() + "'/'" + newSource.getModel().getValue() + "'");
+
 					sources.addSource( newSource);
 
-					configurationProgress.setSourceCount(configuration.getSources().getCount());
+					configurationProgress.setSourceCount( configuration.getSources().getCount());
 				}
-				catch( Exception Reason) {}
+				catch( Exception ignored) {}
 			}
 		}
 
@@ -1336,9 +1320,10 @@ public class SerialConfigurationReader
  		}
 	}
 
-	private class SourceMapPointsHandler extends UnknownTypeHandler
+	private class SourceMapPointsHandler
+		extends UnknownTypeHandler
 	{
-		private Map source;
+		private final Map source;
 		private int pointIndex;
 
 		public SourceMapPointsHandler( Map UseSource)
@@ -1352,20 +1337,17 @@ public class SerialConfigurationReader
 		{
 			switch( id)
 			{
-				case SourceMapPoint :
-				{
-					pushHandler( new SourceTupelHandler( source.getPoint( pointIndex++)));
-				}
-				break;
+				case SourceMapPoint -> pushHandler(new SourceTupelHandler(source.getPoint(pointIndex++)));
 
-				default : super.complexOpened( id); break;
+				default -> super.complexOpened(id);
 			}
  		}
 	}
 
-	private class SourceMixHandler extends UnknownTypeHandler
+	private class SourceMixHandler
+		extends UnknownTypeHandler
 	{
-		private Mix source;
+		private final Mix source;
 
 		public SourceMixHandler( Mix UseSource)
 		{
@@ -1377,20 +1359,17 @@ public class SerialConfigurationReader
 		{
 			switch( id)
 			{
-				case SourceMixInputs :
-				{
-					pushHandler( new SourceMixInputsHandler( source));
-				}
-				break;
+				case SourceMixInputs -> pushHandler(new SourceMixInputsHandler(source));
 
-				default : super.complexOpened( id); break;
+				default -> super.complexOpened(id);
 			}
  		}
 	}
 
-	private class SourceMixInputsHandler extends UnknownTypeHandler
+	private class SourceMixInputsHandler
+		extends UnknownTypeHandler
 	{
-		private Mix source;
+		private final Mix source;
 		private int inputIndex;
 
 		public SourceMixInputsHandler( Mix UseSource)
@@ -1404,17 +1383,15 @@ public class SerialConfigurationReader
 		{
 			switch( id)
 			{
-				case SourceMixInput ->
-				{
-					pushHandler( new SourceTupelHandler( source.getInput( inputIndex++)));
-				}
+				case SourceMixInput -> pushHandler( new SourceTupelHandler( source.getInput( inputIndex++)));
 
 				default -> super.complexOpened( id);
 			}
  		}
 	}
 
-	private class SourceFollowerHandler extends UnknownTypeHandler
+	private class SourceFollowerHandler
+		extends UnknownTypeHandler
 	{
 		private final Follower source;
 
@@ -1428,15 +1405,8 @@ public class SerialConfigurationReader
 		{
 			switch( id)
 			{
-				case SourceFollowerTarget ->
-				{
-					pushHandler( new SourceTupelHandler( source.getTarget()));
-				}
-
-				case SourceFollowerStep ->
-				{
-					pushHandler( new SourceTupelHandler( source.getStep()));
-				}
+				case SourceFollowerTarget -> pushHandler( new SourceTupelHandler( source.getTarget()));
+				case SourceFollowerStep -> pushHandler( new SourceTupelHandler( source.getStep()));
 
 				default -> super.complexOpened( id);
 			}
@@ -1447,20 +1417,9 @@ public class SerialConfigurationReader
 		{			
 			switch( id)
 			{
-				case SourceFollowerTrigger ->
-				{
-					readValue( source.getTrigger(), textContent);
-				}
-
-				case SourceFollowerTriggerLowLimit ->
-			 	{
-					readValue( source.getTriggerLowLimit(), textContent);
-				}
-
-				case SourceFollowerTriggerHighLimit ->
-				{
-					readValue( source.getTriggerHighLimit(), textContent);
-				}
+				case SourceFollowerTrigger -> readValue( source.getTrigger(), textContent);
+				case SourceFollowerTriggerLowLimit -> readValue( source.getTriggerLowLimit(), textContent);
+				case SourceFollowerTriggerHighLimit -> readValue( source.getTriggerHighLimit(), textContent);
 
 				default -> super.valueRead( id, textContent);
 			}
@@ -1482,15 +1441,8 @@ public class SerialConfigurationReader
 		{			
 			switch( id)
 			{
-				case SourceStoreInput ->
-				{
-					readValue( source.getInput(), textContent);
-				}
-
-				case SourceStoreInit ->
-				{
-					readValue( source.getInit(), textContent);
-				}
+				case SourceStoreInput -> readValue( source.getInput(), textContent);
+				case SourceStoreInit -> readValue( source.getInit(), textContent);
 
 				default -> super.valueRead( id, textContent);
 			}
@@ -1512,55 +1464,16 @@ public class SerialConfigurationReader
 		{			
 			switch( id)
 			{
-				case SourceTimerInitTime ->
-				{
-					readValue( source.getInitTime(), textContent);
-				}
-
-				case SourceTimerCurrentTime ->
-			 	{
-					readValue( source.getCurrentTime(), textContent);
-				}
-
-				case SourceTimerStore ->
-				{
-					readValue( source.getStore(), textContent);
-				}
-
-				case SourceTimerReverse ->
-				{
-					readValue( source.getReverse(), textContent);
-				}
-
-				case SourceTimerTrigger ->
-				{
-					readValue( source.getTrigger(), textContent);
-				}
-
-				case SourceTimerTriggerHighLimit ->
-				{
-					readValue( source.getTriggerHighLimit(), textContent);
-				}
-
-				case SourceTimerTriggerLowLimit ->
-				{
-					readValue( source.getTriggerLowLimit(), textContent);
-				}
-
-				case SourceTimerWarnLowTime ->
-				{
-					readValue( source.getWarnLowTime(), textContent);
-				}
-
-				case SourceTimerWarnCriticalTime ->
-				{
-					readValue( source.getWarnCriticalTime(), textContent);
-				}
-
-				case SourceTimerWarnPauseTime ->
-				{
-					readValue( source.getWarnPauseTime(), textContent);
-				}
+				case SourceTimerInitTime -> readValue( source.getInitTime(), textContent);
+				case SourceTimerCurrentTime -> readValue( source.getCurrentTime(), textContent);
+				case SourceTimerStore -> readValue( source.getStore(), textContent);
+				case SourceTimerReverse -> readValue( source.getReverse(), textContent);
+				case SourceTimerTrigger -> readValue( source.getTrigger(), textContent);
+				case SourceTimerTriggerHighLimit -> readValue( source.getTriggerHighLimit(), textContent);
+				case SourceTimerTriggerLowLimit -> readValue( source.getTriggerLowLimit(), textContent);
+				case SourceTimerWarnLowTime -> readValue( source.getWarnLowTime(), textContent);
+				case SourceTimerWarnCriticalTime -> readValue( source.getWarnCriticalTime(), textContent);
+				case SourceTimerWarnPauseTime -> readValue( source.getWarnPauseTime(), textContent);
 
 				default -> super.valueRead( id, textContent);
 			}
@@ -1582,25 +1495,10 @@ public class SerialConfigurationReader
 		{
 			switch( id)
 			{
-				case SourceTrimmerInput ->
-				{
-					pushHandler( new SourceTupelHandler( trimmer.getInput()));
-				}
-
-				case SourceTrimmerTrim ->
-				{
-					pushHandler( new SourceTupelHandler( trimmer.getTrim()));
-				}
-
-				case SourceTrimmerLimit ->
-				{
-					pushHandler( new SourceTupelHandler( trimmer.getLimit()));
-				}
-
-				case SourceTrimmerPoints ->
-				{
-					pushHandler( new SourceTrimmerPointsHandler( trimmer));
-				}
+				case SourceTrimmerInput -> pushHandler( new SourceTupelHandler( trimmer.getInput()));
+				case SourceTrimmerTrim -> pushHandler( new SourceTupelHandler( trimmer.getTrim()));
+				case SourceTrimmerLimit -> pushHandler( new SourceTupelHandler( trimmer.getLimit()));
+				case SourceTrimmerPoints -> pushHandler( new SourceTrimmerPointsHandler( trimmer));
 
 				default -> super.complexOpened( id);
 			}
@@ -1608,23 +1506,20 @@ public class SerialConfigurationReader
 
 		@Override
 		public void valueRead( DesktopProtocol.Id id, String textContent)
-		{			
+		{
 			switch( id)
 			{
-				case SourceTrimmerReverse :
-				{
-					readValue( trimmer.getReverse(), textContent);
-				}
-				break;
+				case SourceTrimmerReverse -> readValue(trimmer.getReverse(), textContent);
 
-				default : super.valueRead( id, textContent); break;
+				default -> super.valueRead(id, textContent);
 			}
  		}
 	}
 
-	private class SourceTrimmerPointsHandler extends UnknownTypeHandler
+	private class SourceTrimmerPointsHandler
+		extends UnknownTypeHandler
 	{
-		private Trimmer trimmer;
+		private final Trimmer trimmer;
 		private int pointIndex;
 
 		public SourceTrimmerPointsHandler( Trimmer UseTrimmer)
@@ -1635,23 +1530,20 @@ public class SerialConfigurationReader
 
 		@Override
 		public void valueRead( DesktopProtocol.Id id, String textContent)
-		{			
+		{
 			switch( id)
 			{
-				case SourceTrimmerPoint :
-				{
-					readValue( trimmer.getPoint( pointIndex++), textContent);
-				}
-				break;
+				case SourceTrimmerPoint -> readValue(trimmer.getPoint(pointIndex++), textContent);
 
-				default : super.valueRead( id, textContent); break;
+				default -> super.valueRead(id, textContent);
 			}
  		}
 	}
 
-	private class SourceProxyHandler extends UnknownTypeHandler
+	private class SourceProxyHandler
+		extends UnknownTypeHandler
 	{
-		private Proxy source;
+		private final Proxy source;
 
 		public SourceProxyHandler( Proxy UseSource)
 		{
@@ -1660,16 +1552,12 @@ public class SerialConfigurationReader
 
 		@Override
 		public void valueRead( DesktopProtocol.Id id, String textContent)
-		{			
+		{
 			switch( id)
 			{
-				case SourceProxySlot :
-				{
-					readValue( source.getSlot(), textContent);
-				}
-				break;
+				case SourceProxySlot -> readValue(source.getSlot(), textContent);
 
-				default : super.valueRead( id, textContent); break;
+				default -> super.valueRead(id, textContent);
 			}
  		}
 	}
@@ -1701,11 +1589,10 @@ public class SerialConfigurationReader
  		}
 
 		@Override
-		public void complexClosed()
+		public void complexClosed( DesktopProtocol.Id id)
 		{
 		}
 	}
-
 
 	private class PPMHandler extends UnknownTypeHandler
 	{
@@ -1823,5 +1710,13 @@ public class SerialConfigurationReader
 		handlerStack.add( 0, connectionHandler);
 		
 		return connectionHandler;
+	}
+
+	private static void debug( String text)
+	{
+		if( debug)
+		{
+			java.lang.System.out.println( text);
+		}
 	}
 }
