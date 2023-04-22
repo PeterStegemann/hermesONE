@@ -3,13 +3,13 @@
 #ifndef SETUP_SOURCE_MIX_H
 #define SETUP_SOURCE_MIX_H
 
-#include "Tupel.h"
+#include "Tuple.h"
 
 #define SETUP_SOURCE_MIX_INPUTS		7
 
 struct Setup_Source_Mix
 {
-	Setup_Source_Tupel InputSource[ SETUP_SOURCE_MIX_INPUTS];
+	Setup_Source_Tuple InputSource[ SETUP_SOURCE_MIX_INPUTS];
 };
 
 #endif

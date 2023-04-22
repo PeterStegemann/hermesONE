@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_STRUCT_H
-#define SETUP_STRUCT_H
+#pragma once
 
 #include "Battery.h"
 #include "Calibration.h"
@@ -38,10 +37,5 @@ struct Setup_ExtensionStruct
 {
 	Setup_Model Model[ SETUP_MODELS];
 
-	// Use two arrays, a single one is too big for gcc.
 	Setup_Source_Source Source[ 0];
-//	Setup_Source_Source Source[ SETUP_SOURCES / 2];
-//	Setup_Source_Source Source2[ SETUP_SOURCES / 2];
 };
-
-#endif

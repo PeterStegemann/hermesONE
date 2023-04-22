@@ -3,7 +3,7 @@
 #ifndef SETUP_SOURCE_TRIMMER_H
 #define SETUP_SOURCE_TRIMMER_H
 
-#include "Tupel.h"
+#include "Tuple.h"
 
 #include "AVR/Source/Types.h"
 
@@ -18,9 +18,9 @@ struct Setup_Source_Trimmer
 		PV_PointVolumeCount
 	};
 
-	Setup_Source_Tupel InputSource;
-	Setup_Source_Tupel TrimSource;
-	Setup_Source_Tupel LimitSource;
+	Setup_Source_Tuple InputSource;
+	Setup_Source_Tuple TrimSource;
+	Setup_Source_Tuple LimitSource;
 
 	bool Reverse;
 

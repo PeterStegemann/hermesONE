@@ -151,7 +151,7 @@ ifeq ($(HAS_SETUP), yes)
 		Source/GUI/Setup/PointGraph.cpp \
 		Source/GUI/Setup/Popup.cpp \
 		Source/GUI/Setup/Select.cpp \
-		Source/GUI/Setup/SourceTupelGraph.cpp \
+		Source/GUI/Setup/SourceTupleGraph.cpp \
 		Source/GUI/Setup/TextInput.cpp \
 		Source/GUI/Setup/TimeLabel.cpp \
 		Source/GUI/Setup/VoltageLabel.cpp \
@@ -438,8 +438,8 @@ LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 #AVRDUDE_PROGRAMMER = stk500
 #AVRDUDE_PROGRAMMER = stk200
 #AVRDUDE_PROGRAMMER = avr910
-#AVRDUDE_PROGRAMMER = usbasp
-AVRDUDE_PROGRAMMER = usbtiny
+AVRDUDE_PROGRAMMER = usbasp
+#AVRDUDE_PROGRAMMER = usbtiny
 
 # com1 = serial port. Use lpt1 to connect to parallel port.
 # AVRDUDE_PORT = /dev/cu.USA19QI1b1P1.1    # programmer connected to serial device

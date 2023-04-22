@@ -1,13 +1,13 @@
 // Copyright 2013 Peter Stegemann
 
-#include "SourceTupelGraph.h"
+#include "SourceTupleGraph.h"
 
 #include "Main/Setup.h"
 #include "Text/Text.h"
 
 #include "AVR/Source/Utility.h"
 
-int16_t GUI_Setup_SourceTupelGraph::getPoint( const Setup_Source_Tupel Point[], uint8_t PointId)
+int16_t GUI_Setup_SourceTupleGraph::getPoint( const Setup_Source_Tuple Point[], uint8_t PointId)
 {
 	uint8_t SignalSourceId = GLOBAL.SignalProcessor.GetSignalSourceId( Point[ PointId].Source);
 	int16_t Volume = Point[ PointId].Volume;
@@ -41,7 +41,7 @@ int16_t GUI_Setup_SourceTupelGraph::getPoint( const Setup_Source_Tupel Point[], 
 	}
 }
 
-bool GUI_Setup_SourceTupelGraph::calculateGraph( const Setup_Source_Tupel Point[], uint8_t Points,
+bool GUI_Setup_SourceTupleGraph::calculateGraph( const Setup_Source_Tuple Point[], uint8_t Points,
 												 int16_t GraphPoint[], uint8_t* GraphPoints)
 {
 	bool Updated = false;
@@ -84,7 +84,7 @@ bool GUI_Setup_SourceTupelGraph::calculateGraph( const Setup_Source_Tupel Point[
 	return( Updated);
 }
 
-void GUI_Setup_SourceTupelGraph::Display( int16_t Marker, const Setup_Source_Tupel Point[],
+void GUI_Setup_SourceTupleGraph::Display( int16_t Marker, const Setup_Source_Tuple Point[],
 										  uint8_t Points)
 {
 	int16_t GraphPoint[ GUI_SETUP_GRAPH_POINTS];

@@ -54,7 +54,7 @@ class Screen_Setup_Channel : public Screen_Setup_Base
 		virtual bool processMenu( DoMenuResult Result);
 
 		void doChannelName( void);
-		bool doSource( uint8_t* SignalSourceId, Setup_Source_Tupel* SourceTupel,
+		bool doSource( uint8_t* SignalSourceId, Setup_Source_Tuple* SourceTuple,
 					   char SourceName[ SETUP_SOURCE_NAME_SIZE + 1],
 					   GUI_Setup_Label* SourceNameLabel, GUI_Setup_Label* SourceVolumeLabel);
 

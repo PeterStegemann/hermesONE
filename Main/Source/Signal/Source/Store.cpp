@@ -45,8 +45,7 @@ void Signal_Source_Store::StoreIfModified( uint16_t SetupSourceId)
 
 int16_t Signal_Source_Store::CalculateValue( Signal_Processor* SignalProcessor)
 {
-	int16_t NewValue =
-		Signal_Utility::AddValues( offset, SignalProcessor->GetSourceValue( SignalSourceId));
+	int16_t NewValue = Signal_Utility::AddValues( offset, SignalProcessor->GetSourceValue( SignalSourceId));
 
 	if( NewValue != value)
 	{

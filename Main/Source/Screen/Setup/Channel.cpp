@@ -317,20 +317,20 @@ void Screen_Setup_Channel::doChannelName( void)
 	channelNameValueLabel.Display();
 }
 
-bool Screen_Setup_Channel::doSource( uint8_t* SignalSourceId, Setup_Source_Tupel* SourceTupel,
+bool Screen_Setup_Channel::doSource( uint8_t* SignalSourceId, Setup_Source_Tuple* SourceTuple,
 									 char SourceName[ SETUP_SOURCE_NAME_SIZE + 1],
 									 GUI_Setup_Label* SourceNameLabel,
 									 GUI_Setup_Label* SourceVolumeLabel)
 {
 	// Do source.
 	bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
-		SignalSourceId, &( SourceTupel->Source), &menuMarker, SourceNameLabel, NULL, SourceName,
+		SignalSourceId, &( SourceTuple->Source), &menuMarker, SourceNameLabel, NULL, SourceName,
 		this, &staticUpdate, true, Signal_Source_Source::L_Model);
 
 	// Do volume.
 	currentVolumeLabel = SourceVolumeLabel;
 
-	bool VolumeChanged = GUI_Setup_Select::DoSelect16( &( SourceTupel->Volume),
+	bool VolumeChanged = GUI_Setup_Select::DoSelect16( &( SourceTuple->Volume),
 		SIGNAL_MINIMUM_VALUE, SIGNAL_MAXIMUM_VALUE, SIGNAL_CHANNEL_INPUT_SIGNAL_PER_VALUE,
 		&menuMarker, SourceVolumeLabel, this, &staticUpdate, &updateVolume);
 

@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SERIAL_DESKTOPPROTOCOL_H
-#define SERIAL_DESKTOPPROTOCOL_H
+#pragma once
 
 #include "AVR/Source/Serial/Serial_Protocol.h"
 
@@ -95,8 +94,8 @@ class Serial_DesktopProtocol : public SERIAL_Protocol
 		I_SourceType,
 		I_SourceName,
 		I_SourceModel,
-		I_SourceTupelSource,
-		I_SourceTupelVolume,
+		I_SourceTupleSource,
+		I_SourceTupleVolume,
 
 		I_SourceInputAnalog,
 		I_SourceInputAnalogInput,
@@ -180,5 +179,3 @@ class Serial_DesktopProtocol : public SERIAL_Protocol
 		I_IdCount
 	};
 };
-
-#endif

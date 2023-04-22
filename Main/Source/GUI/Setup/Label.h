@@ -43,7 +43,10 @@ class GUI_Setup_Label
 		void SetDimensions( uint16_t Left, uint16_t Top);
 
 		// Set some display options.
-		void SetOptions( Options UseOptions);
+		void SetOptions( Options UseOptions)
+		{
+			options = UseOptions;
+		}
 
 		void SetFont( FONT::FontId UseFontId);
 

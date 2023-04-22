@@ -29,8 +29,8 @@ void Status_Battery::calculateVoltage( void)
 	BatteryValue *= batterySetup.CalibrationVoltage;
 	BatteryValue /= 1023;
 
-	BatteryValue += batteryVoltage;
-	BatteryValue /= 2;
+	BatteryValue = BatteryValue + batteryVoltage * 9;
+	BatteryValue /= 10;
 
 	batteryVoltage = BatteryValue;
 }
@@ -79,8 +79,7 @@ void Status_Battery::Process( void)
 
 	warnCount = WarnPause;
 
-	GLOBAL.StatusService.Buzz( BATTERY_WARN_BEEP_LENGTH, BATTERY_WARN_BEEP_PAUSE,
-							   BATTERY_WARN_BEEP_REPEAT);
+	GLOBAL.StatusService.Buzz( BATTERY_WARN_BEEP_LENGTH, BATTERY_WARN_BEEP_PAUSE, BATTERY_WARN_BEEP_REPEAT);
 }
 
 void Status_Battery::SetBatterySetup( Setup_Battery* BatterySetup)

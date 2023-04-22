@@ -6,7 +6,7 @@
 #include "Base.h"
 #include "GUI/Setup/Gauge.h"
 #include "GUI/Setup/Label.h"
-#include "GUI/Setup/SourceTupelGraph.h"
+#include "GUI/Setup/SourceTupleGraph.h"
 #include "GUI/Setup/TextInput.h"
 #include "Setup/Defines.h"
 #include "Setup/Source/Source.h"
@@ -24,7 +24,7 @@ class Screen_Setup_Source_Map : public Screen_Setup_Source_Base
 		char pointSourceName[ SETUP_SOURCE_MAP_POINTS][ SETUP_SOURCE_NAME_SIZE + 1];
 		GUI_Setup_Label pointVolumeLabel[ SETUP_SOURCE_MAP_POINTS];
 
-		GUI_Setup_SourceTupelGraph mapGraph;
+		GUI_Setup_SourceTupleGraph mapGraph;
 
 		virtual void display( void);
 		virtual void update( void);

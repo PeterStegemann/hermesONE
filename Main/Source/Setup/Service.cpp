@@ -1003,7 +1003,7 @@ uint16_t Setup_Service::GetStatusSourceId( uint8_t StatusId)
 }
 
 void Setup_Service::SetProxyReference( uint8_t ModelId, uint8_t ProxyId,
-									   const Setup_Source_Tupel* ProxyReference)
+									   const Setup_Source_Tuple* ProxyReference)
 {
 	if( ProxyId >= SETUP_MODEL_PROXY_SOURCES)
 	{
@@ -1012,11 +1012,11 @@ void Setup_Service::SetProxyReference( uint8_t ModelId, uint8_t ProxyId,
 	}
 
 	EEPROM_WriteBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].ProxyReference[ ProxyId]),
-					   sizeof( Setup_Source_Tupel), ProxyReference);
+					   sizeof( Setup_Source_Tuple), ProxyReference);
 }
 
 void Setup_Service::GetProxyReference( uint8_t ModelId, uint8_t ProxyId,
-									   Setup_Source_Tupel* ProxyReference)
+									   Setup_Source_Tuple* ProxyReference)
 {
 	if( ProxyId >= SETUP_MODEL_PROXY_SOURCES)
 	{
@@ -1025,15 +1025,15 @@ void Setup_Service::GetProxyReference( uint8_t ModelId, uint8_t ProxyId,
 	}
 
 	EEPROM_ReadBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].ProxyReference[ ProxyId]),
-					  sizeof( Setup_Source_Tupel), ProxyReference);
+					  sizeof( Setup_Source_Tuple), ProxyReference);
 }
 
-void Setup_Service::SetProxyReference( uint8_t ProxyId, const Setup_Source_Tupel* ProxyReference)
+void Setup_Service::SetProxyReference( uint8_t ProxyId, const Setup_Source_Tuple* ProxyReference)
 {
 	SetProxyReference( selectedModelId, ProxyId, ProxyReference);
 }
 
-void Setup_Service::GetProxyReference( uint8_t ProxyId, Setup_Source_Tupel* ProxyReference)
+void Setup_Service::GetProxyReference( uint8_t ProxyId, Setup_Source_Tuple* ProxyReference)
 {
 	GetProxyReference( selectedModelId, ProxyId, ProxyReference);
 }
@@ -1221,7 +1221,7 @@ void Setup_Service::ResetModel( uint8_t ModelId, uint8_t SetupId, ModelState Sta
 	}
 
 	// Clear proxy sources.
-	Setup_Source_Tupel ProxyReference;
+	Setup_Source_Tuple ProxyReference;
 	ProxyReference.Source = SETUP_SOURCE_FIXED;
 	ProxyReference.Volume = SIGNAL_MAXIMUM_VALUE;
 

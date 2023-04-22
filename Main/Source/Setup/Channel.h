@@ -3,7 +3,7 @@
 #ifndef SETUP_CHANNEL_H
 #define SETUP_CHANNEL_H
 
-#include "Source/Tupel.h"
+#include "Source/Tuple.h"
 
 #include "AVR/Source/Types.h"
 
@@ -26,9 +26,9 @@ struct Setup_Channel
 		M_ModeCount
 	};
 
-	Setup_Source_Tupel InputSource;
-	Setup_Source_Tupel TrimSource;
-	Setup_Source_Tupel LimitSource;
+	Setup_Source_Tuple InputSource;
+	Setup_Source_Tuple TrimSource;
+	Setup_Source_Tuple LimitSource;
 
 	bool Reverse;
 

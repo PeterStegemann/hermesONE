@@ -27,11 +27,6 @@ void GUI_Setup_Label::SetDimensions( uint16_t Left, uint16_t Top)
 	top = Top;
 }
 
-void GUI_Setup_Label::SetOptions( Options UseOptions)
-{
-	options = UseOptions;
-}
-
 void GUI_Setup_Label::SetFont( FONT::FontId UseFontId)
 {
 	fontId = UseFontId;

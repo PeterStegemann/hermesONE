@@ -24,7 +24,7 @@ class Setup_Model
 	Setup_Channel Channel[ SIGNAL_PPM_CHANNELS];
 	char ChannelName[ SIGNAL_PPM_CHANNELS][ SETUP_CHANNEL_NAME_SIZE];
 
-	Setup_Source_Tupel ProxyReference[ SETUP_MODEL_PROXY_SOURCES];
+	Setup_Source_Tuple ProxyReference[ SETUP_MODEL_PROXY_SOURCES];
 };
 
 #endif

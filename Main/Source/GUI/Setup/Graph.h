@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Setup/Source/Tupel.h"
+#include "Setup/Source/Tuple.h"
 
 #include "AVR/Source/LCD/LCD_65K_RGB.h"
 

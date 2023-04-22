@@ -1,7 +1,6 @@
 // Copyright 2013 Peter Stegemann
 
-#ifndef SIGNAL_SOURCE_PROXY_H
-#define SIGNAL_SOURCE_PROXY_H
+#pragma once
 
 #include "Setup/Source/Proxy.h"
 
@@ -16,17 +15,15 @@ class Signal_Processor;
 
 class Signal_Source_Proxy
 {
-	public:
-		Setup_Source_Proxy Setup;
-		Setup_Source_Tupel ReferenceSetup;
+  public:
+    Setup_Source_Proxy Setup;
+    Setup_Source_Tuple ReferenceSetup;
 
-		uint8_t SignalSourceId;
+    uint8_t SignalSourceId;
 
-		void Initialize( void);
-		void Reset( void);
-		void LoadSetup( uint16_t SetupSourceId);
+    void Initialize( void);
+    void Reset( void);
+    void LoadSetup( uint16_t SetupSourceId);
 
-		int16_t CalculateValue( Signal_Processor* SignalProcessor);
+    int16_t CalculateValue( Signal_Processor* SignalProcessor);
 };
-
-#endif

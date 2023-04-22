@@ -30,7 +30,7 @@
 		0103588B1438E38D00D2E4EC /* Mix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mix.h; sourceTree = "<group>"; };
 		0103588C1438E38D00D2E4EC /* Source.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Source.h; sourceTree = "<group>"; };
 		0103588D1438E38D00D2E4EC /* Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Store.h; sourceTree = "<group>"; };
-		0103588E1438E38D00D2E4EC /* Tupel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tupel.h; sourceTree = "<group>"; };
+		0103588E1438E38D00D2E4EC /* Tuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tuple.h; sourceTree = "<group>"; };
 		010359201438FDFA00D2E4EC /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
 		010359311438FF3400D2E4EC /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
 		010359321438FF3400D2E4EC /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
@@ -269,8 +269,8 @@
 		01ED471A14FDA12D00DE6999 /* Gauge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gauge.h; sourceTree = "<group>"; };
 		01EF2920182393CA00814243 /* PointGraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PointGraph.cpp; sourceTree = "<group>"; };
 		01EF2921182393CA00814243 /* PointGraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PointGraph.h; sourceTree = "<group>"; };
-		01EF292218239A5200814243 /* SourceTupelGraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SourceTupelGraph.cpp; sourceTree = "<group>"; };
-		01EF292318239A5200814243 /* SourceTupelGraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SourceTupelGraph.h; sourceTree = "<group>"; };
+		01EF292218239A5200814243 /* SourceTupleGraph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SourceTupleGraph.cpp; sourceTree = "<group>"; };
+		01EF292318239A5200814243 /* SourceTupleGraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SourceTupleGraph.h; sourceTree = "<group>"; };
 		C6A0FF2C0290799A04C91782 /* hermesONE.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hermesONE.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -312,7 +312,7 @@
 				0103588D1438E38D00D2E4EC /* Store.h */,
 				010359201438FDFA00D2E4EC /* Timer.h */,
 				01006E3515C46087007A94B9 /* Trimmer.h */,
-				0103588E1438E38D00D2E4EC /* Tupel.h */,
+				0103588E1438E38D00D2E4EC /* Tuple.h */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -700,8 +700,8 @@
 				0199D931150CBF010087BD6E /* RangeGauge.cpp */,
 				01290BDD1A27E16200AB3264 /* Select.h */,
 				01290BDC1A27E16200AB3264 /* Select.cpp */,
-				01EF292318239A5200814243 /* SourceTupelGraph.h */,
-				01EF292218239A5200814243 /* SourceTupelGraph.cpp */,
+				01EF292318239A5200814243 /* SourceTupleGraph.h */,
+				01EF292218239A5200814243 /* SourceTupleGraph.cpp */,
 				01ED452414FBE7B000DE6999 /* TextInput.h */,
 				01ED452314FBE7B000DE6999 /* TextInput.cpp */,
 				012359A8151F1ED1006E6119 /* TimeLabel.h */,
