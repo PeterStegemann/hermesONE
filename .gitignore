@@ -45,3 +45,6 @@ xcuserdata
 *.map
 *.sym
 
+.build/
+
+/Misc/

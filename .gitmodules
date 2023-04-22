@@ -1,6 +1,6 @@
 [submodule "Oled/AVR"]
-	path = Oled/AVR
+	path = RC/Oled/AVR
 	url = https://github.com/PeterStegemann/Atmel-AVR-CPP.git
 [submodule "Main/AVR"]
-	path = Main/AVR
+	path = RC/Main/AVR
 	url = https://github.com/PeterStegemann/Atmel-AVR-CPP.git
