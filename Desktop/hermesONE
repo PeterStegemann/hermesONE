@@ -1,9 +1,0 @@
-#!/bin/bash
-
-BASEDIR=$(dirname $0)
-
-exec java \
-	-classpath "${BASEDIR}/RXTX/RXTXcomm.jar":"${BASEDIR}" \
-	-Djava.library.path="${BASEDIR}/RXTX" \
-	-Xdock:icon="${BASEDIR}/../Resources/hermesONE.icns" \
-	net.stegemann.hermesONE

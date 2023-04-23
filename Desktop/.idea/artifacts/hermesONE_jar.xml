@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="hermesONE:jar">
+    <output-path>$PROJECT_DIR$/hermesONE.app/Contents/MacOS</output-path>
+    <root id="archive" name="hermesONE.jar">
+      <element id="module-output" name="hermesONE" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/Library/RXTX/RXTXcomm.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
