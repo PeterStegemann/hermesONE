@@ -1,0 +1,9 @@
+#!/bin/bash
+
+BASEDIR=$(dirname "${0}")
+
+exec java \
+	-Djava.library.path="${BASEDIR}" \
+	-Xdock:icon="${BASEDIR}/../Resources/hermesONE.icns" \
+	-jar "${BASEDIR}/hermesONE.jar" \
+	net.stegemann.hermesONE

@@ -4,6 +4,7 @@
     <root id="archive" name="hermesONE.jar">
       <element id="module-output" name="hermesONE" />
       <element id="extracted-dir" path="$PROJECT_DIR$/Library/RXTX/RXTXcomm.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/Library/RXTX/librxtxSerial.jnilib" />
     </root>
   </artifact>
 </component>
