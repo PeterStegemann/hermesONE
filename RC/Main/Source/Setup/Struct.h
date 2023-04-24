@@ -39,3 +39,5 @@ struct Setup_ExtensionStruct
 
 	Setup_Source_Source Source[ 0];
 };
+
+#define SETUP_EXTENSIONSTRUCT_SIZE  ( sizeof( Setup_ExtensionStruct) + sizeof( Setup_Source_Source) * SETUP_SOURCES)

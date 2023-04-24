@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_MODEL_H
-#define SETUP_MODEL_H
+#pragma once
 
 #include "Channel.h"
 #include "Defines.h"
@@ -26,5 +25,3 @@ class Setup_Model
 
 	Setup_Source_Tuple ProxyReference[ SETUP_MODEL_PROXY_SOURCES];
 };
-
-#endif

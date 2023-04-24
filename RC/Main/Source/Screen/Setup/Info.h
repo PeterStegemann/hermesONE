@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef SCREEN_SETUP_INFO_H
-#define SCREEN_SETUP_INFO_H
+#pragma once
 
 #include "Base.h"
 #include "GUI/Setup/CheckBox.h"
@@ -12,19 +11,17 @@
 
 class Screen_Setup_Info : public Screen_Setup_Base
 {
-	private:
-		GUI_Setup_Label ownerLabel;
-		GUI_Setup_TextInput ownerInput;
-		char owner[ SETUP_OWNER_SIZE + 1];
+  private:
+    GUI_Setup_Label ownerLabel;
+    GUI_Setup_TextInput ownerInput;
+    char owner[ SETUP_OWNER_SIZE + 1];
 
-		virtual void display( void);
-	//		virtual void update( void);
-		virtual bool processMenu( DoMenuResult Result);
+    virtual void display( void);
+//		virtual void update( void);
+    virtual bool processMenu( DoMenuResult Result);
 
-		void doOwner( void);
+    void doOwner( void);
 
-	public:
-		Screen_Setup_Info( void);
+  public:
+    Screen_Setup_Info( void);
 };
-
-#endif

@@ -19,11 +19,10 @@
 class Signal_Processor
 {
 	private:
-		// This signals the process routine that it is already running. It's used for overrun
-		// protection.
+		// This signals the process routine that it is already running. It's used for overrun protection.
 		volatile bool inProcessing;
-		// This signals the process routine that it should pause the processing. It's used to make
-		// sure no calculation is running while a new model is loaded.
+		// This signals the process routine that it should pause the processing. It's used to make sure no calculation
+		// is running while a new model is loaded.
 		volatile bool pauseProcessing;
 
 		volatile Setup_Service::RFMode rfMode;

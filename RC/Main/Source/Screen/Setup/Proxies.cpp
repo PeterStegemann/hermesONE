@@ -231,8 +231,7 @@ void Screen_Setup_Proxies::doAdd( void)
 	bool SignalSourceAvailable = GLOBAL.SignalProcessor.FindNextEmptySource( &SignalSourceId);
 
 	// Check if it worked.
-	if(( SetupSourceAvailable == false) || ( SignalSourceAvailable == false) ||
-	   ( ProxyIdAvailable == false))
+	if(( SetupSourceAvailable == false) || ( SignalSourceAvailable == false) || ( ProxyIdAvailable == false))
 	{
 		GUI_Setup_Popup Popup;
 

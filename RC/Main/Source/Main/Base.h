@@ -58,6 +58,9 @@ class Main_Base
     // Go.
     void Run( void)
     {
+        // Wait some time for the controller and other components to stabilize.
+    	UTILITY::Pause( 100);
+
         // Initialize status.
         StatusService.Initialize();
 

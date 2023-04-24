@@ -24,14 +24,12 @@ void Signal_Processor::Initialize( void)
 	INPUT_ANALOG_A_D_PORT = 0x00;
 
 	// Activate ADC with Prescaler 128 --> 14Mhz/128 = 115.2kHz
-	ADCSRA = UTILITY_BitValue( ADEN) | UTILITY_BitValue( ADPS2) | UTILITY_BitValue( ADPS1) |
-			 UTILITY_BitValue( ADPS0);
+	ADCSRA = UTILITY_BitValue( ADEN) | UTILITY_BitValue( ADPS2) | UTILITY_BitValue( ADPS1) | UTILITY_BitValue( ADPS0);
 }
 
 void Signal_Processor::LoadModel( void)
 {
-	// Tell the processing routine to pause the processing and wait until no calculations are
-	// running.
+	// Tell the processing routine to pause the processing and wait until no calculations are running.
 	pauseProcessing = true;
 
 	while( inProcessing == true);
@@ -52,16 +50,14 @@ void Signal_Processor::LoadModel( void)
 
 	// Read sources.
 	for( uint16_t SetupSourceId = 0;
-		( SetupSourceId < SETUP_SOURCES) && ( SignalSourceId < SIGNAL_SOURCES); SetupSourceId++)
+	    ( SetupSourceId < SETUP_SOURCES) && ( SignalSourceId < SIGNAL_SOURCES); SetupSourceId++)
 	{
 		uint8_t SourceModelId = GLOBAL.SetupService.GetSourceModelId( SetupSourceId);
 
 		// Make sure the source model id is in the valid range.
 		if( !(
-			  (( SourceModelId >= SETUP_MODELS_START) &&
-			   ( SourceModelId < SETUP_MODELS_END)) ||
-			  (( SourceModelId >= SETUP_MODEL_TYPES_START) &&
-			   ( SourceModelId < SETUP_MODEL_TYPES_END)) ||
+			  (( SourceModelId >= SETUP_MODELS_START) && ( SourceModelId < SETUP_MODELS_END)) ||
+			  (( SourceModelId >= SETUP_MODEL_TYPES_START) && ( SourceModelId < SETUP_MODEL_TYPES_END)) ||
 			  ( SourceModelId == SETUP_MODEL_GLOBAL)
 		     )
 		  )

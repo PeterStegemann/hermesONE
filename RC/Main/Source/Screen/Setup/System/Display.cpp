@@ -8,7 +8,7 @@
 #include "AVR/Source/Utility.h"
 
 Screen_Setup_System_Display::Screen_Setup_System_Display( void)
-						   : Screen_Setup_Base( 0b1010110010100101, Text::Display)
+						   : Screen_Setup_Base( 0b1010110010100001, Text::Display)
 						   , setupBacklight( GLOBAL.SetupService.GetSetupBacklight())
 						   , setupBlankTime( GLOBAL.SetupService.GetSetupBlankTime())
 						   , statusBacklight( GLOBAL.SetupService.GetStatusBacklight())
