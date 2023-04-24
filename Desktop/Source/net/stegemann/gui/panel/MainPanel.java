@@ -198,18 +198,18 @@ public class MainPanel extends JPanel
 	}
 
 	@Override
-	public void valueChanged( ListSelectionEvent e)
+	public void valueChanged( ListSelectionEvent Event)
 	{
-		if( e.getValueIsAdjusting() == true)
+		if( Event.getValueIsAdjusting() == true)
 		{
 			return;
 		}
 
-		if( e.getSource() == modelsList)
+		if( Event.getSource() == modelsList)
 		{
 			modelPanel.set( modelsView.getModelFromIndex( modelsList.getSelectedIndex()));
 		}
-		else if( e.getSource() == typesList)
+		else if( Event.getSource() == typesList)
 		{
 			typeChanged();
 		}
@@ -217,18 +217,18 @@ public class MainPanel extends JPanel
 
 	private void typeChanged()
 	{
-		Models models = configuration.getModels();
-		Types types = configuration.getTypes();
+		Models Models = configuration.getModels();
+		Types Types = configuration.getTypes();
 
 		modelPanel.set( null);
 
-		Type SelectedType = types.getTypeFromIndex( typesList.getSelectedIndex());
+		Type SelectedType = Types.getTypeFromIndex( typesList.getSelectedIndex());
 
 		if( SelectedType != null)
 		{
 			Number selectedTypeId = SelectedType.getId();
 
-			modelsView = new ModelsView( models, selectedTypeId);
+			modelsView = new ModelsView( Models, selectedTypeId);
 			modelsList.setModel( new ModelsViewComboBoxModel( modelsView));
 
 			typeName.attachValue( SelectedType.getName());
@@ -240,125 +240,134 @@ public class MainPanel extends JPanel
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent event)
+	public void actionPerformed( ActionEvent Event)
 	{
-		Types types = configuration.getTypes();
+		Types Types = configuration.getTypes();
 
-		if( event.getSource() == systemButton)
+		if( Event.getSource() == systemButton)
 		{
-			SystemFrame systemFrame = new SystemFrame( configuration);
+			SystemFrame SystemFrame = new SystemFrame( configuration);
 
-			systemFrame.set();
-			systemFrame.setLocationRelativeTo( this);
-			systemFrame.open();
+			SystemFrame.set();
+			SystemFrame.setLocationRelativeTo( this);
+			SystemFrame.open();
 		}
-		else if(( event.getSource() == addTypeButton) ||
-				( event.getSource() == cloneTypeButton) ||
-				( event.getSource() == removeTypeButton))
+		else if(( Event.getSource() == addTypeButton) ||
+				( Event.getSource() == cloneTypeButton) ||
+				( Event.getSource() == removeTypeButton))
 		{
-			int selectedIndex = typesList.getSelectedIndex();
+			typeEvent( Event, Types);
+		}
+		else if(( Event.getSource() == addModelButton) ||
+				( Event.getSource() == cloneModelButton) ||
+				( Event.getSource() == removeModelButton))
+		{
+			modelEvent( Event, Types);
+		}
+	}
 
-			if( event.getSource() == addTypeButton)
+	private void typeEvent( ActionEvent Event, Types Types)
+	{
+		int SelectedIndex = typesList.getSelectedIndex();
+
+		if( Event.getSource() == addTypeButton)
+		{
+			Type Type = controller.addType();
+
+			if( Type == null)
 			{
-				Type type = controller.addType();
-
-				if( type == null)
-				{
-					return;
-				}
-
-				typesList.setSelectedIndex( types.getIndexFromId( type.getId()));
-			}
-			else if( event.getSource() == cloneTypeButton)
-			{
-				Type NewType = controller.cloneType( selectedIndex);
-
-				if( NewType == null)
-				{
-					return;
-				}
-
-				// Select new type.
-				typesList.setSelectedIndex( types.getIndexFromId( NewType.getId()));
-			}
-			else if( event.getSource() == removeTypeButton)
-			{
-				controller.removeType( selectedIndex);
-
-				if( selectedIndex > 0)
-				{
-					typesList.setSelectedIndex( selectedIndex - 1);
-				}
-				else
-				{
-					typeName.attachValue( null);
-				}
+				return;
 			}
 
-			if( selectedIndex == typesList.getSelectedIndex())
+			typesList.setSelectedIndex( Types.getIndexFromId( Type.getId()));
+		}
+		else if( Event.getSource() == cloneTypeButton)
+		{
+			Type NewType = controller.cloneType( SelectedIndex);
+
+			if( NewType == null)
 			{
-				// In this case, valueChanged wasn't triggered, so we set the panel here.
-				typeChanged();
+				return;
+			}
+
+			// Select new type.
+			typesList.setSelectedIndex( Types.getIndexFromId( NewType.getId()));
+		}
+		else if( Event.getSource() == removeTypeButton)
+		{
+			controller.removeType( SelectedIndex);
+
+			if( SelectedIndex > 0)
+			{
+				typesList.setSelectedIndex( SelectedIndex - 1);
+			}
+			else
+			{
+				typeName.attachValue( null);
 			}
 		}
-		else if(( event.getSource() == addModelButton) ||
-				( event.getSource() == cloneModelButton) ||
-				( event.getSource() == removeModelButton))
+
+		if( SelectedIndex == typesList.getSelectedIndex())
 		{
-			int selectedTypeIndex = typesList.getSelectedIndex();
-			int selectedModelIndex = modelsList.getSelectedIndex();
+			// In this case, valueChanged wasn't triggered, so we set the panel here.
+			typeChanged();
+		}
+	}
 
-			if( event.getSource() == addModelButton)
+	private void modelEvent( ActionEvent Event, Types Types)
+	{
+		int SelectedTypeIndex = typesList.getSelectedIndex();
+		int SelectedModelIndex = modelsList.getSelectedIndex();
+
+		if( Event.getSource() == addModelButton)
+		{
+			Type Type = Types.getTypeFromIndex( SelectedTypeIndex);
+
+			if( Type == null)
 			{
-				Type type = types.getTypeFromIndex( selectedTypeIndex);
-
-				if( type == null)
-				{
-					return;
-				}
-
-				Model model = controller.addModel( type.getId());
-
-				if( model == null)
-				{
-					return;
-				}
-
-				// Select new model.
-				modelsView.rescan();
-				modelsList.setSelectedIndex( modelsView.getModelIndexFromId( model.getId()));
-			}
-			else if( event.getSource() == cloneModelButton)
-			{
-				Model NewModel =
-					controller.cloneModel( modelsView.getFullModelIndex( selectedModelIndex));
-
-				if( NewModel == null)
-				{
-					return;
-				}
-
-				// Select new model.
-				modelsView.rescan();
-				modelsList.setSelectedIndex( modelsView.getModelIndexFromId( NewModel.getId()));
-			}
-			else if( event.getSource() == removeModelButton)
-			{
-				controller.removeModel( modelsView.getFullModelIndex( selectedModelIndex));
-
-				// Model selection one position up.
-				if( selectedModelIndex > 0)
-				{
-					modelsList.setSelectedIndex( selectedModelIndex - 1);
-				}
+				return;
 			}
 
-			if( selectedModelIndex == modelsList.getSelectedIndex())
+			Model Model = controller.addModel( Type.getId());
+
+			if( Model == null)
 			{
-				// In this case, valueChanged wasn't triggered, so we set the panel here.
-				modelsView.rescan();
-				modelPanel.set( modelsView.getModelFromIndex( selectedModelIndex));
+				return;
 			}
+
+			// Select new model.
+			modelsView.rescan();
+			modelsList.setSelectedIndex( modelsView.getModelIndexFromId( Model.getId()));
+		}
+		else if( Event.getSource() == cloneModelButton)
+		{
+			Model NewModel = controller.cloneModel( modelsView.getFullModelIndex( SelectedModelIndex));
+
+			if( NewModel == null)
+			{
+				return;
+			}
+
+			// Select new model.
+			modelsView.rescan();
+			modelsList.setSelectedIndex( modelsView.getModelIndexFromId( NewModel.getId()));
+		}
+		else if( Event.getSource() == removeModelButton)
+		{
+			controller.removeModel( modelsView.getFullModelIndex( SelectedModelIndex));
+
+			// Model selection one position up.
+			if( SelectedModelIndex > 0)
+			{
+				modelsList.setSelectedIndex( SelectedModelIndex - 1);
+			}
+		}
+
+		if( SelectedModelIndex == modelsList.getSelectedIndex())
+		{
+			// In this case, valueChanged wasn't triggered, so we set the panel here.
+			modelsView.rescan();
+			modelPanel.set( modelsView.getModelFromIndex( SelectedModelIndex));
 		}
 	}
 }

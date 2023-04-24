@@ -13,11 +13,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SystemPanel extends Panel implements ActionListener
 {
+	@Serial
 	private static final long serialVersionUID = -2820312553040435152L;
 
 	private final Configuration configuration;
@@ -35,9 +37,9 @@ public class SystemPanel extends Panel implements ActionListener
 
 	private final List<PPMPanel> ppms = new ArrayList<PPMPanel>();
 
-	public SystemPanel( Configuration UseConfiguration)
+	public SystemPanel( Configuration Configuration)
 	{
-		configuration = UseConfiguration;
+		configuration = Configuration;
 
 		JLabel OwnerLabel = new JLabel( "Besitzer:");
 		owner = new TextComponent( Constants.DEFAULT_TEXTFIELD_WIDTH);
@@ -120,12 +122,12 @@ public class SystemPanel extends Panel implements ActionListener
 
 	public void Set()
 	{
-		net.stegemann.configuration.System UseSystem = configuration.getSystem();
+		net.stegemann.configuration.System System = configuration.getSystem();
 		Models UseModels = configuration.getModels();
 
-		owner.attachValue( UseSystem.getOwner());
+		owner.attachValue( System.getOwner());
 
-		Number SelectedModel = UseSystem.getSelectedModel();
+		Number SelectedModel = System.getSelectedModel();
 
 		selectedModel.setModels( UseModels);
 		selectedModel.attachValue( SelectedModel);
@@ -141,7 +143,7 @@ public class SystemPanel extends Panel implements ActionListener
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent Event)
 	{
 	}
 }

@@ -31,7 +31,7 @@ public class TypeIdComponent extends JComboBox< Type> implements FocusListener
 		setRenderer( new ListCellRenderer< Type>());
 	}
 
-	public void SetTypes( Types UseTypes)
+	public void setTypes(Types UseTypes)
 	{
 		types = UseTypes;
 

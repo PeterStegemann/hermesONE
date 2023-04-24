@@ -1,5 +1,6 @@
 package net.stegemann.configuration;
 
+import lombok.ToString;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
@@ -9,29 +10,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@ToString
 public class Models extends ChangeObservable< Models> implements Iterable< Model>, ChangeListener< Model>
 {
 	private final List< Model> models = new ArrayList<>();
 
 	@Override
-	public String toString()
-	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Models = {\n");
-
-		for( Model Model: models)
-		{
-			Buffer.append( Model);
-		}
-
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
-	}
-
-	@Override
-	public void hasChanged( Model object)
+	public void hasChanged( Model Model)
 	{
 		notifyChange( this);
 	}
@@ -47,93 +32,93 @@ public class Models extends ChangeObservable< Models> implements Iterable< Model
 		models.clear();		
 	}
 
-	public void fillChannels( int channels)
+	public void fillChannels( int Channels)
 	{
 		for( Model CurrentModel: models)
 		{
-			CurrentModel.fill( channels);
+			CurrentModel.fill( Channels);
 		}
 	}
 
-	public void addModel( Model model)
+	public void addModel( Model Model)
 	{
-		models.add( model);
+		models.add( Model);
 
-		model.addChangeListener( this);
+		Model.addChangeListener( this);
 		notifyChange( this);
 	}
 
 	/**
 	 * Insert is like add, but it will assign a new id to the model.
 	 * 
-	 * @param model The model to insert.
+	 * @param Model The model to insert.
 	 *
 	 * @return The model
 	 */
-	public Model insertModel( Model model)
+	public Model insertModel( Model Model)
 	{
-		int freeId = 0;
+		int FreeId = 0;
 
 		// Find free model index.
-		for( Model currentModel: models)
+		for( Model CurrentModel: models)
 		{
-			if( currentModel.getId().equals( freeId) == false)
+			if( CurrentModel.getId().equals( FreeId) == false)
 			{
 				// Here's a gap.
 				break;
 			}
 
-			freeId++;
+			FreeId++;
 		}
 
 		try
 		{ 
-			model.getId().setValue( freeId);
+			Model.getId().setValue( FreeId);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
 			return null;
 		}
 
-		models.add( freeId, model);
+		models.add( FreeId, Model);
 
-		model.addChangeListener( this);
+		Model.addChangeListener( this);
 		notifyChange( this);
 
-		return model;
+		return Model;
 	}
 
-	public Model removeModel( Model model)
+	public Model removeModel( Model Model)
 	{
-		if( models.remove( model) == true)
+		if( models.remove( Model) == true)
 		{
-			model.removeChangeListener( this);
+			Model.removeChangeListener( this);
 			notifyChange( this);
 		}
 
-		return model;
+		return Model;
 	}
 
-	public Model getModelFromIndex( int index)
+	public Model getModelFromIndex( int Index)
 	{
-		if( index == -1)
+		if( Index == -1)
 		{
 			return null;
 		}
 
 		try
 		{
-			return models.get( index);
+			return models.get( Index);
 		}
-		catch( IndexOutOfBoundsException reason)
+		catch( IndexOutOfBoundsException Reason)
 		{
 			return null;
 		}
 	}
 
-	public Number getIdFromIndex( int index)
+	public Number getIdFromIndex( int Index)
 	{
-		Model CurrentModel = getModelFromIndex( index);
+		Model CurrentModel = getModelFromIndex( Index);
 
 		if( CurrentModel == null)
 		{
@@ -143,24 +128,24 @@ public class Models extends ChangeObservable< Models> implements Iterable< Model
 		return CurrentModel.getId();
 	}
 
-	public Model getModelFromId( Number id)
+	public Model getModelFromId( Number Id)
 	{
-		return getModelFromIndex( getIndexFromId( id));
+		return getModelFromIndex( getIndexFromId( Id));
 	}
 
 	/** Get the index of a model in this container from its id.
 	 * 
-	 * @param id The id of the model.
+	 * @param Id The id of the model.
 	 * 
 	 * @return The index in this container.
 	 */
-	public int getIndexFromId( Number id)
+	public int getIndexFromId( Number Id)
 	{
 		int Index = 0;
 
 		for( Model CurrentModel: models)
 		{
-			if( CurrentModel.getId().equals( id) == true)
+			if( CurrentModel.getId().equals( Id) == true)
 			{
 				return Index;
 			}
@@ -171,9 +156,9 @@ public class Models extends ChangeObservable< Models> implements Iterable< Model
 		return -1;
 	}
 
-	public int getIndexFromModel( Model model)
+	public int getIndexFromModel( Model Model)
 	{
-		return models.indexOf( model);
+		return models.indexOf( Model);
 	}
 
 	public int getCount()

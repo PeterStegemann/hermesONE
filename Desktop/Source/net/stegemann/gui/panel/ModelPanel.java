@@ -35,9 +35,9 @@ public class ModelPanel extends JPanel implements ActionListener
 
 	private final StatusSourcesFrame statusSources;
 
-	public ModelPanel( Controller controller)
+	public ModelPanel( Controller Controller)
 	{
-		configuration = controller.getConfiguration();
+		configuration = Controller.getConfiguration();
 
 		statusSources = new StatusSourcesFrame( configuration);
 
@@ -55,10 +55,10 @@ public class ModelPanel extends JPanel implements ActionListener
 		statusSourcesButton = new JButton( "Status...");
 		statusSourcesButton.addActionListener( this);
 
-		globalSourcesPanel = new SourcesPanel( PanelType.GLOBAL, controller);
-		typeSourcesPanel = new SourcesPanel( PanelType.TYPE, controller);
-		modelSourcesPanel = new SourcesPanel( PanelType.MODEL, controller);
-		proxiesPanel = new ProxiesPanel( controller);
+		globalSourcesPanel = new SourcesPanel( PanelType.GLOBAL, Controller);
+		typeSourcesPanel = new SourcesPanel( PanelType.TYPE, Controller);
+		modelSourcesPanel = new SourcesPanel( PanelType.MODEL, Controller);
+		proxiesPanel = new ProxiesPanel( Controller);
 		channelsPanel = new ChannelsPanel( configuration);
 
 		JTabbedPane SourcesPane = new JTabbedPane();
@@ -120,37 +120,37 @@ public class ModelPanel extends JPanel implements ActionListener
 		);
 	}
 
-	public void set( Model model)
+	public void set( Model Model)
 	{
-		statusSources.set( model);
+		statusSources.set( Model);
 
-		if( model == null)
+		if( Model == null)
 		{
 			setVisible( false);
 
 			return;
 		}
 
-		name.attachValue( model.getName());
+		name.attachValue( Model.getName());
 
-		typeId.SetTypes( configuration.getTypes());
-		typeId.attachValue( model.getTypeId());
+		typeId.setTypes( configuration.getTypes());
+		typeId.attachValue( Model.getTypeId());
 
-		rfMode.attachValue( model.getRfMode());
+		rfMode.attachValue( Model.getRfMode());
 
-		globalSourcesPanel.set( model);
-		typeSourcesPanel.set( model);
-		modelSourcesPanel.set( model);
-		proxiesPanel.set( model);
-		channelsPanel.set( model);
+		globalSourcesPanel.set( Model);
+		typeSourcesPanel.set( Model);
+		modelSourcesPanel.set( Model);
+		proxiesPanel.set( Model);
+		channelsPanel.set( Model);
 
 		setVisible( true);
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent Event)
 	{
-		if( e.getSource() == statusSourcesButton)
+		if( Event.getSource() == statusSourcesButton)
 		{
 			statusSources.setLocationRelativeTo( this);
 			statusSources.open();

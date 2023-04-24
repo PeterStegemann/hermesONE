@@ -17,119 +17,119 @@ public class XMLWriter
 
 	private final DocumentGenerator documentGenerator;
 
-	XMLWriter( DocumentGenerator documentGenerator)
+	XMLWriter( DocumentGenerator DocumentGenerator)
  	{
-		 this.documentGenerator = documentGenerator;
+		 this.documentGenerator = DocumentGenerator;
 	}
 
-	public void writeToFile( Configuration configuration, String fileName)
+	public void writeToFile( Configuration Configuration, String FileName)
 		throws DocumentException
 	{
-		Document document = documentGenerator.createDocument();
+		Document Document = documentGenerator.createDocument();
 
-		exportObject( document, document, Names.CONFIGURATION, configuration);
+		exportObject( Document, Document, Names.CONFIGURATION, Configuration);
 
-		documentGenerator.storeDocument( document, fileName);
+		documentGenerator.storeDocument( Document, FileName);
 	}
 
-	private void exportObject( Document document, Node parentNode, String name, Object object)
+	private void exportObject( Document Document, Node ParentNode, String Name, Object Object)
 	{
-		Node childNode = addChildNode( document, parentNode, name);
+		Node ChildNode = addChildNode( Document, ParentNode, Name);
 
-		exportFields( document, childNode, object);
+		exportFields( Document, ChildNode, Object);
 	}
 
-	void exportFields( Document document, Node node, Object object)
+	void exportFields( Document Document, Node Node, Object Object)
 	{
-		exportFields( document, node, object, object.getClass());
+		exportFields( Document, Node, Object, Object.getClass());
 	}
 
-	private void exportFields( Document document, Node node, Object object, Class<?> thisClass)
+	private void exportFields( Document Document, Node Node, Object Object, Class<?> ThisClass)
 	{
-		Class< ?> superClass = thisClass.getSuperclass();
+		Class< ?> SuperClass = ThisClass.getSuperclass();
 
-		if( superClass != null)
+		if( SuperClass != null)
 		{
-			exportFields(document, node, object, superClass);
+			exportFields( Document, Node, Object, SuperClass);
 		}
 
-		Field[] fields = thisClass.getDeclaredFields();
+		Field[] Fields = ThisClass.getDeclaredFields();
 
-		for( Field field : fields)
+		for( Field Field : Fields)
 		{
-			exportField(document, node, field, object);
+			exportField( Document, Node, Field, Object);
 		}
 	}
 
-	private void exportField( Document document, Node node, Field field, Object object)
+	private void exportField( Document Document, Node Node, Field Field, Object Object)
  	{
-		Object value = getFieldValue( object, field);
-		ConfigurationField annotation = getValueAnnotation( field, value);
+		Object Value = getFieldValue( Object, Field);
+		ConfigurationField Annotation = getValueAnnotation( Field, Value);
 
-		String name = annotation != null ? annotation.name() : null;
+		String Name = Annotation != null ? Annotation.name() : null;
 
-		exportValue( document, node, name, annotation, value);
+		exportValue( Document, Node, Name, Annotation, Value);
 	}
 
-	private boolean exportValue( Document document, Node node, String name, ConfigurationField annotation, Object value)
+	private boolean exportValue( Document Document, Node Node, String Name, ConfigurationField Annotation, Object Value)
 	{
-		if( annotation != null)
+		if( Annotation != null)
 		{
-			if( annotation.ignore() == true)
+			if( Annotation.ignore() == true)
 			{
 				return false;
 			}
 
-			if( annotation.name().isBlank() == false)
+			if( Annotation.name().isBlank() == false)
 			{
-				name = annotation.name();
+				Name = Annotation.name();
 			}
 		}
 
-		if( name == null)
+		if( Name == null)
 		{
 			return false;
 		}
 
-		if( !exportSimpleValue( document, node, name, value))
+		if( !exportSimpleValue( Document, Node, Name, Value))
 		{
-			exportComplexValue( document, node, name, annotation, value);
+			exportComplexValue( Document, Node, Name, Annotation, Value);
 		}
 
 		return true;
 	}
 
-	private boolean exportSimpleValue( Document document, Node node, String name, Object value)
+	private boolean exportSimpleValue( Document Document, Node Node, String Name, Object Value)
 	{
-		if( value instanceof Bool)
+		if( Value instanceof Bool)
 		{
-			if( debug) java.lang.System.out.println( name + ": " + (( Bool) value).getValue());
+			if( debug) java.lang.System.out.println( Name + ": " + (( Bool) Value).getValue());
 
-			documentGenerator.appendNode( document, node, name, ( Bool) value);
+			documentGenerator.appendNode( Document, Node, Name, ( Bool) Value);
 		}
-		else if( value instanceof Enum)
+		else if( Value instanceof Enum)
 		{
-			if( debug) java.lang.System.out.println( name + ": " + (( Enum< ?>) value).ordinal());
+			if( debug) java.lang.System.out.println( Name + ": " + (( Enum< ?>) Value).ordinal());
 
-			documentGenerator.appendNode( document, node, name, ( Enum< ?>) value);
+			documentGenerator.appendNode( Document, Node, Name, ( Enum< ?>) Value);
 		}
-		else if( value instanceof Number)
+		else if( Value instanceof Number)
 		{
-			if( debug) java.lang.System.out.println( name + ": " + (( Number) value).getValue());
+			if( debug) java.lang.System.out.println( Name + ": " + (( Number) Value).getValue());
 
-			documentGenerator.appendNode( document, node, name, ( Number) value);
+			documentGenerator.appendNode( Document, Node, Name, ( Number) Value);
 		}
-		else if( value instanceof String)
+		else if( Value instanceof String)
 		{
-			if( debug) java.lang.System.out.println( name + ": " + value);
+			if( debug) java.lang.System.out.println( Name + ": " + Value);
 
-			documentGenerator.appendNode( document, node, name, ( String) value);
+			documentGenerator.appendNode( Document, Node, Name, ( String) Value);
 		}
-		else if( value instanceof Text)
+		else if( Value instanceof Text)
 		{
-			if( debug) java.lang.System.out.println(name + ": " + (( Text) value).getValue());
+			if( debug) java.lang.System.out.println(Name + ": " + (( Text) Value).getValue());
 
-			documentGenerator.appendNode( document, node, name, ( Text) value);
+			documentGenerator.appendNode( Document, Node, Name, ( Text) Value);
 		}
 		else
 		{
@@ -139,57 +139,57 @@ public class XMLWriter
 		return true;
 	}
 
-	private void exportComplexValue( Document document, Node node, String name, ConfigurationField annotation,
-									 Object value)
+	private void exportComplexValue( Document Document, Node Node, String Name, ConfigurationField Annotation,
+									 Object Value)
 	{
-		if( value instanceof Iterable)
+		if( Value instanceof Iterable)
 		{
-			if( debug) System.out.println( name + ": <iterable>");
+			if( debug) System.out.println( Name + ": <iterable>");
 
-			exportIterable( document, node, name, annotation.itemName(), ( Iterable< ?>) value);
+			exportIterable( Document, Node, Name, Annotation.itemName(), ( Iterable< ?>) Value);
 		}
 		else
 		{
-			if( debug) System.out.println( name + ": <object>");
+			if( debug) System.out.println( Name + ": <Object>");
 
-			exportObject( document, node, name, value);
+			exportObject( Document, Node, Name, Value);
 		}
 	}
 
-	private void exportIterable( Document document, Node parentNode, String name, String itemName, Iterable< ?> value)
+	private void exportIterable( Document Document, Node ParentNode, String Name, String ItemName, Iterable< ?> Value)
 	{
-		if( itemName.isEmpty())
+		if( ItemName.isEmpty())
 		{
-			exportIterable( document, parentNode, name, value);
+			exportIterable( Document, ParentNode, Name, Value);
 		}
 		else
 		{
-			Node childNode = addChildNode( document, parentNode, name);
+			Node ChildNode = addChildNode( Document, ParentNode, Name);
 
-			exportIterable( document, childNode, itemName, value);
+			exportIterable( Document, ChildNode, ItemName, Value);
 		}
 	}
 
-	void exportIterable( Document document, Node parentNode, String itemName, Iterable< ?> value)
+	void exportIterable( Document Document, Node ParentNode, String ItemName, Iterable< ?> Value)
 	{
-		int id = 0;
+		int Id = 0;
 
-		for( Object object: value)
+		for( Object Object: Value)
 		{
-			if( exportIterableItem( document, parentNode, itemName, id, object))
+			if( exportIterableItem( Document, ParentNode, ItemName, Id, Object))
 			{
-				id++;
+				Id++;
 			}
 		}
 	}
 
-	private boolean exportIterableItem( Document document, Node parentNode, String name, int id, Object object)
+	private boolean exportIterableItem( Document Document, Node ParentNode, String Name, int Id, Object Object)
 	{
-		ConfigurationField annotation = object.getClass().getAnnotation( ConfigurationField.class);
+		ConfigurationField Annotation = Object.getClass().getAnnotation( ConfigurationField.class);
 
-		if( exportValue( document, parentNode, name, annotation, object))
+		if( exportValue( Document, ParentNode, Name, Annotation, Object))
 		{
-			parentNode.insertBefore( document.createComment(name + " " + id), parentNode.getLastChild());
+			ParentNode.insertBefore( Document.createComment(Name + " " + Id), ParentNode.getLastChild());
 
 			return true;
 		}
@@ -197,33 +197,33 @@ public class XMLWriter
 		return false;
 	}
 
-	private static Node addChildNode( Document document, Node parentNode, String name)
+	private static Node addChildNode( Document Document, Node ParentNode, String Name)
 	{
-		Node childNode = document.createElement( name);
-		parentNode.appendChild( childNode);
+		Node ChildNode = Document.createElement( Name);
+		ParentNode.appendChild( ChildNode);
 
-		return childNode;
+		return ChildNode;
 	}
 
-	private static ConfigurationField getValueAnnotation( Field field, Object value)
+	private static ConfigurationField getValueAnnotation( Field Field, Object Value)
 	{
-		ConfigurationField annotation = value.getClass().getAnnotation( ConfigurationField.class);
+		ConfigurationField Annotation = Value.getClass().getAnnotation( ConfigurationField.class);
 
-		if( annotation == null)
+		if( Annotation == null)
 		{
-			annotation = field.getAnnotation( ConfigurationField.class);
+			Annotation = Field.getAnnotation( ConfigurationField.class);
 		}
 
-		return annotation;
+		return Annotation;
 	}
 
-	private static Object getFieldValue( Object object, Field field)
+	private static Object getFieldValue( Object Object, Field Field)
 	{
-		field.setAccessible( true);
+		Field.setAccessible( true);
 
 		try
 		{
-			return field.get( object);
+			return Field.get( Object);
 		}
 		catch( IllegalAccessException reason)
 		{

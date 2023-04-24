@@ -66,13 +66,8 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 	{
 		proxyReferences.clear();
 
-		if( size <= proxyReferences.size())
-		{
-			return;
-		}
-
 		// Fill up missing proxy slots.
-		int fill = size - proxyReferences.size();
+		int fill = size;
 
 		while( fill > 0)
 		{

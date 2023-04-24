@@ -53,11 +53,11 @@ public class SourcesPanel extends JPanel implements ActionListener, ListSelectio
 
 	private final SourcePanel sourcePanel;
 
-	public SourcesPanel( PanelType panelType, Controller controller)
+	public SourcesPanel( PanelType PanelType, Controller Controller)
 	{
-		this.panelType = panelType;
-		this.controller = controller;
-		this.configuration = controller.getConfiguration();
+		this.panelType = PanelType;
+		this.controller = Controller;
+		this.configuration = Controller.getConfiguration();
 
 		sourcesList = new JList<>();
 		sourcesList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
@@ -130,75 +130,90 @@ public class SourcesPanel extends JPanel implements ActionListener, ListSelectio
 	}
 
 	@Override
-	public void valueChanged( ListSelectionEvent event)
+	public void valueChanged( ListSelectionEvent Event)
 	{
-		if( event.getValueIsAdjusting() == false)
+		if( Event.getValueIsAdjusting() == false)
 		{
 			sourcePanel.set( model, sourcesView.getSourceFromIndex( sourcesList.getSelectedIndex()));
 		}
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent actionEvent)
+	public void actionPerformed( ActionEvent Event)
 	{
-		int selectedSourceIndex = sourcesList.getSelectedIndex();
+		int SelectedSourceIndex = sourcesList.getSelectedIndex();
 
-		if( actionEvent.getSource() == addButton)
+		if( Event.getSource() == addButton)
 		{
-			Object[] options = SourceUtility.getSelectableTypeNames();
-
-			String typeName = ( String) JOptionPane.showInputDialog(
-				this, null, "Neuen Mischer Typ auswählen...",
-				JOptionPane.PLAIN_MESSAGE, null, options, options[ 0]);
-
-			Source newSource;
-
-			try
-			{
-				newSource = controller.addSource( SourceUtility.createSourceForTypeName( typeName), modelId);
-			}
-			catch( ValueOutOfRangeException reason)
-			{
-				throw new RuntimeException( reason);
-			}
-
-			if( newSource == null)
-			{
-				return;
-			}
-
-			// Select new source.
-			sourcesView.rescan();
-			sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( newSource.getId()));
+			addEvent();
 		}
-		else if( actionEvent.getSource() == cloneButton)
+		else if( Event.getSource() == cloneButton)
 		{
-			Source newSource = controller.cloneSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
-
-			if( newSource == null)
-			{
-				return;
-			}
-
-			// Select new source.
-			sourcesView.rescan();
-			sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( newSource.getId()));
+			cloneEvent( SelectedSourceIndex);
 		}
-		else if( actionEvent.getSource() == removeButton)
+		else if( Event.getSource() == removeButton)
 		{
-			controller.removeSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
-
-			if( selectedSourceIndex > 0)
-			{
-				sourcesList.setSelectedIndex( selectedSourceIndex - 1);
-			}
+			removeEvent( SelectedSourceIndex);
 		}
 
-		if( selectedSourceIndex == sourcesList.getSelectedIndex())
+		if( SelectedSourceIndex == sourcesList.getSelectedIndex())
 		{
 			// In this case, valueChanged wasn't triggered, so we set the panel here.
 			sourcesView.rescan();
-			sourcePanel.set( model, sourcesView.getSourceFromIndex( selectedSourceIndex));
+			sourcePanel.set( model, sourcesView.getSourceFromIndex( SelectedSourceIndex));
+		}
+	}
+
+	private void addEvent()
+	{
+		Object[] Options = SourceUtility.getSelectableTypeNames();
+
+		String TypeName = ( String) JOptionPane.showInputDialog(
+			this, null, "Neuen Mischer Typ auswählen...",
+			JOptionPane.PLAIN_MESSAGE, null, Options, Options[ 0]);
+
+		Source NewSource;
+
+		try
+		{
+			NewSource = controller.addSource( SourceUtility.createSourceForTypeName( TypeName), modelId);
+		}
+		catch( ValueOutOfRangeException Reason)
+		{
+			throw new RuntimeException( Reason);
+		}
+
+		if( NewSource == null)
+		{
+			return;
+		}
+
+		// Select new source.
+		sourcesView.rescan();
+		sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( NewSource.getId()));
+	}
+
+	private void cloneEvent( int SelectedSourceIndex)
+	{
+		Source NewSource = controller.cloneSource( sourcesView.getFullSourceIndex( SelectedSourceIndex));
+
+		if( NewSource == null)
+		{
+			return;
+		}
+
+		// Select new source.
+		sourcesView.rescan();
+		sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( NewSource.getId()));
+	}
+
+	private void removeEvent( int SelectedSourceIndex)
+	{
+		controller.removeSource( sourcesView.getFullSourceIndex( SelectedSourceIndex));
+
+		if( SelectedSourceIndex > 0)
+		{
+			sourcesList.setSelectedIndex( SelectedSourceIndex - 1);
 		}
 	}
 
