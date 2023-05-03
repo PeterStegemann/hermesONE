@@ -1,7 +1,6 @@
 // Copyright 2007 Peter Stegemann
 
-#ifndef SCREEN_SETUP_TEST_H
-#define SCREEN_SETUP_TEST_H
+#pragma once
 
 #include "Screen.h"
 
@@ -15,5 +14,3 @@ class Screen_Setup_Test : public Screen_Setup_Base
 		// Run this screen.
 		void Run( void);
 };
-
-#endif

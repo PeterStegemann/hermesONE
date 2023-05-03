@@ -1,7 +1,6 @@
 // Copyright 2006 Peter Stegemann. All rights reserved.
 
-#ifndef SCREEN_SETUP_FRACTAL_H
-#define SCREEN_SETUP_FRACTAL_H
+#pragma once
 
 #include "Screen.h"
 
@@ -42,5 +41,3 @@ class Screen_Setup_Fractal : public Screen_Setup_Base
 		// Run this screen.
 		void Run( void);
 };
-
-#endif

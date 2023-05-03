@@ -1,7 +1,6 @@
 // Copyright 2007 Peter Stegemann
 
-#ifndef SIGNAL_DEFINES_H
-#define SIGNAL_DEFINES_H
+#pragma once
 
 // Number of sources per model.
 #define SIGNAL_SOURCES				50
@@ -14,5 +13,3 @@
 #define SIGNAL_NEUTRAL_VALUE		0L
 #define SIGNAL_MINIMUM_VALUE		( - SIGNAL_MAXIMUM_VALUE)
 #define SIGNAL_VALUE_RANGE			( SIGNAL_MAXIMUM_VALUE - SIGNAL_MINIMUM_VALUE)
-
-#endif

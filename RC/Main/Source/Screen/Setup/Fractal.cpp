@@ -52,7 +52,7 @@ void Fractal::calculate( void)
 	cornerX = centerX - width / 2;
 	cornerY = centerY - height / 2;
 
-	// Check wether we're a single iteration fractal by calculating a frame around the fractal.
+	// Check whether we're a single iteration fractal by calculating a frame around the fractal.
 	uint64_t X, Y;
 	bool IsSingleIteration = true;
 

@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SIGNAL_SOURCE_MAP_H
-#define SIGNAL_SOURCE_MAP_H
+#pragma once
 
 #include "Setup/Source/Map.h"
 
@@ -33,5 +32,3 @@ class Signal_Source_Map
 
 		int16_t CalculateValue( Signal_Processor* SignalProcessor);
 };
-
-#endif

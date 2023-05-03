@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SIGNAL_SOURCE_INPUT_H
-#define SIGNAL_SOURCE_INPUT_H
+#pragma once
 
 #include "Input/Rotary.h"
 #include "Setup/Source/Input.h"
@@ -38,5 +37,3 @@ class Signal_Source_Input
 
 		int16_t CalculateValue( const Signal_Processor* SignalProcessor);
 };
-
-#endif

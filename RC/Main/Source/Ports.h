@@ -1,7 +1,6 @@
 // Copyright 2007 Peter Stegemann
 
-#ifndef PORTS_H
-#define PORTS_H
+#pragma once
 
 #include "System.h"
 
@@ -149,5 +148,3 @@
 
 #define STATUS_SERVICE_RED							PG0
 #define STATUS_SERVICE_GREEN						PG1
-
-#endif

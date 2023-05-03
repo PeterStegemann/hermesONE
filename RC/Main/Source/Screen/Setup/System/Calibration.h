@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SYSTEM_CALIBRATION_H
-#define SCREEN_SETUP_SYSTEM_CALIBRATION_H
+#pragma once
 
 #include "../Base.h"
 #include "Ports.h"
@@ -31,5 +30,3 @@ class Screen_Setup_System_Calibration : public Screen_Setup_Base
 	public:
 		Screen_Setup_System_Calibration( void);
 };
-
-#endif

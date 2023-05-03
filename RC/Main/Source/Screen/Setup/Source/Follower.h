@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SOURCE_FOLLOWER_H
-#define SCREEN_SETUP_SOURCE_FOLLOWER_H
+#pragma once
 
 #include "Base.h"
 #include "GUI/Setup/Gauge.h"
@@ -47,5 +46,3 @@ class Screen_Setup_Source_Follower : public Screen_Setup_Source_Base
 	public:
 		Screen_Setup_Source_Follower( uint8_t SignalSourceId);
 };
-
-#endif

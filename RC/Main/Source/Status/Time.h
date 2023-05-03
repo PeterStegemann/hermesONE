@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef STATUS_TIME_H
-#define STATUS_TIME_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -22,5 +21,3 @@ class Status_Time
 		// Get uptime in seconds.
 		uint16_t GetUptime( void);
 };
-
-#endif

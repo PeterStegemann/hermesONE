@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef SCREEN_STATUS_MENU_CHANNELMAPPING_H
-#define SCREEN_STATUS_MENU_CHANNELMAPPING_H
+#pragma once
 
 #include "Base.h"
 #include "Setup/PPM.h"
@@ -26,5 +25,3 @@ class Screen_Status_Menu_ChannelMapping : public Screen_Status_Menu_Base
 		Screen_Status_Menu_ChannelMapping( uint8_t PPMId);
 		virtual ~Screen_Status_Menu_ChannelMapping( void);
 };
-
-#endif

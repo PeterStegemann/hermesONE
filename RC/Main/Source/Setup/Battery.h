@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef SETUP_BATTERY_H
-#define SETUP_BATTERY_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -19,5 +18,3 @@ struct Setup_Battery
 
 	uint8_t CalibrationVoltage;
 };
-
-#endif

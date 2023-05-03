@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_SOURCE_MAP_H
-#define SETUP_SOURCE_MAP_H
+#pragma once
 
 #include "Tuple.h"
 
@@ -15,5 +14,3 @@ struct Setup_Source_Map
 
 	Setup_Source_Tuple PointSource[ SETUP_SOURCE_MAP_POINTS];
 };
-
-#endif

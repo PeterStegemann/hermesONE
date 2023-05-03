@@ -1,7 +1,6 @@
 // Copyright 2012 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SOURCE_BASE_H
-#define SCREEN_SETUP_SOURCE_BASE_H
+#pragma once
 
 #include "../Base.h"
 #include "GUI/Setup/Gauge.h"
@@ -35,5 +34,3 @@ class Screen_Setup_Source_Base : public Screen_Setup_Base
 		Screen_Setup_Source_Base( uint8_t SignalSourceId, uint32_t MenuPattern,
 								  const flash_char* Title, bool hasGauge = true);
 };
-
-#endif

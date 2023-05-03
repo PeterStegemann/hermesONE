@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_SOURCE_INPUT_H
-#define SETUP_SOURCE_INPUT_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -31,5 +30,3 @@ struct Setup_Source_Input
 	int16_t TopVolume;
 	int16_t BottomVolume;
 };
-
-#endif

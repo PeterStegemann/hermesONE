@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SCREEN_SETUP_BASELIST_H
-#define SCREEN_SETUP_BASELIST_H
+#pragma once
 
 #include "Base.h"
 
@@ -26,5 +25,3 @@ class Screen_Setup_BaseList : public Screen_Setup_Base
 	public:
 		Screen_Setup_BaseList( const flash_char* Title);
 };
-
-#endif

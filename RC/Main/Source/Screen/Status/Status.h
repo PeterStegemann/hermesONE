@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef SCREEN_STATUS_STATUS_H
-#define SCREEN_STATUS_STATUS_H
+#pragma once
 
 #include "../Base.h"
 
@@ -56,5 +55,3 @@ class Screen_Status_Status : public Screen_Base
 		// Update screen.
 		void Update( void);
 };
-
-#endif

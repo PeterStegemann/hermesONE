@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef SCREEN_STATUS_MENU_BATTERY_H
-#define SCREEN_STATUS_MENU_BATTERY_H
+#pragma once
 
 #include "Base.h"
 
@@ -27,5 +26,3 @@ class Screen_Status_Menu_Battery : public Screen_Status_Menu_Base
 		Screen_Status_Menu_Battery( void);
 		virtual ~Screen_Status_Menu_Battery( void);
 };
-
-#endif

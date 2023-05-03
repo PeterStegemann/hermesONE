@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SYSTEM_BATTERY_H
-#define SCREEN_SETUP_SYSTEM_BATTERY_H
+#pragma once
 
 #include "../Base.h"
 #include "GUI/Setup/Gauge.h"
@@ -35,5 +34,3 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 	public:
 		Screen_Setup_System_Battery( void);
 };
-
-#endif

@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef SIGNAL_SOURCE_FOLLOWER_H
-#define SIGNAL_SOURCE_FOLLOWER_H
+#pragma once
 
 #include "Setup/Source/Follower.h"
 
@@ -35,5 +34,3 @@ class Signal_Source_Follower
 
 		int16_t CalculateValue( Signal_Processor* SignalProcessor);
 };
-
-#endif

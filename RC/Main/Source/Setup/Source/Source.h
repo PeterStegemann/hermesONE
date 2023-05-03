@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_SOURCE_SOURCE_H
-#define SETUP_SOURCE_SOURCE_H
+#pragma once
 
 #include "Follower.h"
 #include "Input.h"
@@ -33,5 +32,3 @@ struct Setup_Source_Source
 
 	Setup_Source_Union Body;
 };
-
-#endif

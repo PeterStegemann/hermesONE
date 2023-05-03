@@ -1,7 +1,6 @@
 // Copyright 2007 Peter Stegemann
 
-#ifndef SCREEN_SETUP_INTRO_H
-#define SCREEN_SETUP_INTRO_H
+#pragma once
 
 class Screen_Setup_Intro
 {
@@ -11,5 +10,3 @@ class Screen_Setup_Intro
 		// Run screen.
 		void Run( void);
 };
-
-#endif

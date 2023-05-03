@@ -1,7 +1,6 @@
 // Copyright 2014 Peter Stegemann
 
-#ifndef SETUP_PPM_H
-#define SETUP_PPM_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -12,5 +11,3 @@ struct Setup_PPM
 
 	uint8_t ChannelMapping[ SIGNAL_PPM_CHANNELS];
 };
-
-#endif

@@ -39,7 +39,7 @@ class GUI_Setup_Gauge
 
     FONT::FontId fontId;
 
-    // Marks wether we have remembered values from last draw.
+    // Marks whether we have remembered values from last draw.
     bool remembered;
     // Remembered values.
     int16_t minimum, maximum, value;

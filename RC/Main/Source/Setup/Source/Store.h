@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef SETUP_SOURCE_STORE_H
-#define SETUP_SOURCE_STORE_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -11,5 +10,3 @@ struct Setup_Source_Store
 
 	int16_t InitVolume;
 };
-
-#endif

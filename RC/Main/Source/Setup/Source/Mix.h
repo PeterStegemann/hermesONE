@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_SOURCE_MIX_H
-#define SETUP_SOURCE_MIX_H
+#pragma once
 
 #include "Tuple.h"
 
@@ -11,5 +10,3 @@ struct Setup_Source_Mix
 {
 	Setup_Source_Tuple InputSource[ SETUP_SOURCE_MIX_INPUTS];
 };
-
-#endif

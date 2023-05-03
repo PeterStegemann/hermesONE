@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_DEFINES_H
-#define SETUP_DEFINES_H
+#pragma once
 
 #define SETUP_OWNER_SIZE					30
 
@@ -38,5 +37,3 @@
 #define SETUP_STATUS_SOURCE_LEFT_BOTTOM		1
 #define SETUP_STATUS_SOURCE_RIGHT_SIDE		2
 #define SETUP_STATUS_SOURCE_RIGHT_BOTTOM	3
-
-#endif

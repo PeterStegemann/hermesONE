@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SIGNAL_SOURCE_MIX_H
-#define SIGNAL_SOURCE_MIX_H
+#pragma once
 
 #include "Setup/Source/Mix.h"
 
@@ -24,5 +23,3 @@ class Signal_Source_Mix
 
 		int16_t CalculateValue( Signal_Processor* SignalProcessor);
 };
-
-#endif

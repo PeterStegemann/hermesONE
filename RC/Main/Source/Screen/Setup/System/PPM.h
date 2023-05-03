@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SYSTEM_PPM_H
-#define SCREEN_SETUP_SYSTEM_PPM_H
+#pragma once
 
 #include "../BaseList.h"
 #include "GUI/Setup/Checkbox.h"
@@ -52,5 +51,3 @@ class Screen_Setup_System_PPM : public Screen_Setup_BaseList
 	public:
 		Screen_Setup_System_PPM( uint8_t PPMId);
 };
-
-#endif

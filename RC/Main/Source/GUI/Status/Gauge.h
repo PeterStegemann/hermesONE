@@ -1,7 +1,6 @@
 // Copyright 2012 Peter Stegemann
 
-#ifndef GUI_STATUS_GAUGE_H
-#define GUI_STATUS_GAUGE_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -28,7 +27,7 @@ class GUI_Status_Gauge
 
 		FONT::FontId fontId;
 
-		// Marks wether we have remembered values from last draw.
+		// Marks whether we have remembered values from last draw.
 		bool remembered;
 		// Remembered values.
 		int16_t minimum, maximum, value;
@@ -54,5 +53,3 @@ class GUI_Status_Gauge
 		// Clear gauge content.
 		void Clear( void);
 };
-
-#endif

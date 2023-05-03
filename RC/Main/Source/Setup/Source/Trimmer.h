@@ -1,7 +1,6 @@
 // Copyright 2012 Peter Stegemann
 
-#ifndef SETUP_SOURCE_TRIMMER_H
-#define SETUP_SOURCE_TRIMMER_H
+#pragma once
 
 #include "Tuple.h"
 
@@ -26,5 +25,3 @@ struct Setup_Source_Trimmer
 
 	int16_t PointVolume[ PV_PointVolumeCount];
 };
-
-#endif

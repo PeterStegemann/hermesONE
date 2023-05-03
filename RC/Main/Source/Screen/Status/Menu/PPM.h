@@ -1,7 +1,6 @@
 // Copyright 2014 Peter Stegemann
 
-#ifndef SCREEN_STATUS_MENU_PPM_H
-#define SCREEN_STATUS_MENU_PPM_H
+#pragma once
 
 #include "Base.h"
 #include "Setup/PPM.h"
@@ -23,5 +22,3 @@ class Screen_Status_Menu_PPM : public Screen_Status_Menu_Base
 		Screen_Status_Menu_PPM( uint8_t PPMId);
 		virtual ~Screen_Status_Menu_PPM( void);
 };
-
-#endif

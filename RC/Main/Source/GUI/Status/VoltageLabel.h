@@ -1,7 +1,6 @@
 // Copyright 2012 Peter Stegemann
 
-#ifndef GUI_STATUS_VOLTAGELABEL_H
-#define GUI_STATUS_VOLTAGELABEL_H
+#pragma once
 
 #include "Label.h"
 
@@ -13,5 +12,3 @@ class GUI_Status_VoltageLabel : public GUI_Status_Label
 	public:
 		void SetVoltage( uint8_t Voltage);
 };
-
-#endif

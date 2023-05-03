@@ -1,7 +1,6 @@
 // Copyright 2013 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SOURCE_PROXY_H
-#define SCREEN_SETUP_SOURCE_PROXY_H
+#pragma once
 
 #include "Base.h"
 #include "GUI/Setup/CheckBox.h"
@@ -29,5 +28,3 @@ class Screen_Setup_Source_Proxy : public Screen_Setup_Source_Base
 	public:
 		Screen_Setup_Source_Proxy( uint8_t SignalSourceId);
 };
-
-#endif

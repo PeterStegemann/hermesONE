@@ -1,7 +1,6 @@
 // Copyright 2013 Peter Stegemann
 
-#ifndef SCREEN_SETUP_PROXIES_H
-#define SCREEN_SETUP_PROXIES_H
+#pragma once
 
 #include "BaseList.h"
 
@@ -39,5 +38,3 @@ class Screen_Setup_Proxies : public Screen_Setup_BaseList
 	public:
 		Screen_Setup_Proxies( void);
 };
-
-#endif

@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_CALIBRATION_H
-#define SETUP_CALIBRATION_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -18,5 +17,3 @@ struct Setup_Calibration
 	
 	int16_t Value[ V_ValueCount];
 };
-
-#endif

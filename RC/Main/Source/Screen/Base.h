@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef SCREEN_BASE_H
-#define SCREEN_BASE_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -52,5 +51,3 @@ class Screen_Base
 		// Run screen.
 		void Run( void);
 };
-
-#endif

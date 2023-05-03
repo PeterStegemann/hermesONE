@@ -1,7 +1,6 @@
 // Copyright 2007 Peter Stegemann
 
-#ifndef SIGNAL_PPM_H
-#define SIGNAL_PPM_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -102,5 +101,3 @@ class Signal_PPM
 	// Internal sequence id.
 	uint16_t GetSequence( void);
 };
-
-#endif

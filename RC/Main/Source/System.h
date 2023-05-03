@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#pragma once
 
 //#define SYSTEM_FRAME_DELAY				100		// 10 frames per second.
 #define SYSTEM_LONG_PRESS_DURATION		250		// Long press quarter of a second.
@@ -62,5 +61,3 @@
 #define SERIAL_1_UCSRB_VALUE		( 0 << RXCIE1) | ( 0 << TXCIE1) | ( 0 << UDRIE1) | ( 1 << RXEN1) | ( 1 << TXEN1) | ( 0 << UCSZ12)
 // Asynchronous, No parity, 1 stop bit, 8 bit data
 #define SERIAL_1_UCSRC_VALUE		( 0 << UMSEL11) | ( 0 << UMSEL10) | ( 0 << UPM11) | ( 0 << UPM10) | ( 0 << USBS1) | ( 1 << UCSZ11) | ( 1 << UCSZ10)
-
-#endif

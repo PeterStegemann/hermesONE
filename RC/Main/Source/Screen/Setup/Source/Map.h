@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SOURCE_MAP_H
-#define SCREEN_SETUP_SOURCE_MAP_H
+#pragma once
 
 #include "Base.h"
 #include "GUI/Setup/Gauge.h"
@@ -39,5 +38,3 @@ class Screen_Setup_Source_Map : public Screen_Setup_Source_Base
 	public:
 		Screen_Setup_Source_Map( uint8_t SignalSourceId);
 };
-
-#endif

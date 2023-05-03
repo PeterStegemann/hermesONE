@@ -1,7 +1,6 @@
 // Copyright 2007 Peter Stegemann
 
-#ifndef SCREEN_SETUP_BASE_H
-#define SCREEN_SETUP_BASE_H
+#pragma once
 
 #include "../Base.h"
 
@@ -51,5 +50,3 @@ class Screen_Setup_Base : public Screen_Base
 		// Rebuild entire display.
 		virtual void ReDisplay( void);
 };
-
-#endif

@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef SCREEN_STATUS_MENU_H
-#define SCREEN_STATUS_MENU_H
+#pragma once
 
 #include "../../Base.h"
 
@@ -66,5 +65,3 @@ class Screen_Status_Menu_Base : public Screen_Base
 	Screen_Status_Menu_Base( uint8_t MenuEntries, Level MenuLevel);
 	virtual ~Screen_Status_Menu_Base( void);
 };
-
-#endif

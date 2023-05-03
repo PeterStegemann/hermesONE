@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef MAIN_STATUS_H
-#define MAIN_STATUS_H
+#pragma once
 
 #include "Base.h"
 
@@ -27,5 +26,3 @@ class Main_Status : public Main_Base
 };
 
 extern Main_Status MainInstance;
-
-#endif

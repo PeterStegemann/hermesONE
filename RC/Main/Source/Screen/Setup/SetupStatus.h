@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SETUPSTATUS_H
-#define SCREEN_SETUP_SETUPSTATUS_H
+#pragma once
 
 #include "Base.h"
 #include "GUI/Setup/Gauge.h"
@@ -34,5 +33,3 @@ class Screen_Setup_SetupStatus : public Screen_Setup_Base
 	public:
 		Screen_Setup_SetupStatus( void);
 };
-
-#endif

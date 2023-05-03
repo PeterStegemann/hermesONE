@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef SIGNAL_SOURCE_TIMER_H
-#define SIGNAL_SOURCE_TIMER_H
+#pragma once
 
 #include "Setup/Source/Timer.h"
 
@@ -34,5 +33,3 @@ class Signal_Source_Timer
 		int16_t GetTime( void);
 		void ResetTime( void);
 };
-
-#endif

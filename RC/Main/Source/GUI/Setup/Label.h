@@ -23,7 +23,7 @@ class GUI_Setup_Label
 		FONT::FontId fontId;
 
 	protected:
-		// Marks wether we have remembered values from last draw.
+		// Marks whether we have remembered values from last draw.
 		bool remembered;
 
 		// Remembered values.

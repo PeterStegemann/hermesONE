@@ -1,7 +1,6 @@
 // Copyright 2012 Peter Stegemann
 
-#ifndef SIGNAL_SOURCE_TRIMMER_H
-#define SIGNAL_SOURCE_TRIMMER_H
+#pragma once
 
 #include "Setup/Source/Trimmer.h"
 
@@ -33,5 +32,3 @@ class Signal_Source_Trimmer
 
 		int16_t CalculateValue( Signal_Processor* SignalProcessor);
 };
-
-#endif

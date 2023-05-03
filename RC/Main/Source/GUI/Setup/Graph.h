@@ -19,7 +19,7 @@ class GUI_Setup_Graph
 		};
 
 	private:
-		// Marks wether we have remembered values from last draw.
+		// Marks whether we have remembered values from last draw.
 		bool remembered;
 
 		int16_t marker;

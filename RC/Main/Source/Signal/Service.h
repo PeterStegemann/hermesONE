@@ -1,7 +1,6 @@
 // Copyright 2014 Peter Stegemann
 
-#ifndef SIGNAL_SERVICE_H
-#define SIGNAL_SERVICE_H
+#pragma once
 
 #include "PPM.h"
 
@@ -27,5 +26,3 @@ class Signal_Service
 		// Get ppm 0 or 1.
 		Signal_PPM* GetPPM( uint8_t Index);
 };
-
-#endif

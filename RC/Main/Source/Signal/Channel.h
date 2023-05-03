@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SIGNAL_CHANNEL_H
-#define SIGNAL_CHANNEL_H
+#pragma once
 
 #include "Setup/Channel.h"
 
@@ -38,5 +37,3 @@ class Signal_Channel
 	// Get last calculated value.
 	int16_t GetValue( void);
 };
-
-#endif

@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SOURCES_H
-#define SCREEN_SETUP_SOURCES_H
+#pragma once
 
 #include "BaseList.h"
 
@@ -53,5 +52,3 @@ class Screen_Setup_Sources : public Screen_Setup_BaseList
 							  Signal_Source_Source::Level SourceLevel =
 							  Signal_Source_Source::L_Model);
 };
-
-#endif

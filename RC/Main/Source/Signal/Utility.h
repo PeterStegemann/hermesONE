@@ -1,7 +1,6 @@
 // Copyright 2007 Peter Stegemann
 
-#ifndef SIGNAL_UTILITY_H
-#define SIGNAL_UTILITY_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -18,5 +17,3 @@ class Signal_Utility
 											    uint8_t SignalSourceId,
 											    int16_t HundretPercentVolume, int16_t Volume);
 };
-
-#endif

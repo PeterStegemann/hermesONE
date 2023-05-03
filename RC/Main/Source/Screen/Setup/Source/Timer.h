@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SOURCE_TIMER_H
-#define SCREEN_SETUP_SOURCE_TIMER_H
+#pragma once
 
 #include "Base.h"
 #include "GUI/Setup/CheckBox.h"
@@ -50,5 +49,3 @@ class Screen_Setup_Source_Timer : public Screen_Setup_Source_Base
 	public:
 		Screen_Setup_Source_Timer( uint8_t SignalSourceId);
 };
-
-#endif

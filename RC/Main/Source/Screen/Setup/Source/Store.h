@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef SCREEN_SETUP_SOURCE_STORE_H
-#define SCREEN_SETUP_SOURCE_STORE_H
+#pragma once
 
 #include "Base.h"
 #include "GUI/Setup/Gauge.h"
@@ -23,5 +22,3 @@ class Screen_Setup_Source_Store : public Screen_Setup_Source_Base
 	public:
 		Screen_Setup_Source_Store( uint8_t SignalSourceId);
 };
-
-#endif

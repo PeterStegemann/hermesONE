@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SCREEN_SETUP_CHANNELS_H
-#define SCREEN_SETUP_CHANNELS_H
+#pragma once
 
 #include "BaseList.h"
 #include "GUI/Setup/Gauge.h"
@@ -38,5 +37,3 @@ class Screen_Setup_Channels : public Screen_Setup_BaseList
 	public:
 		Screen_Setup_Channels( void);
 };
-
-#endif

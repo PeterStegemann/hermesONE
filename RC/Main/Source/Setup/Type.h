@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_TYPE_H
-#define SETUP_TYPE_H
+#pragma once
 
 #include "Defines.h"
 
@@ -11,5 +10,3 @@ struct Setup_Type
 
 	char Name[ SETUP_MODEL_TYPE_NAME_SIZE];
 };
-
-#endif

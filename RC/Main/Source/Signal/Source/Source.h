@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SIGNAL_SOURCE_SOURCE_H
-#define SIGNAL_SOURCE_SOURCE_H
+#pragma once
 
 #include "Follower.h"
 #include "Input.h"
@@ -99,5 +98,3 @@ class Signal_Source_Source
 		// Get last calculated value, calulate a new one if needed.
 		int16_t GetValue( Signal_Processor* SignalProcessor);
 };
-
-#endif

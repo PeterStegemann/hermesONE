@@ -23,7 +23,7 @@ class GUI_Setup_Marker
 
     uint8_t size;
 
-    // Marks wether we have remembered values from last draw.
+    // Marks whether we have remembered values from last draw.
     bool remembered;
     // Current marker position.
     uint16_t left, top;

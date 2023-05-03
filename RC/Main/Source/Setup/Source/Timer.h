@@ -1,7 +1,6 @@
 // Copyright 2011 Peter Stegemann
 
-#ifndef SETUP_SOURCE_TIMER_H
-#define SETUP_SOURCE_TIMER_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -20,5 +19,3 @@ struct Setup_Source_Timer
 	int16_t WarnCriticalTime;
 	int16_t WarnPauseTime;
 };
-
-#endif

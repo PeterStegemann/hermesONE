@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef MAIN_SETUP_H
-#define MAIN_SETUP_H
+#pragma once
 
 #include "Base.h"
 
@@ -45,5 +44,3 @@ class Main_Setup : public Main_Base
 };
 
 extern Main_Setup MainInstance;
-
-#endif

@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef SIGNAL_SOURCE_STORE_H
-#define SIGNAL_SOURCE_STORE_H
+#pragma once
 
 #include "Setup/Source/Store.h"
 /*
@@ -35,5 +34,3 @@ class Signal_Source_Store
 
 		void ResetValue( void);
 };
-
-#endif

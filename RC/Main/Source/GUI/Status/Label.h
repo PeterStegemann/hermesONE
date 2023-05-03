@@ -1,7 +1,6 @@
 // Copyright 2012 Peter Stegemann
 
-#ifndef GUI_STATUS_LABEL_H
-#define GUI_STATUS_LABEL_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 #include "AVR/Source/LCD/LCD_DOG.h"
@@ -14,7 +13,7 @@ class GUI_Status_Label
 		FONT::FontId fontId;
 
 	protected:
-		// Marks wether we have remembered values from last draw.
+		// Marks whether we have remembered values from last draw.
 		bool remembered;
 
 		// Remembered values.
@@ -48,5 +47,3 @@ class GUI_Status_Label
 		// Clear label content.
 		void Clear( void);
 };
-
-#endif

@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef STATUS_SERVICE_H
-#define STATUS_SERVICE_H
+#pragma once
 
 #include "AVR/Source/Types.h"
 
@@ -31,5 +30,3 @@ class Status_Service
 		// Give a beep.
 		void Beep( void);
 };
-
-#endif

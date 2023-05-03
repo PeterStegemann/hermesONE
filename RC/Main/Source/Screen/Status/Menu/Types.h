@@ -1,7 +1,6 @@
 // Copyright 2014 Peter Stegemann
 
-#ifndef SCREEN_STATUS_MENU_TYPES_H
-#define SCREEN_STATUS_MENU_TYPES_H
+#pragma once
 
 #include "Base.h"
 
@@ -22,5 +21,3 @@ class Screen_Status_Menu_Types : public Screen_Status_Menu_Base
 	Screen_Status_Menu_Types( void);
 	virtual ~Screen_Status_Menu_Types( void);
 };
-
-#endif

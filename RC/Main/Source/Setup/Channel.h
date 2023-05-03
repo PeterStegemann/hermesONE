@@ -1,7 +1,6 @@
 // Copyright 2008 Peter Stegemann
 
-#ifndef SETUP_CHANNEL_H
-#define SETUP_CHANNEL_H
+#pragma once
 
 #include "Source/Tuple.h"
 
@@ -36,5 +35,3 @@ struct Setup_Channel
 
 	uint8_t Mode;
 };
-
-#endif

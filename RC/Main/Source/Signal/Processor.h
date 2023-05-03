@@ -1,7 +1,6 @@
 // Copyright 2007 Peter Stegemann
 
-#ifndef SIGNAL_PROCESSOR_H
-#define SIGNAL_PROCESSOR_H
+#pragma once
 
 #include "Calibration.h"
 #include "Channel.h"
@@ -94,5 +93,3 @@ class Signal_Processor
 		// Get local sourceid for setup sourceid.
 		uint8_t GetSignalSourceId( uint16_t SetupSourceId);
 };
-
-#endif
