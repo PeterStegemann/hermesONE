@@ -143,19 +143,6 @@ endif
 
 ifeq ($(HAS_SETUP), yes)
 	CPPSRC += \
-		Source/GUI/Setup/Gauge.cpp \
-		Source/GUI/Setup/GaugeSelect.cpp \
-		Source/GUI/Setup/Graph.cpp \
-		Source/GUI/Setup/Label.cpp \
-		Source/GUI/Setup/Marker.cpp \
-		Source/GUI/Setup/MillisecondLabel.cpp \
-		Source/GUI/Setup/PointGraph.cpp \
-		Source/GUI/Setup/Popup.cpp \
-		Source/GUI/Setup/Select.cpp \
-		Source/GUI/Setup/SourceTupleGraph.cpp \
-		Source/GUI/Setup/TextInput.cpp \
-		Source/GUI/Setup/TimeLabel.cpp \
-		Source/GUI/Setup/VoltageLabel.cpp \
 		Source/Screen/Setup/Base.cpp \
 		Source/Screen/Setup/BaseList.cpp \
 		Source/Screen/Setup/Channel.cpp \
