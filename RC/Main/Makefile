@@ -157,7 +157,6 @@ ifeq ($(HAS_SETUP), yes)
 		Source/Screen/Setup/Status.cpp \
 		Source/Screen/Setup/Types.cpp \
 		Source/Screen/Setup/Source/Base.cpp \
-		Source/Screen/Setup/Source/Follower.cpp \
 		Source/Screen/Setup/Source/Input.cpp \
 		Source/Screen/Setup/Source/Map.cpp \
 		Source/Screen/Setup/Source/Mix.cpp \

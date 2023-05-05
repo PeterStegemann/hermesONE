@@ -12,8 +12,7 @@
 
 #include <string.h>
 
-Screen_Setup_Base::Screen_Setup_Base( uint32_t MenuPattern, const flash_char* Title,
-									  bool ManageMenuMarker)
+Screen_Setup_Base::Screen_Setup_Base( uint32_t MenuPattern, const flash_char* Title, bool ManageMenuMarker)
 				 : Screen_Base( MenuPattern)
 				 , manageMenuMarker( ManageMenuMarker)
 				 , title( Title)

@@ -71,8 +71,10 @@ class Main_Base
         Spi.Initialize();
 
         // Set up head lcd.
-        StatusDisplay.Initialize( SetupService.GetStatusBacklight(), SetupService.GetStatusContrast(),
-                                  SetupService.GetStatusInverted());
+        StatusDisplay.Initialize
+        (
+            SetupService.GetStatusBacklight(), SetupService.GetStatusContrast(), SetupService.GetStatusInverted()
+        );
 
         // Show intro on status screen.
         StatusScreen.ShowIntro();
