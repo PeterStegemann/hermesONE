@@ -177,7 +177,6 @@ ifeq ($(HAS_STATUS), yes)
 		Source/GUI/Status/Gauge.cpp \
 		Source/GUI/Status/Label.cpp \
 		Source/GUI/Status/TimeLabel.cpp \
-		Source/GUI/Status/VoltageLabel.cpp \
 		Source/Screen/Status/Status.cpp \
 		Source/Screen/Status/Menu/Base.cpp \
 		Source/Screen/Status/Menu/Battery.cpp \
@@ -213,7 +212,6 @@ else ifeq ($(LANGUAGE), english)
 endif
 
 CPPSRC += \
-	Source/Input/Rotary.cpp \
 	Source/Input/Service.cpp \
 	Source/Interrupt/Service.cpp \
 	Source/Main/Base.cpp \

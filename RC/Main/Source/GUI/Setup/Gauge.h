@@ -3,8 +3,8 @@
 #pragma once
 
 #include "Defines.h"
+#include "Marker.h"
 
-#include "GUI/Setup/Marker.h"
 #include "Text/Text.h"
 
 #include "AVR/Source/Types.h"
