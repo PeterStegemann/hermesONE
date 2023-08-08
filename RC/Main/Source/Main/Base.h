@@ -48,6 +48,7 @@ class Main_Base
   public:
     Main_Base( void)
         : lastStoreModifiedTime( 0)
+        , StatusScreen( &StatusDisplay)
     {
     }
 

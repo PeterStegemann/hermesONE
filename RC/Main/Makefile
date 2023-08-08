@@ -148,7 +148,6 @@ ifeq ($(HAS_SETUP), yes)
 		Source/Screen/Setup/Channel.cpp \
 		Source/Screen/Setup/Channels.cpp \
 		Source/Screen/Setup/Info.cpp \
-		Source/Screen/Setup/Main.cpp \
 		Source/Screen/Setup/Model.cpp \
 		Source/Screen/Setup/Models.cpp \
 		Source/Screen/Setup/Proxies.cpp \
@@ -172,10 +171,6 @@ endif
 
 ifeq ($(HAS_STATUS), yes)
 	CPPSRC += \
-		Source/GUI/Status/BatteryGauge.cpp \
-		Source/GUI/Status/Gauge.cpp \
-		Source/GUI/Status/Label.cpp \
-		Source/GUI/Status/TimeLabel.cpp \
 		Source/Screen/Status/Status.cpp \
 		Source/Screen/Status/Menu/Base.cpp \
 		Source/Screen/Status/Menu/Battery.cpp \

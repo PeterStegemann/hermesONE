@@ -12,6 +12,11 @@ class GUI_Status_VoltageLabel : public GUI_Status_Label
     char voltageLabelText[ 6];
 
   public:
+    GUI_Status_VoltageLabel( LCD_DOG* StatusDisplay)
+        : GUI_Status_Label( StatusDisplay)
+    {
+    }
+
     void SetVoltage( uint8_t Voltage)
     {
     	if( remembered == true)

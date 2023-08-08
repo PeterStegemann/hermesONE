@@ -7,49 +7,31 @@
 
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/Font/Font.h"
-#include "AVR/Source/LCD/LCD_DOG.h"
 
-Screen_Status_Status::Screen_Status_Status( void)
-		            : Screen_Base()
+void Screen_Status_Status::displayGauge( GUI_Status_Gauge* Gauge, uint8_t SourceId)
 {
-	statusGauge[ SETUP_STATUS_SOURCE_LEFT_SIDE].SetOptions(
-		( GUI_Status_Gauge::Options)( GUI_Status_Gauge::O_Vertical));
-	statusGauge[ SETUP_STATUS_SOURCE_RIGHT_SIDE].SetOptions(
-		( GUI_Status_Gauge::Options)( GUI_Status_Gauge::O_Vertical));
-	statusGauge[ SETUP_STATUS_SOURCE_LEFT_BOTTOM].SetOptions(
-		( GUI_Status_Gauge::Options)( GUI_Status_Gauge::O_Horizontal));
-	statusGauge[ SETUP_STATUS_SOURCE_RIGHT_BOTTOM].SetOptions(
-		( GUI_Status_Gauge::Options)( GUI_Status_Gauge::O_Horizontal));
+    uint16_t SetupSourceId = GLOBAL.SetupService.GetStatusSourceId( SourceId);
+    uint8_t Source = GLOBAL.SignalProcessor.GetSignalSourceId( SetupSourceId);
 
-	// Find sources to display.
-	uint8_t SourceLine = 0;
-
-	while( SourceLine < SETUP_MODEL_STATUS_SOURCES)
-	{
-		uint16_t SetupSourceId = GLOBAL.SetupService.GetStatusSourceId( SourceLine);
-
-		source[ SourceLine] = GLOBAL.SignalProcessor.GetSignalSourceId( SetupSourceId);
-
-		SourceLine++;
-	}
+    Gauge->Display( SIGNAL_MINIMUM_VALUE, SIGNAL_MAXIMUM_VALUE, GLOBAL.SignalProcessor.GetSourceValue( Source));
 }
 
 void Screen_Status_Status::display( void)
 {
-	GLOBAL.StatusDisplay.Clear();
+	statusDisplay->Clear();
 
-	statusGauge[ SETUP_STATUS_SOURCE_LEFT_SIDE].SetDimensions( 0, 2);
-	statusGauge[ SETUP_STATUS_SOURCE_RIGHT_SIDE].SetDimensions(
-		GLOBAL.StatusDisplay.GetWidth() - ( 5 + 1), 2);
-	statusGauge[ SETUP_STATUS_SOURCE_LEFT_BOTTOM].SetDimensions( 4, 7);
-	statusGauge[ SETUP_STATUS_SOURCE_RIGHT_BOTTOM].SetDimensions(
-		GLOBAL.StatusDisplay.GetWidth() - ( SCREEN_STATUS_STATUS_HORIZONTAL_GAUGE_WIDTH + 1 + 4), 7);
+	// Set gauge dimensions.
+	leftSideStatusGauge.SetDimensions( 0, 2);
+	rightSideStatusGauge.SetDimensions( statusDisplay->GetWidth() - ( 5 + 1), 2);
+	leftBottomStatusGauge.SetDimensions( 4, 7);
+	rightBottomStatusGauge.SetDimensions(
+		statusDisplay->GetWidth() - ( SCREEN_STATUS_STATUS_HORIZONTAL_GAUGE_WIDTH + 1 + 4), 7);
 
-	// Clear all channels.
-	for( uint8_t SourceLine = 0; SourceLine < SETUP_MODEL_STATUS_SOURCES; SourceLine++)
-	{
-		statusGauge[ SourceLine].Clear();
-	}
+	// Clear all gauges.
+	leftSideStatusGauge.Clear();
+	rightSideStatusGauge.Clear();
+	leftBottomStatusGauge.Clear();
+	rightBottomStatusGauge.Clear();
 
 	uint8_t SelectedModelId = GLOBAL.SetupService.GetSelectedModelId();
 	GLOBAL.SetupService.GetModelName( SelectedModelId, modelName, sizeof( modelName));
@@ -67,41 +49,25 @@ void Screen_Status_Status::display( void)
 	typeNameLabel.SetText( typeName);
 	typeNameLabel.Display();
 
-	batteryLabel.SetDimensions( GLOBAL.StatusDisplay.GetWidth() - 25, 2);
+	batteryLabel.SetDimensions( statusDisplay->GetWidth() - 25, 2);
 	batteryLabel.SetFont( FONT::FI_Mini);
 	batteryLabel.Clear();
 
 	timeLabel.SetDimensions( 30, 5);
 	timeLabel.SetFont( FONT::FI_Large);
 
-	batteryGauge.Display( GLOBAL.StatusBattery.GetMinimumVoltage(),
-						  GLOBAL.StatusBattery.GetMaximumVoltage(), 0);
+	batteryGauge.Display( GLOBAL.StatusBattery.GetMinimumVoltage(), GLOBAL.StatusBattery.GetMaximumVoltage(), 0);
 
 	update();
 }
 
 void Screen_Status_Status::update( void)
 {
-	// Find sources to display.
-	uint8_t SourceLine = 0;
-
-	while( SourceLine < SETUP_MODEL_STATUS_SOURCES)
-	{
-		uint16_t SetupSourceId =
-			GLOBAL.SetupService.GetStatusSourceId( SourceLine);
-
-		source[ SourceLine] = GLOBAL.SignalProcessor.GetSignalSourceId( SetupSourceId);
-
-		SourceLine++;
-	}
-
-	// Print all channels.
-	for( uint8_t SourceLine = 0; SourceLine < SETUP_MODEL_STATUS_SOURCES; SourceLine++)
-	{
-		statusGauge[ SourceLine].Display( SIGNAL_MINIMUM_VALUE, SIGNAL_MAXIMUM_VALUE,
-										  GLOBAL.SignalProcessor.GetSourceValue(
-												source[ SourceLine]));
-	}
+	// Update all gauges.
+	displayGauge( &leftSideStatusGauge, SETUP_STATUS_SOURCE_LEFT_SIDE);
+	displayGauge( &rightSideStatusGauge, SETUP_STATUS_SOURCE_RIGHT_SIDE);
+	displayGauge( &leftBottomStatusGauge, SETUP_STATUS_SOURCE_LEFT_BOTTOM);
+	displayGauge( &rightBottomStatusGauge, SETUP_STATUS_SOURCE_RIGHT_BOTTOM);
 
 	uint8_t Voltage = GLOBAL.StatusBattery.GetVoltage();
 
@@ -125,40 +91,4 @@ void Screen_Status_Status::update( void)
 			timeLabel.SetTime( Source->Body.Timer.GetTime());
 		}
 	}
-}
-
-bool Screen_Status_Status::processMenu( DoMenuResult Result)
-{
-	switch( Result)
-	{
-		case DMR_Selected :	return( false);
-
-		default : break;
-	}
-
-	return( true);
-}
-
-void Screen_Status_Status::ShowIntro( void)
-{
-	GLOBAL.StatusDisplay.Clear();
-
-	GLOBAL.StatusDisplay.Print( 15, 1, FONT::FI_Large, "hermesONE");
-}
-
-void Screen_Status_Status::ShowRfOff( void)
-{
-	GLOBAL.StatusDisplay.Clear();
-
-	GLOBAL.StatusDisplay.Print_P( 5, 1, FONT::FI_Large, Text::RFDisabled);
-}
-
-void Screen_Status_Status::Display( void)
-{
-	display();
-}
-
-void Screen_Status_Status::Update( void)
-{
-	update();
 }
