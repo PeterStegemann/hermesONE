@@ -13,7 +13,8 @@ class GUI_Setup_Marker
         O_LookRight			= 0b00000001,
         O_LookUp			= 0b00000010,
         O_LookLeft			= 0b00000100,
-        O_LookDown			= 0b00001000
+        O_LookDown			= 0b00001000,
+        O_Block		    	= 0b00010000
     };
 
   private:
@@ -21,7 +22,7 @@ class GUI_Setup_Marker
 
     Options options;
 
-    uint8_t size;
+    uint8_t width;
 
     // Marks whether we have remembered values from last draw.
     bool remembered;
@@ -48,69 +49,77 @@ class GUI_Setup_Marker
         {
             DrawColor = BackgroundColor;
         }
-    /*
-        GLOBAL.SetupDisplay.FillRect( areaLeft, areaTop, areaRight - areaLeft + 1,
-                                      areaBottom - areaTop + 1, LCD_65K_RGB::Pink);
-    */
-        uint16_t DrawLeft = left;
-        uint16_t DrawTop = top;
-        int16_t Direction;
 
-        if(( options & O_LookUp) || ( options & O_LookLeft))
+        if( options & O_Block)
         {
-            Direction = 1;
+            GLOBAL.SetupDisplay.DrawHorizontalLine( left, top - width / 2, width + 2, DrawColor);
+            GLOBAL.SetupDisplay.FillRect( left, top - width / 2, width, width, DrawColor);
+            GLOBAL.SetupDisplay.DrawHorizontalLine( left, top + width / 2, width + 2, DrawColor);
+
+            return;
         }
         else
         {
-            if( options & O_LookDown)
+            uint16_t DrawLeft = left;
+            uint16_t DrawTop = top;
+            int16_t Direction;
+
+            if(( options & O_LookUp) || ( options & O_LookLeft))
             {
-                DrawTop += size - 1;
+                Direction = 1;
             }
             else
             {
-                DrawLeft += size - 1;
+                if( options & O_LookDown)
+                {
+                    DrawTop += width - 1;
+                }
+                else
+                {
+                    DrawLeft += width - 1;
+                }
+
+                Direction = -1;
             }
 
-            Direction = -1;
-        }
+            uint16_t DrawSize = 1;
 
-        uint16_t DrawSize = 1;
-
-        for( uint8_t Line = 0; Line < size; Line++)
-        {
-            if(( options & O_LookUp) || ( options & O_LookDown))
+            for( uint8_t Line = 0; Line < width; Line++)
             {
-                GLOBAL.SetupDisplay.DrawHorizontalLine( DrawLeft, DrawTop, DrawSize, DrawColor);
-
-                if( DrawLeft > areaLeft)
+                if(( options & O_LookUp) || ( options & O_LookDown))
                 {
-                    DrawLeft--;
-                    DrawSize++;
-                }
+                    GLOBAL.SetupDisplay.DrawHorizontalLine( DrawLeft, DrawTop, DrawSize, DrawColor);
 
-                if(( DrawLeft + DrawSize - 1) < areaRight)
+                    if( DrawLeft > areaLeft)
+                    {
+                        DrawLeft--;
+                        DrawSize++;
+                    }
+
+                    if(( DrawLeft + DrawSize - 1) < areaRight)
+                    {
+                        DrawSize++;
+                    }
+
+                    DrawTop += Direction;
+                }
+                else
                 {
-                    DrawSize++;
+                    GLOBAL.SetupDisplay.DrawVerticalLine( DrawLeft, DrawTop, DrawSize, DrawColor);
+
+                    if( DrawTop > areaTop)
+                    {
+                        DrawTop--;
+                        DrawSize++;
+                    }
+
+                    if(( DrawTop + DrawSize - 1) < areaBottom)
+                    {
+                        DrawSize++;
+                    }
+
+                    DrawLeft += Direction;
                 }
-
-                DrawTop += Direction;
-            }
-            else
-            {
-                GLOBAL.SetupDisplay.DrawVerticalLine( DrawLeft, DrawTop, DrawSize, DrawColor);
-
-                if( DrawTop > areaTop)
-                {
-                    DrawTop--;
-                    DrawSize++;
-                }
-
-                if(( DrawTop + DrawSize - 1) < areaBottom)
-                {
-                    DrawSize++;
-                }
-
-                DrawLeft += Direction;
             }
         }
     }
@@ -124,7 +133,8 @@ class GUI_Setup_Marker
         : areaLeft( 0)
         , areaTop( 0)
         , options( O_None)
-        , size( 5)
+        , width( 5)
+//        , height( 5)
         , remembered( false)
         , left( 0)
         , top( 0)
@@ -155,9 +165,15 @@ class GUI_Setup_Marker
     }
 
     // Set the size of the marker.
-    void SetSize( uint8_t Size)
+    void SetSize( uint8_t Width)
     {
-    	size = Size;
+    	SetSize( Width, Width);
+    }
+
+    void SetSize( uint8_t Width, uint8_t Height)
+    {
+    	width = Width;
+//    	height = Height;
 
     	remembered = false;
     }

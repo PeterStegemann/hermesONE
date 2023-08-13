@@ -31,6 +31,11 @@ Screen_Setup_Base::~Screen_Setup_Base( void)
 {
 }
 
+extern unsigned int __data_start;
+extern unsigned int __data_end;
+extern unsigned int __bss_start;
+extern unsigned int __bss_end;
+
 void Screen_Setup_Base::update( void)
 {
 	GLOBAL.StatusScreen.Update();
@@ -41,14 +46,30 @@ void Screen_Setup_Base::update( void)
 
 	if( Diff > 0)
 	{
-		uint8_t Frames = 450 / Diff;
+//		uint8_t Frames = 450 / Diff;
 
 		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 1, FONT::FI_Mini,
+										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+										 "%d", __data_start);
+		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 11, FONT::FI_Mini,
+										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+										 "%d", __data_end);
+		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 21, FONT::FI_Mini,
+										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+										 "%d", __bss_start);
+		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 31, FONT::FI_Mini,
+										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+										 "%d", __bss_end);
+		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 41, FONT::FI_Mini,
+										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+    									 "%d", &Sequence);
+
+/*		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 1, FONT::FI_Mini,
 										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
 										 "%u %d %d.%01d  ", Sequence,
 										 GLOBAL.SignalService.GetPPM( 0)->GetWaited(), Frames / 10,
 										 Frames % 10);
-
+*/
 		//		UTILITY::PrintByteBits( &( GLOBAL.SetupDisplay), frameLeft + 250, frameTop + 10, "A: ", PINA);
 	}
 }

@@ -21,12 +21,12 @@ int16_t Signal_Utility::AddValues( int16_t First, int16_t Second)
 	return( ResultValue);
 }
 
-int16_t Signal_Utility::VolumizeValue( int16_t Value, int16_t HundretPercentVolume, int16_t Volume)
+int16_t Signal_Utility::VolumizeValue( int16_t Value, int16_t HundredPercentVolume, int16_t Volume)
 {
 	int32_t ResultValue = Value;
 
 	ResultValue *= Volume;
-	ResultValue /= HundretPercentVolume;
+	ResultValue /= HundredPercentVolume;
 
 	if( ResultValue < SIGNAL_MINIMUM_VALUE)
 	{
@@ -42,7 +42,7 @@ int16_t Signal_Utility::VolumizeValue( int16_t Value, int16_t HundretPercentVolu
 
 int16_t Signal_Utility::GetVolumizedSourceValue( Signal_Processor* SignalProcessor,
 												 uint8_t SignalSourceId,
-												 int16_t HundretPercentVolume, int16_t Volume)
+												 int16_t HundredPercentVolume, int16_t Volume)
 {
 	int16_t SourceValue;
 
@@ -55,7 +55,7 @@ int16_t Signal_Utility::GetVolumizedSourceValue( Signal_Processor* SignalProcess
 	{
 		int32_t ResultValue = Volume;
 		ResultValue *= SIGNAL_MAXIMUM_VALUE;
-		ResultValue /= HundretPercentVolume;
+		ResultValue /= HundredPercentVolume;
 
 		return( ResultValue);
 	}
@@ -63,6 +63,6 @@ int16_t Signal_Utility::GetVolumizedSourceValue( Signal_Processor* SignalProcess
 	{
 		SourceValue = SignalProcessor->GetSourceValue( SignalSourceId);
 
-		return( VolumizeValue( SourceValue, HundretPercentVolume, Volume));
+		return( VolumizeValue( SourceValue, HundredPercentVolume, Volume));
 	}
 }

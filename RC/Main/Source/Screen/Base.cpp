@@ -77,8 +77,7 @@ Screen_Base::DoMenuResult Screen_Base::doMenu( uint32_t MenuPattern)
 	bool RotaryCurrentButton;
 	uint16_t RotaryButtonTime;
 
-	GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton, &RotaryCurrentButton,
-								   &RotaryButtonTime);
+	GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton, &RotaryCurrentButton, &RotaryButtonTime);
 
 	// Check for long press while the button is still pressed.
 	if( RotaryCurrentButton == true)

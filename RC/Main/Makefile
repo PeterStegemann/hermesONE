@@ -180,11 +180,9 @@ ifeq ($(HAS_STATUS), yes)
 		Source/Screen/Status/Menu/ChannelMapping.cpp \
 		Source/Screen/Status/Menu/Channels.cpp \
 		Source/Screen/Status/Menu/Display.cpp \
-		Source/Screen/Status/Menu/Main.cpp \
 		Source/Screen/Status/Menu/Models.cpp \
 		Source/Screen/Status/Menu/PPM.cpp \
 		Source/Screen/Status/Menu/Status.cpp \
-		Source/Screen/Status/Menu/System.cpp \
 		Source/Screen/Status/Menu/Types.cpp
 endif
 
@@ -303,10 +301,13 @@ CFLAGS += -funsigned-char
 CFLAGS += -funsigned-bitfields
 CFLAGS += -fpack-struct
 CFLAGS += -fshort-enums
+CFLAGS += --param=min-pagesize=0
 CFLAGS += -Wall
+CFLAGS += -Werror
+CFLAGS += -Wundef
+CFLAGS += -mcall-prologues
 #CFLAGS += -mshort-calls
 #CFLAGS += -fno-unit-at-a-time
-#CFLAGS += -Wundef
 #CFLAGS += -Wunreachable-code
 #CFLAGS += -Wsign-compare
 #CFLAGS += -Wa,-adhlns=$(<:%.c=$(OBJDIR)/%.lst)
@@ -331,8 +332,11 @@ CPPFLAGS += -fshort-enums
 CPPFLAGS += -fno-exceptions
 CPPFLAGS += -fno-rtti
 #CPPFLAGS += -fwhole-program
+CPPFLAGS += --param=min-pagesize=0
 CPPFLAGS += -Wall
-CFLAGS += -Wundef
+CPPFLAGS += -Werror
+CPPFLAGS += -Wundef
+CPPFLAGS += -mcall-prologues
 #CPPFLAGS += -mshort-calls
 #CPPFLAGS += -fno-unit-at-a-time
 #CPPFLAGS += -Wstrict-prototypes
@@ -450,6 +454,7 @@ endif
 AVRDUDE_FLAGS += $(AVRDUDE_NO_VERIFY)
 AVRDUDE_FLAGS += $(AVRDUDE_VERBOSE)
 AVRDUDE_FLAGS += $(AVRDUDE_ERASE_COUNTER)
+AVRDUDE_FLAGS += -B 0.5
 #AVRDUDE_FLAGS += -b 115200                          # needed for AVR910 programmer
 
 #---------------- Debugging Options ----------------
