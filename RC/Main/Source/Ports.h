@@ -6,12 +6,19 @@
 
 #include <avr/io.h>
 
-// EEPROM
-#define EEPROM_PORT									PORTD
-#define EEPROM_DDR									DDRD
+// TWI
+#define TWI_PORT									PORTD
+#define TWI_DDR							    		DDRD
 
-#define EEPROM_SCL									PD0
-#define EEPROM_SDA									PD1
+#define TWI_SCL								    	PD0
+#define TWI_SDA									    PD1
+
+// EEPROM
+#define EEPROM_PORT									TWI_PORT
+#define EEPROM_DDR									TWI_DDR
+
+#define EEPROM_SCL									TWI_SCL
+#define EEPROM_SDA									TWI_SDA
 
 // SPI
 #define SPI_PORT									PORTB
@@ -55,10 +62,12 @@
 #define INPUT_MENU_ROTARY_A							PD6
 #define INPUT_MENU_ROTARY_B							PD7
 
-#if( SYSTEM_VERSION == SYSTEM_VERSION_MINI_V1)
+#if( SYSTEM_MCU_TYPE == SYSTEM_MCU_2561)
 	#define INPUT_ANALOG_PORTS						8
-#elif( SYSTEM_VERSION == SYSTEM_VERSION_V1)
+#elif( SYSTEM_MCU_TYPE == SYSTEM_MCU_2560)
 	#define INPUT_ANALOG_PORTS						16
+#else
+	#error "Unknown system mcu."
 #endif
 
 #define INPUT_ANALOG_PORT_LIGHT						6
@@ -68,16 +77,18 @@
 #define INPUT_ANALOG_A_D_DDR						DDRF
 #define INPUT_ANALOG_A_D_PIN						PINF
 
-#if( SYSTEM_VERSION == SYSTEM_VERSION_V1)
+#if( SYSTEM_MCU_TYPE == SYSTEM_MCU_2560)
 	#define INPUT_ANALOG_E_G_PORT					PORTK
 	#define INPUT_ANALOG_E_G_DDR					DDRK
 	#define INPUT_ANALOG_E_G_PIN					PINK
 #endif
 
-#if( SYSTEM_VERSION == SYSTEM_VERSION_MINI_V1)
+#if( SYSTEM_MCU_TYPE == SYSTEM_MCU_2561)
 	#define INPUT_DIGITAL_PORTS						16
-#elif( SYSTEM_VERSION == SYSTEM_VERSION_V1)
+#elif( SYSTEM_MCU_TYPE == SYSTEM_MCU_2560)
 	#define INPUT_DIGITAL_PORTS						32
+#else
+	#error "Unknown system mcu."
 #endif
 
 #define INPUT_DIGITAL_H_I_PORT						PORTA
@@ -88,7 +99,7 @@
 #define INPUT_DIGITAL_J_K_DDR						DDRC
 #define INPUT_DIGITAL_J_K_PIN						PINC
 
-#if( SYSTEM_VERSION == SYSTEM_VERSION_V1)
+#if( SYSTEM_MCU_TYPE == SYSTEM_MCU_2560)
 	#define INPUT_DIGITAL_L_M_PORT					PORTJ
 	#define INPUT_DIGITAL_L_M_DDR					DDRJ
 	#define INPUT_DIGITAL_L_M_PIN					PINJ
@@ -110,21 +121,11 @@
 #define SERIAL_DISPLAY_DDR							DDRD
 #define SERIAL_DISPLAY_PIN							PIND
 
-#define SERIAL_DISPLAY_RX							PD0
-#define SERIAL_DISPLAY_TX							PD1
+#define SERIAL_DISPLAY_RX							PD2
+#define SERIAL_DISPLAY_TX							PD3
 
 // PPM generation
-#if( SYSTEM_VERSION == SYSTEM_VERSION_V1)
-	#define SIGNAL_SERVICE_TIMERA					TCCR4A
-	#define SIGNAL_SERVICE_PORT						PORTH
-	#define SIGNAL_SERVICE_DDR						DDRH
-	#define SIGNAL_SERVICE_PIN						PINH
-
-	#define SIGNAL_SERVICE_PPM_ENABLE_1				PH2
-	#define SIGNAL_SERVICE_PPM_ENABLE_2				PH3
-	#define SIGNAL_SERVICE_PPM_OUTPUT_1				PH4
-	#define SIGNAL_SERVICE_PPM_OUTPUT_2				PH5
-#elif( SYSTEM_VERSION == SYSTEM_VERSION_MINI_V1)
+#if( SYSTEM_MCU_TYPE == SYSTEM_MCU_2561)
 	#define SIGNAL_SERVICE_TIMERA					TCCR3A
 	#define SIGNAL_SERVICE_PORT						PORTE
 	#define SIGNAL_SERVICE_DDR						DDRE
@@ -140,6 +141,18 @@
 	#define SIGNAL_SERVICE_PPM_OUTPUT_1				PE4
 	#define SIGNAL_SERVICE_PPM_OUTPUT_2				PE5
 */
+#elif( SYSTEM_MCU_TYPE == SYSTEM_MCU_2560)
+	#define SIGNAL_SERVICE_TIMERA					TCCR4A
+	#define SIGNAL_SERVICE_PORT						PORTH
+	#define SIGNAL_SERVICE_DDR						DDRH
+	#define SIGNAL_SERVICE_PIN						PINH
+
+	#define SIGNAL_SERVICE_PPM_ENABLE_1				PH2
+	#define SIGNAL_SERVICE_PPM_ENABLE_2				PH3
+	#define SIGNAL_SERVICE_PPM_OUTPUT_1				PH4
+	#define SIGNAL_SERVICE_PPM_OUTPUT_2				PH5
+#else
+	#error "Unknown system mcu."
 #endif
 
 // Status

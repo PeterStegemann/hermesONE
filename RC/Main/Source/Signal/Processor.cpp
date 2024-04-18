@@ -179,7 +179,7 @@ void Signal_Processor::Process( void)
 		}
 	}
 
-	// Prepare sources for new calulation round by flushing the cached values.
+	// Prepare sources for new calculation round by flushing the cached values.
 	for( uint8_t SignalSourceId = 0; SignalSourceId < SIGNAL_SOURCES; SignalSourceId++)
 	{
 		source[ SignalSourceId].FlushCache();

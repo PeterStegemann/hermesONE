@@ -422,8 +422,7 @@ void Setup_Service::SetModelName( uint8_t ModelId, const char* ModelName)
 		return;
 	}
 
-	EEPROM_WriteString( EEPROMAddress( ExtensionEeprom.Model[ ModelId].Name), SETUP_MODEL_NAME_SIZE,
-						ModelName);
+	EEPROM_WriteString( EEPROMAddress( ExtensionEeprom.Model[ ModelId].Name), SETUP_MODEL_NAME_SIZE, ModelName);
 }
 
 char* Setup_Service::GetModelName( uint8_t ModelId, char* ModelName, uint8_t Size)
@@ -435,8 +434,7 @@ char* Setup_Service::GetModelName( uint8_t ModelId, char* ModelName, uint8_t Siz
 	}
 	else
 	{
-		EEPROM_ReadString( EEPROMAddress( ExtensionEeprom.Model[ ModelId].Name),
-						   SETUP_MODEL_NAME_SIZE, ModelName, Size);
+		EEPROM_ReadString( EEPROMAddress( ExtensionEeprom.Model[ ModelId].Name), SETUP_MODEL_NAME_SIZE, ModelName, Size);
 	}
 
 	return( ModelName);
@@ -559,8 +557,8 @@ char* Setup_Service::GetSourceName( uint16_t SetupSourceId, char* SourceName, ui
 	}
 	else
 	{
-		EEPROM_ReadString( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].Name),
-						   SETUP_SOURCE_NAME_SIZE, SourceName, Size);
+		EEPROM_ReadString( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].Name), SETUP_SOURCE_NAME_SIZE,
+		                   SourceName, Size);
 	}
 
 	return( SourceName);

@@ -4,6 +4,14 @@
 
 #include <avr/pgmspace.h>
 
+#if( SYSTEM_MCU_TYPE == SYSTEM_MCU_2561)
+	#define SYSTEM_MCU_NAME "ATmega 2561"
+#elif( SYSTEM_MCU_TYPE == SYSTEM_MCU_2560)
+	#define SYSTEM_MCU_NAME "ATmega 2561"
+#else
+	#error "Unknown system mcu."
+#endif
+
 class Text
 {
   public:
