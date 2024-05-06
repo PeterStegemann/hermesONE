@@ -6,6 +6,11 @@
 
 #include "AVR/Source/Utility.h"
 
+bool Signal_Processor::isRFModuleActive( Setup_Service::RFMode RFMode)
+{
+    return(( rfMode == RFMode) || ( rfMode == Setup_Service::RF_Both));
+}
+
 void Signal_Processor::Initialize( void)
 {
 	inProcessing = false;
@@ -23,13 +28,16 @@ void Signal_Processor::Initialize( void)
 	INPUT_ANALOG_A_D_DDR = 0x00;
 	INPUT_ANALOG_A_D_PORT = 0x00;
 
-	// Activate ADC with Prescaler 128 --> 14Mhz/128 = 115.2kHz
-	ADCSRA = UTILITY_BitValue( ADEN) | UTILITY_BitValue( ADPS2) | UTILITY_BitValue( ADPS1) | UTILITY_BitValue( ADPS0);
+	// Activate ADC with pre-scaler 128 --> 14Mhz/128 = 115.2kHz
+	ADCSRA = UTILITY_BitValue( ADEN) | UTILITY_BitValue( ADPS2) |
+	                                   UTILITY_BitValue( ADPS1) |
+	                                   UTILITY_BitValue( ADPS0);
 }
 
 void Signal_Processor::LoadModel( void)
 {
-	// Tell the processing routine to pause the processing and wait until no calculations are running.
+	// Tell the processing routine to pause the processing and wait until no calculations are
+	// running.
 	pauseProcessing = true;
 
 	while( inProcessing == true);
@@ -121,12 +129,7 @@ void Signal_Processor::StoreModifiedSources( void)
 
 void Signal_Processor::Process( void)
 {
-	if( inProcessing == true)
-	{
-		return;
-	}
-
-	if( pauseProcessing == true)
+	if(( inProcessing == true) || ( pauseProcessing == true))
 	{
 		return;
 	}
@@ -143,7 +146,7 @@ void Signal_Processor::Process( void)
 		}
 	}
 
-	// If ppm service is not ready, we won't calculate new data.
+	// If ppm services are not ready, we won't calculate new data.
 	if(( GLOBAL.SignalService.GetPPM( 0)->ReadyForData() == false) ||
 	   ( GLOBAL.SignalService.GetPPM( 1)->ReadyForData() == false))
 	{
@@ -162,7 +165,7 @@ void Signal_Processor::Process( void)
 		// Start conversion
 		ADCSRA |= UTILITY_BitValue( ADSC);
 
-		// Wait until converstion completed.
+		// Wait until conversion is completed.
 		while( ADCSRA & UTILITY_BitValue( ADSC));
 
 		// Get converted value.
@@ -200,24 +203,24 @@ void Signal_Processor::Process( void)
 		int16_t Value = channel[ ChannelId].CalculateValue( this);
 
 		// Now set value.
-		if(( rfMode == Setup_Service::RF_Module_0) || ( rfMode == Setup_Service::RF_Both))
+		if( isRFModuleActive( Setup_Service::RF_Module_0))
 		{
 			GLOBAL.SignalService.GetPPM( 0)->SetChannel( ChannelId, Value);
 		}
 
-		if(( rfMode == Setup_Service::RF_Module_1) || ( rfMode == Setup_Service::RF_Both))
+		if( isRFModuleActive( Setup_Service::RF_Module_1))
 		{
 			GLOBAL.SignalService.GetPPM( 1)->SetChannel( ChannelId, Value);
 		}
 	}
 
 	// Activate new channels.
-	if(( rfMode == Setup_Service::RF_Module_0) || ( rfMode == Setup_Service::RF_Both))
+	if( isRFModuleActive( Setup_Service::RF_Module_0))
 	{
 		GLOBAL.SignalService.GetPPM( 0)->SetChannelsValid();
 	}
 
-	if(( rfMode == Setup_Service::RF_Module_1) || ( rfMode == Setup_Service::RF_Both))
+	if( isRFModuleActive( Setup_Service::RF_Module_1))
 	{
 		GLOBAL.SignalService.GetPPM( 1)->SetChannelsValid();
 	}
@@ -231,23 +234,8 @@ void Signal_Processor::SetRFMode( Setup_Service::RFMode RFMode)
 	rfMode = RFMode;
 
 	// Activate the used rf module(s).
-	if(( rfMode == Setup_Service::RF_Module_0) || ( rfMode == Setup_Service::RF_Both))
-	{
-		GLOBAL.SignalService.GetPPM( 0)->SetRFEnabled( true);
-	}
-	else
-	{
-		GLOBAL.SignalService.GetPPM( 0)->SetRFEnabled( false);
-	}
-
-	if(( rfMode == Setup_Service::RF_Module_1) || ( rfMode == Setup_Service::RF_Both))
-	{
-		GLOBAL.SignalService.GetPPM( 1)->SetRFEnabled( true);
-	}
-	else
-	{
-		GLOBAL.SignalService.GetPPM( 1)->SetRFEnabled( false);
-	}
+    GLOBAL.SignalService.GetPPM( 0)->SetRFEnabled( isRFModuleActive( Setup_Service::RF_Module_0));
+    GLOBAL.SignalService.GetPPM( 1)->SetRFEnabled( isRFModuleActive( Setup_Service::RF_Module_1));
 }
 
 Signal_Calibration* Signal_Processor::GetCalibration( uint8_t CalibrationId)

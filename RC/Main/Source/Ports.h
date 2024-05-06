@@ -70,8 +70,15 @@
 	#error "Unknown system mcu."
 #endif
 
-#define INPUT_ANALOG_PORT_LIGHT						6
-#define INPUT_ANALOG_PORT_VOLTAGE					7
+#if( SYSTEM_MCU_TYPE == SYSTEM_MCU_2561)
+    #define INPUT_ANALOG_PORT_LIGHT						6
+    #define INPUT_ANALOG_PORT_VOLTAGE					7
+#elif( SYSTEM_MCU_TYPE == SYSTEM_MCU_2560)
+    #define INPUT_ANALOG_PORT_LIGHT						14
+    #define INPUT_ANALOG_PORT_VOLTAGE					15
+#else
+	#error "Unknown system mcu."
+#endif
 
 #define INPUT_ANALOG_A_D_PORT						PORTF
 #define INPUT_ANALOG_A_D_DDR						DDRF

@@ -164,6 +164,8 @@ class SERIAL_GraphicConnection : public SERIAL_Connection< DeviceId>
 
 					switch( Command)
 					{
+						case LCD_SerialOledProtocol::I_Ping : break;
+
 						case LCD_SerialOledProtocol::I_Backlight :
 						{
 							receiveBacklight();

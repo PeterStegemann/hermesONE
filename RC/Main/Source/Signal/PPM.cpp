@@ -22,7 +22,7 @@
 #define SIGNAL_PPM_SIGNAL_PAUSE		((( uint32_t)   3) * SIGNAL_PPM_MS_CLOCK_FACTOR)
 //  1.2ms (Multiplex)
 #define SIGNAL_PPM_SIGNAL_CENTER	((( uint32_t)  12) * SIGNAL_PPM_MS_CLOCK_FACTOR)
-//  1.1ms (Spektrum Futaba)
+//  1.1ms (Spektrum, Futaba)
 //#define SIGNAL_PPM_SIGNAL_NEUTRAL	((( uint32_t)  11) * SIGNAL_PPM_MS_CLOCK_FACTOR)
 //  1.1ms
 #define SIGNAL_PPM_SIGNAL_RANGE		((( uint32_t)  11) * SIGNAL_PPM_MS_CLOCK_FACTOR)
@@ -51,8 +51,8 @@ Signal_PPM::Signal_PPM( uint8_t Id)
 		channelMapping[ Count] = Count;
 	}
 
-	// Reset all signals.
-	// To do this, we just call copyChannels once. This will also calculate the correct sync time.
+	// Reset all signals. To do this, we just call copyChannels once. This will also calculate the
+    // correct sync time.
 	channelsValid = true;
 	copyChannels();
 }
@@ -70,21 +70,22 @@ void Signal_PPM::copyChannels( void)
 
 	for( uint8_t Count = 0; Count < SIGNAL_PPM_CHANNELS; Count++)
 	{
-		uint16_t currentSignal = channel[ channelMapping[ Count]];
-		signal[ Count] = currentSignal;
-		TotalSignalTime += currentSignal;
+		uint16_t CurrentSignal = channel[ channelMapping[ Count]];
+		signal[ Count] = CurrentSignal;
+		TotalSignalTime += CurrentSignal;
 	}
 
 	// Sync time is the first signal.
 	syncCopy = sync = SIGNAL_PPM_SIGNAL_FRAME - TotalSignalTime;
 
+    // Mark channels as invalid so a new set will be provided.
 	channelsValid = false;
 }
 
 void Signal_PPM::ProcessSignal( void)
 {
 	bool Switch = false;
-	uint16_t nextInterval = 0;
+	uint16_t NextInterval = 0;
 
 	// Every high signal/start phase is followed by a low pause.
 	if( signalState == SIGNAL_PPM_STATE_PAUSE)
@@ -93,7 +94,7 @@ void Signal_PPM::ProcessSignal( void)
 		signalState = SIGNAL_PPM_STATE_SIGNAL;
 
 		// Set pause time.
-		nextInterval = SIGNAL_PPM_SIGNAL_PAUSE;
+		NextInterval = SIGNAL_PPM_SIGNAL_PAUSE;
 
 		if( inverted == true)
 		{
@@ -118,7 +119,7 @@ void Signal_PPM::ProcessSignal( void)
 			{
 				// We're not using 60k, but 50k. This leaves a minimum rest of 10k, which gives us
 				// enough time for the interrupt code to run.
-				nextInterval = 50000;
+				NextInterval = 50000;
 				sync -= 50000;
 
 				// Don't switch level and signal on next interrupt.
@@ -126,26 +127,26 @@ void Signal_PPM::ProcessSignal( void)
 			}
 			else
 			{
-				nextInterval = sync;
+				NextInterval = sync;
 			}
 		}
 		else
 		{
 			// Set signal width for current signal.
-			nextInterval = signal[ currentSignal - 1];
+			NextInterval = signal[ currentSignal - 1];
 		}
 	}
 
 	// Set new match value.
-	uint32_t newMatchValue = *ocr;
-	newMatchValue += nextInterval;
+	uint32_t NewMatchValue = *ocr;
+	NewMatchValue += NextInterval;
 
-	if( newMatchValue > 0xffff)
+	if( NewMatchValue > 0xffff)
 	{
-		newMatchValue -= 0xffff;
+		NewMatchValue -= 0xffff;
 	}
 
-	*ocr = newMatchValue;
+	*ocr = NewMatchValue;
 
 	// Check if we switch to next signal / sync.
 	if( Switch == true)

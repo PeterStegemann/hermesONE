@@ -171,8 +171,8 @@ const flash_char Text::NoSystemStorage[] PROGMEM			= "Kein Systemspeicher verfue
 const flash_char Text::ModelsCount[] PROGMEM				= "Modelle: %3u / %2u  (%u)";
 const flash_char Text::TypesCount[] PROGMEM					= "Typen:   %3u / %2u  (%u)";
 const flash_char Text::SourcesCount[] PROGMEM				= "Quellen: %3u / %3u  (%u)";
-const flash_char Text::InternalEEPROMSize[] PROGMEM			= "Internes EEPROM: %5u / %5u";
-const flash_char Text::ExternalEEPROMSize[] PROGMEM			= "Externes EEPROM: %5u / %5lu";
+const flash_char Text::InternalEEPROMSize[] PROGMEM			= "Interner Speicher: %5u / %5u";
+const flash_char Text::ExternalEEPROMSize[] PROGMEM			= "Externer Speicher: %5u / %5lu";
 const flash_char Text::CPUType[] PROGMEM					= "CPU: " SYSTEM_MCU_NAME;
 
 const flash_char Text::LeftSide[] PROGMEM					= "Linke Seite";

@@ -17,6 +17,7 @@ class MAIN
 	private:
 		void doFly( void);
 		void doFractal( void);
+		void doIntro( void);
 
 	public:
 		MAIN( void);

@@ -7,6 +7,7 @@
 
 #include "AVR/Source/Types.h"
 #include "AVR/Source/Utility.h"
+#include "AVR/Source/Font/Font.h"
 
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
@@ -71,6 +72,7 @@ void MAIN::Run( void)
 
 	//doFly();
 	//doFractal();
+	doIntro();
 
 	// Listen to the serial master.
 	SerialGraphicConnection.DoSerialConnection();
@@ -182,6 +184,23 @@ void MAIN::Run( void)
 
 //		continue;
 */
+}
+
+void MAIN::doIntro( void)
+{
+    for( uint8_t ColorPart = 0; ColorPart <= LCD_65K_RGB_MAXIMUM_GREY; ColorPart++)
+    {
+//    	Main.Lcd.PrintFormat( 0, 0, FONT::FI_Medium, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+//	    			    LCD::PO_Proportional, "%d", ColorPart);
+
+        LCD_65K_RGB::Color CurrentColor = ( LCD_65K_RGB::Color) LCD_65K_RGB_GREY( ColorPart);
+
+    	Main.Lcd.Print( 120, 100, FONT::FI_Large, CurrentColor, LCD_65K_RGB::C_Black,
+	    			    LCD::PO_Proportional, "hermesONE");
+
+        // 100 fps.
+//        UTILITY::Pause( 1000 / 100);
+    }
 }
 
 void MAIN::doFly( void)

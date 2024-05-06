@@ -35,11 +35,11 @@ Main_Setup::~Main_Setup( void)
 
 void Main_Setup::run( void)
 {
-	// Wait a moment for the main lcd to come up.
-	UTILITY::Pause( 50);
+    // Wait a moment for the main lcd to come up.
+//    UTILITY::Pause( 50);
 
-	// Set up setup lcd and check if it's there.
-	hasSetupDisplay = SetupDisplay.Initialize();
+  	// Set up setup lcd and check if it's there.
+    hasSetupDisplay = SetupDisplay.Initialize( 50);
 
 	if(	hasSetupDisplay == false)
 	{
@@ -47,6 +47,7 @@ void Main_Setup::run( void)
 	}
 	else
 	{
+	    UTILITY::Pause( 50);
 		runOnSetupDisplay();
 	}
 }
@@ -104,34 +105,36 @@ void Main_Setup::Update( void)
 {
 	Main_Base::Update();
 
-	if(( setupBlankTime != 0) || ( statusBlankTime != 0))
+	if(( setupBlankTime == 0) && ( statusBlankTime == 0))
 	{
-		uint16_t CurrentUptime = GLOBAL.StatusTime.GetUptime();
-		uint16_t LastActivityUptime = GLOBAL.InputService.GetLastActivityUptime();
-
-		if( hasSetupDisplay == true)
-		{
-			// Blank setup screen if the user sleeps.
-			if(( setupBlankTime != 0) && (( CurrentUptime - LastActivityUptime) >= setupBlankTime))
-			{
-				SetupDisplay.SetBlanked( true);
-			}
-			else
-			{
-				SetupDisplay.SetBlanked( false);
-			}
-		}
-
-		// Blank status screen if the user sleeps.
-		if(( statusBlankTime != 0) && (( CurrentUptime - LastActivityUptime) >= statusBlankTime))
-		{
-			StatusDisplay.SetBlanked( true);
-		}
-		else
-		{
-			StatusDisplay.SetBlanked( false);
-		}
+	    return;
 	}
+
+    uint16_t CurrentUptime = GLOBAL.StatusTime.GetUptime();
+    uint16_t LastActivityUptime = GLOBAL.InputService.GetLastActivityUptime();
+
+    if( hasSetupDisplay == true)
+    {
+        // Blank setup screen if the user sleeps.
+        if(( setupBlankTime != 0) && (( CurrentUptime - LastActivityUptime) >= setupBlankTime))
+        {
+            SetupDisplay.SetBlanked( true);
+        }
+        else
+        {
+            SetupDisplay.SetBlanked( false);
+        }
+    }
+
+    // Blank status screen if the user sleeps.
+    if(( statusBlankTime != 0) && (( CurrentUptime - LastActivityUptime) >= statusBlankTime))
+    {
+        StatusDisplay.SetBlanked( true);
+    }
+    else
+    {
+        StatusDisplay.SetBlanked( false);
+    }
 }
 
 void Main_Setup::ClearScreens( void)

@@ -32,7 +32,7 @@ class Screen_Setup_Intro
 	        							 LCD_65K_RGB_GREY( LCD_65K_RGB_MAXIMUM_GREY - ColorPart),
 			        					 LCD_65K_RGB::White, LCD::PO_Proportional, Text::hermesONE);
 
-    		// 15 fps.
+    		// 25 fps.
 	    	UTILITY::Pause( 1000 / 25);
 	    }
 

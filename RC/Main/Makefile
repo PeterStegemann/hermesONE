@@ -386,7 +386,7 @@ SCANF_LIB =
 MATH_LIB = -lm
 
 # List any extra directories to look for libraries here.
-#     Each directory must be seperated by a space.
+#     Each directory must be separated by a space.
 #     Use forward slashes for directory separators.
 #     For a directory that has spaces, enclose it in quotes.
 EXTRALIBDIRS = 
@@ -431,6 +431,7 @@ AVRDUDE_PROGRAMMER = usbasp
 # AVRDUDE_PORT = /dev/cu.USA19QI1b1P1.1    # programmer connected to serial device
 # AVRDUDE_PORT = /dev/ttyUSB0
 # AVRDUDE_PORT = /dev/tty.usbserial
+AVRDUDE_PORT =
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
 AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
@@ -458,9 +459,9 @@ endif
 AVRDUDE_FLAGS += $(AVRDUDE_NO_VERIFY)
 AVRDUDE_FLAGS += $(AVRDUDE_VERBOSE)
 AVRDUDE_FLAGS += $(AVRDUDE_ERASE_COUNTER)
-#AVRDUDE_FLAGS += -B 125kHz
-AVRDUDE_FLAGS += -B 0.5
-#AVRDUDE_FLAGS += -b 115200                          # needed for AVR910 programmer
+#AVRDUDE_SPEED = -B 125kHz
+AVRDUDE_SPEED = -B 0.5
+#AVRDUDE_SPEED = -b 115200                          # needed for AVR910 programmer
 
 #---------------- Debugging Options ----------------
 
@@ -582,15 +583,19 @@ sizeafter:
 gccversion : 
 	@$(CC) --version
 
-# Program the device.  
+# Program the device.
 program: $(TARGET).hex $(TARGET).eep
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_SPEED) $(AVRDUDE_WRITE_FLASH)
 
 eeprom: $(TARGET).eep
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_EEPROM)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_SPEED) $(AVRDUDE_WRITE_EEPROM)
 
 fuse:
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSE)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) -B 125kHz $(AVRDUDE_WRITE_FUSE)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_SPEED)
+
+check:
+	$(AVRDUDE) $(AVRDUDE_FLAGS) -B 125kHz
 
 # Generate avr-gdb config/init file which does the following:
 #     define the reset signal, load the target file, connect to target, and set 

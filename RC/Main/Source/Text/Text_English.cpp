@@ -134,7 +134,7 @@ const flash_char Text::Center[] PROGMEM						= "Center";
 const flash_char Text::Top[] PROGMEM						= "Top";
 
 const flash_char Text::ChannelNameFormat[] PROGMEM			= "Channel %u";
-const flash_char Text::PPMNameFormat[] PROGMEM				= "Modul %u";
+const flash_char Text::PPMNameFormat[] PROGMEM				= "Module %u";
 const flash_char Text::FollowerNameFormat[] PROGMEM			= "Follower %u";
 const flash_char Text::InputNameFormat[] PROGMEM			= "Input %u";
 const flash_char Text::MapNameFormat[] PROGMEM				= "Map %u";
@@ -168,11 +168,11 @@ const flash_char Text::NoProxyId[] PROGMEM					= "No proxy available!";
 const flash_char Text::NoModelStorage[] PROGMEM				= "No model storage available!";
 const flash_char Text::NoSystemStorage[] PROGMEM			= "No system storage available!";
 
-const flash_char Text::ModelsCount[] PROGMEM				= "Modelle: %3u / %2u  (%u)";
-const flash_char Text::TypesCount[] PROGMEM					= "Typen:   %3u / %2u  (%u)";
-const flash_char Text::SourcesCount[] PROGMEM				= "Quellen: %3u / %3u  (%u)";
-const flash_char Text::InternalEEPROMSize[] PROGMEM			= "Internes EEPROM: %5u / %5u";
-const flash_char Text::ExternalEEPROMSize[] PROGMEM			= "Externes EEPROM: %5u / %5lu";
+const flash_char Text::ModelsCount[] PROGMEM				= "Models:  %3u / %2u  (%u)";
+const flash_char Text::TypesCount[] PROGMEM					= "Types:   %3u / %2u  (%u)";
+const flash_char Text::SourcesCount[] PROGMEM				= "Sources: %3u / %3u  (%u)";
+const flash_char Text::InternalEEPROMSize[] PROGMEM			= "Internal Memory: %5u / %5u";
+const flash_char Text::ExternalEEPROMSize[] PROGMEM			= "External Memory: %5u / %5lu";
 const flash_char Text::CPUType[] PROGMEM					= "CPU: " SYSTEM_MCU_NAME;
 
 const flash_char Text::LeftSide[] PROGMEM					= "Left Side";

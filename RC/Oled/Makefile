@@ -43,7 +43,7 @@ SYSTEM_VERSION_V0 = 0
 SYSTEM_VERSION_V1 = 1
 SYSTEM_VERSION =
 
-SYSTEM_VERSION = $(SYSTEM_VERSION_V0)
+SYSTEM_VERSION = $(SYSTEM_VERSION_V1)
 
 ifeq ($(SYSTEM_VERSION),)
 	SYSTEM_VERSION = $(SYSTEM_VERSION_V1)
@@ -83,12 +83,14 @@ endif
 FORMAT = ihex
 
 # Target file name (without extension).
-TARGET = Oled
+TARGET = .build/Oled
 
 # Object files directory
 #     To put object files in current directory, use a dot (.), do NOT make
 #     this an empty or blank macro!
-OBJDIR = obj
+OBJDIR = .build/obj
+
+DEPDIR = .build/dep
 
 # List C source files here. (C dependencies are automatically generated.)
 SRC =
@@ -153,6 +155,8 @@ CDEFS =
 CPPDEFS = -DF_CPU=$(F_CPU)UL
 CPPDEFS += -DSYSTEM_MCU=\"$(MCU)\"
 CPPDEFS += -DSYSTEM_VERSION=$(SYSTEM_VERSION)
+CPPDEFS += -DSYSTEM_VERSION_V0=$(SYSTEM_VERSION_V0)
+CPPDEFS += -DSYSTEM_VERSION_V1=$(SYSTEM_VERSION_V1)
 #CPPDEFS += -D__STDC_LIMIT_MACROS
 #CPPDEFS += -D__STDC_CONSTANT_MACROS
 
@@ -163,17 +167,20 @@ CPPDEFS += -DSYSTEM_VERSION=$(SYSTEM_VERSION)
 #  -Wall...:     warning level
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
-CFLAGS = -g$(DEBUG)
+CFLAGS += -g$(DEBUG)
 CFLAGS += $(CDEFS)
 CFLAGS += -O$(OPT)
 CFLAGS += -funsigned-char
 CFLAGS += -funsigned-bitfields
 CFLAGS += -fpack-struct
 CFLAGS += -fshort-enums
+CFLAGS += --param=min-pagesize=0
 CFLAGS += -Wall
+CFLAGS += -Werror
+CFLAGS += -Wundef
+CFLAGS += -mcall-prologues
 #CFLAGS += -mshort-calls
 #CFLAGS += -fno-unit-at-a-time
-#CFLAGS += -Wundef
 #CFLAGS += -Wunreachable-code
 #CFLAGS += -Wsign-compare
 #CFLAGS += -Wa,-adhlns=$(<:%.c=$(OBJDIR)/%.lst)
@@ -187,7 +194,7 @@ CFLAGS += $(CSTANDARD)
 #  -Wall...:     warning level
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
-CPPFLAGS = -g$(DEBUG)
+CPPFLAGS += -g$(DEBUG)
 CPPFLAGS += $(CPPDEFS)
 CPPFLAGS += -O$(OPT)
 CPPFLAGS += -funsigned-char
@@ -198,8 +205,11 @@ CPPFLAGS += -fshort-enums
 CPPFLAGS += -fno-exceptions
 CPPFLAGS += -fno-rtti
 #CPPFLAGS += -fwhole-program
+CPPFLAGS += --param=min-pagesize=0
 CPPFLAGS += -Wall
-CFLAGS += -Wundef
+CPPFLAGS += -Werror
+CPPFLAGS += -Wundef
+CPPFLAGS += -mcall-prologues
 #CPPFLAGS += -mshort-calls
 #CPPFLAGS += -fno-unit-at-a-time
 #CPPFLAGS += -Wstrict-prototypes
@@ -246,7 +256,7 @@ SCANF_LIB =
 MATH_LIB = -lm
 
 # List any extra directories to look for libraries here.
-#     Each directory must be seperated by a space.
+#     Each directory must be separated by a space.
 #     Use forward slashes for directory separators.
 #     For a directory that has spaces, enclose it in quotes.
 EXTRALIBDIRS = 
@@ -295,7 +305,8 @@ AVRDUDE_PORT =
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
 AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
-AVRDUDE_WRITE_FUSE = -U lfuse:w:0xff:m -U hfuse:w:0x91:m -U efuse:w:0xff:m
+# AVRDUDE_WRITE_FUSE = -U lfuse:w:0xff:m -U hfuse:w:0x91:m -U efuse:w:0xff:m
+AVRDUDE_WRITE_FUSE = -U lfuse:w:0xff:m -U hfuse:w:0x91:m -U efuse:w:0xfb:m
 
 # Uncomment the following if you want avrdude's erase cycle counter.
 # Note that this counter needs to be initialized first using -Yn,
@@ -318,7 +329,9 @@ endif
 AVRDUDE_FLAGS += $(AVRDUDE_NO_VERIFY)
 AVRDUDE_FLAGS += $(AVRDUDE_VERBOSE)
 AVRDUDE_FLAGS += $(AVRDUDE_ERASE_COUNTER)
-#AVRDUDE_FLAGS += -b 115200                          # needed for AVR910 programmer
+#AVRDUDE_SPEED = -B 125kHz
+#AVRDUDE_SPEED = -B 0.5
+#AVRDUDE_SPEED = -b 115200                          # needed for AVR910 programmer
 
 #---------------- Debugging Options ----------------
 
@@ -390,7 +403,7 @@ OBJ = $(SRC:%.c=$(OBJDIR)/%.o) $(CPPSRC:%.cpp=$(OBJDIR)/%.o) $(ASRC:%.S=$(OBJDIR
 LST = $(SRC:%.c=$(OBJDIR)/%.lst) $(CPPSRC:%.cpp=$(OBJDIR)/%.lst) $(ASRC:%.S=$(OBJDIR)/%.lst) 
 
 # Compiler flags to generate dependency files.
-GENDEPFLAGS = -MMD -MP -MF .dep/$(@F).d
+GENDEPFLAGS = -MMD -MP -MF $(DEPDIR)/$(@F).d
 
 # Combine all necessary flags and optional flags.
 # Add target processor to flags.
@@ -440,15 +453,19 @@ sizeafter:
 gccversion : 
 	@$(CC) --version
 
-# Program the device.  
+# Program the device.
 program: $(TARGET).hex $(TARGET).eep
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_SPEED) $(AVRDUDE_WRITE_FLASH)
 
 eeprom: $(TARGET).eep
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_EEPROM)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_SPEED) $(AVRDUDE_WRITE_EEPROM)
 
 fuse:
-	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSE)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) -B 125kHz $(AVRDUDE_WRITE_FUSE)
+	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_SPEED)
+
+check:
+	$(AVRDUDE) $(AVRDUDE_FLAGS) -B 125kHz
 
 # Generate avr-gdb config/init file which does the following:
 #     define the reset signal, load the target file, connect to target, and set 
@@ -582,7 +599,7 @@ clean_list :
 	$(REMOVE) $(TARGET).sym
 	$(REMOVE) $(TARGET).lss
 	$(REMOVEDIR) $(OBJDIR)
-	$(REMOVEDIR) .dep
+	$(REMOVEDIR) $(DEPDIR)
 #	$(REMOVE) $(SRC:.c=.s)
 #	$(REMOVE) $(SRC:.c=.d)
 #	$(REMOVE) $(SRC:.c=.i)
@@ -591,7 +608,7 @@ clean_list :
 $(shell mkdir $(OBJDIR) 2>/dev/null)
 
 # Include the dependency files.
--include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
+-include $(shell mkdir -p $(DEPDIR) 2>/dev/null) $(wildcard $(DEPDIR)/*)
 
 # Listing of phony targets.
 .PHONY : all begin finish end sizebefore sizeafter gccversion \
