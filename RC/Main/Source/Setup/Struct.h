@@ -31,6 +31,8 @@ struct Setup_Struct
 
 	Setup_Calibration Calibration[ SIGNAL_PROCESSOR_ANALOG_INPUTS];
 	Setup_Type Type[ SETUP_MODEL_TYPES];
+
+//    uint8_t Debug;
 };
 
 struct Setup_ExtensionStruct

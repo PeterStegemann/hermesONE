@@ -34,7 +34,7 @@ void Screen_Setup_Source_Mix::display( void)
 	uint16_t SourceLeft = menuLeft + 2 * Font->CellWidth;
 	uint16_t VolumeLeft = SourceLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->CellWidth;
 	uint16_t GaugeLeft = VolumeLeft + 6 * Font->CellWidth;
-	uint16_t GaugeWidth = frameWidth - ( GaugeLeft - frameLeft) - 1;	
+	uint16_t GaugeWidth = frameWidth - ( GaugeLeft - frameLeft) - 1;
 
 	uint8_t Line = 4;
 
@@ -73,7 +73,7 @@ void Screen_Setup_Source_Mix::display( void)
 
 void Screen_Setup_Source_Mix::update( void)
 {
-	Screen_Setup_Source_Base::update();
+    Screen_Setup_Source_Base::update();
 
 	// Print all channels.
 	for( uint8_t SourceLine = 0; SourceLine < SETUP_SOURCE_MIX_INPUTS; SourceLine++)

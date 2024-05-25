@@ -55,8 +55,6 @@ class GUI_Setup_Marker
             GLOBAL.SetupDisplay.DrawHorizontalLine( left, top - width / 2, width + 2, DrawColor);
             GLOBAL.SetupDisplay.FillRect( left, top - width / 2, width, width, DrawColor);
             GLOBAL.SetupDisplay.DrawHorizontalLine( left, top + width / 2, width + 2, DrawColor);
-
-            return;
         }
         else
         {

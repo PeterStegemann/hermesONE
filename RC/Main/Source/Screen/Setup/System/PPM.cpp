@@ -55,7 +55,7 @@ Screen_Setup_System_PPM::Screen_Setup_System_PPM( uint8_t PPMId)
 void Screen_Setup_System_PPM::display( void)
 {
 	displayMarker();
-	
+
 	// Adjust gauges to frame and set them up.
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 
@@ -74,38 +74,35 @@ void Screen_Setup_System_PPM::display( void)
 	ppmNameLabel.SetDimensions( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	ppmNameLabel.Display();
 
-	ppmNameValueLabel.SetDimensions( ContentLeft,
-									 frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
+	ppmNameValueLabel.SetDimensions( ContentLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	ppmNameInput.SetDimensions( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
 
 	ppmNameValueLabel.Display( ppmName);
 	
 
 	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Inverted);
+								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+								 LCD::PO_Proportional, Text::Inverted);
 
-	invertedCheckBox.SetDimensions( ContentLeft,
-									frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
+	invertedCheckBox.SetDimensions( ContentLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
 									ContentWidth, SCREEN_SETUP_BASE_GAUGE_THICKNESS);
 
 	invertedCheckBox.Clear();
 	invertedCheckBox.Display( ppmSetup.Inverted);
 
 	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Center);
+								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+								 LCD::PO_Proportional, Text::Center);
 
-	centerLabel.SetDimensions( ContentLeft,
-							   frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
+	centerLabel.SetDimensions( ContentLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	centerLabel.SetMillisecond( ppmSetup.Center + 15);
 	centerLabel.Display();
 
 	Line++;
 
 	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::ChannelMapping);
+								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
+								 LCD::PO_Proportional, Text::ChannelMapping);
 
 	uint16_t SubMenuLeft = menuLeft + Font->CellWidth;
 
@@ -168,8 +165,7 @@ void Screen_Setup_System_PPM::updateSourceChannel( GUI_Setup_Label* Label, int8_
 	GLOBAL.SignalService.GetPPM( ppmId)->SetChannelMapping( ChannelIndex, Value);
 }
 
-void Screen_Setup_System_PPM::updateSourceChannel( void* Object, GUI_Setup_Label* Label,
-												   int8_t Value)
+void Screen_Setup_System_PPM::updateSourceChannel( void* Object, GUI_Setup_Label* Label, int8_t Value)
 {
 	(( Screen_Setup_System_PPM*) Object)->updateSourceChannel( Label, Value);
 }
@@ -193,8 +189,7 @@ bool Screen_Setup_System_PPM::processMenu( DoMenuResult Result)
 					uint8_t ChannelIndex = ( currentMenuEntry - firstLine) - 4;
 					int8_t* SourceChannel = ( int8_t*) &( ppmSetup.ChannelMapping[ ChannelIndex]);
 
-					if( GUI_Setup_Select::DoSelect( SourceChannel, 0, SIGNAL_PPM_CHANNELS - 1, 1,
-												    &menuMarker,
+					if( GUI_Setup_Select::DoSelect( SourceChannel, 0, SIGNAL_PPM_CHANNELS - 1, 1, &menuMarker,
 												    &( sourceChannelLabel[ ChannelIndex]),
 												    this, NULL, &updateSourceChannel) == true)
 					{

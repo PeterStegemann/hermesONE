@@ -3,18 +3,8 @@
 #include "Status.h"
 
 #include "Signal/Source/Timer.h"
-#include "Text/Text.h"
 
 #include "AVR/Source/Utility.h"
-#include "AVR/Source/Font/Font.h"
-
-void Screen_Status_Status::displayGauge( GUI_Status_Gauge* Gauge, uint8_t SourceId)
-{
-    uint16_t SetupSourceId = GLOBAL.SetupService.GetStatusSourceId( SourceId);
-    uint8_t Source = GLOBAL.SignalProcessor.GetSignalSourceId( SetupSourceId);
-
-    Gauge->Display( SIGNAL_MINIMUM_VALUE, SIGNAL_MAXIMUM_VALUE, GLOBAL.SignalProcessor.GetSourceValue( Source));
-}
 
 void Screen_Status_Status::display( void)
 {
@@ -24,8 +14,10 @@ void Screen_Status_Status::display( void)
 	leftSideStatusGauge.SetDimensions( 0, 2);
 	rightSideStatusGauge.SetDimensions( statusDisplay->GetWidth() - ( 5 + 1), 2);
 	leftBottomStatusGauge.SetDimensions( 4, 7);
-	rightBottomStatusGauge.SetDimensions(
-		statusDisplay->GetWidth() - ( SCREEN_STATUS_STATUS_HORIZONTAL_GAUGE_WIDTH + 1 + 4), 7);
+	rightBottomStatusGauge.SetDimensions
+	(
+        statusDisplay->GetWidth() - ( SCREEN_STATUS_STATUS_HORIZONTAL_GAUGE_WIDTH + 1 + 4), 7
+    );
 
 	// Clear all gauges.
 	leftSideStatusGauge.Clear();
@@ -59,6 +51,14 @@ void Screen_Status_Status::display( void)
 	batteryGauge.Display( GLOBAL.StatusBattery.GetMinimumVoltage(), GLOBAL.StatusBattery.GetMaximumVoltage(), 0);
 
 	update();
+}
+
+void Screen_Status_Status::displayGauge( GUI_Status_Gauge* Gauge, uint8_t SourceId)
+{
+    uint16_t SetupSourceId = GLOBAL.SetupService.GetStatusSourceId( SourceId);
+    uint8_t Source = GLOBAL.SignalProcessor.GetSignalSourceId( SetupSourceId);
+
+    Gauge->Display( SIGNAL_MINIMUM_VALUE, SIGNAL_MAXIMUM_VALUE, GLOBAL.SignalProcessor.GetSourceValue( Source));
 }
 
 void Screen_Status_Status::update( void)

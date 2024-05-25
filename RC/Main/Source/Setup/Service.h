@@ -52,6 +52,9 @@ class Setup_Service
     // Supply the size of the target buffer, including room for termination.
     char* GetOwner( char* Owner, uint8_t Size);
 
+    void SetDebug( bool Debug);
+    bool GetDebug( void);
+
     void SetSetupBacklight( uint8_t StatusBacklight);
     uint8_t GetSetupBacklight( void);
 

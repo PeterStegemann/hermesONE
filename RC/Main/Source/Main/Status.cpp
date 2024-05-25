@@ -4,15 +4,10 @@
 
 #include "Screen/Status/Menu/Main.h"
 
-#include <avr/wdt.h>
-
 Main_Status MainInstance;
 
 int main( void)
 {
-	// Disable watchdog.
-	wdt_disable();
-
 	MainInstance.Run();
 
 	return( 0);

@@ -18,11 +18,10 @@
 class Signal_Processor
 {
 	private:
-		// This signals the process routine that it is already running. It's used for overrun
-	    // protection.
+		// This signals the process routine that it is already running. It's used for overrun protection.
 		volatile bool inProcessing;
-		// This signals the process routine that it should pause the processing. It's used to make
-		// sure no calculation is running while a new model is loaded.
+		// This signals the process routine that it should pause the processing. It's used to make sure no calculation
+		// is running while a new model is loaded.
 		volatile bool pauseProcessing;
 
 		volatile Setup_Service::RFMode rfMode;
@@ -86,12 +85,14 @@ class Signal_Processor
 		int16_t GetCalibratedAnalogValue( uint8_t InputId) const;
 
 		// Support stuff...
-		// Find the next valid source by the given offset. May start with SIGNAL_SOURCE_NONE and
-		// will return SIGNAL_SOURCE_NONE at the end.
-		uint8_t FindNextSource( uint8_t SignalSourceId, int8_t Offset, bool HasFixed,
-								Signal_Source_Source::Level SourceLevel,
-								Signal_Source_Source::Type SourceType =
-							    Signal_Source_Source::T_All);
+		// Find the next valid source by the given offset. May start with SIGNAL_SOURCE_NONE and will return
+		// SIGNAL_SOURCE_NONE at the end.
+		uint8_t FindNextSource
+		(
+		    uint8_t SignalSourceId, int8_t Offset, bool HasFixed,
+		    Signal_Source_Source::Level SourceLevel,
+			Signal_Source_Source::Type SourceType = Signal_Source_Source::T_All
+        );
 
 		// Get local source id for setup source id.
 		uint8_t GetSignalSourceId( uint16_t SetupSourceId);

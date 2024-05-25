@@ -9,15 +9,10 @@
 
 #include "AVR/Source/Utility.h"
 
-#include <avr/wdt.h>
-
 Main_Setup MainInstance;
 
 int main( void)
 {
-	// Disable watchdog.
-	wdt_disable();
-
 	MainInstance.Run();
 
 	return( 0);

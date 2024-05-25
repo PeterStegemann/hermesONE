@@ -366,6 +366,11 @@ void Screen_Setup_Sources::doSelectSource( uint8_t SignalSourceId)
 {
 	const Signal_Source_Source* Source = GLOBAL.SignalProcessor.GetSource( SignalSourceId);
 
+	if( Source == NULL)
+    {
+        return;
+    }
+
 	switch( Source->GetType())
 	{
 		case Signal_Source_Source::T_Input :		doInput( SignalSourceId);		break;

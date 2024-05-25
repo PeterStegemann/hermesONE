@@ -48,11 +48,12 @@ SYSTEM_VERSION_MINI_V1 = 1
 SYSTEM_VERSION_V2 = 2
 SYSTEM_VERSION =
 
-# LANGUAGE = english
-LANGUAGE = german
+LANGUAGE_ENGLISH = english
+LANGUAGE_GERMAN = german
+LANGUAGE = $(LANGUAGE_GERMAN)
 
-# SYSTEM_VERSION = $(SYSTEM_VERSION_MINI_V1)
-SYSTEM_VERSION = $(SYSTEM_VERSION_V2)
+SYSTEM_VERSION = $(SYSTEM_VERSION_MINI_V1)
+# SYSTEM_VERSION = $(SYSTEM_VERSION_V2)
 
 ifeq ($(SYSTEM_VERSION),)
 	SYSTEM_VERSION = $(SYSTEM_VERSION_MINI_V1)
@@ -60,7 +61,6 @@ endif
 
 # SYSTEM_MODE = $(SYSTEM_MODE_SETUP)
 # SYSTEM_MODE = $(SYSTEM_MODE_STATUS)
-# SYSTEM_MODE = $(BUILD_STYLE)
 
 ifeq ($(SYSTEM_MODE), )
 	SYSTEM_MODE = $(SYSTEM_MODE_SETUP)
@@ -184,8 +184,6 @@ ifeq ($(HAS_STATUS), yes)
 		Source/Screen/Status/Menu/Channels.cpp \
 		Source/Screen/Status/Menu/Display.cpp \
 		Source/Screen/Status/Menu/Models.cpp \
-		Source/Screen/Status/Menu/PPM.cpp \
-		Source/Screen/Status/Menu/Status.cpp \
 		Source/Screen/Status/Menu/Types.cpp
 endif
 
@@ -227,12 +225,8 @@ CPPSRC += \
 	Source/Signal/Source/Store.cpp \
 	Source/Signal/Source/Timer.cpp \
 	Source/Signal/Source/Trimmer.cpp \
-	Source/Status/Battery.cpp \
-	Source/Status/Service.cpp \
-	Source/Status/Time.cpp \
 	AVR/Source/EEPROM.cpp \
 	AVR/Source/Font/Font.cpp \
-	AVR/Source/Font/Font_Type.cpp \
 	AVR/Source/Font/Font_Large.cpp \
 	AVR/Source/Font/Font_Medium.cpp \
 	AVR/Source/Font/Font_Micro.cpp \
@@ -304,14 +298,17 @@ CFLAGS += -funsigned-char
 CFLAGS += -funsigned-bitfields
 CFLAGS += -fpack-struct
 CFLAGS += -fshort-enums
-CFLAGS += --param=min-pagesize=0
+#CFLAGS += --param=min-pagesize=0
 CFLAGS += -Wall
 CFLAGS += -Werror
+CFLAGS += -Wextra
 CFLAGS += -Wundef
+CFLAGS += -Wno-unused-parameter
 CFLAGS += -mcall-prologues
 #CFLAGS += -mshort-calls
+#CFLAGS += -mrelax
 #CFLAGS += -fno-unit-at-a-time
-#CFLAGS += -Wunreachable-code
+CFLAGS += -Wunreachable-code
 #CFLAGS += -Wsign-compare
 #CFLAGS += -Wa,-adhlns=$(<:%.c=$(OBJDIR)/%.lst)
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
@@ -332,19 +329,20 @@ CPPFLAGS += -funsigned-bitfields
 CPPFLAGS += -fpack-struct
 CPPFLAGS += -fcheck-new
 CPPFLAGS += -fshort-enums
+#CPPFLAGS += -fno-strict-aliasing
 CPPFLAGS += -fno-exceptions
 CPPFLAGS += -fno-rtti
 #CPPFLAGS += -fwhole-program
 CPPFLAGS += --param=min-pagesize=0
-CPPFLAGS += -Wall
-CPPFLAGS += -Werror
-CPPFLAGS += -Wundef
 CPPFLAGS += -mcall-prologues
 #CPPFLAGS += -mshort-calls
-#CPPFLAGS += -fno-unit-at-a-time
-#CPPFLAGS += -Wstrict-prototypes
-#CPPFLAGS += -Wunreachable-code
-#CPPFLAGS += -Wsign-compare
+CPPFLAGS += -Wall
+CPPFLAGS += -Werror
+CPPFLAGS += -Wextra
+CPPFLAGS += -Wno-unused-parameter
+CPPFLAGS += -Wsign-compare
+CPPFLAGS += -Wundef
+CPPFLAGS += -Wunreachable-code
 #CPPFLAGS += -Wa,-adhlns=$(<:%.cpp=$(OBJDIR)/%.lst)
 CPPFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 #CPPFLAGS += $(CSTANDARD)
@@ -568,8 +566,8 @@ end:
 	@echo
 
 # Display size of file.
-HEXSIZE = $(SIZE) --target=$(FORMAT) $(TARGET).hex
-ELFSIZE = $(SIZE) --format=avr $(TARGET).elf
+HEXSIZE = $(SIZE) --mcu=$(MCU) --target=$(FORMAT) $(TARGET).hex
+ELFSIZE = $(SIZE) --mcu=$(MCU) --format=avr $(TARGET).elf
 
 sizebefore:
 	@if test -f $(TARGET).elf; then echo; echo $(MSG_SIZE_BEFORE); $(ELFSIZE); \
@@ -578,6 +576,9 @@ sizebefore:
 sizeafter:
 	@if test -f $(TARGET).elf; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); \
 	2>/dev/null; echo; fi
+
+size:
+	$(SIZE) --mcu=$(MCU) -A $(TARGET).elf
 
 # Display compiler version information.
 gccversion : 

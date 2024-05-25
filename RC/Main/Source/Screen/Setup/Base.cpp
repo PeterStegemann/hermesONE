@@ -35,36 +35,71 @@ extern unsigned int __data_start;
 extern unsigned int __data_end;
 extern unsigned int __bss_start;
 extern unsigned int __bss_end;
+extern unsigned int __noinit_start;
+extern unsigned int __noinit_end;
+extern unsigned int __heap_start;
+extern unsigned int __heap_end;
 
 void Screen_Setup_Base::update( void)
 {
 	GLOBAL.StatusScreen.Update();
 
+    if( GLOBAL.GetDebug() == false)
+    {
+        return;
+    }
+
 	uint16_t Sequence = GLOBAL.SignalService.GetPPM( 0)->GetSequence();
-	uint8_t Diff = Sequence - lastSequence;
-	lastSequence = Sequence;
 
-	if( Diff > 0)
+	if( Sequence != lastSequence)
 	{
-//		uint8_t Frames = 450 / Diff;
+    	lastSequence = Sequence;
 
-		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 1, FONT::FI_Mini,
-										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-										 "%d", __data_start);
-		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 11, FONT::FI_Mini,
-										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-										 "%d", __data_end);
-		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 21, FONT::FI_Mini,
-										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-										 "%d", __bss_start);
-		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 31, FONT::FI_Mini,
-										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-										 "%d", __bss_end);
-		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 41, FONT::FI_Mini,
-										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-    									 "%d", &Sequence);
+    	uint16_t Left = frameLeft + frameWidth - 60;
+    	uint16_t Top = frameTop + 1;
 
-/*		GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 1, FONT::FI_Mini,
+		GLOBAL.SetupDisplay.PrintFormat
+		(
+		    Left, Top, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+            "Stack: %04x", RAMEND - SP
+        );
+		GLOBAL.SetupDisplay.PrintFormat
+		(
+		    Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+            "Free:  %04x", SP - __data_start
+        );
+/*
+		GLOBAL.SetupDisplay.PrintFormat
+		(
+		    Left, Top, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+		    "data:   %04x %04x", __data_start, __data_end
+        );
+		GLOBAL.SetupDisplay.PrintFormat
+		(
+    		Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+            "bss:    %04x %04x", __bss_start, __bss_end
+        );
+		GLOBAL.SetupDisplay.PrintFormat
+		(
+    		Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+            "noinit: %04x %04x", __noinit_start, __noinit_end
+        );
+		GLOBAL.SetupDisplay.PrintFormat
+		(
+    		Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+            "heap:   %04x %04x", __heap_start, __heap_end
+        );
+		GLOBAL.SetupDisplay.PrintFormat
+		(
+		    Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+            "RAMEND: %04x SP: %04x size: %04x", RAMEND, SP, RAMEND - SP
+        );
+*/
+/*
+		//  	uint8_t Diff = Sequence - lastSequence;
+        //		uint8_t Frames = 450 / Diff;
+
+        GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 1, FONT::FI_Mini,
 										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
 										 "%u %d %d.%01d  ", Sequence,
 										 GLOBAL.SignalService.GetPPM( 0)->GetWaited(), Frames / 10,
@@ -86,8 +121,6 @@ void Screen_Setup_Base::drawFrame( void)
 		return;
 	}
 
-	GLOBAL.SetupDisplay.Clear( LCD_65K_RGB::C_Black);
-
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_TITLE_FONT);
 
 //	GLOBAL.SetupDisplay.DrawRect( 0, 0, GLOBAL.SetupDisplay.GetWidth(), GLOBAL.SetupDisplay.GetHeight(),
@@ -96,10 +129,8 @@ void Screen_Setup_Base::drawFrame( void)
 	uint16_t LabelLeft = GLOBAL.SetupDisplay.GetWidth() / 3;
 	uint16_t LabelWidth = LabelLeft;
 
-	GLOBAL.SetupDisplay.FillRect( LabelLeft, 0, LabelWidth, Font->CellHeight + 1,
-								  LCD_65K_RGB::C_White);
-	GLOBAL.SetupDisplay.DrawHorizontalLine( LabelLeft + 1, Font->CellHeight + 1, LabelWidth - 2,
-											LCD_65K_RGB::C_White);
+	GLOBAL.SetupDisplay.FillRect( LabelLeft, 0, LabelWidth, Font->CellHeight + 1, LCD_65K_RGB::C_White);
+	GLOBAL.SetupDisplay.DrawHorizontalLine( LabelLeft + 1, Font->CellHeight + 1, LabelWidth - 2, LCD_65K_RGB::C_White);
 
 	uint16_t TitleWidth = strlen_P( title) * Font->CellWidth;
 	uint16_t TextLeft = ( GLOBAL.SetupDisplay.GetWidth() - TitleWidth) / 2;
@@ -171,6 +202,8 @@ void Screen_Setup_Base::SetSourceLabel( GUI_Setup_Label* Label, char* Name, uint
 
 void Screen_Setup_Base::ReDisplay( void)
 {
+	GLOBAL.SetupDisplay.Clear( LCD_65K_RGB::C_Black);
+
 	drawFrame();
 	display();
 	drawMenuMarker();

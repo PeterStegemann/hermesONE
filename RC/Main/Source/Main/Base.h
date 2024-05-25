@@ -17,6 +17,7 @@
 #include "AVR/Source/LCD/LCD_DOG_S102.h"
 
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 
 #define GLOBAL	MainInstance
 
@@ -24,6 +25,7 @@ class Main_Base
 {
   private:
     uint16_t lastStoreModifiedTime;
+    bool debug;
 
   public:
     Setup_Service SetupService;
@@ -48,6 +50,9 @@ class Main_Base
   public:
     Main_Base( void)
         : lastStoreModifiedTime( 0)
+        , debug( false)
+        , StatusBattery( &SignalProcessor, &SetupService, &StatusService)
+        , StatusService( &SignalService)
         , StatusScreen( &StatusDisplay)
     {
     }
@@ -59,8 +64,14 @@ class Main_Base
     // Go.
     void Run( void)
     {
+    	// Disable watchdog.
+    	wdt_disable();
+
         // Wait some time for the controller and other components to stabilize.
     	UTILITY::Pause( 100);
+
+    	// Get debug state.
+//    	debug = SetupService.GetDebug();
 
         // Initialize status.
         StatusService.Initialize();
@@ -117,9 +128,18 @@ class Main_Base
 	    }
     }
 
-    // Clear screens.
     virtual void ClearScreens( void)
     {
 	    StatusDisplay.Clear();
+    }
+
+    bool GetDebug( void)
+    {
+        return( debug);
+    }
+
+    void SetDebug( bool Debug)
+    {
+        debug = Debug;
     }
 };

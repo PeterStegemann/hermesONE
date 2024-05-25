@@ -13,14 +13,14 @@
 #define GUI_SETUP_TEXTINPUT_STATE_COUNT		    100
 
 // Character sets with room for special characters at the end.
-static const char GUI_Setup_NumericCharacterSet[] =
+static const flash_char GUI_Setup_NumericCharacterSet[] PROGMEM =
 {
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+',
 	FONT::C_SpecialExit, FONT::C_SpecialBackspace, FONT::C_SpecialDelete, FONT::C_SpecialInsert,
 	FONT::C_SpecialLeft, FONT::C_SpecialRight
 };
 
-static const char GUI_Setup_AlphaNumericCharacterSet[] =
+static const flash_char GUI_Setup_AlphaNumericCharacterSet[] PROGMEM =
 {
 	' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
 	's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-',
@@ -29,7 +29,7 @@ static const char GUI_Setup_AlphaNumericCharacterSet[] =
 	FONT::C_SpecialLeft, FONT::C_SpecialRight
 };
 
-static const char GUI_Setup_FullCharacterSet[] =
+static const flash_char GUI_Setup_FullCharacterSet[] PROGMEM =
 {
 	' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', '0', '1', '2',
 	'3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?', '@', 'A', 'B', 'C', 'D', 'E',
@@ -73,8 +73,8 @@ class GUI_Setup_TextInput
 
     void skipCharacter( int16_t Range)
     {
-        const char* CharacterSet = GUI_Setup_FullCharacterSet;
-        int16_t CharacterSetSize = sizeof( GUI_Setup_FullCharacterSet);
+        const flash_char* CharacterSet;
+        int16_t CharacterSetSize;
 
         if( options & O_LimitNumeric)
         {
@@ -86,14 +86,19 @@ class GUI_Setup_TextInput
             CharacterSet = GUI_Setup_AlphaNumericCharacterSet;
             CharacterSetSize = sizeof( GUI_Setup_AlphaNumericCharacterSet);
         }
+        else
+        {
+            CharacterSet = GUI_Setup_FullCharacterSet;
+            CharacterSetSize = sizeof( GUI_Setup_FullCharacterSet);
+        }
 
         // Get position of current character.
-        const char* Current = strchr( CharacterSet, currentCharacter);
+        const flash_char* Current = strchr_P( CharacterSet, currentCharacter);
 
         if( Current == NULL)
         {
             // Try gokal.
-            Current = strchr( CharacterSet, tolower( currentCharacter));
+            Current = strchr_P( CharacterSet, tolower( currentCharacter));
         }
 
         int16_t Index = 0;
@@ -113,7 +118,7 @@ class GUI_Setup_TextInput
 
         Index %= CharacterSetSize;
 
-        currentCharacter = CharacterSet[ Index];
+        currentCharacter = pgm_read_byte( &( CharacterSet[ Index]));
     }
 
     void clearCursor( void)
@@ -224,7 +229,7 @@ class GUI_Setup_TextInput
             text[ cursorPosition + 1] = 0;
         }
 
-        uint8_t BlinkCount = 0;
+        uint16_t BlinkCount = 0;
         blinkState = true;
 
         Display();
@@ -266,8 +271,7 @@ class GUI_Setup_TextInput
                         {
                             cursorPosition--;
 
-                            strncpy( &text[ cursorPosition], &text[ cursorPosition + 1],
-                                     size + 1 - cursorPosition);
+                            strncpy( &text[ cursorPosition], &text[ cursorPosition + 1], size + 1 - cursorPosition);
                         }
                     }
                     break;
@@ -276,8 +280,7 @@ class GUI_Setup_TextInput
                     {
                         if( cursorPosition < size)
                         {
-                            strncpy( &text[ cursorPosition], &text[ cursorPosition + 1],
-                                     size + 1 - cursorPosition);
+                            strncpy( &text[ cursorPosition], &text[ cursorPosition + 1], size + 1 - cursorPosition);
                         }
                     }
                     break;
@@ -286,8 +289,7 @@ class GUI_Setup_TextInput
                     {
                         if(( cursorPosition + 1) < size)
                         {
-                            memmove( &text[ cursorPosition + 1], &text[ cursorPosition],
-                                     size - ( cursorPosition + 1));
+                            memmove( &text[ cursorPosition + 1], &text[ cursorPosition], size - ( cursorPosition + 1));
 
                             text[ cursorPosition] = ' ';
                         }

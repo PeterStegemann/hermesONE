@@ -395,9 +395,12 @@ void Screen_Setup_Source_Input::clear( void)
 		case Setup_Source_Input::IT_Switch :
 		case Setup_Source_Input::IT_Ticker :
 		{
+			inputALabel.Clear();
+			inputAValueLabel.Clear();
 			inputBLabel.Clear();
 			inputBValueLabel.Clear();
 		}
+		break;
 
 		default :
 		{

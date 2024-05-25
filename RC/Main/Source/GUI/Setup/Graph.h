@@ -68,7 +68,8 @@ class GUI_Setup_Graph
                 // Clear old marker?
                 if( marker >= 0)
                 {
-                    GLOBAL.SetupDisplay.DrawVerticalLine( left + 2 + marker, top + 2, size - 4, backgroundColor);
+                    GLOBAL.SetupDisplay.DrawVerticalLine( left + 2 + marker, top + 2, size - 4,
+                                                          backgroundColor);
                 }
             }
             else

@@ -9,7 +9,7 @@
 
 class GUI_Setup_Label
 {
-public:
+  public:
     enum Options
     {
         O_None				= 0b00000000,

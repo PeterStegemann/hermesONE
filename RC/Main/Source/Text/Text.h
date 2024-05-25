@@ -51,6 +51,7 @@ class Text
     static const flash_char Clip[];
     static const flash_char Contrast[];
     static const flash_char Critical[];
+    static const flash_char Debug[];
     static const flash_char Delete[];
     static const flash_char Follower[];
     static const flash_char Followers[];

@@ -6,18 +6,29 @@
 
 class Status_Time
 {
-	private:
-		volatile uint16_t uptime;
+  private:
+    volatile uint16_t uptime;
 
-	public:
-		Status_Time( void);
+  public:
+    Status_Time( void)
+        : uptime( 0)
+    {
+    }
 
-		// Initialize status engine.
-		void Initialize( void);
+    // Initialize status engine.
+    void Initialize( void)
+    {
+    }
 
-		// This is for the interrupt, not for you.
-		void Process( void);
+    // This is for the interrupt, not for you.
+    void Process( void)
+    {
+        uptime++;
+    }
 
-		// Get uptime in seconds.
-		uint16_t GetUptime( void);
+    // Get uptime in seconds.
+    uint16_t GetUptime( void)
+    {
+        return( uptime);
+    }
 };

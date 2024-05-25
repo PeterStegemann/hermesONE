@@ -3,8 +3,8 @@
 #pragma once
 
 //#define SYSTEM_FRAME_DELAY				100		// 10 frames per second.
-#define SYSTEM_LONG_PRESS_DURATION		250		// Long press quarter of a second.
-#define SYSTEM_STORE_MODIFIED_DELAY		5		// Every 5 seconds.
+#define SYSTEM_LONG_PRESS_DURATION      250		// Long press quarter of a second.
+#define SYSTEM_STORE_MODIFIED_DELAY     5		// Every 5 seconds.
 
 #define SYSTEM_MCU_2560                 0
 #define SYSTEM_MCU_2561                 1
@@ -18,7 +18,7 @@
 	#define SYSTEM_EEPROM_TYPE			SYSTEM_EEPROM_TYPE_FM24C512     # ???
 	#define SYSTEM_MCU_TYPE             SYSTEM_MCU_2560
 #elif( SYSTEM_VERSION == SYSTEM_VERSION_MINI_V1)
-	#define SYSTEM_EEPROM_TYPE			SYSTEM_EEPROM_TYPE_FM24C512
+	#define SYSTEM_EEPROM_TYPE			SYSTEM_EEPROM_TYPE_AT24C512
 	#define SYSTEM_MCU_TYPE             SYSTEM_MCU_2561
 #elif( SYSTEM_VERSION == SYSTEM_VERSION_V2)
 	#define SYSTEM_EEPROM_TYPE			SYSTEM_EEPROM_TYPE_FM24C256

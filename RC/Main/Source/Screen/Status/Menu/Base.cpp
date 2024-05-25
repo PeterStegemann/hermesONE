@@ -128,7 +128,7 @@ bool Screen_Status_Menu_Base::selectValue( int8_t* Value, int8_t LowerLimit, int
 {
 	int16_t NewValue = *Value;
 
-	// Align to stepwidth.
+	// Align to step width.
 	NewValue -= NewValue % StepWidth;
 
 	// Saves some write cycles with this flag.
@@ -187,7 +187,7 @@ bool Screen_Status_Menu_Base::selectValue( int16_t* Value, int16_t LowerLimit, i
 {
 	int32_t NewValue = *Value;
 
-	// Align to stepwidth.
+	// Align to step width.
 	NewValue -= NewValue % StepWidth;
 
 	// Save some write cycles with this flag.
@@ -246,7 +246,7 @@ bool Screen_Status_Menu_Base::selectValue( uint16_t* Value, uint16_t LowerLimit,
 {
 	int32_t NewValue = *Value;
 
-	// Align to stepwidth.
+	// Align to step width.
 	NewValue -= NewValue % StepWidth;
 
 	// Save some write cycles with this flag.
@@ -301,11 +301,11 @@ bool Screen_Status_Menu_Base::selectValue( uint16_t* Value, uint16_t LowerLimit,
 	return( ValueChanged);
 }
 
-bool Screen_Status_Menu_Base::selectSource( uint8_t* SignalSourceId, uint16_t* SetupSourceId,
-										    void* Object,
-										    void ( *UpdateSource)( void* Object,
-																   uint16_t SetupSourceId),
-										   Signal_Source_Source::Level Level)
+bool Screen_Status_Menu_Base::selectSource
+(
+    uint8_t* SignalSourceId, uint16_t* SetupSourceId,
+    void* Object, void ( *UpdateSource)( void* Object, uint16_t SetupSourceId), Signal_Source_Source::Level Level
+)
 {
 	// Save some write cycles with this flag.
 	bool SourceChanged = false;
@@ -331,8 +331,7 @@ bool Screen_Status_Menu_Base::selectSource( uint8_t* SignalSourceId, uint16_t* S
 		{
 			SourceChanged = true;
 
-			*SignalSourceId =
-				GLOBAL.SignalProcessor.FindNextSource( *SignalSourceId, RotarySelect, false, Level);
+			*SignalSourceId = GLOBAL.SignalProcessor.FindNextSource( *SignalSourceId, RotarySelect, false, Level);
 
 			if( *SignalSourceId == SIGNAL_SOURCE_NONE)
 			{
@@ -344,8 +343,7 @@ bool Screen_Status_Menu_Base::selectSource( uint8_t* SignalSourceId, uint16_t* S
 			}
 			else
 			{
-				const Signal_Source_Source* SignalSource =
-					GLOBAL.SignalProcessor.GetSource( *SignalSourceId);
+				const Signal_Source_Source* SignalSource = GLOBAL.SignalProcessor.GetSource( *SignalSourceId);
 
 				*SetupSourceId = SignalSource->GetSetupSourceId();
 			}
@@ -414,10 +412,8 @@ void Screen_Status_Menu_Base::drawMenuMarker( uint8_t MenuLevel, bool ShowLeft, 
 		if( ShowRight == true)
 		{
 			// Right marker.
-			GLOBAL.StatusDisplay.Write( GLOBAL.StatusDisplay.GetWidth() - ( Count + 1), CurrentLine,
-								    Arrow[ Index + 1]);
-			GLOBAL.StatusDisplay.Write( GLOBAL.StatusDisplay.GetWidth() - ( Count + 1), CurrentLine + 1,
-								    Arrow[ Index]);
+			GLOBAL.StatusDisplay.Write( GLOBAL.StatusDisplay.GetWidth() - ( Count + 1), CurrentLine, Arrow[ Index + 1]);
+			GLOBAL.StatusDisplay.Write( GLOBAL.StatusDisplay.GetWidth() - ( Count + 1), CurrentLine + 1, Arrow[ Index]);
 		}
 	}
 }

@@ -19,8 +19,7 @@ Screen_Setup_Channel::Screen_Setup_Channel( uint8_t ChannelId)
 	GLOBAL.SetupService.GetChannelName( channelId, channelName, SETUP_CHANNEL_NAME_SIZE + 1);
 
 	channelNameLabel.SetText_P( Text::Name);
-	channelNameInput.SetOptions(( GUI_Setup_TextInput::Options)
-								( GUI_Setup_TextInput::O_LimitAlphaNumeric));
+	channelNameInput.SetOptions(( GUI_Setup_TextInput::Options)	( GUI_Setup_TextInput::O_LimitAlphaNumeric));
 
 	sourceVolumeLabel.SetText_P( Text::FourDigitPercentFormat);
 	sourceVolumeLabel.SetOptions( GUI_Setup_Label::O_Fixed);
@@ -38,9 +37,9 @@ Screen_Setup_Channel::Screen_Setup_Channel( uint8_t ChannelId)
 	}
 
 	currentGauge.SetOptions(( GUI_Setup_Gauge::Options)( GUI_Setup_Gauge::O_Percentage |
-															 GUI_Setup_Gauge::O_DualPercentage |
-															 GUI_Setup_Gauge::O_CenterLine |
-														     GUI_Setup_Gauge::O_Marker));
+														 GUI_Setup_Gauge::O_DualPercentage |
+														 GUI_Setup_Gauge::O_CenterLine |
+													     GUI_Setup_Gauge::O_Marker));
 }
 
 void Screen_Setup_Channel::display( void)
@@ -56,8 +55,8 @@ void Screen_Setup_Channel::display( void)
 
 	uint8_t Line = 0;
 
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop, SCREEN_SETUP_BASE_MAIN_FONT,
-								 LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
+	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop,
+	                             SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
 								 LCD::PO_Proportional, Text::Exit);
 
 	Line += 2;
@@ -65,8 +64,7 @@ void Screen_Setup_Channel::display( void)
 	channelNameLabel.SetDimensions( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	channelNameLabel.Display();
 
-	channelNameValueLabel.SetDimensions( ValueLeft,
-										 frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
+	channelNameValueLabel.SetDimensions( ValueLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	channelNameInput.SetDimensions( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
 
 	channelNameValueLabel.Display( channelName);
@@ -75,24 +73,22 @@ void Screen_Setup_Channel::display( void)
 
 	// Source
 	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Source);
+								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+								 LCD::PO_Proportional, Text::Source);
 	sourceNameLabel.SetDimensions( ValueLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
 
 	SetSourceLabel( &sourceNameLabel, sourceName, channel->InputSignalSourceId);
 
-	sourceVolumeLabel.SetDimensions( VolumeLeft,
-									 frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
-	sourceVolumeLabel.SetValue( channel->Setup.InputSource.Volume /
-							    SIGNAL_CHANNEL_INPUT_SIGNAL_PER_VALUE);
+	sourceVolumeLabel.SetDimensions( VolumeLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
+	sourceVolumeLabel.SetValue( channel->Setup.InputSource.Volume / SIGNAL_CHANNEL_INPUT_SIGNAL_PER_VALUE);
 	sourceVolumeLabel.Display();
 
 	Line++;
 
 	// Trim
 	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Trim);
+								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+								 LCD::PO_Proportional, Text::Trim);
 	trimNameLabel.SetDimensions( ValueLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
 
 	SetSourceLabel( &trimNameLabel, trimName, channel->TrimSignalSourceId);
@@ -113,8 +109,7 @@ void Screen_Setup_Channel::display( void)
 	SetSourceLabel( &limitNameLabel, limitName, channel->LimitSignalSourceId);
 
 	limitVolumeLabel.SetDimensions( VolumeLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
-	limitVolumeLabel.SetValue( channel->Setup.LimitSource.Volume /
-							   SIGNAL_CHANNEL_INPUT_SIGNAL_PER_VALUE);
+	limitVolumeLabel.SetValue( channel->Setup.LimitSource.Volume / SIGNAL_CHANNEL_INPUT_SIGNAL_PER_VALUE);
 	limitVolumeLabel.Display();
 
 	Line += 2;
@@ -125,8 +120,7 @@ void Screen_Setup_Channel::display( void)
 	uint16_t ChartLeft = VolumeLeft + 11 * Font->CellWidth;
 	uint16_t ChartTop = frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT);
 
-	channelGraph.SetDimensions( ChartLeft, ChartTop,
-							    UTILITY_Minimum( frameHeight - ChartTop, frameWidth - ChartLeft));
+	channelGraph.SetDimensions( ChartLeft, ChartTop, UTILITY_Minimum( frameHeight - ChartTop, frameWidth - ChartLeft));
 
 	for( uint8_t PointId = 0; PointId < Setup_Channel::PV_PointVolumeCount; PointId++)
 	{
@@ -141,13 +135,12 @@ void Screen_Setup_Channel::display( void)
 			case 2 : LabelText = Text::Top;			break;
 		}
 
-		GLOBAL.SetupDisplay.PrintFormat_P( menuLeft, LineTop, SCREEN_SETUP_BASE_MAIN_FONT,
-										   LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
+		GLOBAL.SetupDisplay.PrintFormat_P( menuLeft, LineTop,
+		                                   SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
 										   LCD::PO_Proportional, LabelText);
 
 		pointVolumeLabel[ PointId].SetDimensions( VolumeLeft, LineTop);
-		pointVolumeLabel[ PointId].SetValue( channel->Setup.PointVolume[ PointId] /
-											 SIGNAL_CHANNEL_SIGNAL_PER_VALUE);
+		pointVolumeLabel[ PointId].SetValue( channel->Setup.PointVolume[ PointId] / SIGNAL_CHANNEL_SIGNAL_PER_VALUE);
 		pointVolumeLabel[ PointId].Display();
 
 		Line++;
@@ -157,19 +150,18 @@ void Screen_Setup_Channel::display( void)
 
 	// Reverse
 	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Reverse);
+								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+								 LCD::PO_Proportional, Text::Reverse);
 	
-	reverseCheckBox.SetDimensions( ContentLeft,
-								   frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
+	reverseCheckBox.SetDimensions( ContentLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
 								   ContentWidth, SCREEN_SETUP_BASE_GAUGE_THICKNESS);
 	reverseCheckBox.Clear();
 	reverseCheckBox.Display( channel->Setup.Reverse);
 
 	// Mode
 	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Mode);
+								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+								 LCD::PO_Proportional, Text::Mode);
 
 	modeLabel.SetDimensions( ContentLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	updateMode( &modeLabel, channel->Setup.Mode);
@@ -178,8 +170,7 @@ void Screen_Setup_Channel::display( void)
 	uint16_t CurrentGaugeLeft = markerLeft;
 	uint16_t CurrentGaugeWidth = ChartLeft - markerLeft - Font->CellWidth;
 
-	currentGauge.SetDimensions( CurrentGaugeLeft,
-							    frameTop + frameHeight - SCREEN_SETUP_BASE_LINE_HEIGHT + 1,
+	currentGauge.SetDimensions( CurrentGaugeLeft, frameTop + frameHeight - SCREEN_SETUP_BASE_LINE_HEIGHT + 1,
 							    CurrentGaugeWidth, SCREEN_SETUP_BASE_GAUGE_THICKNESS);	
 }
 
@@ -346,8 +337,7 @@ void Screen_Setup_Channel::updateVolume( void* Object, GUI_Setup_Label* Label, i
 
 void Screen_Setup_Channel::updatePointVolume( void* Object, GUI_Setup_Label* Label, int16_t Value)
 {
-	(( Screen_Setup_Channel*) Object)->updatePointVolume(
-	    (( Screen_Setup_Channel*) Object)->currentPointId, Value);
+	(( Screen_Setup_Channel*) Object)->updatePointVolume((( Screen_Setup_Channel*) Object)->currentPointId, Value);
 }
 
 void Screen_Setup_Channel::updatePointVolume( uint8_t CurrentPointId, int16_t Value)

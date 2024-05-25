@@ -51,6 +51,8 @@ Setup_Struct Eeprom EEMEM =
 	{},					// PPMName
 	{},					// Calibration
 	{}					// Type
+
+//    0                   // Debug
 };
 
 Setup_Service::Setup_Service( void)
@@ -110,6 +112,18 @@ char* Setup_Service::GetOwner( char* Owner, uint8_t Size)
 	readString( Owner, Size, &( Eeprom.Owner), SETUP_OWNER_SIZE);
 
 	return( Owner);
+}
+
+void Setup_Service::SetDebug( bool Debug)
+{
+//	eeprom_write_byte( &( Eeprom.Debug), Debug ? 1 : 0);
+}
+
+bool Setup_Service::GetDebug( void)
+{
+	uint8_t Debug = 0; //eeprom_read_byte( &( Eeprom.Debug));
+
+	return( Debug == 1);
 }
 
 void Setup_Service::SetSetupBacklight( uint8_t SetupBacklight)
@@ -190,9 +204,9 @@ void Setup_Service::SetStatusInverted( bool StatusInverted)
 
 bool Setup_Service::GetStatusInverted( void)
 {
-	bool StatusBacklight = eeprom_read_byte( &( Eeprom.StatusInverted));
+	bool StatusInverted = eeprom_read_byte( &( Eeprom.StatusInverted));
 
-	return( StatusBacklight == 1);
+	return( StatusInverted == 1);
 }
 
 void Setup_Service::SetBattery( const Setup_Battery* Battery)
@@ -294,8 +308,7 @@ bool Setup_Service::FindNextEmptyModel( uint8_t* ModelId)
 bool Setup_Service::FindNextEmptyType( uint8_t* TypeId)
 {
 	// Loop types.
-	for( uint8_t CurrentTypeId = SETUP_MODEL_TYPES_START; CurrentTypeId < SETUP_MODEL_TYPES_END;
-		 CurrentTypeId++)
+	for( uint8_t CurrentTypeId = SETUP_MODEL_TYPES_START; CurrentTypeId < SETUP_MODEL_TYPES_END; CurrentTypeId++)
 	{
 		if( GetTypeState( CurrentTypeId) == TS_Empty)
 		{
@@ -318,10 +331,8 @@ uint8_t Setup_Service::CountModels( CountModelsOptions UseCountModelsOptions)
 	{
 		ModelState CurrentModelState = GetModelState( SetupModelId);
 
-		if((( UseCountModelsOptions == CMO_Empty) &&
-			( CurrentModelState == Setup_Service::MS_Empty)) ||
-		   (( UseCountModelsOptions == CMO_Used) &&
-			( CurrentModelState != Setup_Service::MS_Empty)))
+		if((( UseCountModelsOptions == CMO_Empty) && ( CurrentModelState == Setup_Service::MS_Empty)) ||
+		   (( UseCountModelsOptions == CMO_Used) &&	( CurrentModelState != Setup_Service::MS_Empty)))
 		{
 			ModelsMatched++;
 		}
@@ -344,10 +355,8 @@ uint8_t Setup_Service::CountModels( uint8_t SetupTypeId, CountModelsOptions UseC
 		{
 			ModelState CurrentModelState = GetModelState( SetupModelId);
 
-			if((( UseCountModelsOptions == CMO_Empty) &&
-				( CurrentModelState == Setup_Service::MS_Empty)) ||
-			   (( UseCountModelsOptions == CMO_Used) &&
-				( CurrentModelState != Setup_Service::MS_Empty)))
+			if((( UseCountModelsOptions == CMO_Empty) && ( CurrentModelState == Setup_Service::MS_Empty)) ||
+			   (( UseCountModelsOptions == CMO_Used) && ( CurrentModelState != Setup_Service::MS_Empty)))
 			{
 				ModelsMatched++;
 			}
@@ -363,15 +372,12 @@ uint8_t Setup_Service::CountTypes( CountTypesOptions UseCountTypesOptions)
 	uint8_t TypesMatched = 0;
 
 	// Loop types.
-	for( uint8_t SetupTypeId = SETUP_MODEL_TYPES_START; SetupTypeId < SETUP_MODEL_TYPES_END;
-		 SetupTypeId++)
+	for( uint8_t SetupTypeId = SETUP_MODEL_TYPES_START; SetupTypeId < SETUP_MODEL_TYPES_END; SetupTypeId++)
 	{
 		TypeState CurrentTypeState = GetTypeState( SetupTypeId);
 
-		if((( UseCountTypesOptions == CTO_Empty) &&
-			( CurrentTypeState == Setup_Service::TS_Empty)) ||
-		   (( UseCountTypesOptions == CTO_Used) &&
-			( CurrentTypeState != Setup_Service::TS_Empty)))
+		if((( UseCountTypesOptions == CTO_Empty) && ( CurrentTypeState == Setup_Service::TS_Empty)) ||
+		   (( UseCountTypesOptions == CTO_Used) && ( CurrentTypeState != Setup_Service::TS_Empty)))
 		{
 			TypesMatched++;
 		}
@@ -524,10 +530,8 @@ uint16_t Setup_Service::CountSources( CountSourcesOptions UseCountSourcesOptions
 	{
 		Signal_Source_Source::Type CurrentSourceType = GetSourceType( SetupSourceId);
 
-		if((( UseCountSourcesOptions == CSO_Empty) &&
-			( CurrentSourceType == Signal_Source_Source::T_Empty)) ||
-		   (( UseCountSourcesOptions == CSO_Used) &&
-			( CurrentSourceType != Signal_Source_Source::T_Empty)))
+		if((( UseCountSourcesOptions == CSO_Empty) && ( CurrentSourceType == Signal_Source_Source::T_Empty)) ||
+		   (( UseCountSourcesOptions == CSO_Used) && ( CurrentSourceType != Signal_Source_Source::T_Empty)))
 		{
 			SourcesMatched++;
 		}
@@ -849,8 +853,7 @@ uint8_t Setup_Service::GetRFMode( uint8_t ModelId)
 
 void Setup_Service::SetChannelName( uint8_t ModelId, uint8_t ChannelId, const char* ChannelName)
 {
-	if(( ModelId >= SETUP_MODELS) ||
-	   ( ChannelId >= SIGNAL_PPM_CHANNELS))
+	if(( ModelId >= SETUP_MODELS) || ( ChannelId >= SIGNAL_PPM_CHANNELS))
 	{
 		// That index is not available.
 		return;
@@ -860,11 +863,9 @@ void Setup_Service::SetChannelName( uint8_t ModelId, uint8_t ChannelId, const ch
 						SETUP_SOURCE_NAME_SIZE, ChannelName);
 }
 
-char* Setup_Service::GetChannelName( uint8_t ModelId, uint8_t ChannelId, char* ChannelName,
-									 uint8_t Size)
+char* Setup_Service::GetChannelName( uint8_t ModelId, uint8_t ChannelId, char* ChannelName, uint8_t Size)
 {
-	if(( ModelId >= SETUP_MODELS) ||
-	   ( ChannelId >= SIGNAL_PPM_CHANNELS))
+	if(( ModelId >= SETUP_MODELS) || ( ChannelId >= SIGNAL_PPM_CHANNELS))
 	{
 		// That index is not available.
 		*ChannelName = 0;
@@ -890,8 +891,7 @@ char* Setup_Service::GetChannelName( uint8_t ChannelId, char* ChannelName, uint8
 
 void Setup_Service::SetChannel( uint8_t ModelId, uint8_t ChannelId, const Setup_Channel* Channel)
 {
-	if(( ModelId >= SETUP_MODELS) ||
-	   ( ChannelId >= SIGNAL_PPM_CHANNELS))
+	if(( ModelId >= SETUP_MODELS) || ( ChannelId >= SIGNAL_PPM_CHANNELS))
 	{
 		// That index is not available.
 		return;
@@ -903,8 +903,7 @@ void Setup_Service::SetChannel( uint8_t ModelId, uint8_t ChannelId, const Setup_
 
 void Setup_Service::GetChannel( uint8_t ModelId, uint8_t ChannelId, Setup_Channel* Channel)
 {
-	if(( ModelId >= SETUP_MODELS) ||
-	   ( ChannelId >= SIGNAL_PPM_CHANNELS))
+	if(( ModelId >= SETUP_MODELS) || ( ChannelId >= SIGNAL_PPM_CHANNELS))
 	{
 		// That index is not available.
 		return;
@@ -1000,8 +999,7 @@ uint16_t Setup_Service::GetStatusSourceId( uint8_t StatusId)
 	return( GetStatusSourceId( selectedModelId, StatusId));
 }
 
-void Setup_Service::SetProxyReference( uint8_t ModelId, uint8_t ProxyId,
-									   const Setup_Source_Tuple* ProxyReference)
+void Setup_Service::SetProxyReference( uint8_t ModelId, uint8_t ProxyId, const Setup_Source_Tuple* ProxyReference)
 {
 	if( ProxyId >= SETUP_MODEL_PROXY_SOURCES)
 	{
@@ -1013,8 +1011,7 @@ void Setup_Service::SetProxyReference( uint8_t ModelId, uint8_t ProxyId,
 					   sizeof( Setup_Source_Tuple), ProxyReference);
 }
 
-void Setup_Service::GetProxyReference( uint8_t ModelId, uint8_t ProxyId,
-									   Setup_Source_Tuple* ProxyReference)
+void Setup_Service::GetProxyReference( uint8_t ModelId, uint8_t ProxyId, Setup_Source_Tuple* ProxyReference)
 {
 	if( ProxyId >= SETUP_MODEL_PROXY_SOURCES)
 	{

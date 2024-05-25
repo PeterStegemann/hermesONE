@@ -38,7 +38,7 @@ class GUI_Setup_GaugeSelect
         {
             int16_t NewValue = *Value;
 
-            // Align to stepwidth.
+            // Align to step width.
             NewValue -= NewValue % StepWidth;
 
             Gauge->Display( LowerLimit, UpperLimit, *Value);
