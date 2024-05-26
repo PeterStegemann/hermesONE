@@ -3,7 +3,7 @@
 #include "Timer.h"
 
 #include "GUI/Setup/Select.h"
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Signal/Processor.h"
 #include "Text/Text.h"
 

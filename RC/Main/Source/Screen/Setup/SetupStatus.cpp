@@ -2,7 +2,7 @@
 
 #include "SetupStatus.h"
 
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "GUI/Setup/Select.h"
 #include "Text/Text.h"
 

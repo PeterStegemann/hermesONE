@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 class Setup_Utility
 {
   public:

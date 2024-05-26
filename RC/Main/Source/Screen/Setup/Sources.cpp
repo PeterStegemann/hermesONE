@@ -3,7 +3,7 @@
 #include "Sources.h"
 
 #include "GUI/Setup/Popup.h"
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Source/Follower.h"
 #include "Source/Input.h"
 #include "Source/Map.h"

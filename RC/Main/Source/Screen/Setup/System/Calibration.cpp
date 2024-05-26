@@ -2,7 +2,7 @@
 
 #include "Calibration.h"
 
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Text/Text.h"
 
 #include "AVR/Source/Utility.h"

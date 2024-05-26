@@ -2,7 +2,7 @@
 
 #include "Models.h"
 
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "GUI/Setup/Popup.h"
 #include "Text/Text.h"
 

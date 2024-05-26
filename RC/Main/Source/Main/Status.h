@@ -2,6 +2,8 @@
 
 #pragma once
 
+class Main_Status;
+
 #include "Base.h"
 
 class Main_Status : public Main_Base
@@ -24,5 +26,3 @@ class Main_Status : public Main_Base
     // Set new status blank time.
     void SetStatusBlankTime( uint16_t StatusBlankTime);
 };
-
-extern Main_Status MainInstance;

@@ -2,9 +2,10 @@
 
 #include "Map.h"
 
-#include "../Processor.h"
-#include "../Utility.h"
+#include "Main/Global.h"
 #include "Setup/Defines.h"
+#include "Signal/Processor.h"
+#include "Signal/Utility.h"
 
 int16_t Signal_Source_Map::getPoint( uint8_t PointId, Signal_Processor* SignalProcessor)
 {

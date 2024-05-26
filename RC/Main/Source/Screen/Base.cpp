@@ -3,7 +3,7 @@
 #include "Base.h"
 
 #include "Ports.h"
-#include "GUI/Setup/Label.h"
+#include "Main/Global.h"
 #include "Setup/Defines.h"
 #include "Text/Text.h"
 

@@ -6,6 +6,8 @@
 
 #include "Text/Text.h"
 
+#include <stdio.h>
+
 class GUI_Status_TimeLabel : public GUI_Status_Label
 {
   private:

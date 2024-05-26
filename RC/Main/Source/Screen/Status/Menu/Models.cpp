@@ -2,6 +2,7 @@
 
 #include "Models.h"
 
+#include "Main/Global.h"
 #include "Text/Text.h"
 
 #include "AVR/Source/Utility.h"

@@ -2,7 +2,7 @@
 
 #include "Status.h"
 
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Setup/Defines.h"
 #include "Setup/Service.h"
 #include "Setup/Utility.h"

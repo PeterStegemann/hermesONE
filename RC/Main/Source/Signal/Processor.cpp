@@ -2,6 +2,7 @@
 
 #include "Processor.h"
 
+#include "Main/Global.h"
 #include "Setup/Defines.h"
 
 #include "AVR/Source/Utility.h"

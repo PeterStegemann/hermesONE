@@ -300,7 +300,7 @@ class Serial_DesktopConnection
         closeComplex();
     }
 
-    void sendSources( void) __attribute__((used))
+    void sendSources( void)
     {
         openComplex( Serial_DesktopProtocol::I_Sources);
 

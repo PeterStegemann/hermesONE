@@ -2,9 +2,10 @@
 
 #include "Follower.h"
 
-#include "../Processor.h"
-#include "../Utility.h"
+#include "Main/Global.h"
 #include "Setup/Defines.h"
+#include "Signal/Processor.h"
+#include "Signal/Utility.h"
 
 #include "AVR/Source/Utility.h"
 

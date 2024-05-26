@@ -3,7 +3,7 @@
 #include "Fractal.h"
 
 #include "Input.h"
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Ports.h"
 
 #include "AVR/Components/Utility.h"

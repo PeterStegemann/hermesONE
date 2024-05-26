@@ -3,7 +3,7 @@
 #include "PPM.h"
 
 #include "GUI/Setup/Select.h"
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Text/Text.h"
 
 #include "AVR/Source/Utility.h"

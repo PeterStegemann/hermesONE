@@ -2,7 +2,7 @@
 
 #include "Info.h"
 
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Setup/Struct.h"
 #include "Text/Text.h"
 

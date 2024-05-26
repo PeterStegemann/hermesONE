@@ -4,15 +4,6 @@
 
 #include "Screen/Status/Menu/Main.h"
 
-Main_Status MainInstance;
-
-int main( void)
-{
-	MainInstance.Run();
-
-	return( 0);
-}
-
 Main_Status::Main_Status( void)
 		   : statusBlankTime( SetupService.GetStatusBlankTime())
 {

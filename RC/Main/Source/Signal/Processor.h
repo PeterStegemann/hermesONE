@@ -8,6 +8,7 @@
 #include "Ports.h"
 
 #include "Setup/Model.h"
+#include "Setup/Service.h"
 #include "Signal/Service.h"
 #include "Source/Source.h"
 

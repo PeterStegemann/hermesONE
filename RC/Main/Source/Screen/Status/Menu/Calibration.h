@@ -4,6 +4,8 @@
 
 #include "Base.h"
 
+#include "Signal/Calibration.h"
+
 class Screen_Status_Menu_Calibration : public Screen_Status_Menu_Base
 {
 	private:

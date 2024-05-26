@@ -3,6 +3,7 @@
 #include "Service.h"
 
 #include "Ports.h"
+#include "Main/Global.h"
 
 #include "AVR/Source/Utility.h"
 

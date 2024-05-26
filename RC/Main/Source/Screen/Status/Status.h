@@ -9,7 +9,6 @@
 #include "GUI/Status/Label.h"
 #include "GUI/Status/TimeLabel.h"
 #include "GUI/Status/VoltageLabel.h"
-#include "Main/Base.h"
 #include "Setup/Defines.h"
 
 #include "AVR/Source/LCD/LCD_DOG.h"

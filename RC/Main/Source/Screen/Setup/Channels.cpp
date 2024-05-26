@@ -4,7 +4,7 @@
 
 #include "Channel.h"
 #include "GUI/Setup/Select.h"
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Setup/Model.h"
 #include "Setup/Utility.h"
 #include "Text/Text.h"

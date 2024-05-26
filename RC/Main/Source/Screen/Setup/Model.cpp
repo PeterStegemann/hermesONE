@@ -6,7 +6,7 @@
 #include "Sources.h"
 #include "GUI/Setup/Popup.h"
 #include "GUI/Setup/Select.h"
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Setup/Service.h"
 #include "Text/Text.h"
 

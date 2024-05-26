@@ -2,9 +2,10 @@
 
 #include "Store.h"
 
-#include "../Processor.h"
-#include "../Utility.h"
+#include "Main/Global.h"
 #include "Setup/Defines.h"
+#include "Signal/Processor.h"
+#include "Signal/Utility.h"
 
 void Signal_Source_Proxy::Initialize( void)
 {

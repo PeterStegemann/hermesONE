@@ -3,6 +3,8 @@
 #include "Calibrations.h"
 
 #include "Calibration.h"
+#include "Main/Global.h"
+#include "Signal/Processor.h"
 #include "Text/Text.h"
 
 #include "AVR/Source/Utility.h"

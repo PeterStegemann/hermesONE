@@ -3,6 +3,7 @@
 #include "Service.h"
 
 #include "Ports.h"
+#include "Main/Global.h"
 #include "Signal/Defines.h"
 #include "Signal/Processor.h"
 #include "Struct.h"
@@ -11,9 +12,11 @@
 #include "AVR/Source/EEPROM.h"
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/LCD/LCD_DOG.h"
 
-#include <avr/eeprom.h>
+#include <stdio.h>
 #include <string.h>
+#include <avr/eeprom.h>
 
 #define ExtensionEeprom 	( *(( Setup_ExtensionStruct*) NULL))
 

@@ -2,9 +2,10 @@
 
 #include "Timer.h"
 
-#include "../Processor.h"
-#include "../Utility.h"
+#include "Main/Global.h"
 #include "Setup/Defines.h"
+#include "Signal/Processor.h"
+#include "Signal/Utility.h"
 
 #define TIMER_WARN_BEEP_LENGTH					25
 #define TIMER_WARN_BEEP_PAUSE					25

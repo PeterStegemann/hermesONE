@@ -2,7 +2,7 @@
 
 #include "Intro.h"
 
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Text/Text.h"
 
 #include "AVR/Components/Utility.h"

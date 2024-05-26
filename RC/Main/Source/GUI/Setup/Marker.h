@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Main/Global.h"
+
 #include "AVR/Source/LCD/LCD_65K_RGB.h"
 
 class GUI_Setup_Marker

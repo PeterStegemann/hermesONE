@@ -4,6 +4,7 @@
 
 #include "Processor.h"
 #include "Utility.h"
+#include "Main/Global.h"
 #include "Setup/Defines.h"
 
 void Signal_Channel::Initialize( void)

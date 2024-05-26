@@ -4,6 +4,8 @@
 
 #include "Base.h"
 
+#include "Setup/Battery.h"
+
 class Screen_Status_Menu_Battery : public Screen_Status_Menu_Base
 {
 	private:

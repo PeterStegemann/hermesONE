@@ -4,6 +4,8 @@
 
 #include "Base.h"
 
+#include "Signal/Channel.h"
+
 class Screen_Status_Menu_Channel : public Screen_Status_Menu_Base
 {
 	private:

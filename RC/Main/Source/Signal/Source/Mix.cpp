@@ -2,8 +2,9 @@
 
 #include "Mix.h"
 
-#include "../Processor.h"
+#include "Main/Global.h"
 #include "Setup/Defines.h"
+#include "Signal/Processor.h"
 
 void Signal_Source_Mix::Initialize( void)
 {

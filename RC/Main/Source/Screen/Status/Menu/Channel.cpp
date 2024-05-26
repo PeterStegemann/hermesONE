@@ -2,6 +2,7 @@
 
 #include "Channel.h"
 
+#include "Main/Global.h"
 #include "Setup/Channel.h"
 #include "Text/Text.h"
 

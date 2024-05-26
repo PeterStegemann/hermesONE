@@ -4,6 +4,8 @@
 
 #include "../../Base.h"
 
+#include "Signal/Source/Source.h"
+
 #include <avr/pgmspace.h>
 
 class Screen_Status_Menu_Base : public Screen_Base

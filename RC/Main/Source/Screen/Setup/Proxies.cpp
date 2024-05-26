@@ -3,7 +3,7 @@
 #include "Proxies.h"
 
 #include "GUI/Setup/Popup.h"
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Source/Proxy.h"
 #include "Text/Text.h"
 

@@ -7,7 +7,7 @@
 #include "Label.h"
 #include "Marker.h"
 
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "Setup/Defines.h"
 #include "Text/Text.h"
 

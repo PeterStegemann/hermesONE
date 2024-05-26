@@ -4,6 +4,8 @@
 
 #include "Defines.h"
 
+#include "Main/Global.h"
+
 #include "AVR/Source/Types.h"
 #include "AVR/Source/LCD/LCD_65K_RGB.h"
 

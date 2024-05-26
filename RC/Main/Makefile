@@ -52,8 +52,8 @@ LANGUAGE_ENGLISH = english
 LANGUAGE_GERMAN = german
 LANGUAGE = $(LANGUAGE_GERMAN)
 
-SYSTEM_VERSION = $(SYSTEM_VERSION_MINI_V1)
-# SYSTEM_VERSION = $(SYSTEM_VERSION_V2)
+# SYSTEM_VERSION = $(SYSTEM_VERSION_MINI_V1)
+SYSTEM_VERSION = $(SYSTEM_VERSION_V2)
 
 ifeq ($(SYSTEM_VERSION),)
 	SYSTEM_VERSION = $(SYSTEM_VERSION_MINI_V1)
@@ -124,12 +124,43 @@ DEPDIR = .build/dep
 SRC =
 
 # List C++ source files here. (C dependencies are automatically generated.)
+CPPSRC = \
+	Source/Input/Service.cpp \
+	Source/Interrupt/Service.cpp \
+	Source/Main/Base.cpp \
+	Source/Main/Main.cpp \
+	Source/Setup/Service.cpp \
+	Source/Setup/Utility.cpp \
+	Source/Signal/Calibration.cpp \
+	Source/Signal/Channel.cpp \
+	Source/Signal/PPM.cpp \
+	Source/Signal/Processor.cpp \
+	Source/Signal/Service.cpp \
+	Source/Signal/Utility.cpp \
+	Source/Signal/Source/Source.cpp \
+	Source/Signal/Source/Follower.cpp \
+	Source/Signal/Source/Input.cpp \
+	Source/Signal/Source/Map.cpp \
+	Source/Signal/Source/Mix.cpp \
+	Source/Signal/Source/Proxy.cpp \
+	Source/Signal/Source/Store.cpp \
+	Source/Signal/Source/Timer.cpp \
+	Source/Signal/Source/Trimmer.cpp \
+	AVR/Source/EEPROM.cpp \
+	AVR/Source/Font/Font.cpp \
+	AVR/Source/Font/Font_Large.cpp \
+	AVR/Source/Font/Font_Medium.cpp \
+	AVR/Source/Font/Font_Micro.cpp \
+	AVR/Source/Font/Font_Mini.cpp \
+	AVR/Source/Font/Font_Normal.cpp \
+	AVR/Source/SPI.cpp \
+	AVR/Source/String.cpp \
+	AVR/Source/Utility.cpp
+
 ifeq ($(SYSTEM_MODE), $(SYSTEM_MODE_STATUS))
 	CPPSRC += Source/Main/Status.cpp
-	CPPFLAGS += -include Main/Status.h
 else ifeq ($(SYSTEM_MODE), $(SYSTEM_MODE_SETUP))
-	CPPSRC  += Source/Main/Setup.cpp
-	CPPFLAGS += -include Main/Setup.h
+	CPPSRC += Source/Main/Setup.cpp
 endif
 
 ifeq ($(HAS_LCD_65K_RGB), yes)
@@ -204,38 +235,6 @@ else ifeq ($(LANGUAGE), english)
 		Source/Text/Text_English.cpp
 endif
 
-CPPSRC += \
-	Source/Input/Service.cpp \
-	Source/Interrupt/Service.cpp \
-	Source/Main/Base.cpp \
-	Source/Setup/Service.cpp \
-	Source/Setup/Utility.cpp \
-	Source/Signal/Calibration.cpp \
-	Source/Signal/Channel.cpp \
-	Source/Signal/PPM.cpp \
-	Source/Signal/Processor.cpp \
-	Source/Signal/Service.cpp \
-	Source/Signal/Utility.cpp \
-	Source/Signal/Source/Source.cpp \
-	Source/Signal/Source/Follower.cpp \
-	Source/Signal/Source/Input.cpp \
-	Source/Signal/Source/Map.cpp \
-	Source/Signal/Source/Mix.cpp \
-	Source/Signal/Source/Proxy.cpp \
-	Source/Signal/Source/Store.cpp \
-	Source/Signal/Source/Timer.cpp \
-	Source/Signal/Source/Trimmer.cpp \
-	AVR/Source/EEPROM.cpp \
-	AVR/Source/Font/Font.cpp \
-	AVR/Source/Font/Font_Large.cpp \
-	AVR/Source/Font/Font_Medium.cpp \
-	AVR/Source/Font/Font_Micro.cpp \
-	AVR/Source/Font/Font_Mini.cpp \
-	AVR/Source/Font/Font_Normal.cpp \
-	AVR/Source/SPI.cpp \
-	AVR/Source/String.cpp \
-	AVR/Source/Utility.cpp
-
 # List Assembler source files here.
 #     Make them always end in a capital .S.  Files ending in a lowercase .s
 #     will not be considered source files but generated files (assembler
@@ -281,6 +280,7 @@ CPPDEFS += -DSYSTEM_VERSION_V2=$(SYSTEM_VERSION_V2)
 CPPDEFS += -DSYSTEM_MODE=$(SYSTEM_MODE)
 CPPDEFS += -DSYSTEM_MODE_SETUP=$(SYSTEM_MODE_SETUP)
 CPPDEFS += -DSYSTEM_MODE_STATUS=$(SYSTEM_MODE_STATUS)
+
 #CPPDEFS += -D__STDC_LIMIT_MACROS
 #CPPDEFS += -D__STDC_CONSTANT_MACROS
 

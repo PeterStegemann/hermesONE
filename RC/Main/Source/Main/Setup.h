@@ -2,6 +2,8 @@
 
 #pragma once
 
+class Main_Setup;
+
 #include "Base.h"
 
 #include "AVR/Source/LCD/LCD_SerialOled.h"
@@ -42,5 +44,3 @@ class Main_Setup : public Main_Base
 	// From Main_Base.
 	virtual void ClearScreens( void);
 };
-
-extern Main_Setup MainInstance;

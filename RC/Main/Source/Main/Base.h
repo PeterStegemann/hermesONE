@@ -19,8 +19,6 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 
-#define GLOBAL	MainInstance
-
 class Main_Base
 {
   private:

@@ -2,6 +2,8 @@
 
 #include "Utility.h"
 
+#include "Service.h"
+#include "Main/Global.h"
 #include "Text/Text.h"
 
 char* Setup_Utility::GetRFModeName( uint8_t RFMode, char* RFModeName, uint8_t Size)

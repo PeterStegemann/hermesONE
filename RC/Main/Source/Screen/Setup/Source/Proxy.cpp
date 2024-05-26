@@ -2,7 +2,7 @@
 
 #include "Proxy.h"
 
-#include "Main/Setup.h"
+#include "Main/Global.h"
 #include "GUI/Setup/Select.h"
 #include "Signal/Processor.h"
 #include "Signal/Utility.h"

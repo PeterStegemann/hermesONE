@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Signal/PPM.h"
+
 #include "AVR/Source/Types.h"
 
 struct Setup_PPM

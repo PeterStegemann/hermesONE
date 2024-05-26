@@ -2,7 +2,9 @@
 
 #pragma once
 
-#include <avr/pgmspace.h>
+#include "System.h"
+
+#include "AVR/Source/Types.h"
 
 #if( SYSTEM_MCU_TYPE == SYSTEM_MCU_2561)
 	#define SYSTEM_MCU_NAME "ATmega 2561"

@@ -2,7 +2,8 @@
 
 #include "Input.h"
 
-#include "../Processor.h"
+#include "Main/Global.h"
+#include "Signal/Processor.h"
 
 #define BUZZ_LIMIT_LENGTH		10
 #define BUZZ_LIMIT_PAUSE		20

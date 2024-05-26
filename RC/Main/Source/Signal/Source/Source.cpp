@@ -2,6 +2,10 @@
 
 #include "Source.h"
 
+#include "Main/Global.h"
+#include "Setup/Defines.h"
+#include "Signal/Defines.h"
+
 void Signal_Source_Source::SetType( Type SourceType)
 {
 	sourceType = SourceType;

@@ -2,6 +2,7 @@
 
 #include "Status.h"
 
+#include "Main/Global.h"
 #include "Signal/Source/Timer.h"
 
 #include "AVR/Source/Utility.h"

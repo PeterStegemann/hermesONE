@@ -9,15 +9,6 @@
 
 #include "AVR/Source/Utility.h"
 
-Main_Setup MainInstance;
-
-int main( void)
-{
-	MainInstance.Run();
-
-	return( 0);
-}
-
 Main_Setup::Main_Setup( void)
           : setupBlankTime( SetupService.GetSetupBlankTime())
 		  , statusBlankTime( SetupService.GetStatusBlankTime())

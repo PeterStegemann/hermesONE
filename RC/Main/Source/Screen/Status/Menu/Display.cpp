@@ -2,11 +2,14 @@
 
 #include "Display.h"
 
+#include "Main/Global.h"
 #include "Text/Text.h"
 
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/Font/Font.h"
 #include "AVR/Source/LCD/LCD_DOG.h"
+
+#include <stdio.h>
 
 enum MenuEntry
 {

@@ -7,6 +7,8 @@
 #include "AVR/Source/Types.h"
 #include "AVR/Source/Utility.h"
 
+#include <avr/io.h>
+
 #define SIGNAL_SERVICE_PPMS							2
 
 #define SIGNAL_SERVICE_MATCH_INTERUPT_1				TIMER3_COMPA_vect

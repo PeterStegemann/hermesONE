@@ -4,6 +4,8 @@
 
 #include "System.h"
 
+#include <avr/pgmspace.h>
+
 const flash_char Text::ThreeDigitPercentFormat[] PROGMEM        = "%3d%%";
 const flash_char Text::FourDigitPercentFormat[] PROGMEM         = "%4d%%";
 const flash_char Text::EmptyDigitPercent[] PROGMEM              = "---%";
