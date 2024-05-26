@@ -21,11 +21,8 @@ Main_Setup::~Main_Setup( void)
 
 void Main_Setup::run( void)
 {
-    // Wait a moment for the main lcd to come up.
-//    UTILITY::Pause( 50);
-
   	// Set up setup lcd and check if it's there.
-    hasSetupDisplay = SetupDisplay.Initialize( 50);
+    hasSetupDisplay = SetupDisplay.Initialize( 5);
 
 	if(	hasSetupDisplay == false)
 	{
@@ -34,6 +31,7 @@ void Main_Setup::run( void)
 	else
 	{
 	    UTILITY::Pause( 50);
+
 		runOnSetupDisplay();
 	}
 }
