@@ -10,30 +10,30 @@ Screen_Setup_BaseList::Screen_Setup_BaseList( const flash_char* Title)
 					 , visibleLines( SCREEN_SETUP_BASELIST_MAXIMUM_LINES)
 {
 	scrollUpMarker.SetOptions( GUI_Setup_Marker::O_LookUp);
-	scrollUpMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_SIZE - 1);
+	scrollUpMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH - 1);
 	scrollUpMarker.ForegroundColor = LCD_65K_RGB::C_WarmYellow;
 	scrollDownMarker.SetOptions( GUI_Setup_Marker::O_LookDown);
-	scrollDownMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_SIZE - 1);
+	scrollDownMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH - 1);
 	scrollDownMarker.ForegroundColor = LCD_65K_RGB::C_WarmYellow;
 }
 
 void Screen_Setup_BaseList::setupScrollMarkers( uint8_t StartLine)
 {
 	scrollUpMarker.SetArea( frameLeft, frameTop + ( StartLine * SCREEN_SETUP_BASE_LINE_HEIGHT),
-							SCREEN_SETUP_BASE_MENU_MARKER_SIZE + 1,
-						    SCREEN_SETUP_BASE_MENU_MARKER_SIZE);
-	scrollUpMarker.SetPosition( frameLeft + ( SCREEN_SETUP_BASE_MENU_MARKER_SIZE / 2),
+							SCREEN_SETUP_BASE_MENU_MARKER_WIDTH + 1,
+						    SCREEN_SETUP_BASE_MENU_MARKER_WIDTH);
+	scrollUpMarker.SetPosition( frameLeft + ( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH / 2),
 								frameTop + ( StartLine * SCREEN_SETUP_BASE_LINE_HEIGHT) +
 								( SCREEN_SETUP_BASE_LINE_HEIGHT / 2) -
-							    ( SCREEN_SETUP_BASE_MENU_MARKER_SIZE - 1));
+							    ( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH - 1));
 
 	uint8_t StopLine = StartLine + visibleLines - 1;
 
 	scrollDownMarker.SetArea( frameLeft, frameTop + ( StopLine * SCREEN_SETUP_BASE_LINE_HEIGHT) +
 							  ( SCREEN_SETUP_BASE_LINE_HEIGHT / 2) - 1,
-			 				  SCREEN_SETUP_BASE_MENU_MARKER_SIZE + 1,
-							  SCREEN_SETUP_BASE_MENU_MARKER_SIZE);
-	scrollDownMarker.SetPosition( frameLeft + ( SCREEN_SETUP_BASE_MENU_MARKER_SIZE / 2),
+			 				  SCREEN_SETUP_BASE_MENU_MARKER_WIDTH + 1,
+							  SCREEN_SETUP_BASE_MENU_MARKER_WIDTH);
+	scrollDownMarker.SetPosition( frameLeft + ( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH / 2),
 								  frameTop + ( StopLine * SCREEN_SETUP_BASE_LINE_HEIGHT) +
 								  ( SCREEN_SETUP_BASE_LINE_HEIGHT / 2) - 1);
 }

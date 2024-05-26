@@ -22,8 +22,10 @@ Screen_Setup_Base::Screen_Setup_Base( uint32_t MenuPattern, const flash_char* Ti
 				 , frameWidth( GLOBAL.SetupDisplay.GetWidth())
 				 , frameHeight( GLOBAL.SetupDisplay.GetHeight())
 {
-	menuMarker.SetOptions( GUI_Setup_Marker::O_LookRight);
-	menuMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_SIZE);
+	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+
+	menuMarker.SetOptions( GUI_Setup_Marker::O_Block);
+	menuMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH, Font->CellHeight);
 	menuMarker.ForegroundColor = LCD_65K_RGB::C_WarmYellow;
 }
 
@@ -135,9 +137,11 @@ void Screen_Setup_Base::drawFrame( void)
 	uint16_t TitleWidth = strlen_P( title) * Font->CellWidth;
 	uint16_t TextLeft = ( GLOBAL.SetupDisplay.GetWidth() - TitleWidth) / 2;
 
-	TitleWidth = GLOBAL.SetupDisplay.Print_P( TextLeft, 1, SCREEN_SETUP_BASE_TITLE_FONT,
-											  LCD_65K_RGB::C_Black, LCD_65K_RGB::C_White,
-											  LCD::PO_Proportional, title);
+	TitleWidth = GLOBAL.SetupDisplay.Print_P
+	(
+	    TextLeft, 1, SCREEN_SETUP_BASE_TITLE_FONT, LCD_65K_RGB::C_Black, LCD_65K_RGB::C_White,
+        LCD::PO_Proportional, title
+    );
 
 //	GLOBAL.SetupDisplay.DrawVerticalLine( TextLeft - 1, 1, Font->CellHeight, LCD_65K_RGB::C_White);
 /*
@@ -155,9 +159,9 @@ void Screen_Setup_Base::drawFrame( void)
 	markerLeft = frameLeft;
 	markerTop = frameTop + ( SCREEN_SETUP_BASE_LINE_HEIGHT / 2) - 1;
 
-	menuMarker.SetArea( markerLeft, frameTop, SCREEN_SETUP_BASE_MENU_MARKER_SIZE, frameHeight);
+	menuMarker.SetArea( markerLeft, frameTop, SCREEN_SETUP_BASE_MENU_MARKER_WIDTH, frameHeight);
 
-	menuLeft = markerLeft + SCREEN_SETUP_BASE_MENU_MARKER_SIZE + 2;
+	menuLeft = markerLeft + SCREEN_SETUP_BASE_MENU_MARKER_WIDTH + 2;
 }
 
 void Screen_Setup_Base::drawMenuMarker( void)
