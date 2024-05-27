@@ -48,8 +48,8 @@ void Screen_Setup_Source_Map::display( void)
 	// Adjust gauges to frame and set them up.
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t ValueLeft = menuLeft + 7 * Font->CellWidth;
-	uint16_t VolumeLeft = ValueLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->CellWidth;
+	uint16_t ValueLeft = menuLeft + 7 * Font->getCellWidth();
+	uint16_t VolumeLeft = ValueLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->getCellWidth();
 
 	uint8_t Line = 4;
 	// Source
@@ -72,8 +72,8 @@ void Screen_Setup_Source_Map::display( void)
 
 	Line += 2;
 
-	VolumeLeft = menuLeft + 21 * Font->CellWidth;
-	uint16_t ChartLeft = VolumeLeft + ( 9 * Font->CellWidth) - 4;
+	VolumeLeft = menuLeft + 21 * Font->getCellWidth();
+	uint16_t ChartLeft = VolumeLeft + ( 9 * Font->getCellWidth()) - 4;
 	uint16_t MapTop = frameTop + (( Line + 2) * SCREEN_SETUP_BASE_LINE_HEIGHT) - 5;
 
 	mapGraph.SetDimensions( ChartLeft, MapTop, ( frameWidth - ChartLeft - 2));

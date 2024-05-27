@@ -49,16 +49,16 @@ void Screen_Setup_Source_Timer::display( void)
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 	const FONT_Type* LargeFont = FONT::GetFont( FONT::FI_Large);
 
-	uint16_t ValueLeft = menuLeft + 10 * Font->CellWidth;
+	uint16_t ValueLeft = menuLeft + 10 * Font->getCellWidth();
 	uint16_t ContentWidth = frameWidth - ( ValueLeft - frameLeft) - 1;
 	uint16_t GaugeWidth = frameWidth - ( ValueLeft - frameLeft) - 1;
 	
 	uint16_t LowLeft = menuLeft;
-	uint16_t LowValueLeft = LowLeft + 14 * Font->CellWidth;
-	uint16_t HighLeft = LowValueLeft + ( 10 + 1) * Font->CellWidth;
-	uint16_t HighValueLeft = HighLeft + 7 * Font->CellWidth;
+	uint16_t LowValueLeft = LowLeft + 14 * Font->getCellWidth();
+	uint16_t HighLeft = LowValueLeft + ( 10 + 1) * Font->getCellWidth();
+	uint16_t HighValueLeft = HighLeft + 7 * Font->getCellWidth();
 
-	uint16_t TextLeft = frameWidth - ( 8 * LargeFont->CellWidth);
+	uint16_t TextLeft = frameWidth - ( 8 * LargeFont->getCellWidth());
 	timeLabel.SetDimensions( TextLeft, frameTop + ( 4 * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	timeLabel.SetFont( FONT::FI_Large);
 
@@ -129,21 +129,21 @@ void Screen_Setup_Source_Timer::display( void)
 								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
 								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::WarnLow);
 
-	warnLowTimeLabel.SetDimensions( LowValueLeft + 2 * Font->CellWidth,
+	warnLowTimeLabel.SetDimensions( LowValueLeft + 2 * Font->getCellWidth(),
 								    frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	warnLowTimeLabel.SetTime( sourceTimer->Setup.WarnLowTime);
 
 	GLOBAL.SetupDisplay.Print_P( HighLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
 								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
 								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::WarnCritical);
-	warnCriticalTimeLabel.SetDimensions( HighValueLeft + 2 * Font->CellWidth,
+	warnCriticalTimeLabel.SetDimensions( HighValueLeft + 2 * Font->getCellWidth(),
 										 frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	warnCriticalTimeLabel.SetTime( sourceTimer->Setup.WarnCriticalTime);
 
 	GLOBAL.SetupDisplay.Print_P( LowLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
 								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
 								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::WarnPause);
-	warnPauseTimeLabel.SetDimensions( LowValueLeft + 2 * Font->CellWidth,
+	warnPauseTimeLabel.SetDimensions( LowValueLeft + 2 * Font->getCellWidth(),
 									  frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
 	warnPauseTimeLabel.SetTime( sourceTimer->Setup.WarnPauseTime);
 

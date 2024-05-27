@@ -101,7 +101,7 @@ void Test::Run( void)
 			GetLCD()->Print( GetLeft(), Top, ( FONT::FontID) UseFontID, LCD::White, LCD::Black,
 							 LCD::PM_Proportional, String);
 
-			Top += Font->CellHeight;
+			Top += Font->getCellHeight();
 		}
 	}
 

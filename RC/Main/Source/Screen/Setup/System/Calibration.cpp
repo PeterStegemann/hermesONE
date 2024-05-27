@@ -35,7 +35,7 @@ void Screen_Setup_System_Calibration::display( void)
 	// Adjust gauges to frame and set them up.
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 	
-	uint16_t LowLeft = menuLeft + 3 * Font->CellWidth;
+	uint16_t LowLeft = menuLeft + 3 * Font->getCellWidth();
 	uint16_t ColumnWidth = ( frameWidth - ( LowLeft - frameLeft)) / 3;
 	uint16_t CenterLeft = LowLeft + ColumnWidth;
 	uint16_t HighLeft = CenterLeft + ColumnWidth;
@@ -48,15 +48,15 @@ void Screen_Setup_System_Calibration::display( void)
 
 	Line += 2;
 
-	GLOBAL.SetupDisplay.Print_P( LowLeft + Font->CellWidth * 1,
+	GLOBAL.SetupDisplay.Print_P( LowLeft + Font->getCellWidth() * 1,
 								 frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
 								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow,
 								 LCD_65K_RGB::C_Black, LCD_65K_RGB::PO_Fixed, Text::Minus100Percent);
-	GLOBAL.SetupDisplay.Print_P( CenterLeft + Font->CellWidth * 4,
+	GLOBAL.SetupDisplay.Print_P( CenterLeft + Font->getCellWidth() * 4,
 								 frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
 								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow,
 								 LCD_65K_RGB::C_Black, LCD_65K_RGB::PO_Fixed, Text::ZeroPercent);
-	GLOBAL.SetupDisplay.Print_P( HighLeft + Font->CellWidth * 2,
+	GLOBAL.SetupDisplay.Print_P( HighLeft + Font->getCellWidth() * 2,
 								 frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
 								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow,
 								 LCD_65K_RGB::C_Black, LCD_65K_RGB::PO_Fixed, Text::Plus100Percent);
@@ -85,7 +85,7 @@ void Screen_Setup_System_Calibration::display( void)
 							    frameTop + frameHeight - SCREEN_SETUP_BASE_LINE_HEIGHT + 1);
 	currentLabel.SetText_P( Text::FourDigitInt16Format);
 
-	uint16_t GaugeLeft = markerLeft + Font->CellWidth * 5;
+	uint16_t GaugeLeft = markerLeft + Font->getCellWidth() * 5;
 	uint16_t GaugeWidth = frameWidth - ( GaugeLeft - frameLeft) - 1;
 
 	currentGauge.SetDimensions( GaugeLeft,

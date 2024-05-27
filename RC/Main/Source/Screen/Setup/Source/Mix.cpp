@@ -31,9 +31,9 @@ void Screen_Setup_Source_Mix::display( void)
 	// Adjust gauges to frame and set them up.
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t SourceLeft = menuLeft + 2 * Font->CellWidth;
-	uint16_t VolumeLeft = SourceLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->CellWidth;
-	uint16_t GaugeLeft = VolumeLeft + 6 * Font->CellWidth;
+	uint16_t SourceLeft = menuLeft + 2 * Font->getCellWidth();
+	uint16_t VolumeLeft = SourceLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->getCellWidth();
+	uint16_t GaugeLeft = VolumeLeft + 6 * Font->getCellWidth();
 	uint16_t GaugeWidth = frameWidth - ( GaugeLeft - frameLeft) - 1;
 
 	uint8_t Line = 4;

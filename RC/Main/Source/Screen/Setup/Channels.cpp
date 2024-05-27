@@ -48,9 +48,9 @@ void Screen_Setup_Channels::display( void)
 	// Adjust gauges to frame and set them up.
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t ContentLeft = frameLeft + 12 * Font->CellWidth;
+	uint16_t ContentLeft = frameLeft + 12 * Font->getCellWidth();
 
-	uint16_t GaugeLeft = menuLeft + SETUP_CHANNEL_NAME_SIZE * Font->CellWidth;
+	uint16_t GaugeLeft = menuLeft + SETUP_CHANNEL_NAME_SIZE * Font->getCellWidth();
 	uint16_t GaugeWidth = frameWidth - ( GaugeLeft - frameLeft) - 1;	
 
 	uint8_t Line = 0;

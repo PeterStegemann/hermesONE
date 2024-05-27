@@ -51,8 +51,7 @@ Screen_Setup_Model::Screen_Setup_Model( Signal_Source_Source::Level SourceLevel)
 		GLOBAL.SetupService.GetTypeName( selectedTypeId, modelName, sizeof( modelName));
 	}
 
-	modelNameInput.SetOptions(( GUI_Setup_TextInput::Options)
-		( GUI_Setup_TextInput::O_LimitAlphaNumeric));
+	modelNameInput.SetOptions(( GUI_Setup_TextInput::Options)( GUI_Setup_TextInput::O_LimitAlphaNumeric));
 }
 
 void Screen_Setup_Model::display( void)
@@ -60,25 +59,28 @@ void Screen_Setup_Model::display( void)
 	// Adjust menu entries to frame and set them up.
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t ContentLeft = frameLeft + 10 * Font->CellWidth;
+	uint16_t ContentLeft = frameLeft + 10 * Font->getCellWidth();
 
 	uint8_t Line = 0;
 
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop, SCREEN_SETUP_BASE_MAIN_FONT,
-								 LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
-								 LCD::PO_Proportional, Text::Exit);
+	GLOBAL.SetupDisplay.Print_P
+	(
+	    menuLeft, frameTop, SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
+        LCD::PO_Proportional, Text::Exit
+    );
+
 	Line += 2;
 
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Name);
+	GLOBAL.SetupDisplay.Print_P
+	(
+        menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+        LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Name
+    );
 
 	if( sourceLevel != Signal_Source_Source::L_Global)
 	{
-		modelNameLabel.SetDimensions( ContentLeft,
-									  frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
-		modelNameInput.SetDimensions( menuLeft,
-									  frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
+		modelNameLabel.SetDimensions( ContentLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
+		modelNameInput.SetDimensions( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
 
 		modelNameLabel.Clear();
 		modelNameLabel.Display( modelName);
@@ -90,43 +92,61 @@ void Screen_Setup_Model::display( void)
 	{
 		Line--;
 
-		GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-									 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-									 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Type);
+		GLOBAL.SetupDisplay.Print_P
+		(
+            menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Type
+        );
 
 		typeLabel.SetDimensions( ContentLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
 		updateType( &typeLabel, selectedTypeId);
 
 		Line++;
 
-		GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-									 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-									 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Proxies);
+		GLOBAL.SetupDisplay.Print_P
+		(
+            menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Proxies
+        );
 
 		Line++;
 	}
 
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Inputs);
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Maps);
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Mixers);
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Stores);
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Timer);
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Followers);
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Trimmer);
+	GLOBAL.SetupDisplay.Print_P
+	(
+        menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+        LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Inputs
+    );
+	GLOBAL.SetupDisplay.Print_P
+	(
+	    menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+	    LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Maps
+    );
+	GLOBAL.SetupDisplay.Print_P
+	(
+	    menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+	    LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Mixers
+    );
+	GLOBAL.SetupDisplay.Print_P
+	(
+	    menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+	    LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Stores
+    );
+	GLOBAL.SetupDisplay.Print_P
+	(
+	    menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+	    LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Timer
+    );
+	GLOBAL.SetupDisplay.Print_P
+	(
+	    menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+	    LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Followers
+    );
+	GLOBAL.SetupDisplay.Print_P
+	(
+        menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+        LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Trimmer
+    );
 
 	if( sourceLevel == Signal_Source_Source::L_Model)
 	{
@@ -141,13 +161,16 @@ void Screen_Setup_Model::display( void)
 		Line += 6;
 	}
 
-	GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
-								 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Sources);
+	GLOBAL.SetupDisplay.Print_P
+	(
+        menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+        LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Sources
+    );
 }
 
 bool Screen_Setup_Model::processMenu( DoMenuResult Result)
 {
+
 	switch( Result)
 	{
 		case DMR_Selected :
@@ -243,9 +266,13 @@ void Screen_Setup_Model::doModelName( void)
 
 void Screen_Setup_Model::doType( void)
 {
-	if( GUI_Setup_Select::DoSelect(( int8_t*) &selectedTypeId, SETUP_MODEL_TYPES_START,
-									SETUP_MODEL_TYPES_END, 1, &menuMarker, &typeLabel, this,
-								    &staticUpdate, &updateType))
+    bool selected = GUI_Setup_Select::DoSelect
+    (
+        ( int8_t*) &selectedTypeId, SETUP_MODEL_TYPES_START, SETUP_MODEL_TYPES_END, 1,
+        &menuMarker, &typeLabel, this, &staticUpdate, &updateType
+    );
+
+	if( selected)
 	{
 		doSelectType( selectedTypeId);
 	}

@@ -21,7 +21,7 @@ void Screen_Setup_Info::display( void)
 	// Adjust menu entries to frame and set them up.
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 	
-	uint16_t ContentLeft = frameLeft + 12 * Font->CellWidth;
+	uint16_t ContentLeft = frameLeft + 12 * Font->getCellWidth();
 
 	uint8_t Line = 0;
 

@@ -25,7 +25,7 @@ Screen_Setup_Base::Screen_Setup_Base( uint32_t MenuPattern, const flash_char* Ti
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 
 	menuMarker.SetOptions( GUI_Setup_Marker::O_Block);
-	menuMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH, Font->CellHeight);
+	menuMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH, Font->getCellHeight());
 	menuMarker.ForegroundColor = LCD_65K_RGB::C_WarmYellow;
 }
 
@@ -131,10 +131,10 @@ void Screen_Setup_Base::drawFrame( void)
 	uint16_t LabelLeft = GLOBAL.SetupDisplay.GetWidth() / 3;
 	uint16_t LabelWidth = LabelLeft;
 
-	GLOBAL.SetupDisplay.FillRect( LabelLeft, 0, LabelWidth, Font->CellHeight + 1, LCD_65K_RGB::C_White);
-	GLOBAL.SetupDisplay.DrawHorizontalLine( LabelLeft + 1, Font->CellHeight + 1, LabelWidth - 2, LCD_65K_RGB::C_White);
+	GLOBAL.SetupDisplay.FillRect( LabelLeft, 0, LabelWidth, Font->getCellHeight() + 1, LCD_65K_RGB::C_White);
+	GLOBAL.SetupDisplay.DrawHorizontalLine( LabelLeft + 1, Font->getCellHeight() + 1, LabelWidth - 2, LCD_65K_RGB::C_White);
 
-	uint16_t TitleWidth = strlen_P( title) * Font->CellWidth;
+	uint16_t TitleWidth = strlen_P( title) * Font->getCellWidth();
 	uint16_t TextLeft = ( GLOBAL.SetupDisplay.GetWidth() - TitleWidth) / 2;
 
 	TitleWidth = GLOBAL.SetupDisplay.Print_P
@@ -143,15 +143,15 @@ void Screen_Setup_Base::drawFrame( void)
         LCD::PO_Proportional, title
     );
 
-//	GLOBAL.SetupDisplay.DrawVerticalLine( TextLeft - 1, 1, Font->CellHeight, LCD_65K_RGB::C_White);
+//	GLOBAL.SetupDisplay.DrawVerticalLine( TextLeft - 1, 1, Font->getCellHeight(), LCD_65K_RGB::C_White);
 /*
-	GLOBAL.SetupDisplay.DrawHorizontalLine( TextLeft + 1, 1 + Font->CellHeight + 1, TitleWidth - 2,
+	GLOBAL.SetupDisplay.DrawHorizontalLine( TextLeft + 1, 1 + Font->getCellHeight() + 1, TitleWidth - 2,
 									    LCD_65K_RGB::C_Red);
-	GLOBAL.SetupDisplay.DrawVerticalLine( TextLeft + TitleWidth + 1, 1, Font->CellHeight - 1,
+	GLOBAL.SetupDisplay.DrawVerticalLine( TextLeft + TitleWidth + 1, 1, Font->getCellHeight() - 1,
 								   LCD_65K_RGB::C_Red);
 */
 	frameLeft = 0;
-//	frameTop = Font->CellHeight + 2;
+//	frameTop = Font->getCellHeight() + 2;
 	frameTop = 1;
 	frameWidth = GLOBAL.SetupDisplay.GetWidth() - frameLeft;
 	frameHeight = GLOBAL.SetupDisplay.GetHeight() - frameTop;

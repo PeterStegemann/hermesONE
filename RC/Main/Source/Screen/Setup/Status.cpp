@@ -101,10 +101,10 @@ void Screen_Setup_Status::display( void)
 	char ModelName[ SETUP_MODEL_NAME_SIZE + 1];
 	GLOBAL.SetupService.GetModelName( GLOBAL.SetupService.GetSelectedModelId(), ModelName, sizeof( ModelName));
 
-	TextLeft = frameLeft + (( frameWidth - strlen( ModelName) * Font->CellWidth) / 2);
+	TextLeft = frameLeft + (( frameWidth - strlen( ModelName) * Font->getCellWidth()) / 2);
 	GLOBAL.SetupDisplay.Print
 	(
-        TextLeft, frameTop + ( Line++ * Font->CellHeight), FONT::FI_Large,
+        TextLeft, frameTop + ( Line++ * Font->getCellHeight()), FONT::FI_Large,
         LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModelName
     );
 
@@ -146,10 +146,10 @@ void Screen_Setup_Status::display( void)
 
 	Setup_Utility::GetRFModeName( RFMode, RFModeText, sizeof( RFModeText));
 
-	TextLeft = frameLeft + (( frameWidth - strlen( RFModeText) * Font->CellWidth) / 2);
+	TextLeft = frameLeft + (( frameWidth - strlen( RFModeText) * Font->getCellWidth()) / 2);
 	GLOBAL.SetupDisplay.Print
 	(
-	    TextLeft, frameTop + ( Line++ * Font->CellHeight), FONT::FI_Large,
+	    TextLeft, frameTop + ( Line++ * Font->getCellHeight()), FONT::FI_Large,
         RFModeColor, LCD_65K_RGB::C_Black, LCD::PO_Proportional, RFModeText
     );
 
@@ -165,8 +165,8 @@ void Screen_Setup_Status::display( void)
 
 	Line++;
 
-	TextLeft = frameLeft + (( frameWidth - ( 0 * Font->CellWidth)) / 2);
-	uint16_t NameLeft = InnerLeft + ( 1 * Font->CellWidth);
+	TextLeft = frameLeft + (( frameWidth - ( 0 * Font->getCellWidth())) / 2);
+	uint16_t NameLeft = InnerLeft + ( 1 * Font->getCellWidth());
 
 	bool SystemTimeShown = false;
 
@@ -208,7 +208,7 @@ void Screen_Setup_Status::display( void)
 
 	GLOBAL.SetupDisplay.PrintFormat_P
 	(
-        frameLeft + 45, BottomGaugeTop - Font->CellHeight, FONT::FI_Large,
+        frameLeft + 45, BottomGaugeTop - Font->getCellHeight(), FONT::FI_Large,
         LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::StatusUsageFormat,
         GLOBAL.SetupService.CountModels( Setup_Service::CMO_Used), SETUP_MODELS,
         GLOBAL.SetupService.CountSources( Setup_Service::CSO_Used), SETUP_SOURCES

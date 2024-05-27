@@ -18,9 +18,8 @@ class Screen_Setup_Intro
 
     	const FONT_Type* Font = FONT::GetFont( UseFont);
 
-    	uint8_t TextLeft =
-	    	( GLOBAL.SetupDisplay.GetWidth() - strlen_P( Text::hermesONE) * Font->CellWidth) / 2;
-    	uint8_t TextTop = ( GLOBAL.SetupDisplay.GetHeight() - Font->CellHeight) / 2;
+    	uint8_t TextLeft = ( GLOBAL.SetupDisplay.GetWidth() - strlen_P( Text::hermesONE) * Font->getCellWidth()) / 2;
+    	uint8_t TextTop = ( GLOBAL.SetupDisplay.GetHeight() - Font->getCellHeight()) / 2;
 
     	// Flash in screen.
 	    GLOBAL.SetupDisplay.Clear( LCD_65K_RGB::White);

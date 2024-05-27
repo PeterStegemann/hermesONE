@@ -36,6 +36,5 @@ class Screen_Setup_Model : public Screen_Setup_Base
 		static void updateType( void* Object, GUI_Setup_Label* Label, int8_t Value);
 
 	public:
-		Screen_Setup_Model( Signal_Source_Source::Level
-							SourceLevel = Signal_Source_Source::L_Model);
+		Screen_Setup_Model( Signal_Source_Source::Level SourceLevel = Signal_Source_Source::L_Model);
 };

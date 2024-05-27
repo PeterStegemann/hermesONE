@@ -59,8 +59,8 @@ void Screen_Setup_System_PPM::display( void)
 	// Adjust gauges to frame and set them up.
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t SourceLeft = menuLeft + SETUP_CHANNEL_NAME_SIZE * Font->CellWidth;
-	uint16_t ContentLeft = frameLeft + 18 * Font->CellWidth;
+	uint16_t SourceLeft = menuLeft + SETUP_CHANNEL_NAME_SIZE * Font->getCellWidth();
+	uint16_t ContentLeft = frameLeft + 18 * Font->getCellWidth();
 	uint16_t ContentWidth = frameWidth - ( ContentLeft - frameLeft) - 1;
 
 	uint8_t Line = 0;
@@ -104,7 +104,7 @@ void Screen_Setup_System_PPM::display( void)
 								 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
 								 LCD::PO_Proportional, Text::ChannelMapping);
 
-	uint16_t SubMenuLeft = menuLeft + Font->CellWidth;
+	uint16_t SubMenuLeft = menuLeft + Font->getCellWidth();
 
 	setupScrollMarkers( Line);
 

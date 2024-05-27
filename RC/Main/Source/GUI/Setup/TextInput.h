@@ -125,7 +125,7 @@ class GUI_Setup_TextInput
     {
         const FONT_Type* Font = FONT::GetFont( fontId);
 
-        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->CellWidth), top, fontId,
+        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->getCellWidth()), top, fontId,
             ForegroundColor, BackgroundColor, LCD_65K_RGB::PO_Fixed, Text::CharacterFormat, text[ cursorPosition]);
     }
 
@@ -149,7 +149,7 @@ class GUI_Setup_TextInput
 
         const FONT_Type* Font = FONT::GetFont( fontId);
 
-        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->CellWidth), top, fontId,
+        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->getCellWidth()), top, fontId,
             UseForegroundColor, UseBackgroundColor, LCD_65K_RGB::PO_Fixed, Text::CharacterFormat, currentCharacter);
     }
 
@@ -419,6 +419,6 @@ class GUI_Setup_TextInput
     {
         const FONT_Type* Font = FONT::GetFont( fontId);
 
-        GLOBAL.SetupDisplay.FillRect( left, top, size * Font->CellWidth, Font->CellHeight, BackgroundColor);
+        GLOBAL.SetupDisplay.FillRect( left, top, size * Font->getCellWidth(), Font->getCellHeight(), BackgroundColor);
     }
 };

@@ -113,8 +113,8 @@ class GUI_Setup_Graph
 
         const FONT_Type* Font = FONT::GetFont( GUI_SETUP_GRAPH_LABEL_FONT);
 
-        uint16_t LabelLeft = left - 3 * Font->CellWidth;
-        uint16_t LabelTop = ( top - Font->CellHeight);
+        uint16_t LabelLeft = left - 3 * Font->getCellWidth();
+        uint16_t LabelTop = ( top - Font->getCellHeight());
 
         GLOBAL.SetupDisplay.Print_P( LabelLeft, LabelTop, GUI_SETUP_GRAPH_LABEL_FONT, detailColor,
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::Minus100Percent);
@@ -124,19 +124,19 @@ class GUI_Setup_Graph
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::PaddedZeroPercent);
 
         LabelLeft += size / 2 + 1;
-        LabelLeft += ( 1 * Font->CellWidth);
+        LabelLeft += ( 1 * Font->getCellWidth());
         GLOBAL.SetupDisplay.Print_P( LabelLeft, LabelTop, GUI_SETUP_GRAPH_LABEL_FONT, detailColor,
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::Plus100Percent);
 
         LabelTop += size / 2;
-        LabelTop += Font->CellHeight / 2;
-        LabelLeft += ( 2 * Font->CellWidth) + 1;
+        LabelTop += Font->getCellHeight() / 2;
+        LabelLeft += ( 2 * Font->getCellWidth()) + 1;
         GLOBAL.SetupDisplay.Print_P( LabelLeft, LabelTop, GUI_SETUP_GRAPH_LABEL_FONT, detailColor,
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::ZeroPercent);
 
         LabelTop += size / 2;
-        LabelTop += ( Font->CellHeight / 2) + 2;
-        LabelLeft -= ( 3 * Font->CellWidth);
+        LabelTop += ( Font->getCellHeight() / 2) + 2;
+        LabelLeft -= ( 3 * Font->getCellWidth());
         GLOBAL.SetupDisplay.Print_P( LabelLeft, LabelTop, GUI_SETUP_GRAPH_LABEL_FONT, detailColor,
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::Minus100Percent);
 
@@ -316,7 +316,7 @@ class GUI_Setup_Graph
 
         const FONT_Type* Font = FONT::GetFont( GUI_SETUP_GRAPH_LABEL_FONT);
 
-        size -= UTILITY_Maximum( Font->CellHeight, Font->CellWidth);
+        size -= UTILITY_Maximum( Font->getCellHeight(), Font->getCellWidth());
 
         // First draw will redraw everything.
         remembered = false;

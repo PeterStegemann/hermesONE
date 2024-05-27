@@ -67,17 +67,17 @@ class GUI_Setup_Gauge
         if( options & O_Percentage)
         {
             // Check if the text fits in.
-    //		if( height > Font->CellHeight)
+    //		if( height > Font->getCellHeight())
             {
                 uint16_t TextWidth;
 
                 if( options & O_DualPercentage)
                 {
-                    TextWidth = 5 * Font->CellWidth;
+                    TextWidth = 5 * Font->getCellWidth();
                 }
                 else
                 {
-                    TextWidth = 4 * Font->CellWidth;
+                    TextWidth = 4 * Font->getCellWidth();
                 }
 
                 if( Width > TextWidth)
@@ -102,9 +102,9 @@ class GUI_Setup_Gauge
         if( options & O_Value)
         {
             // Check if the text fits in.
-    //		if( height > Font->CellHeight)
+    //		if( height > Font->getCellHeight())
             {
-                uint16_t TextWidth = 6 * Font->CellWidth;
+                uint16_t TextWidth = 6 * Font->getCellWidth();
 
                 if( Width > TextWidth)
                 {

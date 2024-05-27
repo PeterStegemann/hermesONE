@@ -117,11 +117,11 @@ class GUI_Status_Label
 
         if( text != NULL)
         {
-            return( strlen( text) * Font->CellWidth);
+            return( strlen( text) * Font->getCellWidth());
         }
         else
         {
-            return( strlen_P( text_P) * Font->CellWidth);
+            return( strlen_P( text_P) * Font->getCellWidth());
         }
     }
 

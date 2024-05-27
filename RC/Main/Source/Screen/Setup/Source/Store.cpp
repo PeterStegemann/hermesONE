@@ -23,7 +23,7 @@ void Screen_Setup_Source_Store::display( void)
 	// Adjust gauges to frame and set them up.
 	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t ValueLeft = menuLeft + 7 * Font->CellWidth;
+	uint16_t ValueLeft = menuLeft + 7 * Font->getCellWidth();
 
 	uint8_t Line = 3;
 

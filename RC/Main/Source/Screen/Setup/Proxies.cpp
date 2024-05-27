@@ -46,7 +46,7 @@ void Screen_Setup_Proxies::display( void)
 	
 	setupScrollMarkers( Line);
 
-	uint16_t GaugeLeft = menuLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->CellWidth;
+	uint16_t GaugeLeft = menuLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->getCellWidth();
 	uint16_t GaugeWidth = frameWidth - ( GaugeLeft - frameLeft) - 1;
 
 	for( uint8_t SourceLine = 0; SourceLine < visibleLines; SourceLine++)
