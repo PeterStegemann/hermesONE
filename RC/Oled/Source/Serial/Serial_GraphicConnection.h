@@ -6,9 +6,9 @@
 
 #include "AVR/Source/Types.h"
 #include "AVR/Source/Utility.h"
-#include "AVR/Source/LCD/LCD_65K_RGB.h"
-#include "AVR/Source/LCD/LCD_SerialOledProtocol.h"
-#include "AVR/Source/Serial/Serial_Connection.h"
+#include "AVR/Source/LCD/65K_RGB.h"
+#include "AVR/Source/LCD/SerialOledProtocol.h"
+#include "AVR/Source/Serial/Connection.h"
 
 #define SERIAL_STRING_SIZE		5
 
@@ -18,7 +18,7 @@
 #define STATUS_ClearBit( Bit)		UTILITY_ClearBit( STATUS_PORT, Bit)
 
 template< uint8_t DeviceId>
-class SERIAL_GraphicConnection : public SERIAL_Connection< DeviceId>
+class SERIAL_GraphicConnection : public avr::serial::Connection< DeviceId>
 {
 	private:
 		LCD_65K_RGB* lcd;
@@ -142,7 +142,7 @@ class SERIAL_GraphicConnection : public SERIAL_Connection< DeviceId>
 
 		void Initialize( LCD_65K_RGB* lcd)
 		{
-			SERIAL_Connection< DeviceId>::Initialize();
+			avr::serial::Connection< DeviceId>::Initialize();
 
 			this->lcd = lcd;
 		}
@@ -217,8 +217,6 @@ class SERIAL_GraphicConnection : public SERIAL_Connection< DeviceId>
 						default : break;
 					}
 				}
-
-//				UTILITY::Pause( 5);
 			}
 		}
 };

@@ -100,19 +100,19 @@ CPPSRC = Source/Main.cpp \
 		 Source/Serial/Serial_GraphicConnection.cpp \
 		 AVR/Source/Utility.cpp \
 		 AVR/Source/Font/Font.cpp \
-		 AVR/Source/Font/Font_Large.cpp \
-		 AVR/Source/Font/Font_Medium.cpp \
-		 AVR/Source/Font/Font_Micro.cpp \
-		 AVR/Source/Font/Font_Mini.cpp \
-		 AVR/Source/Font/Font_Normal.cpp \
+		 AVR/Source/Font/Large.cpp \
+		 AVR/Source/Font/Medium.cpp \
+		 AVR/Source/Font/Micro.cpp \
+		 AVR/Source/Font/Mini.cpp \
+		 AVR/Source/Font/Normal.cpp \
 		 AVR/Source/LCD/LCD.cpp \
-		 AVR/Source/LCD/LCD_65K_RGB.cpp \
-		 AVR/Source/LCD/LCD_65K_RGB_Window.cpp \
-		 AVR/Source/LCD/LCD_S6E63D6.cpp \
-		 AVR/Source/LCD/LCD_S6E63D6_Parallel.cpp
+		 AVR/Source/LCD/65K_RGB.cpp \
+		 AVR/Source/LCD/65K_RGB_Window.cpp \
+		 AVR/Source/LCD/S6E63D6.cpp \
+		 AVR/Source/LCD/S6E63D6_Parallel.cpp
 
 #		 AVR/Source/SPI.cpp \
-		 AVR/Source/LCD/LCD_S6E63D6_SPI.cpp \
+		 AVR/Source/LCD/S6E63D6_SPI.cpp \
 
 # List Assembler source files here.
 #     Make them always end in a capital .S.  Files ending in a lowercase .s

@@ -66,7 +66,7 @@ void MAIN::Run( void)
 	SerialGraphicConnection.Initialize( &Lcd);
 
 	// Wait a moment to get all services going.
-	UTILITY::Pause( 5);
+	avr::Utility::Pause( 5);
 
 	STATUS_ClearBit( STATUS_RED);
 
@@ -199,7 +199,7 @@ void MAIN::doIntro( void)
 	    			    LCD::PO_Proportional, "hermesONE");
 
         // 100 fps.
-//        UTILITY::Pause( 1000 / 100);
+//        avr::Utility::Pause( 1000 / 100);
     }
 }
 
@@ -219,8 +219,6 @@ void MAIN::doFly( void)
 
 	while( true)
 	{
-		//		UTILITY::Pause( 100);
-
 		if(( X == (( int16_t) Main.Lcd.GetWidth() - 2)) || ( X == 0))
 		{
 			XDir *= -1;
