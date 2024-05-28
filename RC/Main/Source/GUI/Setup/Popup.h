@@ -5,7 +5,7 @@
 #include "Defines.h"
 
 #include "AVR/Source/Types.h"
-#include "AVR/Source/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/LCD/65K_RGB.h"
 
 class GUI_Setup_Popup
 {
@@ -184,7 +184,7 @@ class GUI_Setup_Popup
 
             if( RotaryCurrentButton == true)
             {
-                UTILITY::Pause( 5);
+                avr::Utility::Pause( 5);
             }
             else
             {
@@ -250,7 +250,7 @@ class GUI_Setup_Popup
                 return( Choice);
             }
 
-            UTILITY::Pause( 5);
+            avr::Utility::Pause( 5);
         }
     }
 };

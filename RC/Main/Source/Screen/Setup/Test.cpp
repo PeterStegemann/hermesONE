@@ -77,7 +77,7 @@ void Test::Run( void)
 			}
 		}
 
-		UTILITY::Pause( 100);
+		avr::Utility::Pause( 100);
 	}
 */
 	uint16_t Top = GetTop();
@@ -118,6 +118,6 @@ void Test::Run( void)
 			}
 		}
 		
-		UTILITY::Pause( 5);
+		avr::Utility::Pause( 5);
 	}
 }

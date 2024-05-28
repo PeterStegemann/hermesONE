@@ -6,7 +6,7 @@ class Main_Setup;
 
 #include "Base.h"
 
-#include "AVR/Source/LCD/LCD_SerialOled.h"
+#include "AVR/Source/LCD/SerialOled.h"
 
 class Main_Setup : public Main_Base
 {

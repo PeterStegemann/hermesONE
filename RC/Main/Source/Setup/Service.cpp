@@ -11,8 +11,8 @@
 
 #include "AVR/Source/EEPROM.h"
 #include "AVR/Source/Utility.h"
-#include "AVR/Source/LCD/LCD_65K_RGB.h"
-#include "AVR/Source/LCD/LCD_DOG.h"
+#include "AVR/Source/LCD/65K_RGB.h"
+#include "AVR/Source/LCD/DOG.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -60,7 +60,7 @@ Setup_Struct Eeprom EEMEM =
 
 Setup_Service::Setup_Service( void)
 {
-	EEPROM::Initialize();
+	avr::EEPROM::Initialize();
 
 	selectedModelId = eeprom_read_byte( &( Eeprom.SelectedModelId));
 

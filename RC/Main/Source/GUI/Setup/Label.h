@@ -7,7 +7,7 @@
 #include "Main/Global.h"
 
 #include "AVR/Source/Types.h"
-#include "AVR/Source/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/LCD/65K_RGB.h"
 
 class GUI_Setup_Label
 {

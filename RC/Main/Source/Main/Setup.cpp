@@ -30,7 +30,7 @@ void Main_Setup::run( void)
 	}
 	else
 	{
-	    UTILITY::Pause( 50);
+	    avr::Utility::Pause( 50);
 
 		runOnSetupDisplay();
 	}

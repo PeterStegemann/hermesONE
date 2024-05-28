@@ -262,7 +262,7 @@ void Screen_Setup_System_Display::updateStatusBlankTime( void* Object, GUI_Setup
 
 void Screen_Setup_System_Display::doStatusInverted( void)
 {
-	statusInverted = UTILITY::Invert( statusInverted);
+	statusInverted = avr::Utility::Invert( statusInverted);
 	GLOBAL.SetupService.SetStatusInverted( statusInverted);
 	statusInvertedCheckBox.Display( statusInverted);
 	GLOBAL.StatusDisplay.SetInverted( statusInverted);

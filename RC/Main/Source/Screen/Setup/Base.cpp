@@ -107,7 +107,7 @@ void Screen_Setup_Base::update( void)
 										 GLOBAL.SignalService.GetPPM( 0)->GetWaited(), Frames / 10,
 										 Frames % 10);
 */
-		//		UTILITY::PrintByteBits( &( GLOBAL.SetupDisplay), frameLeft + 250, frameTop + 10, "A: ", PINA);
+		//		avr::Utility::PrintByteBits( &( GLOBAL.SetupDisplay), frameLeft + 250, frameTop + 10, "A: ", PINA);
 	}
 }
 

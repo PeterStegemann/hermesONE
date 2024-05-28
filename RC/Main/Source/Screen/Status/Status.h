@@ -11,7 +11,7 @@
 #include "GUI/Status/VoltageLabel.h"
 #include "Setup/Defines.h"
 
-#include "AVR/Source/LCD/LCD_DOG.h"
+#include "AVR/Source/LCD/DOG.h"
 #include "AVR/Source/Types.h"
 
 class Screen_Status_Status : public Screen_Base

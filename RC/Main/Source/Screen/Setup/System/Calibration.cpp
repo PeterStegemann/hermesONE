@@ -271,7 +271,7 @@ void Screen_Setup_System_Calibration::doCalibration( uint8_t Index)
 			}
 		}
 
-		UTILITY::Pause( 5);
+		avr::Utility::Pause( 5);
 	}
 
 	// Unselect.

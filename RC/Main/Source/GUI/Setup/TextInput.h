@@ -5,7 +5,7 @@
 #include "Defines.h"
 
 #include "AVR/Source/Types.h"
-#include "AVR/Source/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/LCD/65K_RGB.h"
 
 #include <ctype.h>
 
@@ -401,7 +401,7 @@ class GUI_Setup_TextInput
                 BlinkCount = 0;
             }
 
-            UTILITY::Pause( 5);
+            avr::Utility::Pause( 5);
         }
     }
 

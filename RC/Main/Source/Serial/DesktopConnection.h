@@ -8,13 +8,13 @@
 
 #include "AVR/Source/String.h"
 #include "AVR/Source/Types.h"
-#include "AVR/Source/Serial/Serial_TypedConnection.h"
+#include "AVR/Source/Serial/TypedConnection.h"
 
 template< uint8_t DeviceId>
 class Serial_DesktopConnection
 {
   private:
-    SERIAL_TypedConnection< DeviceId> connection;
+    avr::serial::TypedConnection< DeviceId> connection;
 
     void openComplex( uint8_t Id)
     {
@@ -66,7 +66,7 @@ class Serial_DesktopConnection
             sendLong( Serial_DesktopProtocol::I_Outputs, SIGNAL_SERVICE_PPMS);
 
             sendString( Serial_DesktopProtocol::I_Owner,
-               GLOBAL.SetupService.GetOwner( connection.stringBuffer, SERIAL_STRING_SIZE));
+               GLOBAL.SetupService.GetOwner( connection.GetStringBuffer(), SERIAL_STRING_SIZE));
             sendLong( Serial_DesktopProtocol::I_SetupBlankTime, GLOBAL.SetupService.GetSetupBlankTime());
             sendLong( Serial_DesktopProtocol::I_StatusBlankTime, GLOBAL.SetupService.GetStatusBlankTime());
             sendLong( Serial_DesktopProtocol::I_SetupBacklight, GLOBAL.SetupService.GetSetupBacklight());
@@ -142,7 +142,7 @@ class Serial_DesktopConnection
                 sendBoolean( Serial_DesktopProtocol::I_PPMInverted, PPM.Inverted);
                 sendLong( Serial_DesktopProtocol::I_PPMCenter, PPM.Center);
                 sendString( Serial_DesktopProtocol::I_PPMName,
-                    GLOBAL.SetupService.GetPPMName( PPMId, connection.stringBuffer, SERIAL_STRING_SIZE));
+                    GLOBAL.SetupService.GetPPMName( PPMId, connection.GetStringBuffer(), SERIAL_STRING_SIZE));
 
                 sendChannelMappings( PPM.ChannelMapping);
 
@@ -177,11 +177,9 @@ class Serial_DesktopConnection
                     if( GLOBAL.SetupService.GetModelState( ModelId) != Setup_Service::MS_Empty)
                     {
                         sendString( Serial_DesktopProtocol::I_ModelName,
-                            GLOBAL.SetupService.GetModelName( ModelId, connection.stringBuffer,
-                                SERIAL_STRING_SIZE));
+                            GLOBAL.SetupService.GetModelName( ModelId, connection.GetStringBuffer(), SERIAL_STRING_SIZE));
 
-                        sendLong( Serial_DesktopProtocol::I_ModelType,
-                            GLOBAL.SetupService.GetSelectedTypeId( ModelId));
+                        sendLong( Serial_DesktopProtocol::I_ModelType, GLOBAL.SetupService.GetSelectedTypeId( ModelId));
 
                         sendLong( Serial_DesktopProtocol::I_ModelRFMode, GLOBAL.SetupService.GetRFMode( ModelId));
 
@@ -208,7 +206,7 @@ class Serial_DesktopConnection
 
                     sendString( Serial_DesktopProtocol::I_ChannelName,
                         GLOBAL.SetupService.GetChannelName( ModelId, ChannelId,
-                            connection.stringBuffer, SERIAL_STRING_SIZE));
+                            connection.GetStringBuffer(), SERIAL_STRING_SIZE));
 
                     Setup_Channel Channel;
 
@@ -291,7 +289,7 @@ class Serial_DesktopConnection
                     if( GLOBAL.SetupService.GetTypeState( TypeId) != Setup_Service::TS_Empty)
                     {
                         sendString( Serial_DesktopProtocol::I_TypeName,
-                            GLOBAL.SetupService.GetTypeName( TypeId, connection.stringBuffer, SERIAL_STRING_SIZE));
+                            GLOBAL.SetupService.GetTypeName( TypeId, connection.GetStringBuffer(), SERIAL_STRING_SIZE));
                     }
 
                 closeComplex();
@@ -314,7 +312,7 @@ class Serial_DesktopConnection
                     if( GLOBAL.SetupService.GetSourceType( SourceId) != Signal_Source_Source::T_Empty)
                     {
                         sendString( Serial_DesktopProtocol::I_SourceName, GLOBAL.SetupService.GetSourceName(
-                            SourceId, connection.stringBuffer, SERIAL_STRING_SIZE));
+                            SourceId, connection.GetStringBuffer(), SERIAL_STRING_SIZE));
 
                         sendLong( Serial_DesktopProtocol::I_SourceModel,
                             GLOBAL.SetupService.GetSourceModelId( SourceId));
@@ -584,11 +582,11 @@ class Serial_DesktopConnection
 
         switch( Type)
         {
-            case SERIAL_Protocol::T_State : break;
+            case avr::serial::Protocol::T_State : break;
 
-            case SERIAL_Protocol::T_Value : connection.ConsumeValue(); break;
+            case avr::serial::Protocol::T_Value : connection.ConsumeValue(); break;
 
-            case SERIAL_Protocol::T_Complex :
+            case avr::serial::Protocol::T_Complex :
             {
                 switch( Id)
                 {
@@ -602,66 +600,66 @@ class Serial_DesktopConnection
 
                             switch( Type)
                             {
-                                case SERIAL_Protocol::T_ComplexEnd :
+                                case avr::serial::Protocol::T_ComplexEnd :
                                 {
                                     Loop = false;
                                 }
                                 break;
 
-                                case SERIAL_Protocol::T_Value :
+                                case avr::serial::Protocol::T_Value :
                                 {
                                     Id = connection.ReceiveByte();
 
-                                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                                     switch( Id)
                                     {
                                         case Serial_DesktopProtocol::I_Owner :
                                         {
-                                            GLOBAL.SetupService.SetOwner( connection.stringBuffer);
+                                            GLOBAL.SetupService.SetOwner( connection.GetStringBuffer());
                                         }
                                         break;
 
                                         case Serial_DesktopProtocol::I_SetupBlankTime :
                                         {
-                                            GLOBAL.SetupService.SetSetupBlankTime( atol( connection.stringBuffer));
+                                            GLOBAL.SetupService.SetSetupBlankTime( atol( connection.GetStringBuffer()));
                                         }
                                         break;
 
                                         case Serial_DesktopProtocol::I_StatusBlankTime :
                                         {
-                                            GLOBAL.SetupService.SetStatusBlankTime( atol( connection.stringBuffer));
+                                            GLOBAL.SetupService.SetStatusBlankTime( atol( connection.GetStringBuffer()));
                                         }
                                         break;
 
                                         case Serial_DesktopProtocol::I_StatusInverted :
                                         {
                                             GLOBAL.SetupService.SetStatusInverted(
-                                                STRING::String2Boolean( connection.stringBuffer));
+                                                avr::String::String2Boolean( connection.GetStringBuffer()));
                                         }
                                         break;
 
                                         case Serial_DesktopProtocol::I_SetupBacklight :
                                         {
-                                            GLOBAL.SetupService.SetSetupBacklight( atol( connection.stringBuffer));
+                                            GLOBAL.SetupService.SetSetupBacklight( atol( connection.GetStringBuffer()));
                                         }
                                         break;
 
                                         case Serial_DesktopProtocol::I_StatusBacklight :
                                         {
-                                            GLOBAL.SetupService.SetStatusBacklight( atol( connection.stringBuffer));
+                                            GLOBAL.SetupService.SetStatusBacklight( atol( connection.GetStringBuffer()));
                                         }
                                         break;
 
                                         case Serial_DesktopProtocol::I_StatusContrast :
                                         {
-                                            GLOBAL.SetupService.SetStatusContrast( atol( connection.stringBuffer));
+                                            GLOBAL.SetupService.SetStatusContrast( atol( connection.GetStringBuffer()));
                                         }
                                         break;
 
                                         case Serial_DesktopProtocol::I_SelectedModel :
                                         {
-                                            GLOBAL.SetupService.SetSelectedModelId( atol( connection.stringBuffer));
+                                            GLOBAL.SetupService.SetSelectedModelId( atol( connection.GetStringBuffer()));
                                         }
                                         break;
 
@@ -670,7 +668,7 @@ class Serial_DesktopConnection
                                 }
                                 break;
 
-                                case SERIAL_Protocol::T_Complex :
+                                case avr::serial::Protocol::T_Complex :
                                 {
                                     Id = connection.ReceiveByte();
 
@@ -742,13 +740,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -786,35 +784,35 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_CalibrationHigh :
                         {
-                            Calibration.Value[ Setup_Calibration::V_High] = atol( connection.stringBuffer);
+                            Calibration.Value[ Setup_Calibration::V_High] = atol( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_CalibrationCenter :
                         {
-                            Calibration.Value[ Setup_Calibration::V_Center] = atol( connection.stringBuffer);
+                            Calibration.Value[ Setup_Calibration::V_Center] = atol( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_CalibrationLow :
                         {
-                            Calibration.Value[ Setup_Calibration::V_Low] = atol( connection.stringBuffer);
+                            Calibration.Value[ Setup_Calibration::V_Low] = atol( connection.GetStringBuffer());
                         }
                         break;
 
@@ -844,47 +842,47 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_BatteryWarnLowVoltage :
                         {
-                            Battery.WarnLowVoltage = atol( connection.stringBuffer);
+                            Battery.WarnLowVoltage = atol( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_BatteryWarnCriticalVoltage :
                         {
-                            Battery.WarnCriticalVoltage = atol( connection.stringBuffer);
+                            Battery.WarnCriticalVoltage = atol( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_BatteryMinimumVoltage :
                         {
-                            Battery.MinimumVoltage = atol( connection.stringBuffer);
+                            Battery.MinimumVoltage = atol( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_BatteryMaximumVoltage :
                         {
-                            Battery.MaximumVoltage = atol( connection.stringBuffer);
+                            Battery.MaximumVoltage = atol( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_BatteryCalibrationVoltage :
                         {
-                            Battery.CalibrationVoltage = atol( connection.stringBuffer);
+                            Battery.CalibrationVoltage = atol( connection.GetStringBuffer());
                         }
                         break;
 
@@ -912,13 +910,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -956,35 +954,35 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_PPMInverted :
                         {
-                            PPM.Inverted = STRING::String2Boolean( connection.stringBuffer);
+                            PPM.Inverted = avr::String::String2Boolean( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_PPMCenter :
                         {
-                            PPM.Center = atol( connection.stringBuffer);
+                            PPM.Center = atol( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_PPMName :
                         {
-                            GLOBAL.SetupService.SetPPMName( PPMId, connection.stringBuffer);
+                            GLOBAL.SetupService.SetPPMName( PPMId, connection.GetStringBuffer());
                         }
                         break;
 
@@ -993,7 +991,7 @@ class Serial_DesktopConnection
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1029,23 +1027,23 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_ChannelMapping :
                         {
-                            ChannelMapping[ ChannelId] = atol( connection.stringBuffer);
+                            ChannelMapping[ ChannelId] = atol( connection.GetStringBuffer());
 
                             ChannelId++;
                         }
@@ -1073,13 +1071,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1116,43 +1114,43 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_ModelState :
                         {
                             Setup_Service::ModelState Value =
-                                ( Setup_Service::ModelState) atoi( connection.stringBuffer);
+                                ( Setup_Service::ModelState) atoi( connection.GetStringBuffer());
                             GLOBAL.SetupService.SetModelState( ModelId, Value);
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_ModelName :
                         {
-                            GLOBAL.SetupService.SetModelName( ModelId, connection.stringBuffer);
+                            GLOBAL.SetupService.SetModelName( ModelId, connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_ModelType :
                         {
-                            GLOBAL.SetupService.SetSelectedTypeId( ModelId, atoi( connection.stringBuffer));
+                            GLOBAL.SetupService.SetSelectedTypeId( ModelId, atoi( connection.GetStringBuffer()));
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_ModelRFMode :
                         {
-                            GLOBAL.SetupService.SetRFMode( ModelId, atoi( connection.stringBuffer));
+                            GLOBAL.SetupService.SetRFMode( ModelId, atoi( connection.GetStringBuffer()));
                         }
                         break;
 
@@ -1161,7 +1159,7 @@ class Serial_DesktopConnection
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1213,13 +1211,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1257,35 +1255,35 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_ChannelName :
                         {
-                            GLOBAL.SetupService.SetChannelName( ModelId, ChannelId, connection.stringBuffer);
+                            GLOBAL.SetupService.SetChannelName( ModelId, ChannelId, connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_ChannelReverse :
                         {
-                            Channel.Reverse = STRING::String2Boolean( connection.stringBuffer);
+                            Channel.Reverse = avr::String::String2Boolean( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_ChannelMode :
                         {
-                            Channel.Mode = atol( connection.stringBuffer);
+                            Channel.Mode = atol( connection.GetStringBuffer());
                         }
                         break;
 
@@ -1294,7 +1292,7 @@ class Serial_DesktopConnection
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1349,24 +1347,24 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     if( Id == ValueId)
                     {
                         // Don't read to many.
                         if( PointId < NumberOfValues)
                         {
-                            Values[ PointId++] = atol( connection.stringBuffer);
+                            Values[ PointId++] = atol( connection.GetStringBuffer());
                         }
                         else
                         {
@@ -1397,24 +1395,24 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_ModelStatusTimer :
                         {
                             GLOBAL.SetupService.SetStatusTimerId( ModelId, SourceId,
-                                                                  atoi( connection.stringBuffer));
+                                                                  atoi( connection.GetStringBuffer()));
 
                             SourceId++;
                         }
@@ -1442,24 +1440,24 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_ModelStatusSource :
                         {
                             GLOBAL.SetupService.SetStatusSourceId( ModelId, SourceId,
-                                atol( connection.stringBuffer));
+                                atol( connection.GetStringBuffer()));
 
                             SourceId++;
                         }
@@ -1487,13 +1485,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1533,13 +1531,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1579,29 +1577,29 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceTupleSource :
                         {
-                            Value->Source = atol( connection.stringBuffer);
+                            Value->Source = atol( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTupleVolume :
                         {
-                            Value->Volume = atol( connection.stringBuffer);
+                            Value->Volume = atol( connection.GetStringBuffer());
                         }
                         break;
 
@@ -1627,13 +1625,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1670,31 +1668,31 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_TypeState :
                         {
                             Setup_Service::TypeState Value =
-                                ( Setup_Service::TypeState) atoi( connection.stringBuffer);
+                                ( Setup_Service::TypeState) atoi( connection.GetStringBuffer());
                             GLOBAL.SetupService.SetTypeState( TypeId, Value);
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_TypeName :
                         {
-                            GLOBAL.SetupService.SetTypeName( TypeId, connection.stringBuffer);
+                            GLOBAL.SetupService.SetTypeName( TypeId, connection.GetStringBuffer());
                         }
                         break;
 
@@ -1720,13 +1718,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1763,29 +1761,29 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceName :
                         {
-                            GLOBAL.SetupService.SetSourceName( SourceId, connection.stringBuffer);
+                            GLOBAL.SetupService.SetSourceName( SourceId, connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceModel :
                         {
-                            GLOBAL.SetupService.SetSourceModelId( SourceId, atoi( connection.stringBuffer));
+                            GLOBAL.SetupService.SetSourceModelId( SourceId, atoi( connection.GetStringBuffer()));
                         }
                         break;
 
@@ -1794,7 +1792,7 @@ class Serial_DesktopConnection
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1896,35 +1894,35 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceFollowerTriggerSource :
                         {
-                            SourceFollower.TriggerSource = atoi( connection.stringBuffer);
+                            SourceFollower.TriggerSource = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceFollowerTriggerHighLimit :
                         {
-                            SourceFollower.TriggerHighLimit = atoi( connection.stringBuffer);
+                            SourceFollower.TriggerHighLimit = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceFollowerTriggerLowLimit :
                         {
-                            SourceFollower.TriggerLowLimit = atoi( connection.stringBuffer);
+                            SourceFollower.TriggerLowLimit = atoi( connection.GetStringBuffer());
                         }
                         break;
 
@@ -1933,7 +1931,7 @@ class Serial_DesktopConnection
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -1980,23 +1978,23 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceInputAnalogInput :
                         {
-                            SourceInput.InputIdA = atoi( connection.stringBuffer);
+                            SourceInput.InputIdA = atoi( connection.GetStringBuffer());
                         }
                         break;
 
@@ -2029,53 +2027,53 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceInputButtonInput :
                         {
-                            SourceInput.InputIdA = atoi( connection.stringBuffer);
+                            SourceInput.InputIdA = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputButtonStore :
                         {
-                            SourceInput.Store = STRING::String2Boolean( connection.stringBuffer);
+                            SourceInput.Store = avr::String::String2Boolean( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputButtonInit :
                         {
-                            SourceInput.InitVolume = atoi( connection.stringBuffer);
+                            SourceInput.InitVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputButtonToggle :
                         {
-                            SourceInput.Toggle = STRING::String2Boolean( connection.stringBuffer);
+                            SourceInput.Toggle = avr::String::String2Boolean( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputButtonTop :
                         {
-                            SourceInput.TopVolume = atoi( connection.stringBuffer);
+                            SourceInput.TopVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputButtonBottom :
                         {
-                            SourceInput.BottomVolume = atoi( connection.stringBuffer);
+                            SourceInput.BottomVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
@@ -2108,41 +2106,41 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceInputSwitchLowInput :
                         {
-                            SourceInput.InputIdA = atoi( connection.stringBuffer);
+                            SourceInput.InputIdA = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputSwitchHighInput :
                         {
-                            SourceInput.InputIdB = atoi( connection.stringBuffer);
+                            SourceInput.InputIdB = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputSwitchTop :
                         {
-                            SourceInput.TopVolume = atoi( connection.stringBuffer);
+                            SourceInput.TopVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputSwitchBottom :
                         {
-                            SourceInput.BottomVolume = atoi( connection.stringBuffer);
+                            SourceInput.BottomVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
@@ -2175,59 +2173,59 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceInputTickerLowInput :
                         {
-                            SourceInput.InputIdA = atoi( connection.stringBuffer);
+                            SourceInput.InputIdA = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputTickerHighInput :
                         {
-                            SourceInput.InputIdB = atoi( connection.stringBuffer);
+                            SourceInput.InputIdB = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputTickerStore :
                         {
-                            SourceInput.Store = STRING::String2Boolean( connection.stringBuffer);
+                            SourceInput.Store = avr::String::String2Boolean( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputTickerInit :
                         {
-                            SourceInput.InitVolume = atoi( connection.stringBuffer);
+                            SourceInput.InitVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputTickerStep :
                         {
-                            SourceInput.StepVolume = atoi( connection.stringBuffer);
+                            SourceInput.StepVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputTickerTop :
                         {
-                            SourceInput.TopVolume = atoi( connection.stringBuffer);
+                            SourceInput.TopVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputTickerBottom :
                         {
-                            SourceInput.BottomVolume = atoi( connection.stringBuffer);
+                            SourceInput.BottomVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
@@ -2260,59 +2258,59 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceInputRotaryAInput :
                         {
-                            SourceInput.InputIdA = atoi( connection.stringBuffer);
+                            SourceInput.InputIdA = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputRotaryBInput :
                         {
-                            SourceInput.InputIdB = atoi( connection.stringBuffer);
+                            SourceInput.InputIdB = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputRotaryStore :
                         {
-                            SourceInput.Store = STRING::String2Boolean( connection.stringBuffer);
+                            SourceInput.Store = avr::String::String2Boolean( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputRotaryInit :
                         {
-                            SourceInput.InitVolume = atoi( connection.stringBuffer);
+                            SourceInput.InitVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputRotaryStep :
                         {
-                            SourceInput.StepVolume = atoi( connection.stringBuffer);
+                            SourceInput.StepVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputRotaryTop :
                         {
-                            SourceInput.TopVolume = atoi( connection.stringBuffer);
+                            SourceInput.TopVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceInputRotaryBottom :
                         {
-                            SourceInput.BottomVolume = atoi( connection.stringBuffer);
+                            SourceInput.BottomVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
@@ -2343,13 +2341,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -2396,13 +2394,13 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -2442,29 +2440,29 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceStoreInputSource :
                         {
-                            SourceStore.InputSource = atoi( connection.stringBuffer);
+                            SourceStore.InputSource = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceStoreInit :
                         {
-                            SourceStore.InitVolume = atoi( connection.stringBuffer);
+                            SourceStore.InitVolume = atoi( connection.GetStringBuffer());
                         }
                         break;
 
@@ -2495,23 +2493,23 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceProxySlot :
                         {
-                            SourceProxy.Slot = atoi( connection.stringBuffer);
+                            SourceProxy.Slot = atoi( connection.GetStringBuffer());
                         }
                         break;
 
@@ -2542,77 +2540,77 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceTimerInitTime :
                         {
-                            SourceTimer.InitTime = atoi( connection.stringBuffer);
+                            SourceTimer.InitTime = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTimerCurrentTime :
                         {
-                            SourceTimer.CurrentTime = atoi( connection.stringBuffer);
+                            SourceTimer.CurrentTime = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTimerStore :
                         {
-                            SourceTimer.Store = STRING::String2Boolean( connection.stringBuffer);
+                            SourceTimer.Store = avr::String::String2Boolean( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTimerReverse :
                         {
-                            SourceTimer.Reverse = STRING::String2Boolean( connection.stringBuffer);
+                            SourceTimer.Reverse = avr::String::String2Boolean( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTimerTriggerSource :
                         {
-                            SourceTimer.TriggerSource = atoi( connection.stringBuffer);
+                            SourceTimer.TriggerSource = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTimerTriggerHighLimit :
                         {
-                            SourceTimer.TriggerHighLimit = atoi( connection.stringBuffer);
+                            SourceTimer.TriggerHighLimit = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTimerTriggerLowLimit :
                         {
-                            SourceTimer.TriggerLowLimit = atoi( connection.stringBuffer);
+                            SourceTimer.TriggerLowLimit = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTimerWarnLowTime :
                         {
-                            SourceTimer.WarnLowTime = atoi( connection.stringBuffer);
+                            SourceTimer.WarnLowTime = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTimerWarnCriticalTime :
                         {
-                            SourceTimer.WarnCriticalTime = atoi( connection.stringBuffer);
+                            SourceTimer.WarnCriticalTime = atoi( connection.GetStringBuffer());
                         }
                         break;
 
                         case Serial_DesktopProtocol::I_SourceTimerWarnPauseTime :
                         {
-                            SourceTimer.WarnPauseTime = atoi( connection.stringBuffer);
+                            SourceTimer.WarnPauseTime = atoi( connection.GetStringBuffer());
                         }
                         break;
 
@@ -2643,29 +2641,29 @@ class Serial_DesktopConnection
 
             switch( Type)
             {
-                case SERIAL_Protocol::T_ComplexEnd :
+                case avr::serial::Protocol::T_ComplexEnd :
                 {
                     Loop = false;
                 }
                 break;
 
-                case SERIAL_Protocol::T_Value :
+                case avr::serial::Protocol::T_Value :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
-                    connection.ReceiveValue( connection.stringBuffer, SERIAL_STRING_SIZE);
+                    connection.ReceiveValue( connection.GetStringBuffer(), SERIAL_STRING_SIZE);
 
                     switch( Id)
                     {
                         case Serial_DesktopProtocol::I_SourceTrimmerReverse :
                         {
-                            SourceTrimmer.Reverse = STRING::String2Boolean( connection.stringBuffer);
+                            SourceTrimmer.Reverse = avr::String::String2Boolean( connection.GetStringBuffer());
                         }
                         break;
     /*
                         case Serial_DesktopProtocol::I_SourceTrimmerMode :
                         {
-                            SourceTrimmer.Mode = atol( connection.stringBuffer);
+                            SourceTrimmer.Mode = atol( connection.GetStringBuffer());
                         }
                         break;
     */
@@ -2674,7 +2672,7 @@ class Serial_DesktopConnection
                 }
                 break;
 
-                case SERIAL_Protocol::T_Complex :
+                case avr::serial::Protocol::T_Complex :
                 {
                     uint8_t Id = connection.ReceiveByte();
 
@@ -2739,7 +2737,7 @@ class Serial_DesktopConnection
 
                 switch( Type)
                 {
-                    case SERIAL_Protocol::T_Command :
+                    case avr::serial::Protocol::T_Command :
                     {
                         uint8_t Command = connection.ReceiveByte();
 
@@ -2762,7 +2760,7 @@ class Serial_DesktopConnection
                                 receiveConfiguration();
 
                                 GLOBAL.ClearScreens();
-                                UTILITY::HardReset();
+                                avr::Utility::HardReset();
                                 // No comin' back.
                             }
                             break;
@@ -2784,7 +2782,7 @@ class Serial_DesktopConnection
                 }
             }
 
-            UTILITY::Pause( 5);
+            avr::Utility::Pause( 5);
 
             // Exit on button toggle.
             uint8_t RotaryButton;

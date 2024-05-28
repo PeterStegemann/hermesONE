@@ -225,7 +225,7 @@ bool Screen_Setup_Source_Trimmer::processMenu( DoMenuResult Result)
 
 				case 14 :
 				{
-					sourceTrimmer->Setup.Reverse = UTILITY::Invert( sourceTrimmer->Setup.Reverse);
+					sourceTrimmer->Setup.Reverse = avr::Utility::Invert( sourceTrimmer->Setup.Reverse);
 
 					ValueChanged = true;
 

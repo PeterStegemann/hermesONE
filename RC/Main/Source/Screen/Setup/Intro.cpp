@@ -7,6 +7,6 @@
 
 #include "AVR/Components/Utility.h"
 #include "AVR/Components/Font/Font.h"
-#include "AVR/Components/LCD/LCD_S65.h"
+#include "AVR/Components/LCD/S65.h"
 
 #include <string.h>

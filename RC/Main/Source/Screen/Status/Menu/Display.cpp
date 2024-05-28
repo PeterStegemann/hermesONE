@@ -7,7 +7,7 @@
 
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/Font/Font.h"
-#include "AVR/Source/LCD/LCD_DOG.h"
+#include "AVR/Source/LCD/DOG.h"
 
 #include <stdio.h>
 
@@ -180,7 +180,7 @@ bool Screen_Status_Menu_Display::processMenu( DoMenuResult Result)
 				{
 					bool Value = GLOBAL.SetupService.GetStatusInverted();
 
-					Value = UTILITY::Invert( Value);
+					Value = avr::Utility::Invert( Value);
 
 					updateBoolean( Value);
 

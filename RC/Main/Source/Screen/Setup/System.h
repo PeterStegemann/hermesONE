@@ -221,7 +221,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 
         GLOBAL.SignalProcessor.LoadModel();
 
-        UTILITY::HardReset();
+        avr::Utility::HardReset();
         // No comin' back.
     }
 

@@ -100,7 +100,6 @@ CPPSRC = Source/Main.cpp \
 		 Source/Serial/Serial_GraphicConnection.cpp \
 		 AVR/Source/Utility.cpp \
 		 AVR/Source/Font/Font.cpp \
-		 AVR/Source/Font/Font_Type.cpp \
 		 AVR/Source/Font/Font_Large.cpp \
 		 AVR/Source/Font/Font_Medium.cpp \
 		 AVR/Source/Font/Font_Micro.cpp \

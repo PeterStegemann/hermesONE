@@ -8,7 +8,7 @@
 
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/Font/Font.h"
-#include "AVR/Source/LCD/LCD_DOG.h"
+#include "AVR/Source/LCD/DOG.h"
 
 #define MENU_EXIT		0
 #define MENU_REVERSE	1
@@ -154,7 +154,7 @@ bool Screen_Status_Menu_Channel::processMenu( DoMenuResult Result)
 
 				case MENU_REVERSE :
 				{
-					channel->Setup.Reverse = UTILITY::Invert( channel->Setup.Reverse);
+					channel->Setup.Reverse = avr::Utility::Invert( channel->Setup.Reverse);
 
 					updateBoolean( channel->Setup.Reverse);
 

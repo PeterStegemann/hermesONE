@@ -5,7 +5,7 @@
 #include "Setup/Source/Tuple.h"
 #include "Text/Text.h"
 
-#include "AVR/Source/LCD/LCD_65K_RGB.h"
+#include "AVR/Source/LCD/65K_RGB.h"
 
 #define GUI_SETUP_GRAPH_POINTS		    7
 #define GUI_SETUP_GRAPH_LABEL_FONT		FONT::FI_Medium

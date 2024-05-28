@@ -5,7 +5,7 @@
 #include "Defines.h"
 
 #include "AVR/Source/Types.h"
-#include "AVR/Source/LCD/LCD_DOG.h"
+#include "AVR/Source/LCD/DOG.h"
 
 class GUI_Status_Label
 {

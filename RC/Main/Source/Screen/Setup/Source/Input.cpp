@@ -138,7 +138,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 
 						case Setup_Source_Input::IT_Button :
 						{
-							sourceInput->Store = UTILITY::Invert( sourceInput->Store);
+							sourceInput->Store = avr::Utility::Invert( sourceInput->Store);
 							storeCheckBox.Display( sourceInput->Store);
 							ValueChanged = true;
 						}
@@ -172,7 +172,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 						case Setup_Source_Input::IT_Rotary :
 						case Setup_Source_Input::IT_Ticker :
 						{
-							sourceInput->Store = UTILITY::Invert( sourceInput->Store);
+							sourceInput->Store = avr::Utility::Invert( sourceInput->Store);
 							storeCheckBox.Display( sourceInput->Store);
 							ValueChanged = true;
 						}
@@ -196,7 +196,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 					{
 						case Setup_Source_Input::IT_Button :
 						{
-							sourceInput->Toggle = UTILITY::Invert( sourceInput->Toggle);
+							sourceInput->Toggle = avr::Utility::Invert( sourceInput->Toggle);
 							toggleCheckBox.Display( sourceInput->Toggle);
 							ValueChanged = true;
 						}

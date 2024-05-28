@@ -190,7 +190,7 @@ bool Screen_Setup_Source_Timer::processMenu( DoMenuResult Result)
 
 				case 5 :
 				{
-					sourceTimer->Setup.Reverse = UTILITY::Invert( sourceTimer->Setup.Reverse);
+					sourceTimer->Setup.Reverse = avr::Utility::Invert( sourceTimer->Setup.Reverse);
 					reverseCheckBox.Display( sourceTimer->Setup.Reverse);
 					ValueChanged = true;
 				}
@@ -198,7 +198,7 @@ bool Screen_Setup_Source_Timer::processMenu( DoMenuResult Result)
 
 				case 6 :
 				{
-					sourceTimer->Setup.Store = UTILITY::Invert( sourceTimer->Setup.Store);
+					sourceTimer->Setup.Store = avr::Utility::Invert( sourceTimer->Setup.Store);
 					storeCheckBox.Display( sourceTimer->Setup.Store);
 					ValueChanged = true;
 				}

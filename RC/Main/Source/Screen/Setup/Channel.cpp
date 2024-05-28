@@ -259,7 +259,7 @@ bool Screen_Setup_Channel::processMenu( DoMenuResult Result)
 
 				case 12 :
 				{
-					channel->Setup.Reverse = UTILITY::Invert( channel->Setup.Reverse);
+					channel->Setup.Reverse = avr::Utility::Invert( channel->Setup.Reverse);
 
 					ValueChanged = true;
 

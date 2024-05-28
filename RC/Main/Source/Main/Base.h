@@ -14,7 +14,7 @@
 
 #include "AVR/Source/SPI.h"
 #include "AVR/Source/Utility.h"
-#include "AVR/Source/LCD/LCD_DOG_S102.h"
+#include "AVR/Source/LCD/DOG_S102.h"
 
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
@@ -36,7 +36,7 @@ class Main_Base
     Signal_Service SignalService;
     Signal_Processor SignalProcessor;
 
-    SPI Spi;
+    avr::SPI Spi;
 
     LCD_DOG_S102 StatusDisplay;
 
@@ -66,7 +66,7 @@ class Main_Base
     	wdt_disable();
 
         // Wait some time for the controller and other components to stabilize.
-    	UTILITY::Pause( 100);
+    	avr::Utility::Pause( 100);
 
     	// Get debug state.
 //    	debug = SetupService.GetDebug();
@@ -107,7 +107,7 @@ class Main_Base
         InterruptService.Start();
 
         // Wait a moment for all services to come up.
-        UTILITY::Pause( 5);
+        avr::Utility::Pause( 5);
 
         run();
     }

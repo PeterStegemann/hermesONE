@@ -411,6 +411,6 @@ void Fractal::Run( void)
 			}
 		}
 		
-		UTILITY::Pause( 5);
+		avr::Utility::Pause( 5);
 	}
 }

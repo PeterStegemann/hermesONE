@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "AVR/Source/Serial/Serial_Protocol.h"
+#include "AVR/Source/Serial/Protocol.h"
 
-class Serial_DesktopProtocol : public SERIAL_Protocol
+class Serial_DesktopProtocol : public avr::serial::Protocol
 {
   public:
 	enum Id		// uint8

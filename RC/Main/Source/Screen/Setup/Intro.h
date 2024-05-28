@@ -32,10 +32,10 @@ class Screen_Setup_Intro
 			        					 LCD_65K_RGB::White, LCD::PO_Proportional, Text::hermesONE);
 
     		// 25 fps.
-	    	UTILITY::Pause( 1000 / 25);
+	    	avr::Utility::Pause( 1000 / 25);
 	    }
 
-    	UTILITY::Pause( 750);
+    	avr::Utility::Pause( 750);
 
     	// Fade out text.
 	    for( uint8_t ColorPart = 0; ColorPart <= LCD_65K_RGB_MAXIMUM_GREY; ColorPart++)
@@ -44,7 +44,7 @@ class Screen_Setup_Intro
 	        							 LCD_65K_RGB::White, LCD::PO_Proportional, Text::hermesONE);
 
     		// 15 fps.
-	    	UTILITY::Pause( 1000 / 25);
+	    	avr::Utility::Pause( 1000 / 25);
 	    }
 
     	// Fade out screen.
@@ -53,12 +53,12 @@ class Screen_Setup_Intro
     		GLOBAL.SetupDisplay.Clear( LCD_65K_RGB_GREY( LCD_65K_RGB_MAXIMUM_GREY - ColorPart));
 
     		// 25 fps.
-//	    	UTILITY::Pause( 1000 / 25);
+//	    	avr::Utility::Pause( 1000 / 25);
 	    }
 
     	GLOBAL.SetupDisplay.Clear( LCD_65K_RGB::Black);
 
-    	UTILITY::Pause( 250);
+    	avr::Utility::Pause( 250);
     }
 /*
 		Orientation = Landscape;

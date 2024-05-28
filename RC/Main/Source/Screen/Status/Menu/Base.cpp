@@ -7,7 +7,7 @@
 
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/Font/Font.h"
-#include "AVR/Source/LCD/LCD_DOG.h"
+#include "AVR/Source/LCD/DOG.h"
 
 Screen_Status_Menu_Base::Screen_Status_Menu_Base( uint8_t MenuEntries, Level MenuLevel)
 					   : Screen_Base()
@@ -173,7 +173,7 @@ bool Screen_Status_Menu_Base::selectValue( int8_t* Value, int8_t LowerLimit, int
 			UpdateValue( Object, ( int8_t) NewValue);
 		}
 
-		UTILITY::Pause( 5);
+		avr::Utility::Pause( 5);
 	}
 
 	// Unselect.
@@ -232,7 +232,7 @@ bool Screen_Status_Menu_Base::selectValue( int16_t* Value, int16_t LowerLimit, i
 			UpdateValue( Object, ( int16_t) NewValue);
 		}
 
-		UTILITY::Pause( 5);
+		avr::Utility::Pause( 5);
 	}
 
 	// Unselect.
@@ -293,7 +293,7 @@ bool Screen_Status_Menu_Base::selectValue( uint16_t* Value, uint16_t LowerLimit,
 			UpdateValue( Object, ( int16_t) NewValue);
 		}
 
-		UTILITY::Pause( 5);
+		avr::Utility::Pause( 5);
 	}
 
 	// Unselect.
@@ -353,7 +353,7 @@ bool Screen_Status_Menu_Base::selectSource
 			UpdateSource( Object, *SetupSourceId);
 		}
 
-		UTILITY::Pause( 5);
+		avr::Utility::Pause( 5);
 	}
 
 	// Unselect.

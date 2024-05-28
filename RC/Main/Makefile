@@ -148,13 +148,12 @@ CPPSRC = \
 	Source/Signal/Source/Trimmer.cpp \
 	AVR/Source/EEPROM.cpp \
 	AVR/Source/Font/Font.cpp \
-	AVR/Source/Font/Font_Large.cpp \
-	AVR/Source/Font/Font_Medium.cpp \
-	AVR/Source/Font/Font_Micro.cpp \
-	AVR/Source/Font/Font_Mini.cpp \
-	AVR/Source/Font/Font_Normal.cpp \
+	AVR/Source/Font/Large.cpp \
+	AVR/Source/Font/Medium.cpp \
+	AVR/Source/Font/Micro.cpp \
+	AVR/Source/Font/Mini.cpp \
+	AVR/Source/Font/Normal.cpp \
 	AVR/Source/SPI.cpp \
-	AVR/Source/String.cpp \
 	AVR/Source/Utility.cpp
 
 ifeq ($(SYSTEM_MODE), $(SYSTEM_MODE_STATUS))
@@ -166,13 +165,8 @@ endif
 ifeq ($(HAS_LCD_65K_RGB), yes)
 	CPPSRC += \
 		AVR/Source/LCD/LCD.cpp \
-		AVR/Source/LCD/LCD_65K_RGB.cpp \
-		AVR/Source/LCD/LCD_65K_RGB_Window.cpp
-endif
-
-ifeq ($(HAS_LCD_SERIAL_OLED), yes)
-	CPPSRC += \
-		AVR/Source/LCD/LCD_SerialOled.cpp
+		AVR/Source/LCD/65K_RGB.cpp \
+		AVR/Source/LCD/65K_RGB_Window.cpp
 endif
 
 ifeq ($(HAS_SETUP), yes)
@@ -224,8 +218,8 @@ ifeq ($(HAS_SCREEN), yes)
 endif
 
 CPPSRC += \
-	AVR/Source/LCD/LCD_DOG.cpp \
-	AVR/Source/LCD/LCD_DOG_S102.cpp
+	AVR/Source/LCD/DOG.cpp \
+	AVR/Source/LCD/DOG_S102.cpp
 
 ifeq ($(LANGUAGE), german)
 	CPPSRC += \

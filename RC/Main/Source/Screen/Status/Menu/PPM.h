@@ -74,7 +74,7 @@ class Screen_Status_Menu_PPM : public Screen_Status_Menu_Base
 
                     case MENU_PPM_INVERTED :
                     {
-                        ppmSetup.Inverted = UTILITY::Invert( ppmSetup.Inverted);
+                        ppmSetup.Inverted = avr::Utility::Invert( ppmSetup.Inverted);
 
                         GLOBAL.SetupService.SetPPM( ppmId, &ppmSetup);
                         GLOBAL.SignalService.GetPPM( ppmId)->SetInverted( ppmSetup.Inverted);

@@ -9,7 +9,7 @@
 
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/Font/Font.h"
-#include "AVR/Source/LCD/LCD_DOG.h"
+#include "AVR/Source/LCD/DOG.h"
 
 #define MENU_EXIT		0
 #define MENU_START		1
