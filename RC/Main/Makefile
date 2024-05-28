@@ -218,8 +218,8 @@ ifeq ($(HAS_SCREEN), yes)
 endif
 
 CPPSRC += \
-	AVR/Source/LCD/DOG.cpp \
-	AVR/Source/LCD/DOG_S102.cpp
+	AVR/Source/LCD/DOG/DOG.cpp \
+	AVR/Source/LCD/DOG/DOG_S102.cpp
 
 ifeq ($(LANGUAGE), german)
 	CPPSRC += \

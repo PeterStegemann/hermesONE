@@ -7,7 +7,7 @@
 
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/Font/Font.h"
-#include "AVR/Source/LCD/DOG.h"
+#include "AVR/Source/LCD/DOG/DOG.h"
 
 Screen_Status_Menu_Base::Screen_Status_Menu_Base( uint8_t MenuEntries, Level MenuLevel)
 					   : Screen_Base()

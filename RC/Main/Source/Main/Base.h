@@ -14,7 +14,7 @@
 
 #include "AVR/Source/SPI.h"
 #include "AVR/Source/Utility.h"
-#include "AVR/Source/LCD/DOG_S102.h"
+#include "AVR/Source/LCD/DOG/DOG_S102.h"
 
 #include <avr/interrupt.h>
 #include <avr/wdt.h>

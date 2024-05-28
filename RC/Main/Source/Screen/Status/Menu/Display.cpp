@@ -7,7 +7,7 @@
 
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/Font/Font.h"
-#include "AVR/Source/LCD/DOG.h"
+#include "AVR/Source/LCD/DOG/DOG.h"
 
 #include <stdio.h>
 
