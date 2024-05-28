@@ -4,8 +4,8 @@
 
 #include "GraphicConnection.h"
 
-#include "AVR/Source/LCD/S6E63D6_Parallel.h"
-//#include "AVR/Components/LCD/S6E63D6_SPI.h"
+#include "AVR/Source/LCD/S6E63D6/S6E63D6_Parallel.h"
+//#include "AVR/Components/LCD/S6E63D6/S6E63D6_SPI.h"
 
 class MAIN
 {

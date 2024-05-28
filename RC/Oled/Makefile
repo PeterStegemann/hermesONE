@@ -107,8 +107,8 @@ CPPSRC = Source/Main.cpp \
 		 AVR/Source/LCD/LCD.cpp \
 		 AVR/Source/LCD/65K_RGB.cpp \
 		 AVR/Source/LCD/65K_RGB_Window.cpp \
-		 AVR/Source/LCD/S6E63D6.cpp \
-		 AVR/Source/LCD/S6E63D6_Parallel.cpp
+		 AVR/Source/LCD/S6E63D6/S6E63D6.cpp \
+		 AVR/Source/LCD/S6E63D6/S6E63D6_Parallel.cpp
 
 #		 AVR/Source/SPI.cpp \
 		 AVR/Source/LCD/S6E63D6_SPI.cpp \

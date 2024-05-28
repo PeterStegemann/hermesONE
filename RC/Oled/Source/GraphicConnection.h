@@ -7,7 +7,7 @@
 #include "AVR/Source/Types.h"
 #include "AVR/Source/Utility.h"
 #include "AVR/Source/LCD/65K_RGB.h"
-#include "AVR/Source/LCD/SerialOledProtocol.h"
+#include "AVR/Source/LCD/Serial/SerialOledProtocol.h"
 #include "AVR/Source/Serial/Connection.h"
 
 #define SERIAL_STRING_SIZE		5
