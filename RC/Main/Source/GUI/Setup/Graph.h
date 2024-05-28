@@ -8,7 +8,7 @@
 #include "AVR/Source/LCD/65K_RGB.h"
 
 #define GUI_SETUP_GRAPH_POINTS		    7
-#define GUI_SETUP_GRAPH_LABEL_FONT		FONT::FI_Medium
+#define GUI_SETUP_GRAPH_LABEL_FONT		avr::font::FI_Medium
 
 class GUI_Setup_Graph
 {
@@ -111,10 +111,10 @@ class GUI_Setup_Graph
             return;
         }
 
-        const FONT_Type* Font = FONT::GetFont( GUI_SETUP_GRAPH_LABEL_FONT);
+        const avr::font::Type* Font = avr::font::Font::Get( GUI_SETUP_GRAPH_LABEL_FONT);
 
-        uint16_t LabelLeft = left - 3 * Font->getCellWidth();
-        uint16_t LabelTop = ( top - Font->getCellHeight());
+        uint16_t LabelLeft = left - 3 * Font->GetCellWidth();
+        uint16_t LabelTop = ( top - Font->GetCellHeight());
 
         GLOBAL.SetupDisplay.Print_P( LabelLeft, LabelTop, GUI_SETUP_GRAPH_LABEL_FONT, detailColor,
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::Minus100Percent);
@@ -124,19 +124,19 @@ class GUI_Setup_Graph
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::PaddedZeroPercent);
 
         LabelLeft += size / 2 + 1;
-        LabelLeft += ( 1 * Font->getCellWidth());
+        LabelLeft += ( 1 * Font->GetCellWidth());
         GLOBAL.SetupDisplay.Print_P( LabelLeft, LabelTop, GUI_SETUP_GRAPH_LABEL_FONT, detailColor,
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::Plus100Percent);
 
         LabelTop += size / 2;
-        LabelTop += Font->getCellHeight() / 2;
-        LabelLeft += ( 2 * Font->getCellWidth()) + 1;
+        LabelTop += Font->GetCellHeight() / 2;
+        LabelLeft += ( 2 * Font->GetCellWidth()) + 1;
         GLOBAL.SetupDisplay.Print_P( LabelLeft, LabelTop, GUI_SETUP_GRAPH_LABEL_FONT, detailColor,
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::ZeroPercent);
 
         LabelTop += size / 2;
-        LabelTop += ( Font->getCellHeight() / 2) + 2;
-        LabelLeft -= ( 3 * Font->getCellWidth());
+        LabelTop += ( Font->GetCellHeight() / 2) + 2;
+        LabelLeft -= ( 3 * Font->GetCellWidth());
         GLOBAL.SetupDisplay.Print_P( LabelLeft, LabelTop, GUI_SETUP_GRAPH_LABEL_FONT, detailColor,
                                      backgroundColor, LCD_65K_RGB::PO_Fixed, Text::Minus100Percent);
 
@@ -314,9 +314,9 @@ class GUI_Setup_Graph
         top = Top;
         size = Size;
 
-        const FONT_Type* Font = FONT::GetFont( GUI_SETUP_GRAPH_LABEL_FONT);
+        const avr::font::Type* Font = avr::font::Font::Get( GUI_SETUP_GRAPH_LABEL_FONT);
 
-        size -= UTILITY_Maximum( Font->getCellHeight(), Font->getCellWidth());
+        size -= UTILITY_Maximum( Font->GetCellHeight(), Font->GetCellWidth());
 
         // First draw will redraw everything.
         remembered = false;

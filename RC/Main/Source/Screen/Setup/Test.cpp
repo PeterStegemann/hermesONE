@@ -82,9 +82,9 @@ void Test::Run( void)
 */
 	uint16_t Top = GetTop();
 
-	for( uint8_t UseFontID = 0; UseFontID < FONT::GetFontCount(); UseFontID++)
+	for( uint8_t UseFontID = 0; UseFontID < avr::font::Font::GetCount(); UseFontID++)
 	{
-		const FONT_Type* Font = FONT::GetFont(( FONT::FontID) UseFontID);
+		const avr::font::Type* Font = avr::font::Font::Get(( avr::font::FontId) UseFontId);
 
 		// Print characters from 32 to 133.
 		for( uint8_t Line = 0; Line < 4; Line++)
@@ -98,10 +98,10 @@ void Test::Run( void)
 
 			String[ 23] = 0;
 
-			GetLCD()->Print( GetLeft(), Top, ( FONT::FontID) UseFontID, LCD::White, LCD::Black,
+			GetLCD()->Print( GetLeft(), Top, ( avr::font::FontId) UseFontID, LCD::White, LCD::Black,
 							 LCD::PM_Proportional, String);
 
-			Top += Font->getCellHeight();
+			Top += Font->GetCellHeight();
 		}
 	}
 

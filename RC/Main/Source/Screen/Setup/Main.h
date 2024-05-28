@@ -17,7 +17,7 @@ class Screen_Setup_Main : public Screen_Setup_Base
   	virtual void display( void)
     {
     	// Adjust menu entries to frame and set them up.
-	    const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	    const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
     	uint8_t Line = 0;
 
@@ -37,7 +37,7 @@ class Screen_Setup_Main : public Screen_Setup_Base
 	    							 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow,
 		    						 LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Setup);
 
-    	uint16_t SubMenuLeft = menuLeft + Font->getCellWidth();
+    	uint16_t SubMenuLeft = menuLeft + Font->GetCellWidth();
 
     	GLOBAL.SetupDisplay.Print_P( SubMenuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
 	    							 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
@@ -54,7 +54,7 @@ class Screen_Setup_Main : public Screen_Setup_Base
 
     	GLOBAL.SetupService.GetModelName( SelectedModelId, ModelName, sizeof( ModelName));
 
-    	GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->getCellWidth()),
+    	GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->GetCellWidth()),
 	    						   frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
 		    					   SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
 			    				   LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModelName);
@@ -66,7 +66,7 @@ class Screen_Setup_Main : public Screen_Setup_Base
     	GLOBAL.SetupService.GetTypeName( GLOBAL.SetupService.GetSelectedTypeId( SelectedModelId),
 	    								 ModelName, sizeof( ModelName));
 
-    	GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->getCellWidth()),
+    	GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->GetCellWidth()),
 	    						   frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
 		    					   SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
 			    				   LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModelName);

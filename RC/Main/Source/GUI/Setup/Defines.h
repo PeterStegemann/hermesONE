@@ -4,4 +4,4 @@
 
 #define GUI_SETUP_BLINK_DELAY		800
 
-#define GUI_SETUP_MAIN_FONT			FONT::FI_Normal
+#define GUI_SETUP_MAIN_FONT			avr::font::FI_Normal

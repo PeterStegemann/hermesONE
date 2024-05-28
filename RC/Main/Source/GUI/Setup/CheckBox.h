@@ -21,7 +21,7 @@ class GUI_Setup_CheckBox
 
     Options options;
 
-    FONT::FontId fontId;
+    avr::font::FontId fontId;
 
     // Marks whether we have remembered values from last draw.
     bool remembered;

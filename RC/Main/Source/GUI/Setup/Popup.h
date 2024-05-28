@@ -10,7 +10,7 @@
 class GUI_Setup_Popup
 {
   private:
-    FONT::FontId fontId;
+    avr::font::FontId fontId;
 
     const char* text;
     const flash_char* text_P;
@@ -66,17 +66,17 @@ class GUI_Setup_Popup
             return;
         }
 
-        const FONT_Type* Font = FONT::GetFont( fontId);
+        const avr::font::Type* Font = avr::font::Font::Get( fontId);
 
         uint16_t TextWidth;
 
         if( text != NULL)
         {
-        	TextWidth = strlen( text) * Font->getCellWidth();
+        	TextWidth = strlen( text) * Font->GetCellWidth();
         }
         else
         {
-            TextWidth = strlen_P( text_P) * Font->getCellWidth();
+            TextWidth = strlen_P( text_P) * Font->GetCellWidth();
         }
 
         uint16_t OKTextWidth = 0;
@@ -84,23 +84,23 @@ class GUI_Setup_Popup
 
         if( okText_P != NULL)
         {
-            OKTextWidth = strlen_P( okText_P) * Font->getCellWidth();
+            OKTextWidth = strlen_P( okText_P) * Font->GetCellWidth();
         }
 
         if( cancelText_P != NULL)
         {
-        	CancelTextWidth = strlen_P( cancelText_P) * Font->getCellWidth();
+        	CancelTextWidth = strlen_P( cancelText_P) * Font->GetCellWidth();
         }
 
         uint16_t Width;
 
-        if( TextWidth > ( OKTextWidth + CancelTextWidth + Font->getCellWidth()))
+        if( TextWidth > ( OKTextWidth + CancelTextWidth + Font->GetCellWidth()))
         {
             Width = TextWidth;
         }
         else
         {
-            Width = OKTextWidth + CancelTextWidth + Font->getCellWidth();
+            Width = OKTextWidth + CancelTextWidth + Font->GetCellWidth();
         }
 
         Width += 4;
@@ -109,11 +109,11 @@ class GUI_Setup_Popup
 
         if(( okText_P == NULL) && ( cancelText_P == NULL))
         {
-            Height = ( 1 * Font->getCellHeight()) + 4;
+            Height = ( 1 * Font->GetCellHeight()) + 4;
         }
         else
         {
-            Height = ( 3 * Font->getCellHeight()) + 4;
+            Height = ( 3 * Font->GetCellHeight()) + 4;
         }
 
         uint16_t Left = ( GLOBAL.SetupDisplay.GetWidth() - Width) / 2;
@@ -140,7 +140,7 @@ class GUI_Setup_Popup
         Top += 1;
         Left += 2;
 
-        buttonTop = Top + 2 * Font->getCellHeight();
+        buttonTop = Top + 2 * Font->GetCellHeight();
 
         if(( okText_P != NULL) && ( cancelText_P != NULL))
         {

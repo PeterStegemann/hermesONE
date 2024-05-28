@@ -82,7 +82,7 @@ class Screen_Status_Status : public Screen_Base
     {
         statusDisplay->Clear();
 
-        statusDisplay->Print_P( 5, 1, FONT::FI_Large, Text::RFDisabled);
+        statusDisplay->Print_P( 5, 1, avr::font::FI_Large, Text::RFDisabled);
     }
 
     // Intro is an alternative to run, won't work with Update()!
@@ -90,7 +90,7 @@ class Screen_Status_Status : public Screen_Base
     {
         statusDisplay->Clear();
 
-        statusDisplay->Print( 15, 1, FONT::FI_Large, "hermesONE");
+        statusDisplay->Print( 15, 1, avr::font::FI_Large, "hermesONE");
     }
 
     // Set a single source.

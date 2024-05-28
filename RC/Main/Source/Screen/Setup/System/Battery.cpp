@@ -17,10 +17,10 @@ Screen_Setup_System_Battery::Screen_Setup_System_Battery( void)
 void Screen_Setup_System_Battery::display( void)
 {
 	// Adjust menu entries to frame and set them up.
-	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t SubMenuLeft = menuLeft + Font->getCellWidth();
-	uint16_t ContentLeft = SubMenuLeft + 16 * Font->getCellWidth();
+	uint16_t SubMenuLeft = menuLeft + Font->GetCellWidth();
+	uint16_t ContentLeft = SubMenuLeft + 16 * Font->GetCellWidth();
 	uint16_t GaugeWidth = frameWidth - ( menuLeft - frameLeft) - 1;
 
 	uint8_t Line = 0;
@@ -82,7 +82,7 @@ void Screen_Setup_System_Battery::display( void)
 	Line += 2;
 
 	batteryLabel.SetDimensions( ContentLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT));
-	batteryLabel.SetFont( FONT::FI_Large);
+	batteryLabel.SetFont( avr::font::FI_Large);
 	batteryLabel.SetOptions( GUI_Setup_Label::O_Proportional);
 	batteryLabel.SetVoltage( calibrationVoltage);
 

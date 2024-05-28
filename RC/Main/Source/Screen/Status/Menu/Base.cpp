@@ -47,7 +47,7 @@ void Screen_Status_Menu_Base::SetText( Level UseLevel, const char* Text)
 
 	if( Text != NULL)
 	{
-		Column += GLOBAL.StatusDisplay.Print( Column, UseLevel * 2, Limit, FONT::FI_Large, Text);
+		Column += GLOBAL.StatusDisplay.Print( Column, UseLevel * 2, Limit, avr::font::FI_Large, Text);
 	}
 
 	// Fill trailing space.
@@ -67,7 +67,7 @@ void Screen_Status_Menu_Base::SetText_P( Level UseLevel, const flash_char* Text)
 
 	if( Text != NULL)
 	{
-		Column += GLOBAL.StatusDisplay.Print_P( Column, UseLevel * 2, Limit, FONT::FI_Large, Text);
+		Column += GLOBAL.StatusDisplay.Print_P( Column, UseLevel * 2, Limit, avr::font::FI_Large, Text);
 	}
 
 	// Fill trailing space.

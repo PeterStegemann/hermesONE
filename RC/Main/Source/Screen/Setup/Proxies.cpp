@@ -28,7 +28,7 @@ void Screen_Setup_Proxies::display( void)
 	displayMarker();
 
 	// Adjust gauges to frame and set them up.
-	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
 	uint8_t Line = 0;
 
@@ -46,7 +46,7 @@ void Screen_Setup_Proxies::display( void)
 	
 	setupScrollMarkers( Line);
 
-	uint16_t GaugeLeft = menuLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->getCellWidth();
+	uint16_t GaugeLeft = menuLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->GetCellWidth();
 	uint16_t GaugeWidth = frameWidth - ( GaugeLeft - frameLeft) - 1;
 
 	for( uint8_t SourceLine = 0; SourceLine < visibleLines; SourceLine++)

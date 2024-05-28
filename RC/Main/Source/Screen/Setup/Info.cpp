@@ -19,9 +19,9 @@ Screen_Setup_Info::Screen_Setup_Info( void)
 void Screen_Setup_Info::display( void)
 {
 	// Adjust menu entries to frame and set them up.
-	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 	
-	uint16_t ContentLeft = frameLeft + 12 * Font->getCellWidth();
+	uint16_t ContentLeft = frameLeft + 12 * Font->GetCellWidth();
 
 	uint8_t Line = 0;
 

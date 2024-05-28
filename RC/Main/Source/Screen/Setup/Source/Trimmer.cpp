@@ -38,13 +38,13 @@ void Screen_Setup_Source_Trimmer::display( void)
 	Screen_Setup_Source_Base::display();
 
 	// Adjust gauges to frame and set them up.
-	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t ContentLeft = frameLeft + 12 * Font->getCellWidth();
+	uint16_t ContentLeft = frameLeft + 12 * Font->GetCellWidth();
 	uint16_t ContentWidth = frameWidth - ( ContentLeft - frameLeft) - 1;
 
-	uint16_t ValueLeft = menuLeft + 7 * Font->getCellWidth();
-	uint16_t VolumeLeft = ValueLeft + ( SETUP_SOURCE_NAME_SIZE * Font->getCellWidth());
+	uint16_t ValueLeft = menuLeft + 7 * Font->GetCellWidth();
+	uint16_t VolumeLeft = ValueLeft + ( SETUP_SOURCE_NAME_SIZE * Font->GetCellWidth());
 
 	uint8_t Line = 4;
 
@@ -95,8 +95,8 @@ void Screen_Setup_Source_Trimmer::display( void)
 	Line += 2;
 
 	// Graph
-	VolumeLeft = menuLeft + ( 16 * Font->getCellWidth());
-	uint16_t ChartLeft = VolumeLeft + 13 * Font->getCellWidth();
+	VolumeLeft = menuLeft + ( 16 * Font->GetCellWidth());
+	uint16_t ChartLeft = VolumeLeft + 13 * Font->GetCellWidth();
 
 	uint16_t ChartTop = frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT);
 

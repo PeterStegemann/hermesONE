@@ -21,9 +21,9 @@ class Screen_Setup_System : public Screen_Setup_Base
     virtual void display( void)
     {
         // Adjust menu entries to frame and set them up.
-        const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+        const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
-    	uint16_t ContentLeft = frameLeft + 18 * Font->getCellWidth();
+    	uint16_t ContentLeft = frameLeft + 18 * Font->GetCellWidth();
     	uint16_t ContentWidth = frameWidth - ( ContentLeft - frameLeft) - 1;
 
         uint8_t Line = 0;
@@ -53,7 +53,7 @@ class Screen_Setup_System : public Screen_Setup_Base
                                      SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
                                      LCD::PO_Proportional, Text::PPM);
 
-        uint16_t SubMenuLeft = menuLeft + Font->getCellWidth();
+        uint16_t SubMenuLeft = menuLeft + Font->GetCellWidth();
 
         char ModuleName[ SETUP_PPM_NAME_SIZE];
 
@@ -63,7 +63,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 
         GLOBAL.SetupService.GetPPMName( 0, ModuleName, sizeof( ModuleName));
 
-        GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->getCellWidth()),
+        GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->GetCellWidth()),
                                    frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
                                    SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
                                    LCD::PO_Proportional, ModuleName);
@@ -74,7 +74,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 
         GLOBAL.SetupService.GetPPMName( 1, ModuleName, sizeof( ModuleName));
 
-        GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->getCellWidth()),
+        GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->GetCellWidth()),
                                    frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
                                    SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
                                    LCD::PO_Proportional, ModuleName);

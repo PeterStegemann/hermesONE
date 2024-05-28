@@ -2,4 +2,4 @@
 
 #pragma once
 
-#define GUI_STATUS_MAIN_FONT		FONT::FI_Normal
+#define GUI_STATUS_MAIN_FONT		avr::font::FI_Normal

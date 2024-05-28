@@ -12,14 +12,14 @@ class Screen_Setup_Intro
 	// Run screen.
 	void Run( void)
     {
-    	FONT::FontId UseFont = FONT::FID_Large;
+    	avr::font::FontId UseFont = avr::font::FID_Large;
 
     	GLOBAL.SetupDisplay.Clear( LCD_65K_RGB::Black);
 
-    	const FONT_Type* Font = FONT::GetFont( UseFont);
+    	const avr::font::Type* Font = avr::font::Font::Get( UseFont);
 
-    	uint8_t TextLeft = ( GLOBAL.SetupDisplay.GetWidth() - strlen_P( Text::hermesONE) * Font->getCellWidth()) / 2;
-    	uint8_t TextTop = ( GLOBAL.SetupDisplay.GetHeight() - Font->getCellHeight()) / 2;
+    	uint8_t TextLeft = ( GLOBAL.SetupDisplay.GetWidth() - strlen_P( Text::hermesONE) * Font->GetCellWidth()) / 2;
+    	uint8_t TextTop = ( GLOBAL.SetupDisplay.GetHeight() - Font->GetCellHeight()) / 2;
 
     	// Flash in screen.
 	    GLOBAL.SetupDisplay.Clear( LCD_65K_RGB::White);

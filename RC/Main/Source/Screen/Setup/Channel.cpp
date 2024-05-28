@@ -45,13 +45,13 @@ Screen_Setup_Channel::Screen_Setup_Channel( uint8_t ChannelId)
 void Screen_Setup_Channel::display( void)
 {	
 	// Adjust gauges to frame and set them up.
-	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t ContentLeft = frameLeft + 12 * Font->getCellWidth();
+	uint16_t ContentLeft = frameLeft + 12 * Font->GetCellWidth();
 	uint16_t ContentWidth = frameWidth - ( ContentLeft - frameLeft) - 1;
 
-	uint16_t ValueLeft = menuLeft + 7 * Font->getCellWidth();
-	uint16_t VolumeLeft = ValueLeft + ( SETUP_SOURCE_NAME_SIZE * Font->getCellWidth());
+	uint16_t ValueLeft = menuLeft + 7 * Font->GetCellWidth();
+	uint16_t VolumeLeft = ValueLeft + ( SETUP_SOURCE_NAME_SIZE * Font->GetCellWidth());
 
 	uint8_t Line = 0;
 
@@ -115,9 +115,9 @@ void Screen_Setup_Channel::display( void)
 	Line += 2;
 
 	// Graph
-	VolumeLeft = menuLeft + ( 16 * Font->getCellWidth());
+	VolumeLeft = menuLeft + ( 16 * Font->GetCellWidth());
 
-	uint16_t ChartLeft = VolumeLeft + 11 * Font->getCellWidth();
+	uint16_t ChartLeft = VolumeLeft + 11 * Font->GetCellWidth();
 	uint16_t ChartTop = frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT);
 
 	channelGraph.SetDimensions( ChartLeft, ChartTop, UTILITY_Minimum( frameHeight - ChartTop, frameWidth - ChartLeft));
@@ -168,7 +168,7 @@ void Screen_Setup_Channel::display( void)
 
 	// Result
 	uint16_t CurrentGaugeLeft = markerLeft;
-	uint16_t CurrentGaugeWidth = ChartLeft - markerLeft - Font->getCellWidth();
+	uint16_t CurrentGaugeWidth = ChartLeft - markerLeft - Font->GetCellWidth();
 
 	currentGauge.SetDimensions( CurrentGaugeLeft, frameTop + frameHeight - SCREEN_SETUP_BASE_LINE_HEIGHT + 1,
 							    CurrentGaugeWidth, SCREEN_SETUP_BASE_GAUGE_THICKNESS);	

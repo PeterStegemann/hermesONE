@@ -2808,7 +2808,7 @@ class Serial_DesktopConnection
             {
                 connection.SendByte( DataToSend);
 
-                GLOBAL.Lcd.PrintFormat( 0, 10, FONT::FI_Mini, LCD::White, LCD::Black,
+                GLOBAL.Lcd.PrintFormat( 0, 10, avr::font::FI_Mini, LCD::White, LCD::Black,
                 LCD::PO_Proportional, "%c", DataToSend);
 
                 DataToSend++;
@@ -2824,7 +2824,7 @@ class Serial_DesktopConnection
             {
                 char DataReceived = connection.ReceiveByte();
 
-                GLOBAL.Lcd.PrintFormat( 0, 20, FONT::FI_Mini, LCD::White, LCD::Black,
+                GLOBAL.Lcd.PrintFormat( 0, 20, avr::font::FI_Mini, LCD::White, LCD::Black,
                                       LCD::PO_Proportional, "%c", DataReceived);
             }
 

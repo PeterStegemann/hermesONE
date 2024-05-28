@@ -57,9 +57,9 @@ Screen_Setup_Model::Screen_Setup_Model( Signal_Source_Source::Level SourceLevel)
 void Screen_Setup_Model::display( void)
 {
 	// Adjust menu entries to frame and set them up.
-	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t ContentLeft = frameLeft + 10 * Font->getCellWidth();
+	uint16_t ContentLeft = frameLeft + 10 * Font->GetCellWidth();
 
 	uint8_t Line = 0;
 

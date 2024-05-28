@@ -202,14 +202,14 @@ int16_t Signal_Source_Map::CalculateValue( Signal_Processor* SignalProcessor)
 
 	int32_t Full = (( int32_t) Where) * Rise;
 
-//	GLOBAL.Lcd.PrintFormat_P( 0, 40, ( FONT::FontId) 1, LCD::Red, LCD::Black,
+//	GLOBAL.Lcd.PrintFormat_P( 0, 40, ( avr::font::FontId) 1, LCD::Red, LCD::Black,
 //						  LCD::PO_Fixed, "%u %u %ld       ", Width, Where, Full);
 
 	Full /= Width;
 
 	int16_t Result = ( int32_t) Lower + Full;
 
-//	GLOBAL.Lcd.PrintFormat_P( 0, 50, ( FONT::FontId) 1, LCD::Red, LCD::Black,
+//	GLOBAL.Lcd.PrintFormat_P( 0, 50, ( avr::font::FontId) 1, LCD::Red, LCD::Black,
 //						  LCD::PO_Fixed, "%ld %ld %d       ", Rise, Full, Result);
 
 	return( Result);

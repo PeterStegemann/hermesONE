@@ -95,16 +95,16 @@ void Screen_Setup_Status::display( void)
 
 	uint8_t Line = 3;
 
-	const FONT_Type* Font = FONT::GetFont( FONT::FI_Large);
+	const avr::font::Type* Font = avr::font::Font::Get( avr::font::FI_Large);
 	uint8_t TextLeft;
 
 	char ModelName[ SETUP_MODEL_NAME_SIZE + 1];
 	GLOBAL.SetupService.GetModelName( GLOBAL.SetupService.GetSelectedModelId(), ModelName, sizeof( ModelName));
 
-	TextLeft = frameLeft + (( frameWidth - strlen( ModelName) * Font->getCellWidth()) / 2);
+	TextLeft = frameLeft + (( frameWidth - strlen( ModelName) * Font->GetCellWidth()) / 2);
 	GLOBAL.SetupDisplay.Print
 	(
-        TextLeft, frameTop + ( Line++ * Font->getCellHeight()), FONT::FI_Large,
+        TextLeft, frameTop + ( Line++ * Font->GetCellHeight()), avr::font::FI_Large,
         LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModelName
     );
 
@@ -146,17 +146,17 @@ void Screen_Setup_Status::display( void)
 
 	Setup_Utility::GetRFModeName( RFMode, RFModeText, sizeof( RFModeText));
 
-	TextLeft = frameLeft + (( frameWidth - strlen( RFModeText) * Font->getCellWidth()) / 2);
+	TextLeft = frameLeft + (( frameWidth - strlen( RFModeText) * Font->GetCellWidth()) / 2);
 	GLOBAL.SetupDisplay.Print
 	(
-	    TextLeft, frameTop + ( Line++ * Font->getCellHeight()), FONT::FI_Large,
+	    TextLeft, frameTop + ( Line++ * Font->GetCellHeight()), avr::font::FI_Large,
         RFModeColor, LCD_65K_RGB::C_Black, LCD::PO_Proportional, RFModeText
     );
 
 	Line++;
 
 	batteryLabel.SetDimensions( InnerLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT));
-	batteryLabel.SetFont( FONT::FI_Large);
+	batteryLabel.SetFont( avr::font::FI_Large);
 	batteryGauge.SetDimensions
 	(
 	    InnerLeft + 42, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT) + 1,
@@ -165,8 +165,8 @@ void Screen_Setup_Status::display( void)
 
 	Line++;
 
-	TextLeft = frameLeft + (( frameWidth - ( 0 * Font->getCellWidth())) / 2);
-	uint16_t NameLeft = InnerLeft + ( 1 * Font->getCellWidth());
+	TextLeft = frameLeft + (( frameWidth - ( 0 * Font->GetCellWidth())) / 2);
+	uint16_t NameLeft = InnerLeft + ( 1 * Font->GetCellWidth());
 
 	bool SystemTimeShown = false;
 
@@ -182,7 +182,7 @@ void Screen_Setup_Status::display( void)
 			{
 				GLOBAL.SetupDisplay.Print_P
 				(
-				    NameLeft, TextTop, FONT::FI_Large, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+				    NameLeft, TextTop, avr::font::FI_Large, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
                     LCD::PO_Proportional, Text::SystemTime
                 );
 
@@ -197,18 +197,18 @@ void Screen_Setup_Status::display( void)
 
 			GLOBAL.SetupDisplay.Print
 			(
-			    NameLeft, TextTop, FONT::FI_Large, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+			    NameLeft, TextTop, avr::font::FI_Large, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
                 LCD::PO_Proportional, TimerName
             );
 		}
 
 		timerLabel[ TimerId].SetDimensions( TextLeft, TextTop);
-		timerLabel[ TimerId].SetFont( FONT::FI_Large);
+		timerLabel[ TimerId].SetFont( avr::font::FI_Large);
 	}
 
 	GLOBAL.SetupDisplay.PrintFormat_P
 	(
-        frameLeft + 45, BottomGaugeTop - Font->getCellHeight(), FONT::FI_Large,
+        frameLeft + 45, BottomGaugeTop - Font->GetCellHeight(), avr::font::FI_Large,
         LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::StatusUsageFormat,
         GLOBAL.SetupService.CountModels( Setup_Service::CMO_Used), SETUP_MODELS,
         GLOBAL.SetupService.CountSources( Setup_Service::CSO_Used), SETUP_SOURCES

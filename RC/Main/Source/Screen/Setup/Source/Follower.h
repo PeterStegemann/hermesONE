@@ -41,19 +41,19 @@ class Screen_Setup_Source_Follower : public Screen_Setup_Source_Base
     	Screen_Setup_Source_Base::display();
 
     	// Adjust gauges to frame and set them up.
-	    const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	    const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
-    	uint16_t ValueLeft = menuLeft + 12 * Font->getCellWidth();
-        uint16_t VolumeLeft = ValueLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->getCellWidth();
+    	uint16_t ValueLeft = menuLeft + 12 * Font->GetCellWidth();
+        uint16_t VolumeLeft = ValueLeft + ( SETUP_SOURCE_NAME_SIZE + 1) * Font->GetCellWidth();
         uint16_t GaugeWidth = frameWidth - ( ValueLeft - frameLeft) - 1;
 
-        uint16_t StepLeft = ValueLeft + Font->getCellWidth();
+        uint16_t StepLeft = ValueLeft + Font->GetCellWidth();
         uint16_t StepGaugeWidth = frameWidth - ( StepLeft - frameLeft) - 1;
 
         uint16_t LowLeft = menuLeft;
-        uint16_t LowValueLeft = LowLeft + 12 * Font->getCellWidth();
-        uint16_t HighLeft = LowValueLeft + ( 10 + 1) * Font->getCellWidth();
-        uint16_t HighValueLeft = HighLeft + 6 * Font->getCellWidth();
+        uint16_t LowValueLeft = LowLeft + 12 * Font->GetCellWidth();
+        uint16_t HighLeft = LowValueLeft + ( 10 + 1) * Font->GetCellWidth();
+        uint16_t HighValueLeft = HighLeft + 6 * Font->GetCellWidth();
 
         uint8_t Line = 4;
 

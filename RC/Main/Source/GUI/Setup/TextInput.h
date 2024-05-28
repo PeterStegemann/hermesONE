@@ -16,8 +16,8 @@
 static const flash_char GUI_Setup_NumericCharacterSet[] PROGMEM =
 {
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+',
-	FONT::C_SpecialExit, FONT::C_SpecialBackspace, FONT::C_SpecialDelete, FONT::C_SpecialInsert,
-	FONT::C_SpecialLeft, FONT::C_SpecialRight
+	avr::font::C_SpecialExit, avr::font::C_SpecialBackspace, avr::font::C_SpecialDelete, avr::font::C_SpecialInsert,
+	avr::font::C_SpecialLeft, avr::font::C_SpecialRight
 };
 
 static const flash_char GUI_Setup_AlphaNumericCharacterSet[] PROGMEM =
@@ -25,8 +25,8 @@ static const flash_char GUI_Setup_AlphaNumericCharacterSet[] PROGMEM =
 	' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
 	's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-',
 	'+', '_', '/', '&', '%', '?', '=',
-	FONT::C_SpecialExit, FONT::C_SpecialBackspace, FONT::C_SpecialDelete, FONT::C_SpecialInsert,
-	FONT::C_SpecialLeft, FONT::C_SpecialRight
+	avr::font::C_SpecialExit, avr::font::C_SpecialBackspace, avr::font::C_SpecialDelete, avr::font::C_SpecialInsert,
+	avr::font::C_SpecialLeft, avr::font::C_SpecialRight
 };
 
 static const flash_char GUI_Setup_FullCharacterSet[] PROGMEM =
@@ -36,8 +36,8 @@ static const flash_char GUI_Setup_FullCharacterSet[] PROGMEM =
 	'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
 	'Y', 'Z', '[', '\\', ']', '^', '_', '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
 	'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~',
-	FONT::C_SpecialExit, FONT::C_SpecialBackspace, FONT::C_SpecialDelete, FONT::C_SpecialInsert,
-	FONT::C_SpecialLeft, FONT::C_SpecialRight
+	avr::font::C_SpecialExit, avr::font::C_SpecialBackspace, avr::font::C_SpecialDelete, avr::font::C_SpecialInsert,
+	avr::font::C_SpecialLeft, avr::font::C_SpecialRight
 };
 
 class GUI_Setup_TextInput
@@ -55,7 +55,7 @@ class GUI_Setup_TextInput
 
     Options options;
 
-    FONT::FontId fontId;
+    avr::font::FontId fontId;
 
     // The current version of the text.
     char text[ GUI_SETUP_TEXTINPUT_MAXIMUM_SIZE + 1];
@@ -68,7 +68,7 @@ class GUI_Setup_TextInput
 
     bool isSpecial( char Character)
     {
-        return(( Character >= FONT::C_FirstSpecial) && ( Character <= FONT::C_LastSpecial));
+        return(( Character >= avr::font::C_FirstSpecial) && ( Character <= avr::font::C_LastSpecial));
     }
 
     void skipCharacter( int16_t Range)
@@ -123,9 +123,9 @@ class GUI_Setup_TextInput
 
     void clearCursor( void)
     {
-        const FONT_Type* Font = FONT::GetFont( fontId);
+        const avr::font::Type* Font = avr::font::Font::Get( fontId);
 
-        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->getCellWidth()), top, fontId,
+        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->GetCellWidth()), top, fontId,
             ForegroundColor, BackgroundColor, LCD_65K_RGB::PO_Fixed, Text::CharacterFormat, text[ cursorPosition]);
     }
 
@@ -147,9 +147,9 @@ class GUI_Setup_TextInput
             UseForegroundColor = BackgroundColor;
         }
 
-        const FONT_Type* Font = FONT::GetFont( fontId);
+        const avr::font::Type* Font = avr::font::Font::Get( fontId);
 
-        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->getCellWidth()), top, fontId,
+        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->GetCellWidth()), top, fontId,
             UseForegroundColor, UseBackgroundColor, LCD_65K_RGB::PO_Fixed, Text::CharacterFormat, currentCharacter);
     }
 
@@ -257,7 +257,7 @@ class GUI_Setup_TextInput
                 // If this is a special character, act accordingly.
                 switch( currentCharacter)
                 {
-                    case FONT::C_SpecialExit :
+                    case avr::font::C_SpecialExit :
                     {
                         clearCursor();
 
@@ -265,7 +265,7 @@ class GUI_Setup_TextInput
                     }
                     break;
 
-                    case FONT::C_SpecialBackspace :
+                    case avr::font::C_SpecialBackspace :
                     {
                         if( cursorPosition > 0)
                         {
@@ -276,7 +276,7 @@ class GUI_Setup_TextInput
                     }
                     break;
 
-                    case FONT::C_SpecialDelete :
+                    case avr::font::C_SpecialDelete :
                     {
                         if( cursorPosition < size)
                         {
@@ -285,7 +285,7 @@ class GUI_Setup_TextInput
                     }
                     break;
 
-                    case FONT::C_SpecialInsert :
+                    case avr::font::C_SpecialInsert :
                     {
                         if(( cursorPosition + 1) < size)
                         {
@@ -296,7 +296,7 @@ class GUI_Setup_TextInput
                     }
                     break;
 
-                    case FONT::C_SpecialLeft :
+                    case avr::font::C_SpecialLeft :
                     {
                         // Skip left.
                         // Don't go beyond the string beginning.
@@ -307,7 +307,7 @@ class GUI_Setup_TextInput
                     }
                     break;
 
-                    case FONT::C_SpecialRight :
+                    case avr::font::C_SpecialRight :
                     {
                         // Skip next.
                         // Don't go beyond the string size.
@@ -417,8 +417,8 @@ class GUI_Setup_TextInput
 
     void Clear( void)
     {
-        const FONT_Type* Font = FONT::GetFont( fontId);
+        const avr::font::Type* Font = avr::font::Font::Get( fontId);
 
-        GLOBAL.SetupDisplay.FillRect( left, top, size * Font->getCellWidth(), Font->getCellHeight(), BackgroundColor);
+        GLOBAL.SetupDisplay.FillRect( left, top, size * Font->GetCellWidth(), Font->GetCellHeight(), BackgroundColor);
     }
 };

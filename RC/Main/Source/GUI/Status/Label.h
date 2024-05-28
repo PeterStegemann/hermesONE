@@ -14,7 +14,7 @@ class GUI_Status_Label
 
     uint16_t left, top;
 
-    FONT::FontId fontId;
+    avr::font::FontId fontId;
 
   protected:
     // Marks whether we have remembered values from last draw.
@@ -45,7 +45,7 @@ class GUI_Status_Label
     	top = Top;
     }
 
-    void SetFont( FONT::FontId UseFontId)
+    void SetFont( avr::font::FontId UseFontId)
     {
     	fontId = UseFontId;
     }
@@ -113,15 +113,15 @@ class GUI_Status_Label
             return( 0);
         }
 
-        const FONT_Type* Font = FONT::GetFont( fontId);
+        const avr::font::Type* Font = avr::font::Font::Get( fontId);
 
         if( text != NULL)
         {
-            return( strlen( text) * Font->getCellWidth());
+            return( strlen( text) * Font->GetCellWidth());
         }
         else
         {
-            return( strlen_P( text_P) * Font->getCellWidth());
+            return( strlen_P( text_P) * Font->GetCellWidth());
         }
     }
 

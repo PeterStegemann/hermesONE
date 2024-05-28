@@ -40,7 +40,7 @@ class GUI_Setup_Gauge
 
     LCD_65K_RGB::Color foregroundColor, backgroundColor, detailColor;
 
-    FONT::FontId fontId;
+    avr::font::FontId fontId;
 
     // Marks whether we have remembered values from last draw.
     bool remembered;
@@ -57,7 +57,7 @@ class GUI_Setup_Gauge
     // Calculate inner dimensions.
     void calculateInnerDimensions( void)
     {
-        const FONT_Type* Font = FONT::GetFont( fontId);
+        const avr::font::Type* Font = avr::font::Font::Get( fontId);
 
         int32_t Width = width;
 
@@ -67,17 +67,17 @@ class GUI_Setup_Gauge
         if( options & O_Percentage)
         {
             // Check if the text fits in.
-    //		if( height > Font->getCellHeight())
+    //		if( height > Font->GetCellHeight())
             {
                 uint16_t TextWidth;
 
                 if( options & O_DualPercentage)
                 {
-                    TextWidth = 5 * Font->getCellWidth();
+                    TextWidth = 5 * Font->GetCellWidth();
                 }
                 else
                 {
-                    TextWidth = 4 * Font->getCellWidth();
+                    TextWidth = 4 * Font->GetCellWidth();
                 }
 
                 if( Width > TextWidth)
@@ -102,9 +102,9 @@ class GUI_Setup_Gauge
         if( options & O_Value)
         {
             // Check if the text fits in.
-    //		if( height > Font->getCellHeight())
+    //		if( height > Font->GetCellHeight())
             {
-                uint16_t TextWidth = 6 * Font->getCellWidth();
+                uint16_t TextWidth = 6 * Font->GetCellWidth();
 
                 if( Width > TextWidth)
                 {

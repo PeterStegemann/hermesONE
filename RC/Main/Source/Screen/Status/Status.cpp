@@ -30,7 +30,7 @@ void Screen_Status_Status::display( void)
 	GLOBAL.SetupService.GetModelName( SelectedModelId, modelName, sizeof( modelName));
 
 	modelNameLabel.SetDimensions( 0, 0);
-	modelNameLabel.SetFont( FONT::FI_Large);
+	modelNameLabel.SetFont( avr::font::FI_Large);
 	modelNameLabel.SetText( modelName);
 	modelNameLabel.Display();
 
@@ -38,16 +38,16 @@ void Screen_Status_Status::display( void)
 	GLOBAL.SetupService.GetTypeName( SelectedTypeId, typeName, sizeof( typeName));
 
 	typeNameLabel.SetDimensions( 7, 2);
-	typeNameLabel.SetFont( FONT::FI_Mini);
+	typeNameLabel.SetFont( avr::font::FI_Mini);
 	typeNameLabel.SetText( typeName);
 	typeNameLabel.Display();
 
 	batteryLabel.SetDimensions( statusDisplay->GetWidth() - 25, 2);
-	batteryLabel.SetFont( FONT::FI_Mini);
+	batteryLabel.SetFont( avr::font::FI_Mini);
 	batteryLabel.Clear();
 
 	timeLabel.SetDimensions( 30, 5);
-	timeLabel.SetFont( FONT::FI_Large);
+	timeLabel.SetFont( avr::font::FI_Large);
 
 	batteryGauge.Display( GLOBAL.StatusBattery.GetMinimumVoltage(), GLOBAL.StatusBattery.GetMaximumVoltage(), 0);
 

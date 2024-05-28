@@ -21,9 +21,9 @@ void Screen_Setup_Source_Store::display( void)
 	Screen_Setup_Source_Base::display();
 
 	// Adjust gauges to frame and set them up.
-	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
-	uint16_t ValueLeft = menuLeft + 7 * Font->getCellWidth();
+	uint16_t ValueLeft = menuLeft + 7 * Font->GetCellWidth();
 
 	uint8_t Line = 3;
 

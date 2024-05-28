@@ -22,10 +22,10 @@ Screen_Setup_Base::Screen_Setup_Base( uint32_t MenuPattern, const flash_char* Ti
 				 , frameWidth( GLOBAL.SetupDisplay.GetWidth())
 				 , frameHeight( GLOBAL.SetupDisplay.GetHeight())
 {
-	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_MAIN_FONT);
+	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
 	menuMarker.SetOptions( GUI_Setup_Marker::O_Block);
-	menuMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH, Font->getCellHeight());
+	menuMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH, Font->GetCellHeight());
 	menuMarker.ForegroundColor = LCD_65K_RGB::C_WarmYellow;
 }
 
@@ -62,38 +62,38 @@ void Screen_Setup_Base::update( void)
 
 		GLOBAL.SetupDisplay.PrintFormat
 		(
-		    Left, Top, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+		    Left, Top, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
             "Stack: %04x", RAMEND - SP
         );
 		GLOBAL.SetupDisplay.PrintFormat
 		(
-		    Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+		    Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
             "Free:  %04x", SP - __data_start
         );
 /*
 		GLOBAL.SetupDisplay.PrintFormat
 		(
-		    Left, Top, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+		    Left, Top, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
 		    "data:   %04x %04x", __data_start, __data_end
         );
 		GLOBAL.SetupDisplay.PrintFormat
 		(
-    		Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+    		Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
             "bss:    %04x %04x", __bss_start, __bss_end
         );
 		GLOBAL.SetupDisplay.PrintFormat
 		(
-    		Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+    		Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
             "noinit: %04x %04x", __noinit_start, __noinit_end
         );
 		GLOBAL.SetupDisplay.PrintFormat
 		(
-    		Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+    		Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
             "heap:   %04x %04x", __heap_start, __heap_end
         );
 		GLOBAL.SetupDisplay.PrintFormat
 		(
-		    Left, Top += 10, FONT::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
+		    Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
             "RAMEND: %04x SP: %04x size: %04x", RAMEND, SP, RAMEND - SP
         );
 */
@@ -101,7 +101,7 @@ void Screen_Setup_Base::update( void)
 		//  	uint8_t Diff = Sequence - lastSequence;
         //		uint8_t Frames = 450 / Diff;
 
-        GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 1, FONT::FI_Mini,
+        GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 1, avr::font::FI_Mini,
 										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
 										 "%u %d %d.%01d  ", Sequence,
 										 GLOBAL.SignalService.GetPPM( 0)->GetWaited(), Frames / 10,
@@ -123,7 +123,7 @@ void Screen_Setup_Base::drawFrame( void)
 		return;
 	}
 
-	const FONT_Type* Font = FONT::GetFont( SCREEN_SETUP_BASE_TITLE_FONT);
+	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_TITLE_FONT);
 
 //	GLOBAL.SetupDisplay.DrawRect( 0, 0, GLOBAL.SetupDisplay.GetWidth(), GLOBAL.SetupDisplay.GetHeight(),
 //						   LCD_65K_RGB::C_White, LCD::RO_Rounded);
@@ -131,10 +131,10 @@ void Screen_Setup_Base::drawFrame( void)
 	uint16_t LabelLeft = GLOBAL.SetupDisplay.GetWidth() / 3;
 	uint16_t LabelWidth = LabelLeft;
 
-	GLOBAL.SetupDisplay.FillRect( LabelLeft, 0, LabelWidth, Font->getCellHeight() + 1, LCD_65K_RGB::C_White);
-	GLOBAL.SetupDisplay.DrawHorizontalLine( LabelLeft + 1, Font->getCellHeight() + 1, LabelWidth - 2, LCD_65K_RGB::C_White);
+	GLOBAL.SetupDisplay.FillRect( LabelLeft, 0, LabelWidth, Font->GetCellHeight() + 1, LCD_65K_RGB::C_White);
+	GLOBAL.SetupDisplay.DrawHorizontalLine( LabelLeft + 1, Font->GetCellHeight() + 1, LabelWidth - 2, LCD_65K_RGB::C_White);
 
-	uint16_t TitleWidth = strlen_P( title) * Font->getCellWidth();
+	uint16_t TitleWidth = strlen_P( title) * Font->GetCellWidth();
 	uint16_t TextLeft = ( GLOBAL.SetupDisplay.GetWidth() - TitleWidth) / 2;
 
 	TitleWidth = GLOBAL.SetupDisplay.Print_P
@@ -143,15 +143,15 @@ void Screen_Setup_Base::drawFrame( void)
         LCD::PO_Proportional, title
     );
 
-//	GLOBAL.SetupDisplay.DrawVerticalLine( TextLeft - 1, 1, Font->getCellHeight(), LCD_65K_RGB::C_White);
+//	GLOBAL.SetupDisplay.DrawVerticalLine( TextLeft - 1, 1, Font->GetCellHeight(), LCD_65K_RGB::C_White);
 /*
-	GLOBAL.SetupDisplay.DrawHorizontalLine( TextLeft + 1, 1 + Font->getCellHeight() + 1, TitleWidth - 2,
+	GLOBAL.SetupDisplay.DrawHorizontalLine( TextLeft + 1, 1 + Font->GetCellHeight() + 1, TitleWidth - 2,
 									    LCD_65K_RGB::C_Red);
-	GLOBAL.SetupDisplay.DrawVerticalLine( TextLeft + TitleWidth + 1, 1, Font->getCellHeight() - 1,
+	GLOBAL.SetupDisplay.DrawVerticalLine( TextLeft + TitleWidth + 1, 1, Font->GetCellHeight() - 1,
 								   LCD_65K_RGB::C_Red);
 */
 	frameLeft = 0;
-//	frameTop = Font->getCellHeight() + 2;
+//	frameTop = Font->GetCellHeight() + 2;
 	frameTop = 1;
 	frameWidth = GLOBAL.SetupDisplay.GetWidth() - frameLeft;
 	frameHeight = GLOBAL.SetupDisplay.GetHeight() - frameTop;
