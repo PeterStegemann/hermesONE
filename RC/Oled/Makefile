@@ -97,7 +97,6 @@ SRC =
 
 # List C++ source files here. (C dependencies are automatically generated.)
 CPPSRC = Source/Main.cpp \
-		 Source/Serial/Serial_GraphicConnection.cpp \
 		 AVR/Source/Utility.cpp \
 		 AVR/Source/Font/Font.cpp \
 		 AVR/Source/Font/Large.cpp \

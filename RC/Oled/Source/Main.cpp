@@ -56,14 +56,14 @@ void MAIN::Run( void)
 	sei();
 
 	// Set up main lcd.
-	Lcd.Initialize();
+	lcd.Initialize();
 
 	STATUS_SetBit( STATUS_GREEN);
 
-	Lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape));
+	lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape));
 
-	// Set up serial graphic connection.
-	SerialGraphicConnection.Initialize( &Lcd);
+	// Set up graphic connection.
+	graphicConnection.Initialize( &lcd);
 
 	// Wait a moment to get all services going.
 	avr::Utility::Pause( 5);
@@ -75,9 +75,9 @@ void MAIN::Run( void)
 	doIntro();
 
 	// Listen to the serial master.
-	SerialGraphicConnection.DoSerialConnection();
+	graphicConnection.DoSerialConnection();
 /*
-	Main.Lcd.Print( 50, 50, FONT::FID_Medium, LCD_65K_RGB::White, LCD_65K_RGB::Black,
+	lcd.Print( 50, 50, FONT::FID_Medium, LCD_65K_RGB::White, LCD_65K_RGB::Black,
 				    LCD::PO_Fixed, "Test");
 
 	char* Byte = "A"; // FONT::C_FirstTotal;
@@ -94,7 +94,7 @@ void MAIN::Run( void)
 		uint16_t X = 50; //( Count % 10) * 6;
 		uint16_t Y = 50; //(( Count / 10) % 8) * 5;
 
-		Main.Lcd.Print( X, Y, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
+		lcd.Print( X, Y, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
 						LCD::PO_Fixed, Byte);
 
 		Count++;
@@ -116,66 +116,66 @@ void MAIN::Run( void)
 	while( true)
 	{
 		//
-		Main.Lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape));
+		lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape));
 
-		Main.Lcd.FillRect( 20, 10, 10, 10, LCD_65K_RGB::White);
+		lcd.FillRect( 20, 10, 10, 10, LCD_65K_RGB::White);
 
-		Main.Lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
+		lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
 					    LCD::PO_Fixed, "Landscape");
 
-//		Main.Lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::Black, LCD_65K_RGB::Black,
+//		lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::Black, LCD_65K_RGB::Black,
 //					    LCD::PO_Proportional, "Landscape");
 		//
-		Main.Lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape |
+		lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape |
 													 LCD::O_HorizontalFlip));
 
-		Main.Lcd.FillRect( 20, 10, 10, 10, LCD_65K_RGB::Red);
+		lcd.FillRect( 20, 10, 10, 10, LCD_65K_RGB::Red);
 
-		Main.Lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
+		lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
 					    LCD::PO_Fixed, "Landscape hor flip");
 
-//		Main.Lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::Black, LCD_65K_RGB::Black,
+//		lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::Black, LCD_65K_RGB::Black,
 //					   LCD::PO_Proportional, "Landscape hor flip");
 
 		//
-		Main.Lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape |
+		lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape |
 													 LCD::O_VerticalFlip));
 
-		Main.Lcd.FillRect( 20, 10, 10, 10, LCD_65K_RGB::Green);
+		lcd.FillRect( 20, 10, 10, 10, LCD_65K_RGB::Green);
 
-		Main.Lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
+		lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
 						LCD::PO_Fixed, "Landscape vert flip");
 
-//		Main.Lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::Black, LCD_65K_RGB::Black,
+//		lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::Black, LCD_65K_RGB::Black,
 //						LCD::PO_Proportional, "Landscape vert flip");
 
 		//
-		Main.Lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape |
+		lcd.SetOrientation(( LCD::Orientation)( LCD::O_Landscape |
 													 LCD::O_VerticalFlip | LCD::O_HorizontalFlip));
 
-		Main.Lcd.FillRect( 20, 10, 10, 10, LCD_65K_RGB::Blue);
+		lcd.FillRect( 20, 10, 10, 10, LCD_65K_RGB::Blue);
 
-		Main.Lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
+		lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::White, LCD_65K_RGB::Black,
 					    LCD::PO_Fixed, "Landscape vert hor flip");
 
-//		Main.Lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::Black, LCD_65K_RGB::Black,
+//		lcd.Print( 50, 50, FONT::FID_Large, LCD_65K_RGB::Black, LCD_65K_RGB::Black,
 //					   LCD::PO_Proportional, "Landscape vert hor flip");
 
-		Main.Lcd.Clear( LCD_65K_RGB::Black);
+		lcd.Clear( LCD_65K_RGB::Black);
 	}
 */
 /*
 		for( uint8_t Grey = 0; Grey <= 0x1f; Grey++)
 		{
-			Main.Lcd.Clear( LCD_65K_RGB_GREY( Grey));
+			lcd.Clear( LCD_65K_RGB_GREY( Grey));
 		}
 */
 /*
-		for( uint16_t HeightCount = 0; HeightCount <= Main.Lcd.GetHeight(); HeightCount++)
+		for( uint16_t HeightCount = 0; HeightCount <= lcd.GetHeight(); HeightCount++)
 		{
-			for( uint16_t WidthCount = 0; WidthCount <= Main.Lcd.GetWidth(); WidthCount++)
+			for( uint16_t WidthCount = 0; WidthCount <= lcd.GetWidth(); WidthCount++)
 			{
-				Main.Lcd.DrawPixel( WidthCount, HeightCount,
+				lcd.DrawPixel( WidthCount, HeightCount,
 								    LCD_65K_RGB_COLOR( WidthCount / 9.97,
 													   HeightCount / 3.74,
 													   ( 239 - HeightCount) / 7.48));
@@ -190,13 +190,13 @@ void MAIN::doIntro( void)
 {
     for( uint8_t ColorPart = 0; ColorPart <= LCD_65K_RGB_MAXIMUM_GREY; ColorPart++)
     {
-//    	Main.Lcd.PrintFormat( 0, 0, FONT::FI_Medium, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
+//    	lcd.PrintFormat( 0, 0, FONT::FI_Medium, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
 //	    			    LCD::PO_Proportional, "%d", ColorPart);
 
         LCD_65K_RGB::Color CurrentColor = ( LCD_65K_RGB::Color) LCD_65K_RGB_GREY( ColorPart);
 
-    	Main.Lcd.Print( 120, 100, FONT::FI_Large, CurrentColor, LCD_65K_RGB::C_Black,
-	    			    LCD::PO_Proportional, "hermesONE");
+    	lcd.Print( 120, 100, avr::font::FI_Large, CurrentColor, LCD_65K_RGB::C_Black,
+    	           LCD::PO_Proportional, "hermesONE");
 
         // 100 fps.
 //        avr::Utility::Pause( 1000 / 100);
@@ -219,41 +219,41 @@ void MAIN::doFly( void)
 
 	while( true)
 	{
-		if(( X == (( int16_t) Main.Lcd.GetWidth() - 2)) || ( X == 0))
+		if(( X == (( int16_t) lcd.GetWidth() - 2)) || ( X == 0))
 		{
 			XDir *= -1;
 		}
 
-		if(( Y == (( int16_t) Main.Lcd.GetHeight() - 1)) || ( Y == 0))
+		if(( Y == (( int16_t) lcd.GetHeight() - 1)) || ( Y == 0))
 		{
 			YDir *= -1;
 		}
 
-		if(( X2 == (( int16_t) Main.Lcd.GetWidth() - 1)) || ( X2 == 0))
+		if(( X2 == (( int16_t) lcd.GetWidth() - 1)) || ( X2 == 0))
 		{
 			X2Dir *= -1;
 		}
 			
-		if(( Y2 == (( int16_t) Main.Lcd.GetHeight() - 2)) || ( Y2 == 0))
+		if(( Y2 == (( int16_t) lcd.GetHeight() - 2)) || ( Y2 == 0))
 		{
 			Y2Dir *= -1;
 		}
 
-		//		Main.Lcd.FillRect( X, Y, -10, 1, LCD_65K_RGB::Black, LCD::RO_None);
-		//		Main.Lcd.DrawLine( X, Y, X - 10, Y, LCD_65K_RGB::Black);
+		//		lcd.FillRect( X, Y, -10, 1, LCD_65K_RGB::Black, LCD::RO_None);
+		//		lcd.DrawLine( X, Y, X - 10, Y, LCD_65K_RGB::Black);
 
-		//		Main.Lcd.DrawLine( X, Y, X2, Y2, LCD_65K_RGB::Black);
+		//		lcd.DrawLine( X, Y, X2, Y2, LCD_65K_RGB::Black);
 
 		X += XDir;
 		Y += YDir;
 		X2 += X2Dir;
 		Y2 += Y2Dir;
 
-		//		Main.Lcd.FillRect( X, Y, -10, 1, LCD_65K_RGB::Yellow, LCD::RO_None);
-		//		Main.Lcd.DrawLine( X, Y, X - 10, Y, LCD_65K_RGB::Yellow);
+		//		lcd.FillRect( X, Y, -10, 1, LCD_65K_RGB::Yellow, LCD::RO_None);
+		//		lcd.DrawLine( X, Y, X - 10, Y, LCD_65K_RGB::Yellow);
 
 		CurrentColor = LCD_65K_RGB_COLOR( X, Y, X2); //  X | Y << 6 | X2 << 11; 
-		Main.Lcd.DrawLine( X, Y, X2, Y2, ( LCD_65K_RGB::Color) CurrentColor);
+		Main.lcd.DrawLine( X, Y, X2, Y2, ( LCD_65K_RGB::Color) CurrentColor);
 
 		//		CurrentColor++;
 	}
@@ -307,7 +307,7 @@ void MAIN::doFractal( void)
 				CurrentIteration++;
 			}
 			
-			Lcd.DrawPixel( X, Y, LCD_65K_RGB_COLOR( CurrentIteration & 7,
+			lcd.DrawPixel( X, Y, LCD_65K_RGB_COLOR( CurrentIteration & 7,
 													CurrentIteration & 192,
 													CurrentIteration & 63));
 
