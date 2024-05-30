@@ -49,7 +49,12 @@ void Screen_Status_Status::display( void)
 	timeLabel.SetDimensions( 30, 5);
 	timeLabel.SetFont( avr::font::FI_Large);
 
-	batteryGauge.Display( GLOBAL.StatusBattery.GetMinimumVoltage(), GLOBAL.StatusBattery.GetMaximumVoltage(), 0);
+	batteryGauge.Display
+	(
+	    GLOBAL.StatusBattery.GetBatterySetup()->MinimumVoltage,
+	    GLOBAL.StatusBattery.GetBatterySetup()->MaximumVoltage,
+	    0
+    );
 
 	update();
 }

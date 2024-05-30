@@ -86,7 +86,7 @@ public class DesktopProtocol
 		BatteryWarnCriticalVoltage,
 		BatteryMinimumVoltage,
 		BatteryMaximumVoltage,
-		BatteryCalibrationVoltage,
+		BatteryCalibrationValue,
 
 		Models,
 		Model,

@@ -29,7 +29,7 @@ public class Names
 	public static final String BATTERY_WARN_CRITICAL_VOLTAGE			= "BatteryWarnCriticalVoltage";
 	public static final String BATTERY_MINIMUM_VOLTAGE					= "BatteryMinimumVoltage";
 	public static final String BATTERY_MAXIMUM_VOLTAGE					= "BatteryMaximumVoltage";
-	public static final String BATTERY_CALIBRATION_VOLTAGE				= "BatteryCalibrationVoltage";
+	public static final String BATTERY_CALIBRATION_VOLTAGE				= "BatteryCalibrationValue";
 
 	public static final String PPMS										= "PPMs";
 	public static final String PPM										= "PPM";

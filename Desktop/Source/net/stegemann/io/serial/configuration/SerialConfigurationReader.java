@@ -321,7 +321,7 @@ public class SerialConfigurationReader
 				}
 				break;
 
-				case BatteryCalibrationVoltage :
+				case BatteryCalibrationValue :
 				{
 					readValue( battery.getCalibrationVoltage(), textContent);
 				}

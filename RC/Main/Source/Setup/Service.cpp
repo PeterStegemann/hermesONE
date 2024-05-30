@@ -1126,7 +1126,7 @@ void Setup_Service::Reset( void)
 	Battery.WarnCriticalVoltage = 60;
 	Battery.MinimumVoltage = 60;
 	Battery.MaximumVoltage = 90;
-	Battery.CalibrationVoltage = 150;
+	Battery.CalibrationValue = 150;
 
 	SetBattery( &Battery);
 

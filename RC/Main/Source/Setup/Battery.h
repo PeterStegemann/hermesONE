@@ -16,5 +16,5 @@ struct Setup_Battery
 	uint8_t MinimumVoltage;
 	uint8_t MaximumVoltage;
 
-	uint8_t CalibrationVoltage;
+	uint8_t CalibrationValue;
 };

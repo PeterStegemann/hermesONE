@@ -32,15 +32,15 @@ class Status_Battery
 
     void calculateVoltage( void)
     {
-        uint32_t BatteryValue = GetRawVoltage();
+        uint32_t Voltage = GetRawVoltage();
 
-        BatteryValue *= batterySetup.CalibrationVoltage;
-        BatteryValue /= 1023;
+        Voltage *= batterySetup.CalibrationValue;
+        Voltage /= 1023;
 
-        BatteryValue = BatteryValue + batteryVoltage * 9;
-        BatteryValue /= 10;
+        Voltage = Voltage + batteryVoltage * 9;
+        Voltage /= 10;
 
-        batteryVoltage = BatteryValue;
+        batteryVoltage = Voltage;
     }
 
   public:
@@ -50,9 +50,9 @@ class Status_Battery
         Setup_Service* SetupService,
         Status_Service* StatusService
     )
-        // Initialize this with a pause to avoid false alarms on startup.
         : signalProcessor( SignalProcessor)
         , statusService( StatusService)
+        // Initialize this with a pause to avoid false alarms on startup.
         , warnCount( BATTERY_WARN_LOW_PAUSE)
     {
     	SetupService->GetBattery( &batterySetup);
@@ -109,34 +109,19 @@ class Status_Battery
         statusService->Buzz( BATTERY_WARN_BEEP_LENGTH, BATTERY_WARN_BEEP_PAUSE, BATTERY_WARN_BEEP_REPEAT);
     }
 
-    void SetBatterySetup( Setup_Battery* BatterySetup)
+    Setup_Battery* GetBatterySetup( void)
     {
-    	batterySetup = *BatterySetup;
+    	return( &batterySetup);
     }
 
-    uint8_t GetWarnLowVoltage( void)
+    void UpdateCalibrationValue( uint8_t ExpectedVoltage)
     {
-    	return( batterySetup.WarnLowVoltage);
-    }
-
-    uint8_t GetWarnCriticalVoltage( void)
-    {
-    	return( batterySetup.WarnCriticalVoltage);
-    }
-
-    uint8_t GetMinimumVoltage( void)
-    {
-	    return( batterySetup.MinimumVoltage);
-    }
-
-    uint8_t GetMaximumVoltage( void)
-    {
-	    return( batterySetup.MaximumVoltage);
-    }
-
-    uint8_t GetCalibrationVoltage( void)
-    {
-    	return( batterySetup.CalibrationVoltage);
+        // RawVoltage == Value
+        uint16_t RawVoltage = GetRawVoltage();
+        uint32_t NewCalibrationValue = ExpectedVoltage;
+        NewCalibrationValue *= 1023;
+        NewCalibrationValue /= RawVoltage;
+        batterySetup.CalibrationValue = NewCalibrationValue;
     }
 
     // Raw voltage value.

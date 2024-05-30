@@ -122,7 +122,7 @@ class Serial_DesktopConnection
             sendLong( Serial_DesktopProtocol::I_BatteryWarnCriticalVoltage, Battery.WarnCriticalVoltage);
             sendLong( Serial_DesktopProtocol::I_BatteryMinimumVoltage, Battery.MinimumVoltage);
             sendLong( Serial_DesktopProtocol::I_BatteryMaximumVoltage, Battery.MaximumVoltage);
-            sendLong( Serial_DesktopProtocol::I_BatteryCalibrationVoltage, Battery.CalibrationVoltage);
+            sendLong( Serial_DesktopProtocol::I_BatteryCalibrationValue, Battery.CalibrationValue);
 
         closeComplex();
     }
@@ -880,9 +880,9 @@ class Serial_DesktopConnection
                         }
                         break;
 
-                        case Serial_DesktopProtocol::I_BatteryCalibrationVoltage :
+                        case Serial_DesktopProtocol::I_BatteryCalibrationValue :
                         {
-                            Battery.CalibrationVoltage = atol( connection.GetStringBuffer());
+                            Battery.CalibrationValue = atol( connection.GetStringBuffer());
                         }
                         break;
 

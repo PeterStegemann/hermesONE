@@ -28,78 +28,103 @@ class Screen_Setup_System : public Screen_Setup_Base
 
         uint8_t Line = 0;
 
-        GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop, SCREEN_SETUP_BASE_MAIN_FONT,
-                                     LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
-                                     LCD::PO_Proportional, Text::Exit);
+        GLOBAL.SetupDisplay.Print_P
+        (
+            menuLeft, frameTop, SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
+            LCD::PO_Proportional, Text::Exit
+        );
 
         Line += 2;
 
-        GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                     SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                     LCD::PO_Proportional, Text::Serial);
+        GLOBAL.SetupDisplay.Print_P
+        (
+            menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Serial
+        );
 
         Line++;
 
-        GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                     SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                     LCD::PO_Proportional, Text::Display);
-        GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                     SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                     LCD::PO_Proportional, Text::Battery);
+        GLOBAL.SetupDisplay.Print_P
+        (
+            menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Display
+        );
+        GLOBAL.SetupDisplay.Print_P
+        (
+            menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Battery
+        );
 
         Line++;
 
-        GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                     SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
-                                     LCD::PO_Proportional, Text::PPM);
+        GLOBAL.SetupDisplay.Print_P
+        (
+            menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::PPM
+        );
 
         uint16_t SubMenuLeft = menuLeft + Font->GetCellWidth();
 
         char ModuleName[ SETUP_PPM_NAME_SIZE];
 
-        GLOBAL.SetupDisplay.Print_P( SubMenuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                     SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                     LCD::PO_Proportional, Text::RFModule0);
+        GLOBAL.SetupDisplay.Print_P
+        (
+            SubMenuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::RFModule0
+        );
 
         GLOBAL.SetupService.GetPPMName( 0, ModuleName, sizeof( ModuleName));
 
-        GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->GetCellWidth()),
-                                   frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                   SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                   LCD::PO_Proportional, ModuleName);
+        GLOBAL.SetupDisplay.Print
+        (
+            SubMenuLeft + ( 15 * Font->GetCellWidth()), frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
+            SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModuleName
+        );
 
-        GLOBAL.SetupDisplay.Print_P( SubMenuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                     SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                     LCD::PO_Proportional, Text::RFModule1);
+        GLOBAL.SetupDisplay.Print_P
+        (
+            SubMenuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::RFModule1
+        );
 
         GLOBAL.SetupService.GetPPMName( 1, ModuleName, sizeof( ModuleName));
 
-        GLOBAL.SetupDisplay.Print( SubMenuLeft + ( 15 * Font->GetCellWidth()),
-                                   frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                   SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                   LCD::PO_Proportional, ModuleName);
+        GLOBAL.SetupDisplay.Print
+        (
+            SubMenuLeft + ( 15 * Font->GetCellWidth()), frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
+            SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModuleName
+        );
 
         Line += 2;
 
-        GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                    SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                    LCD::PO_Proportional, Text::Calibration);
+        GLOBAL.SetupDisplay.Print_P
+        (
+            menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Calibration
+        );
 
         Line++;
 
-        GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                    SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                    LCD::PO_Proportional, Text::Debug);
+        GLOBAL.SetupDisplay.Print_P
+        (
+            menuLeft, frameTop + ( Line * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Debug
+        );
 
-    	debugCheckBox.SetDimensions( ContentLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-		    						 ContentWidth, SCREEN_SETUP_BASE_GAUGE_THICKNESS);
+    	debugCheckBox.SetDimensions
+    	(
+    	    ContentLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
+            ContentWidth, SCREEN_SETUP_BASE_GAUGE_THICKNESS
+        );
 
     	debugCheckBox.Clear();
 	    debugCheckBox.Display( GLOBAL.GetDebug());
 
-        GLOBAL.SetupDisplay.Print_P( menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-                                     SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black,
-                                     LCD::PO_Proportional, Text::Reset);
+        GLOBAL.SetupDisplay.Print_P
+        (
+            menuLeft, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT), SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Reset
+        );
     }
 
     virtual bool processMenu( DoMenuResult Result)

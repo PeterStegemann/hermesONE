@@ -191,7 +191,6 @@ ifeq ($(HAS_SETUP), yes)
 		Source/Screen/Setup/Source/Store.cpp \
 		Source/Screen/Setup/Source/Timer.cpp \
 		Source/Screen/Setup/Source/Trimmer.cpp \
-		Source/Screen/Setup/System/Battery.cpp \
 		Source/Screen/Setup/System/Calibration.cpp \
 		Source/Screen/Setup/System/Display.cpp \
 		Source/Screen/Setup/System/PPM.cpp

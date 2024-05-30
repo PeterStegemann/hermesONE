@@ -625,7 +625,7 @@ public class SerialConfigurationWriter
 			writeValue( Id.BatteryWarnCriticalVoltage, battery.getWarnCriticalVoltage());
 			writeValue( Id.BatteryMinimumVoltage, battery.getMinimumVoltage());
 			writeValue( Id.BatteryMaximumVoltage, battery.getMaximumVoltage());
-			writeValue( Id.BatteryCalibrationVoltage, battery.getCalibrationVoltage());
+			writeValue( Id.BatteryCalibrationValue, battery.getCalibrationVoltage());
 
 		connection.closeComplex();
 	}

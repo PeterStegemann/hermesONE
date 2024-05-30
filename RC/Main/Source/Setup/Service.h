@@ -98,8 +98,7 @@ class Setup_Service
     };
 
     uint8_t CountModels( CountModelsOptions UseCountModelsOptions = CMO_Empty);
-    uint8_t CountModels( uint8_t SetupTypeId,
-                         CountModelsOptions UseCountModelsOptions = CMO_Empty);
+    uint8_t CountModels( uint8_t SetupTypeId, CountModelsOptions UseCountModelsOptions = CMO_Empty);
 
     enum CountTypesOptions
     {

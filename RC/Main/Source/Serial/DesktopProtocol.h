@@ -57,7 +57,7 @@ class Serial_DesktopProtocol : public avr::serial::Protocol
 		I_BatteryWarnCriticalVoltage,
 		I_BatteryMinimumVoltage,
 		I_BatteryMaximumVoltage,
-		I_BatteryCalibrationVoltage,
+		I_BatteryCalibrationValue,
 
 		I_Models,
 		I_Model,

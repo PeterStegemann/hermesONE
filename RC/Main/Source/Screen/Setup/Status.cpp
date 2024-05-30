@@ -234,8 +234,8 @@ void Screen_Setup_Status::update( void)
 
 	batteryGauge.Display
 	(
-        GLOBAL.StatusBattery.GetMinimumVoltage(),
-        GLOBAL.StatusBattery.GetMaximumVoltage(),
+        GLOBAL.StatusBattery.GetBatterySetup()->MinimumVoltage,
+        GLOBAL.StatusBattery.GetBatterySetup()->MaximumVoltage,
         GLOBAL.StatusBattery.GetVoltage()
     );
 

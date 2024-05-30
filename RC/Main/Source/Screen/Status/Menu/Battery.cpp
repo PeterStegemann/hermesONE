@@ -20,9 +20,8 @@
 Screen_Status_Menu_Battery::Screen_Status_Menu_Battery( void)
 						  : Screen_Status_Menu_Base( MENU_COUNT, L_Three)
 {
-	GLOBAL.SetupService.GetBattery( &batterySetup);
-
-	calibrationVoltage = GLOBAL.StatusBattery.GetVoltage();
+    batterySetup = GLOBAL.StatusBattery.GetBatterySetup();
+	voltage = GLOBAL.StatusBattery.GetVoltage();
 }
 
 Screen_Status_Menu_Battery::~Screen_Status_Menu_Battery( void)
@@ -41,8 +40,6 @@ void Screen_Status_Menu_Battery::updateVoltage( int8_t Value)
 	snprintf_P( String, sizeof( String), Text::VoltageFormat, Value / 10, Value % 10);
 
 	SetText(( Level)( menuLevel + 1), String);
-
-	GLOBAL.StatusBattery.SetBatterySetup( &batterySetup);
 }
 
 void Screen_Status_Menu_Battery::updateVoltage( void* Object, int8_t Value)
@@ -52,13 +49,7 @@ void Screen_Status_Menu_Battery::updateVoltage( void* Object, int8_t Value)
 
 void Screen_Status_Menu_Battery::updateCalibrationVoltage( int8_t Value)
 {
-	// RawVoltage == Value
-	uint16_t RawVoltage = GLOBAL.StatusBattery.GetRawVoltage();
-	uint32_t NewCalibrationVoltage = Value;
-	NewCalibrationVoltage *= 1023;
-	NewCalibrationVoltage /= RawVoltage;
-
-	batterySetup.CalibrationVoltage = NewCalibrationVoltage;
+    GLOBAL.StatusBattery.UpdateCalibrationValue( Value);
 
 	updateVoltage( Value);
 }
@@ -87,7 +78,7 @@ bool Screen_Status_Menu_Battery::processMenu( DoMenuResult Result)
 				{
 					SetText_P( Text::Low);
 
-					updateVoltage( batterySetup.WarnLowVoltage);
+					updateVoltage( batterySetup->WarnLowVoltage);
 				}
 				break;
 
@@ -95,7 +86,7 @@ bool Screen_Status_Menu_Battery::processMenu( DoMenuResult Result)
 				{
 					SetText_P( Text::Critical);
 
-					updateVoltage( batterySetup.WarnCriticalVoltage);
+					updateVoltage( batterySetup->WarnCriticalVoltage);
 				}
 				break;
 
@@ -103,7 +94,7 @@ bool Screen_Status_Menu_Battery::processMenu( DoMenuResult Result)
 				{
 					SetText_P( Text::Minimum);
 
-					updateVoltage( batterySetup.MinimumVoltage);
+					updateVoltage( batterySetup->MinimumVoltage);
 				}
 				break;
 
@@ -111,7 +102,7 @@ bool Screen_Status_Menu_Battery::processMenu( DoMenuResult Result)
 				{
 					SetText_P( Text::Maximum);
 
-					updateVoltage( batterySetup.MaximumVoltage);
+					updateVoltage( batterySetup->MaximumVoltage);
 				}
 				break;
 
@@ -119,7 +110,7 @@ bool Screen_Status_Menu_Battery::processMenu( DoMenuResult Result)
 				{
 					SetText_P( Text::Calibration);
 
-					updateVoltage( calibrationVoltage);
+					updateVoltage( voltage);
 				}
 				break;
 			}
@@ -136,53 +127,65 @@ bool Screen_Status_Menu_Battery::processMenu( DoMenuResult Result)
 
 				case MENU_WARN_LOW_VOLTAGE :
 				{
-					IsUpdated =
-						selectValue(( int8_t*) &( batterySetup.WarnLowVoltage),
-									 SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM,
-									 SETUP_BATTERY_VOLTAGE_STEPS, this, &updateVoltage);
+					IsUpdated = selectValue
+					(
+					    ( int8_t*) &( batterySetup->WarnLowVoltage),
+                        SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,
+                        this, &updateVoltage
+                    );
 				}
 				break;
 
 				case MENU_WARN_CRITICAL_VOLTAGE :
 				{
-					IsUpdated =
-						selectValue(( int8_t*) &( batterySetup.WarnCriticalVoltage),
-									 SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM,
-									 SETUP_BATTERY_VOLTAGE_STEPS, this, &updateVoltage);
+					IsUpdated = selectValue
+					(
+					    ( int8_t*) &( batterySetup->WarnCriticalVoltage),
+                        SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,
+                        this, &updateVoltage
+                    );
 				}
 				break;
 
 				case MENU_MINIMUM_VOLTAGE :
 				{
-					IsUpdated =
-						selectValue(( int8_t*) &( batterySetup.MinimumVoltage),
-									 SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM,
-									 SETUP_BATTERY_VOLTAGE_STEPS, this, &updateVoltage);
+					IsUpdated = selectValue
+					(
+					    ( int8_t*) &( batterySetup->MinimumVoltage),
+                        SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,
+                        this, &updateVoltage
+                    );
 				}
 				break;
 
 				case MENU_MAXIMUM_VOLTAGE :
 				{
-					IsUpdated =
-						selectValue(( int8_t*) &( batterySetup.MaximumVoltage),
-									 SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM,
-									 SETUP_BATTERY_VOLTAGE_STEPS, this, &updateVoltage);
+					IsUpdated = selectValue
+					(
+					    ( int8_t*) &( batterySetup->MaximumVoltage),
+                        SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,
+                        this, &updateVoltage
+                    );
 				}
 				break;
 
 				case MENU_CALIBRATION_VOLTAGE :
 				{
-					IsUpdated =
-						selectValue(( int8_t*) &calibrationVoltage, batterySetup.MinimumVoltage,
-									 batterySetup.MaximumVoltage, SETUP_BATTERY_VOLTAGE_STEPS, this,
-									 &updateCalibrationVoltage);
+                    uint8_t Value = voltage;
+
+					IsUpdated = selectValue
+					(
+					    ( int8_t*) &Value,
+					    batterySetup->MinimumVoltage, batterySetup->MaximumVoltage, SETUP_BATTERY_VOLTAGE_STEPS,
+					    this, &updateCalibrationVoltage
+                    );
 				}
 				break;
 			}
 
 			if( IsUpdated == true)
 			{
-				GLOBAL.SetupService.SetBattery( &batterySetup);
+				GLOBAL.SetupService.SetBattery( batterySetup);
 			}
 
 			drawMenuMarker();

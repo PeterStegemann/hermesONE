@@ -17,7 +17,7 @@
       <BatteryWarnCriticalVoltage>60</BatteryWarnCriticalVoltage>
       <BatteryMinimumVoltage>60</BatteryMinimumVoltage>
       <BatteryMaximumVoltage>60</BatteryMaximumVoltage>
-      <BatteryCalibrationVoltage>60</BatteryCalibrationVoltage>
+      <BatteryCalibrationValue>60</BatteryCalibrationValue>
     </Battery>
     <Calibrations>
       <!--Calibration 0-->
