@@ -355,34 +355,42 @@ class GUI_Setup_Gauge
                     Value /= NormalizedMaximum;
                     Value -= 100;
 
-                    GLOBAL.SetupDisplay.PrintFormat_P( percentageLeft, top, fontId, foregroundColor,
-                                                       backgroundColor, LCD_65K_RGB::PO_Fixed,
-                                                       Text::FourDigitPercentFormat, ( int16_t) Value);
+                    GLOBAL.SetupDisplay.PrintFormat_P
+                    (
+                        percentageLeft, top, fontId, foregroundColor, backgroundColor,
+                        LCD_65K_RGB::PO_Fixed, Text::FourDigitPercentFormat, ( int16_t) Value
+                    );
                 }
                 else
                 {
                     int32_t Value = NormalizedCurrent * 100;
                     Value /= NormalizedMaximum;
 
-                    GLOBAL.SetupDisplay.PrintFormat_P( percentageLeft, top, fontId, foregroundColor,
-                                                       backgroundColor, LCD_65K_RGB::PO_Fixed,
-                                                       Text::ThreeDigitPercentFormat, ( int16_t) Value);
+                    GLOBAL.SetupDisplay.PrintFormat_P
+                    (
+                        percentageLeft, top, fontId, foregroundColor, backgroundColor,
+                        LCD_65K_RGB::PO_Fixed, Text::ThreeDigitPercentFormat, ( int16_t) Value
+                    );
                 }
             }
             else
             {
-                GLOBAL.SetupDisplay.Print_P( percentageLeft, top, fontId, foregroundColor,
-                                             backgroundColor, LCD_65K_RGB::PO_Fixed,
-                                             Text::EmptyDigitPercent);
+                GLOBAL.SetupDisplay.Print_P
+                (
+                    percentageLeft, top, fontId, foregroundColor, backgroundColor,
+                    LCD_65K_RGB::PO_Fixed, Text::EmptyDigitPercent
+                );
             }
         }
 
         // Display value?
         if(( options & O_Value) && ( valueWidth != 0))
         {
-            GLOBAL.SetupDisplay.PrintFormat_P( valueLeft, top, fontId, foregroundColor, backgroundColor,
-                                               LCD_65K_RGB::PO_Fixed, Text::SixDigitInt16Format,
-                                               Current);
+            GLOBAL.SetupDisplay.PrintFormat_P
+            (
+                valueLeft, top, fontId, foregroundColor, backgroundColor,
+                LCD_65K_RGB::PO_Fixed, Text::SixDigitInt16Format, Current
+            );
         }
 
         // We need a minimum space for display.
@@ -392,10 +400,11 @@ class GUI_Setup_Gauge
         }
 
         // Draw gauge frame.
-        GLOBAL.SetupDisplay.DrawRect( gaugeLeft, top, gaugeWidth, height, foregroundColor,
-                                      LCD_65K_RGB::RO_Rounded);
-        GLOBAL.SetupDisplay.DrawRect( gaugeLeft + 1, top + 1, gaugeWidth - 2, height - 2,
-                                      foregroundColor, LCD_65K_RGB::RO_Boxed);
+        GLOBAL.SetupDisplay.DrawRect( gaugeLeft, top, gaugeWidth, height, foregroundColor, LCD_65K_RGB::RO_Rounded);
+        GLOBAL.SetupDisplay.DrawRect
+        (
+            gaugeLeft + 1, top + 1, gaugeWidth - 2, height - 2, foregroundColor, LCD_65K_RGB::RO_Boxed
+        );
 
         // Draw gauge inner frame.
 
@@ -431,14 +440,18 @@ class GUI_Setup_Gauge
             if( options & O_Vertical)
             {
                 GLOBAL.SetupDisplay.FillRect( fillLeft, fillTop, fillWidth, ValueSize, detailColor);
-                GLOBAL.SetupDisplay.FillRect( fillLeft, fillTop + ValueSize, fillWidth,
-                                              fillHeight - ValueSize, backgroundColor);
+                GLOBAL.SetupDisplay.FillRect
+                (
+                    fillLeft, fillTop + ValueSize, fillWidth, fillHeight - ValueSize, backgroundColor
+                );
             }
             else
             {
                 GLOBAL.SetupDisplay.FillRect( fillLeft, fillTop, ValueSize, fillHeight, detailColor);
-                GLOBAL.SetupDisplay.FillRect( fillLeft + ValueSize, fillTop, fillWidth - ValueSize,
-                                              fillHeight, backgroundColor);
+                GLOBAL.SetupDisplay.FillRect
+                (
+                    fillLeft + ValueSize, fillTop, fillWidth - ValueSize, fillHeight, backgroundColor
+                );
             }
         }
 

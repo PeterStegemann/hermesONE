@@ -90,7 +90,7 @@ class GUI_Setup_CheckBox
     {
     	if( remembered == true)
 	    {
-    		// If we have the same values as last time, don't display anything.
+    		// If we have the same values as last time, don't change anything.
 	    	if( ticked == Ticked)
 		    {
     			// No changes.
@@ -122,8 +122,7 @@ class GUI_Setup_CheckBox
 
         // Draw box frame.
         GLOBAL.SetupDisplay.DrawRect( left, top, height, height, ForegroundColor, LCD::RO_Rounded);
-        GLOBAL.SetupDisplay.DrawRect( left + 1, top + 1, height - 2, height - 2, ForegroundColor,
-                                  LCD::RO_Boxed);
+        GLOBAL.SetupDisplay.DrawRect( left + 1, top + 1, height - 2, height - 2, ForegroundColor, LCD::RO_Boxed);
 
         LCD_65K_RGB::Color Color;
 

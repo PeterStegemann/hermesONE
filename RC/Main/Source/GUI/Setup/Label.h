@@ -219,26 +219,34 @@ class GUI_Setup_Label
             {
                 if( text != NULL)
                 {
-                    GLOBAL.SetupDisplay.PrintFormat( left, top, fontId, ForegroundColor,
-                                                     BackgroundColor, PrintOptions, text, value);
+                    GLOBAL.SetupDisplay.PrintFormat
+                    (
+                        left, top, fontId, ForegroundColor, BackgroundColor, PrintOptions, text, value
+                    );
                 }
                 else
                 {
-                    GLOBAL.SetupDisplay.PrintFormat_P( left, top, fontId, ForegroundColor,
-                                                       BackgroundColor, PrintOptions, text_P, value);
+                    GLOBAL.SetupDisplay.PrintFormat_P
+                    (
+                        left, top, fontId, ForegroundColor, BackgroundColor, PrintOptions, text_P, value
+                    );
                 }
             }
             else
             {
                 if( text != NULL)
                 {
-                    GLOBAL.SetupDisplay.PrintFormat( left, top, fontId, BackgroundColor,
-                                                     ForegroundColor, PrintOptions, text, value);
+                    GLOBAL.SetupDisplay.PrintFormat
+                    (
+                        left, top, fontId, BackgroundColor, ForegroundColor, PrintOptions, text, value
+                    );
                 }
                 else
                 {
-                    GLOBAL.SetupDisplay.PrintFormat_P( left, top, fontId, BackgroundColor,
-                                                       ForegroundColor, PrintOptions, text_P, value);
+                    GLOBAL.SetupDisplay.PrintFormat_P
+                    (
+                        left, top, fontId, BackgroundColor, ForegroundColor, PrintOptions, text_P, value
+                    );
                 }
             }
         }
@@ -262,13 +270,17 @@ class GUI_Setup_Label
 
         if( text != NULL)
         {
-            GLOBAL.SetupDisplay.PrintFormat( left, top, fontId, BackgroundColor, BackgroundColor,
-                                             PrintOptions, text, value);
+            GLOBAL.SetupDisplay.PrintFormat
+            (
+                left, top, fontId, BackgroundColor, BackgroundColor, PrintOptions, text, value
+            );
         }
         else if( text_P != NULL)
         {
-            GLOBAL.SetupDisplay.PrintFormat_P( left, top, fontId, BackgroundColor, BackgroundColor,
-                                               PrintOptions, text_P, value);
+            GLOBAL.SetupDisplay.PrintFormat_P
+            (
+                left, top, fontId, BackgroundColor, BackgroundColor, PrintOptions, text_P, value
+            );
         }
 
         remembered = false;
