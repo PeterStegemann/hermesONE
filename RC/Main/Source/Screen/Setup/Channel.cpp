@@ -269,7 +269,7 @@ bool Screen_Setup_Channel::processMenu( DoMenuResult Result)
 
 				case 13 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSelect(
+					ValueChanged = GUI_Setup_Select::DoSelect8(
 						( int8_t*) &( channel->Setup.Mode), Setup_Channel::M_Warp,
 						Setup_Channel::M_Clip, 1, &menuMarker, &modeLabel, this, &staticUpdate,
 						&updateMode);

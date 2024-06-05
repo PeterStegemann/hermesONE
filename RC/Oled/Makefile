@@ -104,7 +104,6 @@ CPPSRC = Source/Main.cpp \
 		 AVR/Source/Font/Micro.cpp \
 		 AVR/Source/Font/Mini.cpp \
 		 AVR/Source/Font/Normal.cpp \
-		 AVR/Source/LCD/LCD.cpp \
 		 AVR/Source/LCD/65K_RGB.cpp \
 		 AVR/Source/LCD/65K_RGB_Window.cpp \
 		 AVR/Source/LCD/S6E63D6/S6E63D6.cpp \

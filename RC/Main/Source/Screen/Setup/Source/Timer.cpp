@@ -182,7 +182,7 @@ bool Screen_Setup_Source_Timer::processMenu( DoMenuResult Result)
 			{
 				case 4 :
 				{
-					ValueChanged = GUI_Setup_Select::DoTimeSelect(
+					ValueChanged = GUI_Setup_Select::DoSelectTime(
 						&( sourceTimer->Setup.InitTime), 0, TIME_LIMIT, TIME_STEP_WIDTH,
 						&menuMarker, &initTimeLabel, this, &updateTime);
 				}
@@ -234,11 +234,11 @@ bool Screen_Setup_Source_Timer::processMenu( DoMenuResult Result)
 
 				case 12 :
 				{
-					bool LowChanged = GUI_Setup_Select::DoTimeSelect(
+					bool LowChanged = GUI_Setup_Select::DoSelectTime(
 						&( sourceTimer->Setup.WarnLowTime), 0, TIME_LIMIT, TIME_STEP_WIDTH,
 						&menuMarker, &warnLowTimeLabel, this, &updateTime);
 
-					bool HighChanged = GUI_Setup_Select::DoTimeSelect(
+					bool HighChanged = GUI_Setup_Select::DoSelectTime(
 						&( sourceTimer->Setup.WarnCriticalTime), 0, TIME_LIMIT, TIME_STEP_WIDTH,
 						&menuMarker, &warnCriticalTimeLabel, this, &updateTime);
 
@@ -248,7 +248,7 @@ bool Screen_Setup_Source_Timer::processMenu( DoMenuResult Result)
 
 				case 13 :
 				{
-					ValueChanged = GUI_Setup_Select::DoTimeSelect(
+					ValueChanged = GUI_Setup_Select::DoSelectTime(
 						&( sourceTimer->Setup.WarnPauseTime), 0, PAUSE_TIME_LIMIT,
 						PAUSE_TIME_STEP_WIDTH, &menuMarker, &warnPauseTimeLabel, this, &updateTime);
 				}

@@ -1,7 +1,6 @@
 // Copyright 2010 Peter Stegemann
 
-#ifndef PORTS_H
-#define PORTS_H
+#pragma once
 
 #include "System.h"
 
@@ -16,7 +15,7 @@
 #define SPI_DC							PB2			// Data/Command S6E63D6 RS
 #define SPI_SS							PB4
 #define SPI_DATA_OUTPUT					PB5			// Send Data 
-#define SPI_DATA_INPUT					PB6			// Recieve Data 
+#define SPI_DATA_INPUT					PB6			// Receive Data
 #define SPI_CLOCK						PB7			// Clock
 
 // LCD S6E63D6
@@ -58,5 +57,3 @@
 
 #define STATUS_RED						PD6
 #define STATUS_GREEN					PD7
-
-#endif

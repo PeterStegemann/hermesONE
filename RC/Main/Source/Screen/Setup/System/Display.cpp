@@ -149,7 +149,7 @@ bool Screen_Setup_System_Display::processMenu( DoMenuResult Result)
 
 void Screen_Setup_System_Display::doSetupBacklight( void)
 {
-	if( GUI_Setup_GaugeSelect::DoSelect( &setupBacklight, LCD_DOG_BACKLIGHT_OFF,
+	if( GUI_Setup_GaugeSelect::DoSelect8( &setupBacklight, LCD_DOG_BACKLIGHT_OFF,
 										 LCD_DOG_BACKLIGHT_FULL, LCD_65K_RGB_BACKLIGHT_STEPS,
 										 &menuMarker, &setupBacklightGauge,
 										 &updateSetupBacklight) == true)
@@ -165,7 +165,7 @@ void Screen_Setup_System_Display::updateSetupBacklight( uint8_t Value)
 
 void Screen_Setup_System_Display::doSetupBlankTime( void)
 {
-	if( GUI_Setup_Select::DoTimeSelect( &setupBlankTime, 0, 5 * 60, 5, &menuMarker,
+	if( GUI_Setup_Select::DoSelectTime( &setupBlankTime, 0, 5 * 60, 5, &menuMarker,
 									    &setupBlankTimeLabel, this, &updateSetupBlankTime))
 	{
 		GLOBAL.SetupService.SetSetupBlankTime( setupBlankTime);
@@ -198,7 +198,7 @@ void Screen_Setup_System_Display::updateSetupBlankTime( void* Object, GUI_Setup_
 
 void Screen_Setup_System_Display::doStatusBacklight( void)
 {
-	if( GUI_Setup_GaugeSelect::DoSelect( &statusBacklight, LCD_DOG_BACKLIGHT_OFF,
+	if( GUI_Setup_GaugeSelect::DoSelect8( &statusBacklight, LCD_DOG_BACKLIGHT_OFF,
 										 LCD_DOG_BACKLIGHT_FULL, LCD_DOG_BACKLIGHT_STEPS,
 										 &menuMarker, &statusBacklightGauge,
 										 &updateStatusBacklight) == true)
@@ -214,7 +214,7 @@ void Screen_Setup_System_Display::updateStatusBacklight( uint8_t Value)
 
 void Screen_Setup_System_Display::doStatusContrast( void)
 {
-	if( GUI_Setup_GaugeSelect::DoSelect( &statusContrast, LCD_DOG_CONTRAST_OFF,
+	if( GUI_Setup_GaugeSelect::DoSelect8( &statusContrast, LCD_DOG_CONTRAST_OFF,
 										 LCD_DOG_CONTRAST_FULL, LCD_DOG_CONTRAST_STEPS, &menuMarker,
 										 &statusContrastGauge, &updateStatusContrast) == true)
 	{
@@ -229,7 +229,7 @@ void Screen_Setup_System_Display::updateStatusContrast( uint8_t Value)
 
 void Screen_Setup_System_Display::doStatusBlankTime( void)
 {
-	if( GUI_Setup_Select::DoTimeSelect( &statusBlankTime, 0, 5 * 60, 5, &menuMarker,
+	if( GUI_Setup_Select::DoSelectTime( &statusBlankTime, 0, 5 * 60, 5, &menuMarker,
 									    &statusBlankTimeLabel, this, &updateStatusBlankTime))
 	{
 		GLOBAL.SetupService.SetStatusBlankTime( statusBlankTime);

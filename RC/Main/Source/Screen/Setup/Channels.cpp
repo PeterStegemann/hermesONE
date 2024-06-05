@@ -131,7 +131,7 @@ bool Screen_Setup_Channels::processMenu( DoMenuResult Result)
 
 				case 1 :
 				{
-					bool ValueChanged = GUI_Setup_Select::DoSelect(
+					bool ValueChanged = GUI_Setup_Select::DoSelect8(
 						( int8_t*) &rfMode, Setup_Service::RF_None, Setup_Service::RF_Both, 1,
 						&menuMarker, &rfModeLabel, this, &staticUpdate, &updateRFMode);
 

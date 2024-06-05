@@ -13,7 +13,84 @@
 class GUI_Setup_Select
 {
   private:
-	static void blink( GUI_Setup_Label* Label, uint16_t* Millis, bool* Inverted)
+    static void select( GUI_Setup_Marker* Marker, GUI_Setup_Label* Label)
+    {
+        Marker->ForegroundColor = LCD_65K_RGB::C_Red;
+        Marker->Display();
+    }
+
+    static void unSelect( GUI_Setup_Marker* Marker, GUI_Setup_Label* Label)
+    {
+        Marker->ForegroundColor = LCD_65K_RGB::C_WarmYellow;
+        Marker->Display();
+
+        Label->SetInverted( false);
+        Label->Display();
+    }
+
+    static void blink( GUI_Setup_Label* Label, uint16_t* Millis, bool* Inverted)
+    {
+        if( Blink( Millis, Inverted))
+        {
+            Label->SetInverted( *Inverted);
+            Label->Display();
+        }
+    }
+
+    static int8_t adjustToBoundaries8( int8_t NewValue, int8_t LowerLimit, int8_t UpperLimit, int8_t StepWidth)
+    {
+        while( true)
+        {
+            if( NewValue > UpperLimit)
+            {
+                NewValue -= (( int16_t) UpperLimit - ( int16_t) LowerLimit) + StepWidth;
+            }
+            else if( NewValue < LowerLimit)
+            {
+                NewValue += (( int16_t) UpperLimit - ( int16_t) LowerLimit) + StepWidth;
+            }
+            else
+            {
+                return( NewValue);
+            }
+        }
+    }
+
+    static int16_t adjustToBoundaries16( int16_t NewValue, int16_t LowerLimit, int16_t UpperLimit, int16_t StepWidth)
+    {
+        while( true)
+        {
+            if( NewValue > UpperLimit)
+            {
+                NewValue -= (( int32_t) UpperLimit - ( int32_t) LowerLimit) + StepWidth;
+            }
+            else if( NewValue < LowerLimit)
+            {
+                NewValue += (( int32_t) UpperLimit - ( int32_t) LowerLimit) + StepWidth;
+            }
+            else
+            {
+                return( NewValue);
+            }
+        }
+    }
+
+    static int16_t adjustToBoundariesTime( int16_t NewValue, int16_t LowerLimit, int16_t UpperLimit)
+    {
+        if( NewValue > UpperLimit)
+        {
+            NewValue = UpperLimit;
+        }
+        else if( NewValue < LowerLimit)
+        {
+            NewValue = LowerLimit;
+        }
+
+        return( NewValue);
+    }
+
+  public:
+    static bool Blink( uint16_t* Millis, bool* Inverted)
     {
         uint16_t NewMillis = GLOBAL.InterruptService.GetMillis();
         int32_t Diff = NewMillis;
@@ -29,28 +106,26 @@ class GUI_Setup_Select
             *Millis = NewMillis;
             *Inverted = !*Inverted;
 
-            Label->SetInverted( *Inverted);
-            Label->Display();
+            return( true);
         }
+
+        return( false);
     }
 
-  public:
-    static bool DoSelect( int8_t* Value, int8_t LowerLimit, int8_t UpperLimit, int8_t StepWidth,
+    static bool DoSelect8
+    (
+        int8_t* Value, int8_t LowerLimit, int8_t UpperLimit, int8_t StepWidth,
         GUI_Setup_Marker* Marker, GUI_Setup_Label* Label, void* Object,
-        void ( *Update)( void* Object), void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int8_t Value))
+        void ( *Update)( void* Object), void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int8_t Value)
+    )
     {
+        select( Marker, Label);
+
         // Saves some write cycles with this flag.
         bool ValueChanged = false;
 
         uint16_t Millis = 0;
-        bool Inverted = true;
-
-        Marker->ForegroundColor = LCD_65K_RGB::C_Red;
-        Marker->Display();
-
-        Label->SetInverted( Inverted);
-        Label->Display();
-
+        bool Inverted = false;
         bool Exit = false;
 
         while( Exit == false)
@@ -81,22 +156,7 @@ class GUI_Setup_Select
                 ValueChanged = true;
 
                 NewValue += RotarySelect * StepWidth;
-
-                while( true)
-                {
-                    if( NewValue > UpperLimit)
-                    {
-                        NewValue -= (( int16_t) UpperLimit - ( int16_t) LowerLimit) + StepWidth;
-                    }
-                    else if( NewValue < LowerLimit)
-                    {
-                        NewValue += (( int16_t) UpperLimit - ( int16_t) LowerLimit) + StepWidth;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                NewValue = adjustToBoundaries8( NewValue, LowerLimit, UpperLimit, StepWidth);
 
                 *Value = NewValue;
 
@@ -108,32 +168,25 @@ class GUI_Setup_Select
             blink( Label, &Millis, &Inverted);
         }
 
-        // Unselect.
-        Marker->ForegroundColor = LCD_65K_RGB::C_WarmYellow;
-        Marker->Display();
-
-        Label->SetInverted( false);
-        Label->Display();
+        unSelect( Marker, Label);
 
         return( ValueChanged);
     }
 
-    static bool DoSelect16( int16_t* Value, int16_t LowerLimit, int16_t UpperLimit, int16_t StepWidth,
+    static bool DoSelect16
+    (
+        int16_t* Value, int16_t LowerLimit, int16_t UpperLimit, int16_t StepWidth,
         GUI_Setup_Marker* Marker, GUI_Setup_Label* Label, void* Object,
-        void ( *Update)( void* Object), void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int16_t Value))
+        void ( *Update)( void* Object), void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int16_t Value)
+    )
     {
+        select( Marker, Label);
+
         // Saves some write cycles with this flag.
         bool ValueChanged = false;
 
         uint16_t Millis = 0;
-        bool Inverted = true;
-
-        Marker->ForegroundColor = LCD_65K_RGB::C_Red;
-        Marker->Display();
-
-        Label->SetInverted( Inverted);
-        Label->Display();
-
+        bool Inverted = false;
         bool Exit = false;
 
         while( Exit == false)
@@ -164,22 +217,7 @@ class GUI_Setup_Select
                 ValueChanged = true;
 
                 NewValue += RotarySelect * StepWidth;
-
-                while( true)
-                {
-                    if( NewValue > UpperLimit)
-                    {
-                        NewValue -= (( int32_t) UpperLimit - ( int32_t) LowerLimit) + StepWidth;
-                    }
-                    else if( NewValue < LowerLimit)
-                    {
-                        NewValue += (( int32_t) UpperLimit - ( int32_t) LowerLimit) + StepWidth;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                NewValue = adjustToBoundaries16( NewValue, LowerLimit, UpperLimit, StepWidth);
 
                 *Value = NewValue;
 
@@ -191,39 +229,32 @@ class GUI_Setup_Select
             blink( Label, &Millis, &Inverted);
         }
 
-        // Unselect.
-        Marker->ForegroundColor = LCD_65K_RGB::C_WarmYellow;
-        Marker->Display();
-
-        Label->SetInverted( false);
-        Label->Display();
+        unSelect( Marker, Label);
 
         return( ValueChanged);
     }
 
-	static bool DoTimeSelect( int16_t* Value, int16_t LowerLimit, int16_t UpperLimit, uint8_t StepWidth,
+	static bool DoSelectTime
+	(
+	    int16_t* Value, int16_t LowerLimit, int16_t UpperLimit, uint8_t StepWidth,
         GUI_Setup_Marker* Marker, GUI_Setup_Label* Label, void* Object,
-        void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int16_t Value))
+        void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int16_t Value)
+    )
     {
+        select( Marker, Label);
+
         // Saves some write cycles with this flag.
         bool ValueChanged = false;
 
         uint16_t Millis = 0;
-        bool Inverted = true;
-
-        Marker->ForegroundColor = LCD_65K_RGB::C_Red;
-        Marker->Display();
-
-        Label->SetInverted( Inverted);
-        Label->Display();
-
+        bool Inverted = false;
         bool Exit = false;
 
         while( Exit == false)
         {
             int32_t NewValue = *Value;
 
-            // Align to stepwidth.
+            // Align to step width.
             NewValue -= NewValue % StepWidth;
 
             int8_t RotarySelect;
@@ -242,15 +273,7 @@ class GUI_Setup_Select
                 ValueChanged = true;
 
                 NewValue += RotarySelect * StepWidth;
-
-                if( NewValue > UpperLimit)
-                {
-                    NewValue = UpperLimit;
-                }
-                else if( NewValue < LowerLimit)
-                {
-                    NewValue = LowerLimit;
-                }
+                NewValue = adjustToBoundariesTime( NewValue, LowerLimit, UpperLimit);
 
                 *Value = NewValue;
 
@@ -262,34 +285,27 @@ class GUI_Setup_Select
             blink( Label, &Millis, &Inverted);
         }
 
-        // Unselect.
-        Marker->ForegroundColor = LCD_65K_RGB::C_WarmYellow;
-        Marker->Display();
-
-        Label->SetInverted( false);
-        Label->Display();
+        unSelect( Marker, Label);
 
         return( ValueChanged);
     }
 
-	// UseGauge may be null. T_Empty means "All"
-	static bool DoSourceSelect( uint8_t* SignalSourceId, uint16_t* SetupSourceId,
-        GUI_Setup_Marker* Marker, GUI_Setup_Label* Label, GUI_Setup_Gauge* Gauge,
+	// Gauge may be null. T_Empty means "All"
+	static bool DoSourceSelect
+	(
+	    uint8_t* SignalSourceId, uint16_t* SetupSourceId,
+	    GUI_Setup_Marker* Marker, GUI_Setup_Label* Label, GUI_Setup_Gauge* Gauge,
         char SourceName[ SETUP_SOURCE_NAME_SIZE + 1], void* Object, void ( *Update)( void* Object), bool HasFixed,
-        Signal_Source_Source::Level SourceLevel, Signal_Source_Source::Type SourceType = Signal_Source_Source::T_Empty)
+        Signal_Source_Source::Level SourceLevel, Signal_Source_Source::Type SourceType = Signal_Source_Source::T_Empty
+    )
     {
+        select( Marker, Label);
+
         // Saves some write cycles with this flag.
-        bool SourceChanged = false;
+        bool ValueChanged = false;
 
         uint16_t Millis = 0;
-        bool Inverted = true;
-
-        Marker->ForegroundColor = LCD_65K_RGB::C_Red;
-        Marker->Display();
-
-        Label->SetInverted( Inverted);
-        Label->Display();
-
+        bool Inverted = false;
         bool Exit = false;
 
         while( Exit == false)
@@ -312,10 +328,12 @@ class GUI_Setup_Select
             // Set new position.
             if( RotarySelect != 0)
             {
-                SourceChanged = true;
+                ValueChanged = true;
 
-                *SignalSourceId = GLOBAL.SignalProcessor.FindNextSource(
-                    *SignalSourceId, RotarySelect, HasFixed, SourceLevel, SourceType);
+                *SignalSourceId = GLOBAL.SignalProcessor.FindNextSource
+                (
+                    *SignalSourceId, RotarySelect, HasFixed, SourceLevel, SourceType
+                );
 
                 // Refresh label.
                 Label->Clear();
@@ -339,13 +357,14 @@ class GUI_Setup_Select
                 }
                 else
                 {
-                    const Signal_Source_Source* SignalSource =
-                        GLOBAL.SignalProcessor.GetSource( *SignalSourceId);
+                    const Signal_Source_Source* SignalSource = GLOBAL.SignalProcessor.GetSource( *SignalSourceId);
 
                     *SetupSourceId = SignalSource->GetSetupSourceId();
 
-                    GLOBAL.SetupService.GetSourceName( SignalSource->GetSetupSourceId(), SourceName,
-                                                          SETUP_SOURCE_NAME_SIZE + 1);
+                    GLOBAL.SetupService.GetSourceName
+                    (
+                        SignalSource->GetSetupSourceId(), SourceName, SETUP_SOURCE_NAME_SIZE + 1
+                    );
                     Label->SetText( SourceName);
                 }
 
@@ -356,20 +375,8 @@ class GUI_Setup_Select
             blink( Label, &Millis, &Inverted);
         }
 
-        // Unselect.
-        Marker->ForegroundColor = LCD_65K_RGB::C_WarmYellow;
-        Marker->Display();
+        unSelect( Marker, Label);
 
-        Label->SetInverted( false);
-        Label->Display();
-
-        return( SourceChanged);
+        return( ValueChanged);
     }
-/*
-		static bool DoValueSourceSelect( int16_t* Value, int16_t LowerLimit, int16_t UpperLimit,
-										 int16_t StepWidth, GUI_Setup_Marker* UseMarker, GUI_Setup_Label* UseLabel,
-										 char SourceName[ SETUP_SOURCE_NAME_SIZE + 1],
-										 void* Object, void ( *Display)( void* Object),
-										 void ( *Update)( void* Object, int16_t Value));
-*/
 };

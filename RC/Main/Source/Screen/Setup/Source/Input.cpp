@@ -82,7 +82,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 			{
 				case 3 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSelect(
+					ValueChanged = GUI_Setup_Select::DoSelect8(
 						( int8_t*) &( sourceInput->Type), 0,
 						Setup_Source_Input::IT_InputTypeCount - 1, 1,
 						&menuMarker, &typeValueLabel, this, &staticUpdate, &updateType);
@@ -95,7 +95,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 					{
 						case Setup_Source_Input::IT_Analog :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect(
+							ValueChanged = GUI_Setup_Select::DoSelect8(
 								( int8_t*) &( sourceInput->InputIdA), 0,
 								SIGNAL_PROCESSOR_ANALOG_INPUTS - 1, 1, &menuMarker,
 								&inputAValueLabel, this, &staticUpdate, &updateInputAnalog);
@@ -104,7 +104,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 
 						default :
 						{							
-							ValueChanged = GUI_Setup_Select::DoSelect(
+							ValueChanged = GUI_Setup_Select::DoSelect8(
 								( int8_t*) &( sourceInput->InputIdA), 0,
 								SIGNAL_PROCESSOR_DIGITAL_INPUTS - 1, 1, &menuMarker,
 								&inputAValueLabel, this, &staticUpdate, &updateInputDigitalA);
@@ -116,7 +116,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 
 				case 6 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSelect(
+					ValueChanged = GUI_Setup_Select::DoSelect8(
 						( int8_t*) &( sourceInput->InputIdB), 0,
 						SIGNAL_PROCESSOR_DIGITAL_INPUTS - 1, 1, &menuMarker, &inputBValueLabel,
 						this, &staticUpdate, &updateInputDigitalB);

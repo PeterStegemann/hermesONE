@@ -152,7 +152,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 
                     case 3 :
                     {
-                        IsUpdated = GUI_Setup_Select::DoSelect
+                        IsUpdated = GUI_Setup_Select::DoSelect8
                         (
                             ( int8_t*) &( batterySetup->WarnLowVoltage),
                             batterySetup->MinimumVoltage, batterySetup->MaximumVoltage, SETUP_BATTERY_VOLTAGE_STEPS,
@@ -163,7 +163,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 
                     case 4 :
                     {
-                        IsUpdated = GUI_Setup_Select::DoSelect
+                        IsUpdated = GUI_Setup_Select::DoSelect8
                         (
                             ( int8_t*) &( batterySetup->WarnCriticalVoltage),
                             batterySetup->MinimumVoltage, batterySetup->MaximumVoltage, SETUP_BATTERY_VOLTAGE_STEPS,
@@ -174,7 +174,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 
                     case 7 :
                     {
-                        IsUpdated = GUI_Setup_Select::DoSelect
+                        IsUpdated = GUI_Setup_Select::DoSelect8
                         (
                             ( int8_t*) &( batterySetup->MinimumVoltage),
                             SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,
@@ -185,7 +185,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 
                     case 8 :
                     {
-                        IsUpdated = GUI_Setup_Select::DoSelect
+                        IsUpdated = GUI_Setup_Select::DoSelect8
                         (
                             ( int8_t*) &( batterySetup->MaximumVoltage),
                             SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,
@@ -198,7 +198,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
                     {
                         uint8_t Value = voltage;
 
-                        IsUpdated = GUI_Setup_Select::DoSelect
+                        IsUpdated = GUI_Setup_Select::DoSelect8
                         (
                             ( int8_t*) &Value,
                             0, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,

@@ -189,7 +189,7 @@ bool Screen_Setup_System_PPM::processMenu( DoMenuResult Result)
 					uint8_t ChannelIndex = ( currentMenuEntry - firstLine) - 4;
 					int8_t* SourceChannel = ( int8_t*) &( ppmSetup.ChannelMapping[ ChannelIndex]);
 
-					if( GUI_Setup_Select::DoSelect( SourceChannel, 0, SIGNAL_PPM_CHANNELS - 1, 1, &menuMarker,
+					if( GUI_Setup_Select::DoSelect8( SourceChannel, 0, SIGNAL_PPM_CHANNELS - 1, 1, &menuMarker,
 												    &( sourceChannelLabel[ ChannelIndex]),
 												    this, NULL, &updateSourceChannel) == true)
 					{
@@ -261,7 +261,7 @@ void Screen_Setup_System_PPM::doInverted( void)
 
 void Screen_Setup_System_PPM::doCenter( void)
 {
-	if( GUI_Setup_Select::DoSelect( &( ppmSetup.Center), SIGNAL_PPM_CENTER_MINIMUM,
+	if( GUI_Setup_Select::DoSelect8( &( ppmSetup.Center), SIGNAL_PPM_CENTER_MINIMUM,
 									SIGNAL_PPM_CENTER_MAXIMUM, 1, &menuMarker, &centerLabel,
 								    this, NULL, &updateCenter))
 	{

@@ -38,19 +38,24 @@ class GraphicConnection : public avr::serial::Connection< DeviceId>
 
         this->ReceiveBoolean( &Blanked);
 
+        STATUS_SetBit( STATUS_RED);
+
         lcd->SetBlanked( Blanked);
+
+        STATUS_ClearBit( STATUS_RED);
     }
 
     void receiveClear( void)
     {
         uint16_t Color;
 
+        STATUS_SetBit( STATUS_RED);
+
         this->ReceiveWord( &Color);
 
         lcd->Clear(( LCD_65K_RGB::Color) Color);
 
-    //	lcd->PrintFormat( 200, 0, FONT::FID_Mini, LCD_65K_RGB::White, LCD_65K_RGB::Black,
-    //					  LCD::PO_Proportional, "Clear %x", Color);
+        STATUS_ClearBit( STATUS_RED);
     }
 
     void receiveDrawPixel( void)
@@ -61,7 +66,11 @@ class GraphicConnection : public avr::serial::Connection< DeviceId>
         this->ReceiveWord( &Top);
         this->ReceiveWord( &Color);
 
+        STATUS_SetBit( STATUS_RED);
+
         lcd->DrawPixel( Left, Top, ( LCD_65K_RGB::Color) Color);
+
+        STATUS_ClearBit( STATUS_RED);
     }
 
     void receiveDrawLine( void)
@@ -74,7 +83,11 @@ class GraphicConnection : public avr::serial::Connection< DeviceId>
         this->ReceiveWord( &StopY);
         this->ReceiveWord( &Color);
 
+        STATUS_SetBit( STATUS_RED);
+
         lcd->DrawLine( StartX, StartY, StopX, StopY, ( LCD_65K_RGB::Color) Color);
+
+        STATUS_ClearBit( STATUS_RED);
     }
 
     void receiveDrawRect( void)
@@ -87,7 +100,11 @@ class GraphicConnection : public avr::serial::Connection< DeviceId>
         this->ReceiveWord( &Height);
         this->ReceiveWord( &Color);
 
+        STATUS_SetBit( STATUS_RED);
+
         lcd->DrawRect( Left, Top, Width, Height, ( LCD_65K_RGB::Color) Color);
+
+        STATUS_ClearBit( STATUS_RED);
     }
 
     void receiveFillRect( void)
@@ -100,7 +117,11 @@ class GraphicConnection : public avr::serial::Connection< DeviceId>
         this->ReceiveWord( &Height);
         this->ReceiveWord( &Color);
 
+        STATUS_SetBit( STATUS_RED);
+
         lcd->FillRect( Left, Top, Width, Height, ( LCD_65K_RGB::Color) Color);
+
+        STATUS_ClearBit( STATUS_RED);
     }
 
     void receivePrint( void)
@@ -135,7 +156,7 @@ class GraphicConnection : public avr::serial::Connection< DeviceId>
         while( FetchMore);
     }
 
-public:
+  public:
     virtual ~GraphicConnection( void)
     {
     }
@@ -149,6 +170,8 @@ public:
 
     void DoSerialConnection( void)
     {
+        STATUS_ClearBit( STATUS_RED);
+
         while( true)
         {
             // Receive command.
@@ -156,11 +179,7 @@ public:
             {
                 uint8_t Command;
 
-                STATUS_ClearBit( STATUS_RED);
-
                 this->ReceiveByte( &Command);
-
-                STATUS_SetBit( STATUS_RED);
 
                 switch( Command)
                 {

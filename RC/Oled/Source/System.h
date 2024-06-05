@@ -1,7 +1,6 @@
 // Copyright 2009 Peter Stegemann
 
-#ifndef SYSTEM_H
-#define SYSTEM_H
+#pragma once
 
 #define SYSTEM_SERIAL_ID		0
 
@@ -39,5 +38,3 @@
 #define SERIAL_0_UCSRB_VALUE	( 0 << RXCIE0) | ( 0 << TXCIE0) | ( 0 << UDRIE0) | ( 1 << RXEN0) | ( 1 << TXEN0) | ( 0 << UCSZ02)
 // Asynchronous, No parity, 1 stop bit, 8 bit data
 #define SERIAL_0_UCSRC_VALUE	( 0 << UMSEL01) | ( 0 << UMSEL00) | ( 0 << UPM01) | ( 0 << UPM00) | ( 0 << USBS0) | ( 1 << UCSZ01) | ( 1 << UCSZ00)
-
-#endif

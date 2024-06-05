@@ -32,15 +32,22 @@ class Status_Battery
 
     void calculateVoltage( void)
     {
-        uint32_t Voltage = GetRawVoltage();
-
-        Voltage *= batterySetup.CalibrationValue;
-        Voltage /= 1023;
+        uint32_t Voltage = getCalibratedVoltage();
 
         Voltage = Voltage + batteryVoltage * 9;
         Voltage /= 10;
 
         batteryVoltage = Voltage;
+    }
+
+    uint32_t getCalibratedVoltage( void)
+    {
+        uint32_t Voltage = GetRawVoltage();
+
+        Voltage *= batterySetup.CalibrationValue;
+        Voltage /= 1023;
+
+        return( Voltage);
     }
 
   public:

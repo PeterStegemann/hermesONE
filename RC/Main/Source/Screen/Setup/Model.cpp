@@ -266,7 +266,7 @@ void Screen_Setup_Model::doModelName( void)
 
 void Screen_Setup_Model::doType( void)
 {
-    bool selected = GUI_Setup_Select::DoSelect
+    bool selected = GUI_Setup_Select::DoSelect8
     (
         ( int8_t*) &selectedTypeId, SETUP_MODEL_TYPES_START, SETUP_MODEL_TYPES_END, 1,
         &menuMarker, &typeLabel, this, &staticUpdate, &updateType

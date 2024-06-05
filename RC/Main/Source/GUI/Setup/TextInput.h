@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Defines.h"
+#include "Select.h"
 
 #include "AVR/Source/Types.h"
 #include "AVR/Source/LCD/65K_RGB.h"
@@ -22,20 +23,19 @@ static const flash_char GUI_Setup_NumericCharacterSet[] PROGMEM =
 
 static const flash_char GUI_Setup_AlphaNumericCharacterSet[] PROGMEM =
 {
-	' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-	's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-',
-	'+', '_', '/', '&', '%', '?', '=',
+	' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+	'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '+', '_', '/', '&', '%', '?', '=',
 	avr::font::C_SpecialExit, avr::font::C_SpecialBackspace, avr::font::C_SpecialDelete, avr::font::C_SpecialInsert,
 	avr::font::C_SpecialLeft, avr::font::C_SpecialRight
 };
 
 static const flash_char GUI_Setup_FullCharacterSet[] PROGMEM =
 {
-	' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', '0', '1', '2',
-	'3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?', '@', 'A', 'B', 'C', 'D', 'E',
-	'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-	'Y', 'Z', '[', '\\', ']', '^', '_', '`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-	'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~',
+	' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', '0', '1', '2', '3', '4', '5', '6',
+	'7', '8', '9', ':', ';', '<', '=', '>', '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+	'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '[', '\\', ']', '^', '_', '`', 'a', 'b', 'c', 'd',
+	'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{',
+	'|', '}', '~',
 	avr::font::C_SpecialExit, avr::font::C_SpecialBackspace, avr::font::C_SpecialDelete, avr::font::C_SpecialInsert,
 	avr::font::C_SpecialLeft, avr::font::C_SpecialRight
 };
@@ -57,6 +57,10 @@ class GUI_Setup_TextInput
 
     avr::font::FontId fontId;
 
+    LCD_65K_RGB::Color foregroundColor;
+    LCD_65K_RGB::Color backgroundColor;
+    LCD_65K_RGB::Color cursorColor;
+
     // The current version of the text.
     char text[ GUI_SETUP_TEXTINPUT_MAXIMUM_SIZE + 1];
 
@@ -65,6 +69,7 @@ class GUI_Setup_TextInput
     char currentCharacter;
 
     bool blinkState;
+    uint8_t stateCount;
 
     bool isSpecial( char Character)
     {
@@ -125,38 +130,177 @@ class GUI_Setup_TextInput
     {
         const avr::font::Type* Font = avr::font::Font::Get( fontId);
 
-        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->GetCellWidth()), top, fontId,
-            ForegroundColor, BackgroundColor, LCD_65K_RGB::PO_Fixed, Text::CharacterFormat, text[ cursorPosition]);
+        GLOBAL.SetupDisplay.PrintFormat_P
+        (
+            left + ( cursorPosition * Font->GetCellWidth()), top, fontId, foregroundColor, backgroundColor,
+            LCD_65K_RGB::PO_Fixed, Text::CharacterFormat, text[ cursorPosition]
+        );
     }
 
     void displayCursor( void)
     {
-        LCD_65K_RGB::Color UseForegroundColor = ForegroundColor;
-        LCD_65K_RGB::Color UseBackgroundColor = BackgroundColor;
+        LCD_65K_RGB::Color ForegroundColor = foregroundColor;
+        LCD_65K_RGB::Color BackgroundColor = backgroundColor;
 
         if( isSpecial( currentCharacter))
         {
             // Set special color.
-            UseForegroundColor = CursorColor;
+            ForegroundColor = cursorColor;
         }
 
         if( blinkState)
         {
             // Switch colors.
-            UseBackgroundColor = UseForegroundColor;
-            UseForegroundColor = BackgroundColor;
+            BackgroundColor = ForegroundColor;
+            ForegroundColor = backgroundColor;
         }
 
         const avr::font::Type* Font = avr::font::Font::Get( fontId);
 
-        GLOBAL.SetupDisplay.PrintFormat_P( left + ( cursorPosition * Font->GetCellWidth()), top, fontId,
-            UseForegroundColor, UseBackgroundColor, LCD_65K_RGB::PO_Fixed, Text::CharacterFormat, currentCharacter);
+        GLOBAL.SetupDisplay.PrintFormat_P
+        (
+            left + ( cursorPosition * Font->GetCellWidth()), top, fontId, ForegroundColor, BackgroundColor,
+            LCD_65K_RGB::PO_Fixed, Text::CharacterFormat, currentCharacter
+        );
     }
 
-  public:
-    LCD_65K_RGB::Color ForegroundColor;
-    LCD_65K_RGB::Color BackgroundColor;
-    LCD_65K_RGB::Color CursorColor;
+    /**
+     * Returns false if the user selected "Exit"
+     */
+    bool handleButton( void)
+    {
+        // If this is a special character, act accordingly.
+        switch( currentCharacter)
+        {
+            case avr::font::C_SpecialExit :
+            {
+                clearCursor();
+
+                return( false);
+            }
+            break;
+
+            case avr::font::C_SpecialBackspace :
+            {
+                if( cursorPosition > 0)
+                {
+                    cursorPosition--;
+
+                    strncpy( &text[ cursorPosition], &text[ cursorPosition + 1], size + 1 - cursorPosition);
+                }
+            }
+            break;
+
+            case avr::font::C_SpecialDelete :
+            {
+                if( cursorPosition < size)
+                {
+                    strncpy( &text[ cursorPosition], &text[ cursorPosition + 1], size + 1 - cursorPosition);
+                }
+            }
+            break;
+
+            case avr::font::C_SpecialInsert :
+            {
+                if(( cursorPosition + 1) < size)
+                {
+                    memmove( &text[ cursorPosition + 1], &text[ cursorPosition], size - ( cursorPosition + 1));
+
+                    text[ cursorPosition] = ' ';
+                }
+            }
+            break;
+
+            case avr::font::C_SpecialLeft :
+            {
+                // Skip left.
+                // Don't go beyond the string beginning.
+                if( cursorPosition > 0)
+                {
+                    cursorPosition--;
+                }
+            }
+            break;
+
+            case avr::font::C_SpecialRight :
+            {
+                // Skip next.
+                // Don't go beyond the string size.
+                if( cursorPosition < ( size - 1))
+                {
+                    if( text[ cursorPosition + 1] != 0)
+                    {
+                        cursorPosition++;
+                    }
+                }
+            }
+            break;
+
+            default :
+            {
+                text[ cursorPosition] = currentCharacter;
+
+                // Skip next.
+                // Don't go beyond the string size.
+                if( cursorPosition < ( size - 1))
+                {
+                    cursorPosition++;
+
+                    currentCharacter = text[ cursorPosition];
+                }
+            }
+            break;
+        }
+
+        // Set initial character?
+        if( currentCharacter == 0)
+        {
+            if( cursorPosition == 0)
+            {
+                currentCharacter = 'A';
+            }
+            else
+            {
+                currentCharacter = text[ cursorPosition - 1];
+            }
+
+            text[ cursorPosition + 1] = 0;
+        }
+
+        return( true);
+    }
+
+    void handleCurrentButton( void)
+    {
+        if( stateCount > 0)
+        {
+            stateCount--;
+        }
+        else
+        {
+            // Long press, flip size.
+            stateCount = GUI_SETUP_TEXTINPUT_STATE_COUNT;
+
+            if( isupper( currentCharacter))
+            {
+                currentCharacter = tolower( currentCharacter);
+            }
+            else
+            {
+                currentCharacter = toupper( currentCharacter);
+            }
+
+            displayCursor();
+        }
+    }
+
+    void blink( uint16_t* Millis)
+    {
+        if( GUI_Setup_Select::Blink( Millis, &blinkState))
+        {
+            displayCursor();
+        }
+    }
 
   public:
     GUI_Setup_TextInput( void)
@@ -164,13 +308,13 @@ class GUI_Setup_TextInput
         , top( 0)
         , options( O_None)
         , fontId( GUI_SETUP_MAIN_FONT)
+        , foregroundColor( LCD_65K_RGB::C_White)
+        , backgroundColor( LCD_65K_RGB::C_Black)
+        , cursorColor( LCD_65K_RGB::C_WarmYellow)
         , size( sizeof( text) - 1)
         , cursorPosition( 0)
         , currentCharacter( 'A')
         , blinkState( false)
-        , ForegroundColor( LCD_65K_RGB::C_White)
-        , BackgroundColor( LCD_65K_RGB::C_Black)
-        , CursorColor( LCD_65K_RGB::C_WarmYellow)
     {
     	text[ 0] = 0;
     }
@@ -183,9 +327,9 @@ class GUI_Setup_TextInput
     }
 
     // Set some display options.
-    void SetOptions( Options UseOptions)
+    void SetOptions( Options Options)
     {
-    	options = UseOptions;
+    	options = Options;
     }
 
     // Get text.
@@ -229,12 +373,11 @@ class GUI_Setup_TextInput
             text[ cursorPosition + 1] = 0;
         }
 
-        uint16_t BlinkCount = 0;
+        uint16_t Millis = 0;
+        stateCount = GUI_SETUP_TEXTINPUT_STATE_COUNT;
         blinkState = true;
 
         Display();
-
-        uint8_t StateCount = GUI_SETUP_TEXTINPUT_STATE_COUNT;
 
         while( true)
         {
@@ -254,102 +397,9 @@ class GUI_Setup_TextInput
 
             if( RotaryButton > 0)
             {
-                // If this is a special character, act accordingly.
-                switch( currentCharacter)
+                if( handleButton() == false)
                 {
-                    case avr::font::C_SpecialExit :
-                    {
-                        clearCursor();
-
-                        return;
-                    }
                     break;
-
-                    case avr::font::C_SpecialBackspace :
-                    {
-                        if( cursorPosition > 0)
-                        {
-                            cursorPosition--;
-
-                            strncpy( &text[ cursorPosition], &text[ cursorPosition + 1], size + 1 - cursorPosition);
-                        }
-                    }
-                    break;
-
-                    case avr::font::C_SpecialDelete :
-                    {
-                        if( cursorPosition < size)
-                        {
-                            strncpy( &text[ cursorPosition], &text[ cursorPosition + 1], size + 1 - cursorPosition);
-                        }
-                    }
-                    break;
-
-                    case avr::font::C_SpecialInsert :
-                    {
-                        if(( cursorPosition + 1) < size)
-                        {
-                            memmove( &text[ cursorPosition + 1], &text[ cursorPosition], size - ( cursorPosition + 1));
-
-                            text[ cursorPosition] = ' ';
-                        }
-                    }
-                    break;
-
-                    case avr::font::C_SpecialLeft :
-                    {
-                        // Skip left.
-                        // Don't go beyond the string beginning.
-                        if( cursorPosition > 0)
-                        {
-                            cursorPosition--;
-                        }
-                    }
-                    break;
-
-                    case avr::font::C_SpecialRight :
-                    {
-                        // Skip next.
-                        // Don't go beyond the string size.
-                        if( cursorPosition < ( size - 1))
-                        {
-                            if( text[ cursorPosition + 1] != 0)
-                            {
-                                cursorPosition++;
-                            }
-                        }
-                    }
-                    break;
-
-                    default :
-                    {
-                        text[ cursorPosition] = currentCharacter;
-
-                        // Skip next.
-                        // Don't go beyond the string size.
-                        if( cursorPosition < ( size - 1))
-                        {
-                            cursorPosition++;
-
-                            currentCharacter = text[ cursorPosition];
-                        }
-                    }
-                    break;
-                }
-
-                // Set initial character?
-                if( currentCharacter == 0)
-                {
-                    if( cursorPosition == 0)
-                    {
-                        currentCharacter = 'A';
-                    }
-                    else
-                    {
-                        currentCharacter = text[ cursorPosition - 1];
-                    }
-
-                    text[ cursorPosition + 1] = 0;
                 }
 
                 Display();
@@ -357,49 +407,14 @@ class GUI_Setup_TextInput
 
             if( RotaryCurrentButton)
             {
-                if( StateCount > 0)
-                {
-                    StateCount--;
-                }
-                else
-                {
-                    // Long press, flip size.
-                    StateCount = GUI_SETUP_TEXTINPUT_STATE_COUNT;
-
-                    if( isupper( currentCharacter))
-                    {
-                        currentCharacter = tolower( currentCharacter);
-                    }
-                    else
-                    {
-                        currentCharacter = toupper( currentCharacter);
-                    }
-
-                    displayCursor();
-                }
+                handleCurrentButton();
             }
             else
             {
-                StateCount = GUI_SETUP_TEXTINPUT_STATE_COUNT;
+                stateCount = GUI_SETUP_TEXTINPUT_STATE_COUNT;
             }
 
-            // Blink cursor.
-            BlinkCount++;
-
-            if( BlinkCount == ( GUI_SETUP_BLINK_DELAY / 2))
-            {
-                blinkState = false;
-
-                displayCursor();
-            }
-            else if( BlinkCount == GUI_SETUP_BLINK_DELAY)
-            {
-                blinkState = true;
-
-                displayCursor();
-
-                BlinkCount = 0;
-            }
+            blink( &Millis);
 
             avr::Utility::Pause( 5);
         }
@@ -410,7 +425,7 @@ class GUI_Setup_TextInput
     {
         Clear();
 
-        GLOBAL.SetupDisplay.Print( left, top, fontId, ForegroundColor, BackgroundColor, LCD_65K_RGB::PO_Fixed, text);
+        GLOBAL.SetupDisplay.Print( left, top, fontId, foregroundColor, backgroundColor, LCD_65K_RGB::PO_Fixed, text);
 
         displayCursor();
     }
@@ -419,6 +434,6 @@ class GUI_Setup_TextInput
     {
         const avr::font::Type* Font = avr::font::Font::Get( fontId);
 
-        GLOBAL.SetupDisplay.FillRect( left, top, size * Font->GetCellWidth(), Font->GetCellHeight(), BackgroundColor);
+        GLOBAL.SetupDisplay.FillRect( left, top, size * Font->GetCellWidth(), Font->GetCellHeight(), backgroundColor);
     }
 };
