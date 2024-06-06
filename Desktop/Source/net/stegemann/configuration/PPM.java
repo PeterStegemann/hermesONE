@@ -37,16 +37,12 @@ public class PPM extends ChangeObservable< PPM> implements ChangeListener< Text>
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "PPM = {\n");
-		Buffer.append( " Inverted: " + inverted + "\n");
-		Buffer.append( " Center: " + center + "\n");
-		Buffer.append( " Name: " + name + "\n");
-		Buffer.append( channelMappings);
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+        return "PPM = {\n" +
+				" Inverted: " + inverted + "\n" +
+				" Center: " + center + "\n" +
+				" Name: " + name + "\n" +
+				channelMappings +
+				"}\n";
 	}
 
 	public void clear( int outputChannels)

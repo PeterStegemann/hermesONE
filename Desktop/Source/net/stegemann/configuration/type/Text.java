@@ -1,106 +1,103 @@
 package net.stegemann.configuration.type;
 
+import lombok.Getter;
 import net.stegemann.misc.ChangeObservable;
 
+@Getter
 public class Text extends ChangeObservable< Text> implements ConfigurationValue
 {
-	private String value;
+    private String value;
 
-	public Text()
-	{
-		value = "";
-	}
+    public Text()
+    {
+        value = "";
+    }
 
-	public Text( Text other)
-	{
-		value = other.value;
-	}
+    public Text( Text other)
+    {
+        value = other.value;
+    }
 
-	public Text( String value)
-	{
-		this.value = value;
-	}
+    public Text( String value)
+    {
+        this.value = value;
+    }
 
-	@Override
-	public String toString()
-	{
-		StringBuffer Buffer = new StringBuffer();
+    @Override
+    public String toString()
+    {
+        return String.format( """
+            Text
+            {
+                value: %s
+            }""",
+            value
+        );
+    }
 
-		Buffer.append( "Text = {\n");
-		Buffer.append(  " Value: " + value + "\n");
-		Buffer.append( "}\n");
+    @Override
+    public int hashCode()
+    {
+        return value.hashCode();
+    }
 
-		return Buffer.toString();
-	}
+    @Override
+    public boolean equals( Object other)
+    {
+        if( this == other)
+        {
+            return true;
+        }
 
-	@Override
-	public int hashCode()
-	{
-		return value.hashCode();
-	}
+        if( other == null)
+        {
+            return false;
+        }
 
-	@Override
-	public boolean equals( Object other)
-	{
-		if( this == other)
-		{
-			return true;
-		}
+        if(( other instanceof Text) == false)
+        {
+            return false;
+        }
 
-		if( other == null)
-		{
-			return false;
-		}
+        return equals(( Text) other);
+    }
 
-		if(( other instanceof Text) == false)
-		{
-			return false;
-		}
+    public boolean equals( Text other)
+    {
+        if( value == null)
+        {
+            if( other.value != null)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if( value.equals( other.value) == false)
+            {
+                return false;
+            }
+        }
 
-		return equals(( Text) other);
-	}
+        return true;
+    }
 
-	public boolean equals( Text other)
-	{
-		if( value == null)
-		{
-			if( other.value != null)
-			{
-				return false;
-			}
-		}
-		else
-		{
-			if( value.equals( other.value) == false)
-			{
-				return false;
-			}
-		}
+    public void setValue( String Value)
+    {
+        value = Value;
 
-		return true;
-	}
+        notifyChange( this);
+    }
 
-	public void setValue( String Value)
-	{
-		value = Value;
+    @Override
+    public void setConfigurationValue( String value)
+    {
+        setValue( value);
+    }
 
-		notifyChange( this);
-	}
-
-	public String getValue()
-	{
-		return value;
-	}
-
-	@Override
-	public void setConfigurationValue( String value)
-	{
-		setValue( value);
-	}
-
-	@Override
-	public String getConfigurationValue()
-	{
-		return value;
-	}
+    @Override
+    public String getConfigurationValue()
+    {
+        return value;
+    }
 }

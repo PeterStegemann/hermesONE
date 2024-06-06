@@ -53,8 +53,8 @@ public class Model extends ChangeObservable< Model> implements ChangeListener< T
 	public static final int MODEL_START		= 0;
 	public static final int MODEL_END		= TYPE_START - 1;
 
-	public static final int CHANNELS	= 9;
-	public static final int PROXIES		= 25;
+	public static final int CHANNELS		= 9;
+	public static final int PROXIES			= 25;
 
 	public final static Number Global;
 

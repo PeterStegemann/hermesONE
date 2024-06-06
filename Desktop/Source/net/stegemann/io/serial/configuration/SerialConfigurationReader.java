@@ -285,7 +285,7 @@ public class SerialConfigurationReader
 
 	private class BatteryHandler extends UnknownTypeHandler
 	{
-		private Battery battery;
+		private final Battery battery;
 
 		public BatteryHandler( Battery UseBattery)
 		{
@@ -334,7 +334,7 @@ public class SerialConfigurationReader
 
 	private class CalibrationsHandler extends UnknownTypeHandler
 	{
-		private Calibrations calibrations;
+		private final Calibrations calibrations;
 		private int calibrationIndex;
 
 		public CalibrationsHandler( Calibrations UseCalibrations)
@@ -432,7 +432,7 @@ public class SerialConfigurationReader
 					{
 						NewModel.getId().setValue( modelId);
 					}
-					catch( ValueOutOfRangeException e)
+					catch( ValueOutOfRangeException ignored)
 					{
 					}
 
@@ -539,7 +539,7 @@ public class SerialConfigurationReader
 
 	private class StatusSourcesHandler extends UnknownTypeHandler
 	{
-		private Model model;
+		private final Model model;
 		private int statusSourceIndex;
 
 		public StatusSourcesHandler( Model UseModel)
@@ -569,7 +569,7 @@ public class SerialConfigurationReader
 
 	private class StatusTimesHandler extends UnknownTypeHandler
 	{
-		private Model model;
+		private final Model model;
 		private int statusTimeIndex;
 
 		public StatusTimesHandler( Model UseModel)
@@ -697,7 +697,7 @@ public class SerialConfigurationReader
 
 	private class ChannelPointsHandler extends UnknownTypeHandler
 	{
-		private Channel channel;
+		private final Channel channel;
 		private int channelPointIndex;
 
 		public ChannelPointsHandler( Channel UseChannel)
@@ -724,7 +724,7 @@ public class SerialConfigurationReader
 
 	private class ProxyReferencesHandler extends UnknownTypeHandler
 	{
-		private ProxyReferences proxyReferences;
+		private final ProxyReferences proxyReferences;
 		private int proxyIndex;
 
 		public ProxyReferencesHandler( ProxyReferences UseProxyReferences)
@@ -778,7 +778,7 @@ public class SerialConfigurationReader
 					{
 						NewType.getId().setValue( typeId);
 					}
-					catch( ValueOutOfRangeException e)
+					catch( ValueOutOfRangeException ignored)
 					{
 					}
 
@@ -1046,7 +1046,7 @@ public class SerialConfigurationReader
 
 	private class SourceInputAnalogHandler extends UnknownTypeHandler
 	{
-		private Analog source;
+		private final Analog source;
 
 		public SourceInputAnalogHandler( Analog UseSource)
 		{
@@ -1071,7 +1071,7 @@ public class SerialConfigurationReader
 
 	private class SourceInputButtonHandler extends UnknownTypeHandler
 	{
-		private Button source;
+		private final Button source;
 
 		public SourceInputButtonHandler( Button UseSource)
 		{
@@ -1126,7 +1126,7 @@ public class SerialConfigurationReader
 
 	private class SourceInputRotaryHandler extends UnknownTypeHandler
 	{
-		private Rotary source;
+		private final Rotary source;
 
 		public SourceInputRotaryHandler( Rotary UseSource)
 		{
@@ -1187,7 +1187,7 @@ public class SerialConfigurationReader
 
 	private class SourceInputSwitchHandler extends UnknownTypeHandler
 	{
-		private Switch source;
+		private final Switch source;
 
 		public SourceInputSwitchHandler( Switch UseSource)
 		{
@@ -1230,7 +1230,7 @@ public class SerialConfigurationReader
 
 	private class SourceInputTickerHandler extends UnknownTypeHandler
 	{
-		private Ticker source;
+		private final Ticker source;
 
 		public SourceInputTickerHandler( Ticker UseSource)
 		{
@@ -1291,7 +1291,7 @@ public class SerialConfigurationReader
 
 	private class SourceMapHandler extends UnknownTypeHandler
 	{
-		private Map source;
+		private final Map source;
 
 		public SourceMapHandler( Map UseSource)
 		{
@@ -1564,7 +1564,7 @@ public class SerialConfigurationReader
 
 	private class PPMsHandler extends UnknownTypeHandler
 	{
-		private PPMs ppms;
+		private final PPMs ppms;
 		private int ppmIndex;
 
 		public PPMsHandler( PPMs UsePPMs)
@@ -1587,16 +1587,11 @@ public class SerialConfigurationReader
 				default : super.complexOpened( id); break;
 			}
  		}
-
-		@Override
-		public void complexClosed( DesktopProtocol.Id id)
-		{
-		}
 	}
 
 	private class PPMHandler extends UnknownTypeHandler
 	{
-		private PPM ppm;
+		private final PPM ppm;
 
 		public PPMHandler( PPM UsePPM)
 		{
@@ -1648,7 +1643,7 @@ public class SerialConfigurationReader
 
 	private class ChannelMappingsHandler extends UnknownTypeHandler
 	{
-		private ChannelMappings channelMappings;
+		private final ChannelMappings channelMappings;
 		private int channelIndex;
 
 		public ChannelMappingsHandler( ChannelMappings UseChannelMappings)

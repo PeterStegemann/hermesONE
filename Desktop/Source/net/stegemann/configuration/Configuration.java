@@ -27,16 +27,12 @@ public class Configuration
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Configuration = {\n");
-		Buffer.append( system);
-		Buffer.append( types);
-		Buffer.append( models);
-		Buffer.append( sources);
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+        return "Configuration = {\n" +
+			system +
+			types +
+			models +
+			sources +
+			"}\n";
 	}
 
 	public void clear()

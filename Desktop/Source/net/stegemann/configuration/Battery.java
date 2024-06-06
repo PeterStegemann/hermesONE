@@ -28,17 +28,14 @@ public class Battery
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
 
-		Buffer.append( "Battery = {\n");
-		Buffer.append( " WarnLowVoltage: " + warnLowVoltage + "\n");
-		Buffer.append( " WarnCriticalVoltage: " + warnCriticalVoltage + "\n");
-		Buffer.append( " MinimumVoltage: " + minimumVoltage + "\n");
-		Buffer.append( " MaximumVoltage: " + maximumVoltage + "\n");
-		Buffer.append( " CalibrationVoltage: " + calibrationVoltage + "\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+        return "Battery = {\n" +
+				" WarnLowVoltage: " + warnLowVoltage + "\n" +
+				" WarnCriticalVoltage: " + warnCriticalVoltage + "\n" +
+				" MinimumVoltage: " + minimumVoltage + "\n" +
+				" MaximumVoltage: " + maximumVoltage + "\n" +
+				" CalibrationVoltage: " + calibrationVoltage + "\n" +
+				"}\n";
 	}
 
 	public void clear()

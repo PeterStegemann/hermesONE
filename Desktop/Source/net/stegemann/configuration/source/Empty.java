@@ -6,6 +6,8 @@ import net.stegemann.configuration.util.ConfigurationField;
 
 import java.util.HashMap;
 
+import static net.stegemann.misc.Utility.indent;
+
 @ConfigurationField( ignore = true)
 public final class Empty extends Source
 {
@@ -29,12 +31,11 @@ public final class Empty extends Source
 	public String toString()
 	{
 		return String.format( """
-				Empty
-				{
-					%s
-				}
-				""",
-				super.toString());
+			Empty
+			{
+			    %s
+			}""",
+			indent( super.toString()));
 	}
 
 	@Override

@@ -97,4 +97,9 @@ public class Utility
 
 		return ( int)( Float.parseFloat( valueArray[ 0]) * 10);
 	}
+
+	static public String indent(Object object)
+	{
+		return object.toString().indent(4).trim();
+	}
 }

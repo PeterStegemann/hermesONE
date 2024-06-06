@@ -14,85 +14,89 @@ import net.stegemann.misc.ChangeObservable;
 
 import java.util.HashMap;
 
+import static net.stegemann.misc.Utility.indent;
+
 @Getter
 @ConfigurationField( name = Names.SOURCE)
 public abstract class Source extends ChangeObservable< Source>
-						  implements ChangeListener< Text>, Comparable< Source>, Named
+                          implements ChangeListener< Text>, Comparable< Source>, Named
 {
-	public static final int SOURCE_FIXED = 0xfffe;
-	public static final int SOURCE_NONE = 0xffff;
+    public static final int SOURCE_FIXED = 0xfffe;
+    public static final int SOURCE_NONE = 0xffff;
 
-	public static final int SOURCE_START = 0;
-	public static final int SOURCE_END = SOURCE_NONE;
+    public static final int SOURCE_START = 0;
+    public static final int SOURCE_END = SOURCE_NONE;
 
-	private final SourceId id = new SourceId();
-	@ConfigurationField( name = Names.SOURCE_NAME)
-	private final Text name;
-	@ConfigurationField( name = Names.SOURCE_MODEL)
-	private final Number model = new Number( Model.MODEL_START, Model.MODEL_GLOBAL);
+    private final SourceId id = new SourceId();
+    @ConfigurationField( name = Names.SOURCE_NAME)
+    private final Text name;
+    @ConfigurationField( name = Names.SOURCE_MODEL)
+    private final Number model = new Number( Model.MODEL_START, Model.MODEL_GLOBAL);
 
-	protected Source()
-	{
-		name = new Text();
+    protected Source()
+    {
+        name = new Text();
 
-		name.addChangeListener( this);
-	}
+        name.addChangeListener( this);
+    }
 
-	protected Source( Source other)
-	{
-		name = new Text( other.name);
+    protected Source( Source other)
+    {
+        name = new Text( other.name);
 
-		try
-		{
-			model.setValue( other.model);
-		}
-		catch( ValueOutOfRangeException reason)
-		{
-			throw new RuntimeException( reason);
-		}
+        try
+        {
+            model.setValue( other.model);
+        }
+        catch( ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
 
-		name.addChangeListener( this);
-	}
+        name.addChangeListener( this);
+    }
 
-	@Override
-	public String toString()
-	{
-		return String.format( """
-				Source
-				{
-					Id: %s
-					Name: %s
-					Model Id: %s
-				}
-				""",
-				id, name, model);
-	}
-
-	@Override
-	public abstract Source clone();
-
-	@Override
-	public void hasChanged( Text object)
-	{
-		notifyChange( this);
-	}
-
-	public void setModel( Number newModel)
-		throws ValueOutOfRangeException
-	{
-		model.setValue( newModel);
-	}
-
-	public abstract void replaceSources( HashMap< SourceId, SourceId> sourcesMap);
+    @Override
+    public String toString()
+    {
+        return String.format( """
+            Source
+            {
+                id: %s
+                name: %s
+                model: %s
+            }""",
+			indent( id),
+            indent( name),
+            indent( model)
+		);
+    }
 
 	@Override
-	public int compareTo( Source other)
-	{
-		if(( other instanceof Empty) || ( other instanceof Fixed))
-		{
-			return 1;
-		}
+    public abstract Source clone();
 
-		return name.getValue().compareToIgnoreCase( other.name.getValue());
-	}
+    @Override
+    public void hasChanged( Text object)
+    {
+        notifyChange( this);
+    }
+
+    public void setModel( Number newModel)
+        throws ValueOutOfRangeException
+    {
+        model.setValue( newModel);
+    }
+
+    public abstract void replaceSources( HashMap< SourceId, SourceId> sourcesMap);
+
+    @Override
+    public int compareTo( Source other)
+    {
+        if(( other instanceof Empty) || ( other instanceof Fixed))
+        {
+            return 1;
+        }
+
+        return name.getValue().compareToIgnoreCase( other.name.getValue());
+    }
 }
