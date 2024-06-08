@@ -28,14 +28,11 @@ public final class Analog extends Input
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Analog = {\n");
-		Buffer.append( super.toString());
-		Buffer.append( " Input Id: " + inputId + "\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+        return "Analog" +
+				"{\n" +
+				super.toString() +
+				" Input Id: " + inputId + "\n" +
+				"}\n";
 	}
 
 	@Override

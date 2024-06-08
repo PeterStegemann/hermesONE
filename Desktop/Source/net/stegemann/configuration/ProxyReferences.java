@@ -85,7 +85,7 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 		}
 	}
 
-	public SourceWithVolume GetProxyReferenceFromIndex( int Index)
+	public SourceWithVolume getProxyReferenceFromIndex(int Index)
 	{
 		if( Index == -1)
 		{

@@ -65,20 +65,16 @@ public final class Ticker extends Input
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Ticker = {\n");
-		Buffer.append( super.toString());
-		Buffer.append( " Low Input Id: " + lowInputId + "\n");
-		Buffer.append( " High Input Id: " + highInputId + "\n");
-		Buffer.append( " Init: " + init + "\n");
-		Buffer.append( " Step: " + step + "\n");
-		Buffer.append( " Store: " + store + "\n");
-		Buffer.append( " Top: " + top + "\n");
-		Buffer.append( " Bottom: " + bottom + "\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+        return "Ticker = {\n" +
+				super.toString() +
+				" Low Input Id: " + lowInputId + "\n" +
+				" High Input Id: " + highInputId + "\n" +
+				" Init: " + init + "\n" +
+				" Step: " + step + "\n" +
+				" Store: " + store + "\n" +
+				" Top: " + top + "\n" +
+				" Bottom: " + bottom + "\n" +
+				"}\n";
 	}
 
 	@Override

@@ -116,8 +116,7 @@ public class Number extends ChangeObservable< Number> implements ConfigurationVa
     {
         if(( Value > maximum) || ( Value < minimum))
         {
-            throw new ValueOutOfRangeException(
-                "Value " + Value + " not in range (" + minimum + " < " + maximum + ")");
+            throw new ValueOutOfRangeException( "Value " + Value + " not in range (" + minimum + " < " + maximum + ")");
         }
 
         value = Value;
@@ -141,7 +140,18 @@ public class Number extends ChangeObservable< Number> implements ConfigurationVa
     public void setConfigurationValue( String stringValue)
         throws ValueOutOfRangeException, NumberFormatException
     {
-        setValue( Integer.parseInt( stringValue));
+        int intValue;
+
+        if( stringValue == null)
+        {
+            intValue = 0;
+        }
+        else
+        {
+            intValue = Integer.parseInt( stringValue);
+        }
+
+        setValue( intValue);
     }
 
     @Override

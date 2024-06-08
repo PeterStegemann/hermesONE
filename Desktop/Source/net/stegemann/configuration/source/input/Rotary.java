@@ -67,20 +67,16 @@ public final class Rotary extends Input
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Rotary = {\n");
-		Buffer.append( super.toString());
-		Buffer.append( " A Input Id: " + aInputId + "\n");
-		Buffer.append( " B Input Id: " + bInputId + "\n");
-		Buffer.append( " Store: " + store + "\n");
-		Buffer.append( " Init: " + init + "\n");
-		Buffer.append( " Step: " + step + "\n");
-		Buffer.append( " Top: " + top + "\n");
-		Buffer.append( " Bottom: " + bottom + "\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+        return "Rotary = {\n" +
+				super.toString() +
+				" A Input Id: " + aInputId + "\n" +
+				" B Input Id: " + bInputId + "\n" +
+				" Store: " + store + "\n" +
+				" Init: " + init + "\n" +
+				" Step: " + step + "\n" +
+				" Top: " + top + "\n" +
+				" Bottom: " + bottom + "\n" +
+				"}\n";
 	}
 
 	@Override

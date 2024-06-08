@@ -17,13 +17,9 @@ public class Bool implements ConfigurationValue
 	@Override
 	public String toString()
 	{
-		StringBuilder builder = new StringBuilder();
-
-		builder.append( "Bool = {\n");
-		builder.append( " Value: " + value + "\n");
-		builder.append( "}\n");
-
-		return builder.toString();
+        return "Bool = {\n" +
+				" Value: " + value + "\n" +
+				"}\n";
 	}
 
 	@Override

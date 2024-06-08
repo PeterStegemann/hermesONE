@@ -45,6 +45,7 @@ public class Channel extends ChangeObservable< Channel> implements ChangeListene
 	@ConfigurationField( name = Names.CHANNEL_LIMIT)
 	private final SourceWithVolume limit;
 
+	@Getter
 	@ConfigurationField( name = Names.CHANNEL_POINTS, itemName = Names.CHANNEL_POINT)
 	private final List< Volume> points = new ArrayList<>();
 

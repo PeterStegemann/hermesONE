@@ -2,7 +2,7 @@ package net.stegemann.misc;
 
 public class Utility
 {
-	static public String formatTime( int time)
+	public static String formatTime( int time)
 	{
 		int seconds = time % 60;
 		int minutes = time / 60;
@@ -27,7 +27,7 @@ public class Utility
 		return result;
 	}
 
-	static public int parseTime( String time)
+	public static int parseTime( String time)
 	{
 		String[] valueArray = time.split( ":");
 
@@ -47,7 +47,7 @@ public class Utility
 		return seconds;
 	}
 
-	static public String formatMilliSeconds( int milliSeconds)
+	public static String formatMilliSeconds( int milliSeconds)
 	{
 		if( milliSeconds < 0)
 		{
@@ -55,11 +55,11 @@ public class Utility
 		}
 		else
 		{
-			return "" + milliSeconds / 10 + "." + milliSeconds % 10 + "ms";
+			return milliSeconds / 10 + "." + milliSeconds % 10 + "ms";
 		}
 	}
 
-	static public int parseMilliSeconds( String milliSeconds)
+	public static int parseMilliSeconds( String milliSeconds)
 	{
 		String[] valueArray = milliSeconds.split( "ms");
 
@@ -76,12 +76,12 @@ public class Utility
 		return ( int)( Float.parseFloat( valueArray[ 0]) * 10);
 	}
 
-	static public String formatVoltage( int voltage)
+	public static String formatVoltage( int voltage)
 	{
-		return "" + voltage / 10 + "." + voltage % 10 + "V";
+		return voltage / 10 + "." + voltage % 10 + "V";
 	}
 
-	static public int parseVoltage( String voltage)
+	public static int parseVoltage( String voltage)
 	{
 		String[] valueArray = voltage.split( "V");
 
@@ -98,8 +98,18 @@ public class Utility
 		return ( int)( Float.parseFloat( valueArray[ 0]) * 10);
 	}
 
-	static public String indent(Object object)
+	public static String indent( Object object)
 	{
 		return object.toString().indent(4).trim();
+	}
+
+	public static < Type, IterableType extends Iterable< Type>, ExceptionType extends Exception>
+		void forEach( ThrowingConsumer< Type, ExceptionType> consumer, IterableType iterable)
+			throws ExceptionType
+	{
+		for( Type item : iterable)
+		{
+			consumer.accept( item);
+		}
 	}
 }

@@ -38,8 +38,10 @@ class XMLWriterTest
 
 		xmlWriter.exportFields( document, node, testObject);
 
-		verify( documentGenerator, times( 0))
-				.appendNode( document, node, "testName", testObject.getTestField());
+		verify( documentGenerator, times( 0)).appendNode
+		(
+			document, node, "testName", testObject.getTestField()
+		);
 	}
 
 	@Test
@@ -155,8 +157,10 @@ class XMLWriterTest
 		xmlWriter.exportFields( document, node, testObject);
 
 		verify( document).createElement( eq( "testIterable"));
-		verify( documentGenerator)
-			.appendNode( eq( document), eq( iterableNode), eq("testItem"), eq( "testField"));
+		verify( documentGenerator).appendNode
+		(
+			eq( document), eq( iterableNode), eq("testItem"), eq( "testField")
+		);
 	}
 
 	@Test
@@ -223,8 +227,10 @@ class XMLWriterTest
 		xmlWriter.exportIterable( document, node, "testItem", testObject);
 
 		verify( document).createElement( eq( "className"));
-		verify( documentGenerator)
-				.appendNode( eq( document), eq( iterableNode), eq("testName"), eq( "testField"));
+		verify( documentGenerator).appendNode
+		(
+			eq( document), eq( iterableNode), eq("testName"), eq( "testField")
+		);
 	}
 
 	@Test
@@ -256,8 +262,10 @@ class XMLWriterTest
 		xmlWriter.exportFields( document, node, testContainer);
 
 		verify( document).createElement( eq( "testClass"));
-		verify( documentGenerator).appendNode( document, classNode, "testName",
-				testContainer.getTestField().getTestField());
+		verify( documentGenerator).appendNode
+		(
+			document, classNode, "testName", testContainer.getTestField().getTestField()
+		);
 	}
 
 	@Test

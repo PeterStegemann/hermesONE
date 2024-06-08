@@ -1,5 +1,6 @@
 package net.stegemann.controller;
 
+import lombok.Getter;
 import net.stegemann.configuration.*;
 import net.stegemann.configuration.source.Proxy;
 import net.stegemann.configuration.source.Source;
@@ -15,8 +16,10 @@ import net.stegemann.configuration.view.SourcesView.HasFixed;
 import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
+@Getter
 public class Controller
 {
 	private final Configuration configuration;
@@ -24,11 +27,6 @@ public class Controller
 	public Controller( Configuration configuration)
 	{
 		this.configuration = configuration;
-	}
-
-	public Configuration getConfiguration()
-	{
-		return configuration;
 	}
 
 	public Model addModel( Number TypeId)
@@ -383,10 +381,7 @@ public class Controller
 	{
 		boolean[] availableProxies = new boolean[ Model.PROXIES];
 
-		for( int currentProxyId = 0; currentProxyId < Model.PROXIES; currentProxyId++)
-		{
-			availableProxies[ currentProxyId] = true;
-		}
+        Arrays.fill( availableProxies, true);
 
 		// Loop sources.
 		for( Source currentSource: configuration.getSources())

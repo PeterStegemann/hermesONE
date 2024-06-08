@@ -18,7 +18,7 @@ class XMLWriterIntegrationTest extends AbstractXMLIntegrationTest
 {
 	private final XMLWriter xmlWriter = new XMLWriter( new DocumentGenerator());
 
-	private final String expected = Files.readString( Path.of(TEST_CONFIGURATION_XML));
+	private final String expected = Files.readString( Path.of( TEST_CONFIGURATION_XML));
 
 	private static final String RESULT_XML = "Target/XMLIntegrationTest.xml";
 
@@ -38,6 +38,6 @@ class XMLWriterIntegrationTest extends AbstractXMLIntegrationTest
 
 		String result = Files.readString( Path.of( RESULT_XML));
 
-		assertEquals(expected, result);
+		assertEquals( expected, result);
 	}
 }

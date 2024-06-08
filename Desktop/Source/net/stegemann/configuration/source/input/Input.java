@@ -34,13 +34,9 @@ public abstract class Input extends Source
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Input = {\n");
-		Buffer.append( super.toString());
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+        return "Input = {\n" +
+				super.toString() +
+				"}\n";
 	}
 
 	@Override

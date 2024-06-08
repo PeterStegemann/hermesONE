@@ -26,7 +26,7 @@ public class hermesONE_Serial //implements Runnable, SerialPortEventListener
 			usePort = Arguments[ 0];
 		}
 
-		System.out.println( "Available ports: " + Ports.ports());
+		System.out.println( "Available ports: " + Ports.getPorts());
 
 		TypedConnectionForwarder connectionForwarder = new TypedConnectionForwarder();
 		DesktopConnection UseConnection = new DesktopConnection();

@@ -8,28 +8,28 @@ public class ChangeObservable< Type>
 	private final Map< ChangeListener< Type>, Object> observers = new WeakHashMap<>();
 	private final Object dummy = new Object();
 
-	public void addChangeListener( ChangeListener< Type> Listener)
+	public void addChangeListener( ChangeListener< Type> listener)
 	{
 		synchronized( observers)
 		{
-			observers.put( Listener, dummy);
+			observers.put( listener, dummy);
 		}
 	}
 
-	public void removeChangeListener( ChangeListener< Type> Listener)
+	public void removeChangeListener( ChangeListener< Type> listener)
 	{
 		synchronized( observers)
 		{
-			observers.put( Listener, dummy);
+			observers.put( listener, dummy);
 		}
 	}
 
-	public void notifyChange( Type ChangedObject)
+	public void notifyChange( Type changedObject)
 	{
-		javax.swing.SwingUtilities.invokeLater(() -> doNotifyChange( ChangedObject));
+		javax.swing.SwingUtilities.invokeLater(() -> doNotifyChange( changedObject));
 	}
 
-	private void doNotifyChange( Type ChangedObject)
+	private void doNotifyChange( Type changedObject)
 	{
 		synchronized( observers)
 		{
@@ -38,7 +38,7 @@ public class ChangeObservable< Type>
 				// The listener might have vanished, so check that. Not sure whether this really applies here.
 				if( currentListener != null)
 				{
-					currentListener.hasChanged( ChangedObject);
+					currentListener.hasChanged( changedObject);
 				}
 			}
 		}

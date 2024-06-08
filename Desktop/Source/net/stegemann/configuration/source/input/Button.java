@@ -36,8 +36,7 @@ public final class Button extends Input
 
 		try
 		{
-			top = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TOP_SIGNAL_PER_VALUE,
-							  TOP_DEFAULT_VALUE);
+			top = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TOP_SIGNAL_PER_VALUE, TOP_DEFAULT_VALUE);
 			bottom = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, BOTTOM_SIGNAL_PER_VALUE,
 								 BOTTOM_DEFAULT_VALUE);
 		}
@@ -62,19 +61,15 @@ public final class Button extends Input
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Button = {\n");
-		Buffer.append( super.toString());
-		Buffer.append( " Input Id: " + inputId + "\n");
-		Buffer.append( " Init: " + init + "\n");
-		Buffer.append( " Store: " + store + "\n");
-		Buffer.append( " Toggle: " + toggle + "\n");
-		Buffer.append( " Top: " + top + "\n");
-		Buffer.append( " Bottom: " + bottom + "\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+        return "Button = {\n" +
+				super.toString() +
+				" Input Id: " + inputId + "\n" +
+				" Init: " + init + "\n" +
+				" Store: " + store + "\n" +
+				" Toggle: " + toggle + "\n" +
+				" Top: " + top + "\n" +
+				" Bottom: " + bottom + "\n" +
+				"}\n";
 	}
 
 	@Override

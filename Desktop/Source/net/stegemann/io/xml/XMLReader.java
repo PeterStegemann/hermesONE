@@ -583,7 +583,7 @@ public class XMLReader
 
 			if( Names.MODEL_PROXY_REFERENCE.compareToIgnoreCase( nodeName) == 0)
 			{
-				importSourceTupel( UseProxySources.GetProxyReferenceFromIndex( ProxyReferenceIndex),
+				importSourceTupel( UseProxySources.getProxyReferenceFromIndex( ProxyReferenceIndex),
 						           getChildNodes( childNode));
 
 				ProxyReferenceIndex++;

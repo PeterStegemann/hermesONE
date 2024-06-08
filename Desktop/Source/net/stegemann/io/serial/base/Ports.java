@@ -32,11 +32,11 @@ public class Ports
 		return null;
 	}
 
-	@SuppressWarnings( "unchecked")
-	public static List< String> ports()
+	public static List< String> getPorts()
 	{
 		ArrayList< String> ports = new ArrayList<>();
 
+		@SuppressWarnings( "unchecked")
 		Enumeration< CommPortIdentifier> portIdentifiers = CommPortIdentifier.getPortIdentifiers();
 
 		while( portIdentifiers.hasMoreElements())

@@ -1,8 +1,5 @@
 package net.stegemann.gui.panel.source;
 
-import javax.swing.GroupLayout;
-import javax.swing.JLabel;
-
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.ProxyReferences;
@@ -16,6 +13,8 @@ import net.stegemann.configuration.view.SourcesView.HasFixed;
 import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
 import net.stegemann.gui.components.source.SourceWithVolumeComponent;
+
+import javax.swing.*;
 
 public class ProxyPanel extends SpecificSourcePanel
 {
@@ -78,7 +77,7 @@ public class ProxyPanel extends SpecificSourcePanel
 
 		ProxyReferences UseProxyReferences = model.getProxyReferences();
 
-		proxyReference.set( sourcesView, UseProxyReferences.GetProxyReferenceFromIndex(
+		proxyReference.set( sourcesView, UseProxyReferences.getProxyReferenceFromIndex(
 							source.getSlot().getValue()));
 
 		setVisible( true);

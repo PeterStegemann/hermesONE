@@ -10,8 +10,8 @@ import net.stegemann.io.ReadException;
 import net.stegemann.io.WriteException;
 import net.stegemann.io.serial.base.Ports;
 import net.stegemann.io.serial.configuration.ConfigurationObjectFactory;
-import net.stegemann.io.serial.configuration.SerialConfigurationReader;
-import net.stegemann.io.serial.configuration.SerialConfigurationWriter;
+import net.stegemann.io.serial.configuration.read.SerialConfigurationReader;
+import net.stegemann.io.serial.configuration.write.SerialConfigurationWriter;
 import net.stegemann.io.xml.XMLObjectFactory;
 import net.stegemann.io.xml.XMLReader;
 import net.stegemann.io.xml.XMLWriter;
@@ -131,7 +131,7 @@ public class MainFrame extends JFrame implements ActionListener
 
 		CheckboxMenuItemGroup newPortGroup = new CheckboxMenuItemGroup();
 
-		for( String port: Ports.ports())
+		for( String port: Ports.getPorts())
 		{
 			JCheckBoxMenuItem newMenuItem = new JCheckBoxMenuItem( port);
 			newPortGroup.add( newMenuItem);

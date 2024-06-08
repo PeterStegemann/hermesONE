@@ -5,219 +5,219 @@ import java.util.List;
 
 public class DesktopProtocol
 {
-	private static final List< Id> idValues = Arrays.asList( Id.values());
+    private static final List< Id> idValues = Arrays.asList( Id.values());
 
-	public static Id enumFromByte( byte byteValue)
-	{
-		int enumPosition = byteValue & 0x00ff;
+    public static Id enumFromByte( byte byteValue)
+    {
+        int enumPosition = byteValue & 0x00ff;
 
-		Id enumValue;
+        Id enumValue;
 
-		if( enumPosition < idValues.size())
-		{
-			enumValue = idValues.get( enumPosition);
-		}
-		else
-		{
-			enumValue = Id.Unknown;
-		}
+        if( enumPosition < idValues.size())
+        {
+            enumValue = idValues.get( enumPosition);
+        }
+        else
+        {
+            enumValue = Id.Unknown;
+        }
 
-		// We keep the original byte value for debugging reasons, for example to identify values that get mapped to
-		// unknown.
-		enumValue.byteValue( byteValue);
+        // We keep the original byte value for debugging reasons, for example to identify values that get mapped to
+        // unknown.
+        enumValue.byteValue( byteValue);
 
-		return enumValue; 
-	}
+        return enumValue;
+    }
 
-	public static byte byteFromEnum( Id enumValue)
-	{
-		int enumPosition = idValues.indexOf( enumValue);
+    public static byte byteFromEnum( Id enumValue)
+    {
+        int enumPosition = idValues.indexOf( enumValue);
 
-		return ( byte) enumPosition;
-	}
+        return ( byte) enumPosition;
+    }
 
-	public enum Id
-	{
-		Ok,
-		Error,
+    public enum Id
+    {
+        Ok,
+        Error,
 
-		Ping,
-		ReadConfiguration,
-		WriteConfiguration,
+        Ping,
+        ReadConfiguration,
+        WriteConfiguration,
 
-		Configuration,
+        Configuration,
 
-		Owner,
-		SelectedModel,
+        Owner,
+        SelectedModel,
 
-		PPMs,
-		PPM,
-		PPMName,
+        PPMs,
+        PPM,
+        PPMName,
 
-		PPMInverted,
-		PPMCenter,
+        PPMInverted,
+        PPMCenter,
 
-		Outputs,
+        Outputs,
 
-		AnalogInputs,
-		DigitalInputs,
-		OutputChannels,
+        AnalogInputs,
+        DigitalInputs,
+        OutputChannels,
 
-		SetupBacklight,
-		SetupBlankTime,
-		StatusBacklight,
-		StatusContrast,
-		StatusBlankTime,
-		StatusInverted,
+        SetupBacklight,
+        SetupBlankTime,
+        StatusBacklight,
+        StatusContrast,
+        StatusBlankTime,
+        StatusInverted,
 
-		ChannelMappings,
-		ChannelMapping,
+        ChannelMappings,
+        ChannelMapping,
 
-		ChannelMode,
+        ChannelMode,
 
-		Calibrations,
-		Calibration,
-		CalibrationHigh,
-		CalibrationCenter,
-		CalibrationLow,
+        Calibrations,
+        Calibration,
+        CalibrationHigh,
+        CalibrationCenter,
+        CalibrationLow,
 
-		Battery,
-		BatteryWarnLowVoltage,
-		BatteryWarnCriticalVoltage,
-		BatteryMinimumVoltage,
-		BatteryMaximumVoltage,
-		BatteryCalibrationValue,
+        Battery,
+        BatteryWarnLowVoltage,
+        BatteryWarnCriticalVoltage,
+        BatteryMinimumVoltage,
+        BatteryMaximumVoltage,
+        BatteryCalibrationValue,
 
-		Models,
-		Model,
-		ModelState,
-		ModelName,
-		ModelType,
-		ModelRFMode,
+        Models,
+        Model,
+        ModelState,
+        ModelName,
+        ModelType,
+        ModelRFMode,
 
-		StatusTimers,
-		StatusTimer,
-		StatusSources,
-		StatusSource,
+        StatusTimers,
+        StatusTimer,
+        StatusSources,
+        StatusSource,
 
-		ModelProxyReferences,
-		ModelProxyReference,
+        ModelProxyReferences,
+        ModelProxyReference,
 
-		Types,
-		Type,
-		TypeState,
-		TypeName,
+        Types,
+        Type,
+        TypeState,
+        TypeName,
 
-		Channels,
-		Channel,
-		ChannelName,
-		ChannelInput,
-		ChannelPoints,
-		ChannelPoint,
-		ChannelTrim,
-		ChannelLimit,
-		ChannelReverse,
+        Channels,
+        Channel,
+        ChannelName,
+        ChannelInput,
+        ChannelPoints,
+        ChannelPoint,
+        ChannelTrim,
+        ChannelLimit,
+        ChannelReverse,
 
-		Sources,
-		Source,
-		SourceType,
-		SourceName,
-		SourceModel,
-		SourceTupelSource,
-		SourceTupelVolume,
+        Sources,
+        Source,
+        SourceType,
+        SourceName,
+        SourceModel,
+        SourceTupleSource,
+        SourceTupleVolume,
 
-		SourceInputAnalog,
-		SourceInputAnalogInput,
+        SourceInputAnalog,
+        SourceInputAnalogInput,
 
-		SourceInputButton,
-		SourceInputButtonInput,
-		SourceInputButtonStore,
-		SourceInputButtonInit,
-		SourceInputButtonToggle,
-		SourceInputButtonTop,
-		SourceInputButtonBottom,
+        SourceInputButton,
+        SourceInputButtonInput,
+        SourceInputButtonStore,
+        SourceInputButtonInit,
+        SourceInputButtonToggle,
+        SourceInputButtonTop,
+        SourceInputButtonBottom,
 
-		SourceInputRotary,
-		SourceInputRotaryAInput,
-		SourceInputRotaryBInput,
-		SourceInputRotaryStore,
-		SourceInputRotaryInit,
-		SourceInputRotaryStep,
-		SourceInputRotaryTop,
-		SourceInputRotaryBottom,
+        SourceInputRotary,
+        SourceInputRotaryAInput,
+        SourceInputRotaryBInput,
+        SourceInputRotaryStore,
+        SourceInputRotaryInit,
+        SourceInputRotaryStep,
+        SourceInputRotaryTop,
+        SourceInputRotaryBottom,
 
-		SourceInputSwitch,
-		SourceInputSwitchLowInput,
-		SourceInputSwitchHighInput,
-		SourceInputSwitchTop,
-		SourceInputSwitchBottom,
+        SourceInputSwitch,
+        SourceInputSwitchLowInput,
+        SourceInputSwitchHighInput,
+        SourceInputSwitchTop,
+        SourceInputSwitchBottom,
 
-		SourceInputTicker,
-		SourceInputTickerLowInput,
-		SourceInputTickerHighInput,
-		SourceInputTickerStore,
-		SourceInputTickerInit,
-		SourceInputTickerStep,
-		SourceInputTickerTop,
-		SourceInputTickerBottom,
+        SourceInputTicker,
+        SourceInputTickerLowInput,
+        SourceInputTickerHighInput,
+        SourceInputTickerStore,
+        SourceInputTickerInit,
+        SourceInputTickerStep,
+        SourceInputTickerTop,
+        SourceInputTickerBottom,
 
-		SourceMap,
-		SourceMapInput,
-		SourceMapPoints,
-		SourceMapPoint,
+        SourceMap,
+        SourceMapInput,
+        SourceMapPoints,
+        SourceMapPoint,
 
-		SourceMix,
-		SourceMixInputs,
-		SourceMixInput,
+        SourceMix,
+        SourceMixInputs,
+        SourceMixInput,
 
-		SourceStore,
-		SourceStoreInput,
-		SourceStoreInit,
+        SourceStore,
+        SourceStoreInput,
+        SourceStoreInit,
 
-		SourceFollower,
-		SourceFollowerTarget,
-		SourceFollowerStep,
-		SourceFollowerTrigger,
-		SourceFollowerTriggerHighLimit,
-		SourceFollowerTriggerLowLimit,
+        SourceFollower,
+        SourceFollowerTarget,
+        SourceFollowerStep,
+        SourceFollowerTrigger,
+        SourceFollowerTriggerHighLimit,
+        SourceFollowerTriggerLowLimit,
 
-		SourceTimer,
-		SourceTimerInitTime,
-		SourceTimerCurrentTime,
-		SourceTimerStore,
-		SourceTimerReverse,
-		SourceTimerTrigger,
-		SourceTimerTriggerHighLimit,
-		SourceTimerTriggerLowLimit,
-		SourceTimerWarnLowTime,
-		SourceTimerWarnCriticalTime,
-		SourceTimerWarnPauseTime,
+        SourceTimer,
+        SourceTimerInitTime,
+        SourceTimerCurrentTime,
+        SourceTimerStore,
+        SourceTimerReverse,
+        SourceTimerTrigger,
+        SourceTimerTriggerHighLimit,
+        SourceTimerTriggerLowLimit,
+        SourceTimerWarnLowTime,
+        SourceTimerWarnCriticalTime,
+        SourceTimerWarnPauseTime,
 
-		SourceProxy,
-		SourceProxySlot,
+        SourceProxy,
+        SourceProxySlot,
 
-		SourceTrimmer,
-		SourceTrimmerName,
-		SourceTrimmerInput,
-		SourceTrimmerPoints,
-		SourceTrimmerPoint,
-		SourceTrimmerTrim,
-		SourceTrimmerLimit,
-		SourceTrimmerReverse,
-		
-		// Always keep this at the end. It doesn't really exist in the protocol.
-		Unknown;
+        SourceTrimmer,
+        SourceTrimmerName,
+        SourceTrimmerInput,
+        SourceTrimmerPoints,
+        SourceTrimmerPoint,
+        SourceTrimmerTrim,
+        SourceTrimmerLimit,
+        SourceTrimmerReverse,
 
-		public byte byteValue;
+        // Always keep this at the end. It doesn't really exist in the protocol.
+        Unknown;
 
-		public void byteValue( byte byteValue)
-		{
-			this.byteValue = byteValue;
-		}
+        public byte byteValue;
 
-		public byte byteValue()
-		{
-			return byteValue;
-		}
-	}
+        public void byteValue( byte byteValue)
+        {
+            this.byteValue = byteValue;
+        }
+
+        public byte byteValue()
+        {
+            return byteValue;
+        }
+    }
 }

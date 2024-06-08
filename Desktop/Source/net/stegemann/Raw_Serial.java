@@ -14,23 +14,24 @@ public class Raw_Serial //implements Runnable, SerialPortEventListener
 		new Raw_Serial().Main( Arguments);
 	}
 
-	public void Main( String[] Arguments) throws UnsupportedCommOperationException, PortInUseException, IOException
+	public void Main( String[] arguments)
+		throws UnsupportedCommOperationException, PortInUseException, IOException
 	{
 //		String defaultPort = "/dev/tty.PL2303-00001004";
-		String Device = "/dev/cu.usbserial-A1048A6Y";
-		int BaudRate = 9600;
+		String device = "/dev/cu.usbserial-A1048A6Y";
+		int baudRate = 9600;
 
-		if( Arguments.length > 0)
+		if( arguments.length > 0)
 		{
-			Device = Arguments[ 0];
+			device = arguments[ 0];
 		}
 
-		System.out.println( "Available ports: " + Ports.ports());
+		System.out.println( "Available ports: " + Ports.getPorts());
 
-		SerialPort UsePort = Ports.openPort( Device);
+		SerialPort UsePort = Ports.openPort( device);
 
 		UsePort.setFlowControlMode( SerialPort.FLOWCONTROL_NONE);
-		UsePort.setSerialPortParams( BaudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
+		UsePort.setSerialPortParams( baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
 											  SerialPort.PARITY_NONE);
 
 		while( true)

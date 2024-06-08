@@ -11,7 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 
 @ToString
-public class Models extends ChangeObservable< Models> implements Iterable< Model>, ChangeListener< Model>
+public class Models
+    extends ChangeObservable< Models>
+    implements Iterable< Model>, ChangeListener< Model>
 {
 	private final List< Model> models = new ArrayList<>();
 
@@ -32,30 +34,30 @@ public class Models extends ChangeObservable< Models> implements Iterable< Model
 		models.clear();		
 	}
 
-	public void fillChannels( int Channels)
+	public void fillChannels( int channels)
 	{
-		for( Model CurrentModel: models)
+		for( Model currentModel: models)
 		{
-			CurrentModel.fill( Channels);
+			currentModel.fill( channels);
 		}
 	}
 
-	public void addModel( Model Model)
+	public void addModel( Model model)
 	{
-		models.add( Model);
+		models.add( model);
 
-		Model.addChangeListener( this);
+		model.addChangeListener( this);
 		notifyChange( this);
 	}
 
 	/**
 	 * Insert is like add, but it will assign a new id to the model.
 	 * 
-	 * @param Model The model to insert.
+	 * @param model The model to insert.
 	 *
 	 * @return The model
 	 */
-	public Model insertModel( Model Model)
+	public Model insertModel( Model model)
 	{
 		int FreeId = 0;
 
@@ -73,19 +75,19 @@ public class Models extends ChangeObservable< Models> implements Iterable< Model
 
 		try
 		{ 
-			Model.getId().setValue( FreeId);
+			model.getId().setValue( FreeId);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
 			return null;
 		}
 
-		models.add( FreeId, Model);
+		models.add( FreeId, model);
 
-		Model.addChangeListener( this);
+		model.addChangeListener( this);
 		notifyChange( this);
 
-		return Model;
+		return model;
 	}
 
 	public Model removeModel( Model Model)
