@@ -43,81 +43,22 @@ class ConfigurationHandler extends DesktopConnectionHandler
 	{
 		System UseSystem = configuration.getSystem();
 
-		switch( id)
-		{
-			case Owner :
-			{
-				readValue( UseSystem.getOwner(), textContent);
-			}
-			break;
+        switch( id)
+        {
+            case Owner -> readValue( UseSystem.getOwner(), textContent);
+            case AnalogInputs -> readValue( UseSystem.getAnalogInputs(), textContent);
+            case DigitalInputs -> readValue( UseSystem.getDigitalInputs(), textContent);
+            case OutputChannels -> readValue( UseSystem.getOutputChannels(), textContent);
+            case Outputs -> readValue( UseSystem.getOutputs(), textContent);
+            case SetupBacklight -> readValue( UseSystem.getSetupBacklight(), textContent);
+            case SetupBlankTime -> readValue( UseSystem.getSetupBlankTime(), textContent);
+            case StatusBacklight -> readValue( UseSystem.getStatusBacklight(), textContent);
+            case StatusContrast -> readValue( UseSystem.getStatusContrast(), textContent);
+            case StatusBlankTime -> readValue( UseSystem.getStatusBlankTime(), textContent);
+            case StatusInverted -> readValue( UseSystem.getStatusInverted(), textContent);
+            case SelectedModel -> readValue( UseSystem.getSelectedModel(), textContent);
 
-			case AnalogInputs :
-			{
-				readValue( UseSystem.getAnalogInputs(), textContent);
-			}
-			break;
-
-			case DigitalInputs :
-			{
-				readValue( UseSystem.getDigitalInputs(), textContent);
-			}
-			break;
-
-			case OutputChannels :
-			{
-				readValue( UseSystem.getOutputChannels(), textContent);
-			}
-			break;
-
-			case Outputs :
-			{
-				readValue( UseSystem.getOutputs(), textContent);
-			}
-			break;
-
-			case SetupBacklight :
-			{
-				readValue( UseSystem.getSetupBacklight(), textContent);
-			}
-			break;
-
-			case SetupBlankTime :
-			{
-				readValue( UseSystem.getSetupBlankTime(), textContent);
-			}
-			break;
-
-			case StatusBacklight :
-			{
-				readValue( UseSystem.getStatusBacklight(), textContent);
-			}
-			break;
-
-			case StatusContrast :
-			{
-				readValue( UseSystem.getStatusContrast(), textContent);
-			}
-			break;
-
-			case StatusBlankTime :
-			{
-				readValue( UseSystem.getStatusBlankTime(), textContent);
-			}
-			break;
-
-			case StatusInverted :
-			{
-				readValue( UseSystem.getStatusInverted(), textContent);
-			}
-			break;
-
-			case SelectedModel :
-			{
-				readValue( UseSystem.getSelectedModel(), textContent);
-			}
-			break;
-
-			default : super.valueRead( id, textContent); break;
-		}
+            default -> super.valueRead( id, textContent);
+        }
 	}
 }

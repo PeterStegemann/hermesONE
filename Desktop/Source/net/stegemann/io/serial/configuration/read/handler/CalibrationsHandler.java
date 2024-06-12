@@ -6,34 +6,31 @@ import net.stegemann.io.serial.base.DesktopProtocol;
 
 class CalibrationsHandler extends DesktopConnectionHandler
 {
-	private final Calibrations calibrations;
-	private int calibrationIndex;
+    private final Calibrations calibrations;
+    private int calibrationIndex = 0;
 
-	public CalibrationsHandler( Calibrations calibrations)
-	{
-		this.calibrations = calibrations;
+    public CalibrationsHandler( Calibrations calibrations)
+    {
+        this.calibrations = calibrations;
+    }
 
-		calibrationIndex = 0;
-	}
+    @Override
+    public void complexOpened( DesktopProtocol.Id id)
+    {
+        switch( id)
+        {
+            case Calibration ->
+            {
+                Calibration calibration = new Calibration();
 
-	@Override
-	public void complexOpened( DesktopProtocol.Id id)
-	{
-		switch( id)
-		{
-			case Calibration :
-			{
-				Calibration NewCalibration = new Calibration();
+                pushHandler( new CalibrationHandler( calibration));
 
-				pushHandler( new CalibrationHandler( NewCalibration));
+                calibrations.setCalibration( calibrationIndex, calibration);
 
-				calibrations.setCalibration( calibrationIndex, NewCalibration);
+                calibrationIndex++;
+            }
 
-				calibrationIndex++;
-			}
-			break;
-
-			default : super.complexOpened( id); break;
-		}
-	}
+            default -> super.complexOpened( id);
+        }
+    }
 }

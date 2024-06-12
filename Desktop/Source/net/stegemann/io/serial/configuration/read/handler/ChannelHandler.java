@@ -6,70 +6,37 @@ import net.stegemann.io.serial.configuration.read.handler.source.SourceTupleHand
 
 class ChannelHandler extends DesktopConnectionHandler
 {
-	private final Channel channel;
+    private final Channel channel;
 
-	public ChannelHandler( Channel channel)
-	{
-		this.channel = channel;
-	}
+    public ChannelHandler( Channel channel)
+    {
+        this.channel = channel;
+    }
 
-	@Override
-	public void complexOpened( DesktopProtocol.Id id)
-	{
-		switch( id)
-		{
-			case ChannelInput :
-			{
-				pushHandler( new SourceTupleHandler( channel.getInput()));
-			}
-			break;
+    @Override
+    public void complexOpened( DesktopProtocol.Id id)
+    {
+        switch( id)
+        {
+            case ChannelInput -> pushHandler( new SourceTupleHandler( channel.getInput()));
+            case ChannelTrim -> pushHandler( new SourceTupleHandler( channel.getTrim()));
+            case ChannelLimit -> pushHandler( new SourceTupleHandler( channel.getLimit()));
+            case ChannelPoints -> pushHandler( new ChannelPointsHandler( channel.getPoints()));
 
-			case ChannelTrim :
-			{
-				pushHandler( new SourceTupleHandler( channel.getTrim()));
-			}
-			break;
+            default -> super.complexOpened( id);
+        }
+    }
 
-			case ChannelLimit :
-			{
-				pushHandler( new SourceTupleHandler( channel.getLimit()));
-			}
-			break;
+    @Override
+    public void valueRead( DesktopProtocol.Id id, String textContent)
+    {
+        switch( id)
+        {
+            case ChannelName -> readValue( channel.getName(), textContent);
+            case ChannelReverse -> readValue( channel.getReverse(), textContent);
+            case ChannelMode -> readValue( channel.getMode(), textContent);
 
-			case ChannelPoints :
-			{
-				pushHandler( new ChannelPointsHandler( channel));
-			}
-			break;
-
-			default : super.complexOpened( id); break;
-		}
-	}
-
-	@Override
-	public void valueRead( DesktopProtocol.Id id, String textContent)
-	{
-		switch( id)
-		{
-			case ChannelName :
-			{
-				readValue( channel.getName(), textContent);
-			}
-			break;
-
-			case ChannelReverse :
-			{
-				readValue( channel.getReverse(), textContent);
-			}
-			break;
-
-			case ChannelMode :
-			{
-				readValue( channel.getMode(), textContent);
-			}
-			break;
-
-			default : super.valueRead( id, textContent); break;
-		}
-	}
+            default -> super.valueRead( id, textContent);
+        }
+    }
 }

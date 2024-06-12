@@ -4,11 +4,11 @@ import net.stegemann.configuration.source.input.Switch;
 import net.stegemann.io.serial.base.DesktopProtocol;
 import net.stegemann.io.serial.configuration.read.handler.DesktopConnectionHandler;
 
-public class InputSwitchHandler extends DesktopConnectionHandler
+public class SwitchHandler extends DesktopConnectionHandler
 {
 	private final Switch aSwitch;
 
-	public InputSwitchHandler( Switch aSwitch)
+	public SwitchHandler( Switch aSwitch)
 	{
 		this.aSwitch = aSwitch;
 	}

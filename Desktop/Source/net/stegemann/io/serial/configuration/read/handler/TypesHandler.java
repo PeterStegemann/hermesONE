@@ -8,43 +8,36 @@ import net.stegemann.io.serial.base.DesktopProtocol;
 
 class TypesHandler extends DesktopConnectionHandler
 {
-	private final Types types;
+    private final Types types;
+    private int typeId = 0;
 
-	private int typeId;
+    public TypesHandler( Types types)
+    {
+        this.types = types;
+    }
 
-	public TypesHandler( Types types)
-	{
-		this.types = types;
+    @Override
+    public void complexOpened( DesktopProtocol.Id id)
+    {
+        switch( id)
+        {
+            case Type ->
+            {
+                Type type = new Type();
 
-		// TypeIds don't start with zero!
-		typeId = Model.TYPE_START;
-	}
+                try
+                {
+                    type.getId().setValue( typeId + Model.TYPE_START);
+                }
+                catch( ValueOutOfRangeException ignored) {}
 
-	@Override
-	public void complexOpened( DesktopProtocol.Id id)
-	{
-		switch( id)
-		{
-			case Type :
-			{
-				Type NewType = new Type();
+                pushHandler( new TypeHandler( types, type));
 
-				try
-				{
-					NewType.getId().setValue( typeId);
-				}
-				catch( ValueOutOfRangeException ignored)
-				{
-				}
+                // Always count up type id, it doesn't matter if a type was skipped.
+                typeId++;
+            }
 
-				// Always count up type id, it doesn't matter if a type was skipped.
-				typeId++;
-
-				pushHandler( new TypeHandler( types, NewType));
-			}
-			break;
-
-			default : super.complexOpened( id); break;
-		}
-	}
+            default -> super.complexOpened( id);
+        }
+    }
 }

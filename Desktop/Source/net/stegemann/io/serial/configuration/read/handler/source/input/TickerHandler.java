@@ -4,11 +4,11 @@ import net.stegemann.configuration.source.input.Ticker;
 import net.stegemann.io.serial.base.DesktopProtocol;
 import net.stegemann.io.serial.configuration.read.handler.DesktopConnectionHandler;
 
-public class InputTickerHandler extends DesktopConnectionHandler
+public class TickerHandler extends DesktopConnectionHandler
 {
 	private final Ticker ticker;
 
-	public InputTickerHandler( Ticker ticker)
+	public TickerHandler( Ticker ticker)
 	{
 		this.ticker = ticker;
 	}

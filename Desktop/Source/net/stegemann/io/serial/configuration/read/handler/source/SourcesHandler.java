@@ -6,23 +6,22 @@ import net.stegemann.io.serial.configuration.read.handler.DesktopConnectionHandl
 
 public class SourcesHandler extends DesktopConnectionHandler
 {
-	private final Sources sources;
+    private final Sources sources;
+    private int sourceId = 0;
 
-	private int sourceId = 0;
-
-	public SourcesHandler( Sources sources)
-	{
-		this.sources = sources;
+    public SourcesHandler( Sources sources)
+    {
+        this.sources = sources;
     }
 
-	@Override
-	public void complexOpened( DesktopProtocol.Id id)
-	{
-		switch( id)
-		{
-			case Source -> pushHandler( new SourceHandler( sources, sourceId++));
+    @Override
+    public void complexOpened( DesktopProtocol.Id id)
+    {
+        switch( id)
+        {
+            case Source -> pushHandler( new SourceHandler( sources, sourceId++));
 
-			default -> super.complexOpened( id);
-		}
-	}
+            default -> super.complexOpened( id);
+        }
+    }
 }

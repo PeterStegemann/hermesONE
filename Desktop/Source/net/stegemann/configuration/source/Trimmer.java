@@ -48,10 +48,14 @@ public final class Trimmer extends Source
 		try
 		{
 			input = new SourceWithVolume( INPUT_SIGNAL_PER_VALUE, DEFAULT_INPUT_VOLUME);
-			trim = new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TRIM_SIGNAL_PER_VALUE,
-										 DEFAULT_TRIM_VOLUME);
-			limit = new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, LIMIT_SIGNAL_PER_VALUE,
-										  DEFAULT_LIMIT_VOLUME);
+			trim = new SourceWithVolume
+			(
+                Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TRIM_SIGNAL_PER_VALUE, DEFAULT_TRIM_VOLUME
+            );
+			limit = new SourceWithVolume
+			(
+                Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, LIMIT_SIGNAL_PER_VALUE, DEFAULT_LIMIT_VOLUME
+            );
 			limit.getSourceId().setValue( Source.SOURCE_FIXED);
 		}
 		catch( ValueOutOfRangeException reason)
@@ -76,7 +80,7 @@ public final class Trimmer extends Source
 		}
 	}
 
-	public Trimmer(Trimmer other)
+	public Trimmer( Trimmer other)
 	{
 		super( other);
 

@@ -17,30 +17,11 @@ class BatteryHandler extends DesktopConnectionHandler
 	{
         switch( id)
         {
-            case BatteryWarnLowVoltage ->
-            {
-                readValue( battery.getWarnLowVoltage(), textContent);
-            }
-
-            case BatteryWarnCriticalVoltage ->
-            {
-                readValue( battery.getWarnCriticalVoltage(), textContent);
-            }
-
-            case BatteryMinimumVoltage ->
-            {
-                readValue( battery.getMinimumVoltage(), textContent);
-            }
-
-            case BatteryMaximumVoltage ->
-            {
-                readValue( battery.getMaximumVoltage(), textContent);
-            }
-
-            case BatteryCalibrationValue ->
-            {
-                readValue( battery.getCalibrationVoltage(), textContent);
-            }
+            case BatteryWarnLowVoltage -> readValue( battery.getWarnLowVoltage(), textContent);
+            case BatteryWarnCriticalVoltage -> readValue( battery.getWarnCriticalVoltage(), textContent);
+            case BatteryMinimumVoltage -> readValue( battery.getMinimumVoltage(), textContent);
+            case BatteryMaximumVoltage -> readValue( battery.getMaximumVoltage(), textContent);
+            case BatteryCalibrationValue -> readValue( battery.getCalibrationVoltage(), textContent);
 
             default -> super.valueRead( id, textContent);
         }

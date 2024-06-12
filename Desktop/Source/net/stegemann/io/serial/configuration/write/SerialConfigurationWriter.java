@@ -31,8 +31,10 @@ public class SerialConfigurationWriter
         this.connection = connection;
     }
 
-    public void writeToPort( Configuration configuration, String portName,
-                             ChangeListener< ConfigurationProgress> configurationListener)
+    public void writeToPort
+    (
+        Configuration configuration, String portName, ChangeListener< ConfigurationProgress> configurationListener
+    )
         throws WriteException
     {
         DummyConnectionHandler connectionForwarder = new DummyConnectionHandler();
@@ -43,6 +45,10 @@ public class SerialConfigurationWriter
         }
 
         configurationProgress.reset();
+        configurationProgress.setModelsMaximum( configuration.getModels().getCount());
+        configurationProgress.setTypesMaximum( configuration.getTypes().getCount());
+        configurationProgress.setSourcesMaximum( configuration.getSources().getCount());
+
         configurationProgress.addChangeListener( configurationListener);
 
         try
@@ -141,7 +147,7 @@ public class SerialConfigurationWriter
 
                 sourceId++;
 
-                configurationProgress.setSourceCount( sourceId);
+                configurationProgress.setSourcesCount( sourceId);
             }
         });
     }
@@ -152,11 +158,11 @@ public class SerialConfigurationWriter
         complex( Id.Source, () ->
         {
             value( Id.SourceName, source.getName());
-            value( Id.SourceModel, source.getModel());
+            value( Id.SourceModel, source.getModelId());
 
             if( source instanceof Analog)
             {
-                inputAnalog(( Analog) source);
+                analog(( Analog) source);
             }
             else if( source instanceof Button)
             {
@@ -200,12 +206,12 @@ public class SerialConfigurationWriter
             }
             else if( source instanceof Trimmer)
             {
-                trimmer((Trimmer) source);
+                trimmer(( Trimmer) source);
             }
         });
     }
 
-    private void inputAnalog( Analog analog)
+    private void analog( Analog analog)
         throws WriteException
     {
         complex( Id.SourceInputAnalog, () -> value( Id.SourceInputAnalogInput, analog.getInputId()));
@@ -369,7 +375,7 @@ public class SerialConfigurationWriter
     {
         complex( Id.Types, () ->
         {
-            // TypeIds don't start with zero!
+            // Type ids don't start with zero!
             int typeId = Model.TYPE_START;
 
             for( Type type: types)
@@ -386,7 +392,7 @@ public class SerialConfigurationWriter
 
                 typeId++;
 
-                configurationProgress.setTypeCount( typeId);
+                configurationProgress.setTypesCount( typeId - Model.TYPE_START);
             }
         });
     }
@@ -422,7 +428,7 @@ public class SerialConfigurationWriter
 
                 modelId++;
 
-                configurationProgress.setModelCount( modelId);
+                configurationProgress.setModelsCount( modelId);
             }
         });
     }

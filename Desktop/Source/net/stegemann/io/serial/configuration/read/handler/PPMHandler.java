@@ -15,42 +15,24 @@ class PPMHandler extends DesktopConnectionHandler
 	@Override
 	public void complexOpened( DesktopProtocol.Id id)
 	{
-		switch( id)
-		{
-			case ChannelMappings :
-			{
-				pushHandler( new ChannelMappingsHandler( ppm.getChannelMappings()));
-			}
-			break;
+        switch( id)
+        {
+            case ChannelMappings -> pushHandler( new ChannelMappingsHandler( ppm.getChannelMappings()));
 
-			default : super.complexOpened( id); break;
-		}
+            default -> super.complexOpened( id);
+        }
 	}
 
 	@Override
 	public void valueRead( DesktopProtocol.Id id, String textContent)
 	{
-		switch( id)
-		{
-			case PPMInverted :
-			{
-				readValue( ppm.getInverted(), textContent);
-			}
-			break;
+        switch( id)
+        {
+            case PPMInverted -> readValue( ppm.getInverted(), textContent);
+            case PPMCenter -> readValue( ppm.getCenter(), textContent);
+            case PPMName -> readValue( ppm.getName(), textContent);
 
-			case PPMCenter :
-			{
-				readValue( ppm.getCenter(), textContent);
-			}
-			break;
-
-			case PPMName :
-			{
-				readValue( ppm.getName(), textContent);
-			}
-			break;
-
-			default : super.valueRead( id, textContent); break;
-		}
+            default -> super.valueRead( id, textContent);
+        }
 	}
 }

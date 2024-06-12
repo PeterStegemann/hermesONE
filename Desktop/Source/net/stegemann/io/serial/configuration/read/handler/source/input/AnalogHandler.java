@@ -4,11 +4,11 @@ import net.stegemann.configuration.source.input.Analog;
 import net.stegemann.io.serial.base.DesktopProtocol;
 import net.stegemann.io.serial.configuration.read.handler.DesktopConnectionHandler;
 
-public class InputAnalogHandler extends DesktopConnectionHandler
+public class AnalogHandler extends DesktopConnectionHandler
 {
 	private final Analog analog;
 
-	public InputAnalogHandler( Analog analog)
+	public AnalogHandler( Analog analog)
 	{
 		this.analog = analog;
 	}

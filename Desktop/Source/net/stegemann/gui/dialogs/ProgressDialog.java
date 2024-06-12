@@ -10,161 +10,162 @@ import java.io.Serial;
 
 public class ProgressDialog extends JDialog implements ChangeListener< ConfigurationProgress>
 {
-	@Serial
-	private static final long serialVersionUID = 108509389789556744L;
+    @Serial
+    private static final long serialVersionUID = 108509389789556744L;
 
-	private final JLabel typesValue = new JLabel( "0");
-	private final JLabel modelsValue = new JLabel( "0");
-	private final JLabel sourcesValue = new JLabel( "0");
+    private final JLabel typesValue = new JLabel( "0");
+    private final JLabel modelsValue = new JLabel( "0");
+    private final JLabel sourcesValue = new JLabel( "0");
+    private final JProgressBar progressBar = new JProgressBar();
 
-	// This flag is set on close and is respected by open, just for the case that close is called before open. In that
-	// case, open won't do anything.
-	private volatile boolean gone = false;
-	// We can't lock because setVisible( true) blocking, but it might happen that we close and open run at the same
-	// time. That's why we keep closing until the open flag is set to false.
-	private volatile boolean open = false;
+    // This flag is set on close and is respected by open, just for the case that close is called before open. In that
+    // case, open won't do anything.
+    private volatile boolean gone = false;
+    // We can't lock because setVisible( true) is blocking, but it might happen that we close and open run at the same
+    // time. That's why we keep closing until the open flag is set to false.
+    private volatile boolean open = false;
 
-	public ProgressDialog( JFrame parent, String text)
-	{
-		super( parent, "", true);
+    public ProgressDialog( JFrame parent, String text)
+    {
+        super( parent, "", true);
 
-		setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE);
-		setResizable( false);
+        setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE);
+        setResizable( false);
 
-		JLabel textLabel = new JLabel( text);
+        JLabel textLabel = new JLabel( text);
 
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setIndeterminate( true);
+        progressBar.setIndeterminate( false);
 
-		JSeparator valueSeparator = new JSeparator( SwingConstants.HORIZONTAL);
+        JSeparator valueSeparator = new JSeparator( SwingConstants.HORIZONTAL);
 
-		JLabel typesLabel = new JLabel( "Types");
-		JLabel modelsLabel = new JLabel( "Models");
-		JLabel sourcesLabel = new JLabel( "Sources");
+        JLabel typesLabel = new JLabel( "Typen");
+        JLabel modelsLabel = new JLabel( "Modelle");
+        JLabel sourcesLabel = new JLabel( "Quellen");
 
-		// Layout elements.
-		GroupLayout layout = new GroupLayout( getContentPane());
-		setLayout( layout);
+        // Layout elements.
+        GroupLayout layout = new GroupLayout( getContentPane());
+        setLayout( layout);
 
 //		Layout.setAutoCreateGaps( true);
-		layout.setAutoCreateContainerGaps( true);
+        layout.setAutoCreateContainerGaps( true);
 
-		layout.setHorizontalGroup
-		(
-			layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( textLabel)
-				.addComponent( progressBar)
-				.addComponent( valueSeparator)
-				.addGroup
-				(
-					layout.createSequentialGroup()
-						.addGroup
-						(
-							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-								.addComponent( typesLabel)
-								.addComponent( typesValue)
-						)
-						.addPreferredGap( ComponentPlacement.UNRELATED)
-						.addGroup
-						(
-							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-								.addComponent( modelsLabel)
-								.addComponent( modelsValue)
-						)
-						.addPreferredGap( ComponentPlacement.UNRELATED)
-						.addGroup
-						(
-							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-								.addComponent( sourcesLabel)
-								.addComponent( sourcesValue)
-						)
-				)
-		);
+        layout.setHorizontalGroup
+        (
+            layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent( textLabel)
+                .addComponent( progressBar)
+                .addComponent( valueSeparator)
+                .addGroup
+                (
+                    layout.createSequentialGroup()
+                        .addGroup
+                        (
+                            layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                                .addComponent( typesLabel)
+                                .addComponent( typesValue)
+                        )
+                        .addPreferredGap( ComponentPlacement.UNRELATED)
+                        .addGroup
+                        (
+                            layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                                .addComponent( modelsLabel)
+                                .addComponent( modelsValue)
+                        )
+                        .addPreferredGap( ComponentPlacement.UNRELATED)
+                        .addGroup
+                        (
+                            layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                                .addComponent( sourcesLabel)
+                                .addComponent( sourcesValue)
+                        )
+                )
+        );
 
-		layout.setVerticalGroup
-		(
-			layout.createSequentialGroup()
-				.addComponent( textLabel)
-				.addComponent( progressBar)
-				.addComponent( valueSeparator)
-				.addGroup
-				(
-					layout.createSequentialGroup()
-						.addGroup
-						(
-							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-								.addComponent( typesLabel)
-								.addComponent( modelsLabel)
-								.addComponent( sourcesLabel)
-						)
-						.addGroup
-						(
-							layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-								.addComponent( typesValue)
-								.addComponent( modelsValue)
-								.addComponent( sourcesValue)
-						)
-				)
-		);
-	}
+        layout.setVerticalGroup
+        (
+            layout.createSequentialGroup()
+                .addComponent( textLabel)
+                .addComponent( progressBar)
+                .addComponent( valueSeparator)
+                .addGroup
+                (
+                    layout.createSequentialGroup()
+                        .addGroup
+                        (
+                            layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                                .addComponent( typesLabel)
+                                .addComponent( modelsLabel)
+                                .addComponent( sourcesLabel)
+                        )
+                        .addGroup
+                        (
+                            layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                                .addComponent( typesValue)
+                                .addComponent( modelsValue)
+                                .addComponent( sourcesValue)
+                        )
+                )
+        );
+    }
 
-	public void open()
-	{
-		open = true;
+    public void open()
+    {
+        open = true;
 
-		if( gone == true)
-		{
-			open = false;
+        if( gone == true)
+        {
+            open = false;
 
-			return;
-		}
+            return;
+        }
 
-		pack();
+        pack();
 
-		if( getParent() != null)
-		{
-			Dimension parentSize = getParent().getSize();
-			Point parentLocation = getParent().getLocation();
-			Dimension thisSize = getSize();
+        if( getParent() != null)
+        {
+            Dimension parentSize = getParent().getSize();
+            Point parentLocation = getParent().getLocation();
+            Dimension thisSize = getSize();
 
-			setLocation
-			(
-				parentLocation.x + parentSize.width / 2 - thisSize.width / 2,
-				parentLocation.y + parentSize.height / 2 - thisSize.height / 2
-			);
-		}
+            setLocation
+            (
+                parentLocation.x + parentSize.width / 2 - thisSize.width / 2,
+                parentLocation.y + parentSize.height / 2 - thisSize.height / 2
+            );
+        }
 
-		setVisible( true);
+        setVisible( true);
 
-		open = false;
-	}
+        open = false;
+    }
 
-	public void close()
-	{
-		gone = true;
+    public void close()
+    {
+        gone = true;
 
-		while( open == true)
-		{
-			setVisible( false);
+        while( open == true)
+        {
+            setVisible( false);
 
-			if( open == true)
-			{
-				try
-				{
-					Thread.sleep( 100);
-				}
-				catch (InterruptedException ignored)
-				{
-				}
-			}
-		}
-	}
+            if( open == true)
+            {
+                try
+                {
+                    Thread.sleep( 100);
+                }
+                catch( InterruptedException ignored) {}
+            }
+        }
+    }
 
-	@Override
-	public void hasChanged( ConfigurationProgress configurationProgress)
-	{
-		typesValue.setText( String.valueOf( configurationProgress.getTypeCount()));
-		modelsValue.setText( String.valueOf( configurationProgress.getModelCount()));
-		sourcesValue.setText( String.valueOf( configurationProgress.getSourceCount()));
-	}
+    @Override
+    public void hasChanged( ConfigurationProgress configurationProgress)
+    {
+        progressBar.setMaximum( configurationProgress.getTotalMaximum());
+        progressBar.setValue( configurationProgress.getTotalCount());
+
+        typesValue.setText( String.valueOf( configurationProgress.getTypesCount()));
+        modelsValue.setText( String.valueOf( configurationProgress.getModelsCount()));
+        sourcesValue.setText( String.valueOf( configurationProgress.getSourcesCount()));
+    }
 }

@@ -149,7 +149,7 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		}
 
 		// Match if the source is global, same type or same model.
-		Number sourceModelId = source.getModel();
+		Number sourceModelId = source.getModelId();
 
 		boolean isMatching =
 			(( pickGlobals == PickGlobals.Yes) && ( sourceModelId.equals( Model.MODEL_GLOBAL))) ||

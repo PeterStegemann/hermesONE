@@ -7,42 +7,36 @@ import net.stegemann.io.serial.base.DesktopProtocol;
 
 class ModelsHandler extends DesktopConnectionHandler
 {
-	private final Models models;
+    private final Models models;
+    private int modelId = 0;
 
-	private int modelId;
+    public ModelsHandler( Models models)
+    {
+        this.models = models;
+    }
 
-	public ModelsHandler( Models models)
-	{
-		this.models = models;
+    @Override
+    public void complexOpened( DesktopProtocol.Id id)
+    {
+        switch( id)
+        {
+            case Model ->
+            {
+                Model model = new Model();
 
-		modelId = 0;
-	}
+                try
+                {
+                    model.getId().setValue( modelId);
+                }
+                catch( ValueOutOfRangeException ignored) {}
 
-	@Override
-	public void complexOpened( DesktopProtocol.Id id)
-	{
-		switch( id)
-		{
-			case Model :
-			{
-				Model newModel = new Model();
+                pushHandler( new ModelHandler( models, model));
 
-				pushHandler( new ModelHandler( models, newModel));
+                // Always count up model id, it doesn't matter if a model was skipped.
+                modelId++;
+            }
 
-				try
-				{
-					newModel.getId().setValue( modelId);
-				}
-				catch( ValueOutOfRangeException ignored)
-				{
-				}
-
-				// Always count up model id, it doesn't matter if a model was skipped.
-				modelId++;
-			}
-			break;
-
-			default : super.complexOpened( id); break;
-		}
-	}
+            default -> super.complexOpened( id);
+        }
+    }
 }

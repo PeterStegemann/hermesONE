@@ -1,44 +1,65 @@
 package net.stegemann.io.serial.configuration;
 
 import lombok.Getter;
-import net.stegemann.misc.ChangeObservable;
+import lombok.Setter;import net.stegemann.misc.ChangeObservable;
 
 @Getter
 public class ConfigurationProgress extends ChangeObservable< ConfigurationProgress>
 {
-	private int typeCount;
-	private int modelCount;
-	private int sourceCount;
+	private int modelsCount;
+	private int typesCount;
+	private int sourcesCount;
+
+    @Setter
+	private int modelsMaximum;
+    @Setter
+	private int typesMaximum;
+    @Setter
+	private int sourcesMaximum;
 
 	ConfigurationProgress()
 	{
 		reset();
 	}
 
-	public void setTypeCount( int useTypeCount)
+	public void setTypesCount( int typesCount)
 	{
-		typeCount = useTypeCount;
+		this.typesCount = typesCount;
 		
 		notifyChange( this);
 	}
 
-	public void setModelCount( int useModelCount)
+	public void setModelsCount( int modelsCount)
 	{
-		modelCount = useModelCount;
+		this.modelsCount = modelsCount;
 	
 		notifyChange( this);
 	}
 
-	public void setSourceCount( int useSourceCount)
+	public void setSourcesCount( int sourcesCount)
 	{
-		sourceCount = useSourceCount;
+		this.sourcesCount = sourcesCount;
 	
 		notifyChange( this);
 	}
 
-	public void reset() {
-		typeCount = 0;
-		modelCount = 0;
-		sourceCount = 0;
+    public int getTotalCount()
+    {
+        return modelsCount * 5 + typesCount + sourcesCount;
+    }
+
+    public int getTotalMaximum()
+    {
+        return modelsMaximum * 5 + typesMaximum + sourcesMaximum;
+    }
+
+    public void reset()
+	{
+		typesCount = 0;
+		modelsCount = 0;
+		sourcesCount = 0;
+        modelsMaximum = 0;
+        typesMaximum = 0;
+	    sourcesMaximum = 0;
 	}
 }

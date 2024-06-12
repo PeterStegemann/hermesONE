@@ -133,7 +133,7 @@ public class ProxiesPanel extends JPanel implements ActionListener, ListSelectio
 			{
 				proxy = controller.addProxy( typeId);
 			}
-			catch (ValueOutOfRangeException reason)
+			catch( ValueOutOfRangeException reason)
 			{
 				throw new RuntimeException( reason);
 			}

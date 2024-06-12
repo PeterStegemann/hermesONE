@@ -5,30 +5,27 @@ import net.stegemann.io.serial.base.DesktopProtocol;
 
 class StatusTimesHandler extends DesktopConnectionHandler
 {
-	private final Model model;
-	private int statusTimeIndex;
+    private final Model model;
+    private int statusTimeIndex = 0;
 
-	public StatusTimesHandler( Model model)
-	{
-		this.model = model;
+    public StatusTimesHandler( Model model)
+    {
+        this.model = model;
+    }
 
-		statusTimeIndex = 0;
-	}
+    @Override
+    public void valueRead( DesktopProtocol.Id id, String textContent)
+    {
+        switch( id)
+        {
+            case StatusTimer ->
+            {
+                readValue( model.getStatusTimeId( Model.StatusTime.values()[ statusTimeIndex]), textContent);
 
-	@Override
-	public void valueRead( DesktopProtocol.Id id, String textContent)
-	{
-		switch( id)
-		{
-			case StatusTimer :
-			{
-				readValue( model.getStatusTimeId( Model.StatusTime.values()[ statusTimeIndex]), textContent);
+                statusTimeIndex++;
+            }
 
-				statusTimeIndex++;
-			}
-			break;
-
-			default : super.valueRead( id, textContent); break;
-		}
-	}
+            default -> super.valueRead( id, textContent);
+        }
+    }
 }

@@ -16,9 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @Getter
-public class Model
-    extends ChangeObservable< Model>
-    implements ChangeListener< Text>, Named
+public class Model extends ChangeObservable< Model>
+                implements ChangeListener< Text>, Named
 {
     public enum State
     {
@@ -60,6 +59,7 @@ public class Model
 
     public final static Number Global;
 
+    @ConfigurationField( name = Names.MODEL_ID)
 	private final Number id;
     @ConfigurationField( name = Names.MODEL_NAME)
     private final Text name;
@@ -202,7 +202,7 @@ public class Model
     }
 
 	@Override
-	public Number getModel()
+	public Number getModelId()
 	{
 		return id;
 	}

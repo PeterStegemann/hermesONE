@@ -7,5 +7,5 @@ public interface Named
 {
 	Number getId();
 	Text getName();
-	Number getModel();
+	Number getModelId();
 }

@@ -1,32 +1,25 @@
 package net.stegemann.io.serial.configuration.read.handler;
 
-import net.stegemann.configuration.Channel;
-import net.stegemann.io.serial.base.DesktopProtocol;
+import net.stegemann.configuration.type.Volume;import net.stegemann.io.serial.base.DesktopProtocol;import java.util.List;
 
 class ChannelPointsHandler extends DesktopConnectionHandler
 {
-	private final Channel channel;
-	private int channelPointIndex;
+    private final List<Volume> channelPoints;
+	private int channelPointIndex = 0;
 
-	public ChannelPointsHandler( Channel channel)
+	public ChannelPointsHandler( List< Volume> channelPoints)
 	{
-		this.channel = channel;
-
-		channelPointIndex = 0;
-	}
+        this.channelPoints = channelPoints;
+    }
 
 	@Override
 	public void valueRead( DesktopProtocol.Id id, String textContent)
 	{
-		switch( id)
-		{
-			case ChannelPoint :
-			{
-				readValue( channel.getPoint( channelPointIndex++), textContent);
-			}
-			break;
+        switch( id)
+        {
+            case ChannelPoint -> readValue( channelPoints.get( channelPointIndex++), textContent);
 
-			default : super.valueRead( id, textContent); break;
-		}
+            default -> super.valueRead( id, textContent);
+        }
 	}
 }

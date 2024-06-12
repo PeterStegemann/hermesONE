@@ -11,14 +11,13 @@ import java.util.Iterator;
 import java.util.List;
 
 @ToString
-public class Models
-    extends ChangeObservable< Models>
-    implements Iterable< Model>, ChangeListener< Model>
+public class Models extends ChangeObservable< Models>
+                 implements Iterable< Model>, ChangeListener< Model>
 {
 	private final List< Model> models = new ArrayList<>();
 
 	@Override
-	public void hasChanged( Model Model)
+	public void hasChanged( Model model)
 	{
 		notifyChange( this);
 	}
@@ -59,30 +58,30 @@ public class Models
 	 */
 	public Model insertModel( Model model)
 	{
-		int FreeId = 0;
+		int freeId = 0;
 
 		// Find free model index.
-		for( Model CurrentModel: models)
+		for( Model currentModel: models)
 		{
-			if( CurrentModel.getId().equals( FreeId) == false)
+			if( currentModel.getId().equals( freeId) == false)
 			{
 				// Here's a gap.
 				break;
 			}
 
-			FreeId++;
+			freeId++;
 		}
 
 		try
 		{ 
-			model.getId().setValue( FreeId);
+			model.getId().setValue( freeId);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
 			return null;
 		}
 
-		models.add( FreeId, model);
+		models.add( freeId, model);
 
 		model.addChangeListener( this);
 		notifyChange( this);
@@ -90,15 +89,15 @@ public class Models
 		return model;
 	}
 
-	public Model removeModel( Model Model)
+	public Model removeModel( Model model)
 	{
-		if( models.remove( Model) == true)
+		if( models.remove( model) == true)
 		{
-			Model.removeChangeListener( this);
+			model.removeChangeListener( this);
 			notifyChange( this);
 		}
 
-		return Model;
+		return model;
 	}
 
 	public Model getModelFromIndex( int Index)
@@ -120,14 +119,14 @@ public class Models
 
 	public Number getIdFromIndex( int Index)
 	{
-		Model CurrentModel = getModelFromIndex( Index);
+		Model currentModel = getModelFromIndex( Index);
 
-		if( CurrentModel == null)
+		if( currentModel == null)
 		{
 			return null;
 		}
 
-		return CurrentModel.getId();
+		return currentModel.getId();
 	}
 
 	public Model getModelFromId( Number Id)
@@ -135,32 +134,33 @@ public class Models
 		return getModelFromIndex( getIndexFromId( Id));
 	}
 
-	/** Get the index of a model in this container from its id.
+	/**
+	 * Get the index of a model in this container from its id.
 	 * 
-	 * @param Id The id of the model.
+	 * @param id The id of the model.
 	 * 
 	 * @return The index in this container.
 	 */
-	public int getIndexFromId( Number Id)
+	public int getIndexFromId( Number id)
 	{
-		int Index = 0;
+		int index = 0;
 
-		for( Model CurrentModel: models)
+		for( Model currentModel: models)
 		{
-			if( CurrentModel.getId().equals( Id) == true)
+			if( currentModel.getId().equals( id) == true)
 			{
-				return Index;
+				return index;
 			}
 
-			Index++;
+			index++;
 		}
 
 		return -1;
 	}
 
-	public int getIndexFromModel( Model Model)
+	public int getIndexFromModel( Model model)
 	{
-		return models.indexOf( Model);
+		return models.indexOf( model);
 	}
 
 	public int getCount()

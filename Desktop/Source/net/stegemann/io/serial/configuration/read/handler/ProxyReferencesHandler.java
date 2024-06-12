@@ -6,28 +6,25 @@ import net.stegemann.io.serial.configuration.read.handler.source.SourceTupleHand
 
 class ProxyReferencesHandler extends DesktopConnectionHandler
 {
-	private final ProxyReferences proxyReferences;
-	private int proxyIndex;
+    private final ProxyReferences proxyReferences;
+    private int proxyIndex = 0;
 
-	public ProxyReferencesHandler( ProxyReferences proxyReferences)
-	{
-		this.proxyReferences = proxyReferences;
+    public ProxyReferencesHandler( ProxyReferences proxyReferences)
+    {
+        this.proxyReferences = proxyReferences;
+    }
 
-		proxyIndex = 0;
-	}
+    @Override
+    public void complexOpened( DesktopProtocol.Id id)
+    {
+        switch( id)
+        {
+            case ModelProxyReference -> pushHandler
+            (
+                new SourceTupleHandler( proxyReferences.getProxyReferenceFromIndex( proxyIndex++))
+            );
 
-	@Override
-	public void complexOpened( DesktopProtocol.Id id)
-	{
-		switch( id)
-		{
-			case ModelProxyReference :
-			{
-				pushHandler( new SourceTupleHandler( proxyReferences.getProxyReferenceFromIndex( proxyIndex++)));
-			}
-			break;
-
-			default : super.complexOpened( id); break;
-		}
-	}
+            default -> super.complexOpened( id);
+        }
+    }
 }

@@ -18,15 +18,8 @@ public class SourceTupleHandler extends DesktopConnectionHandler
 	{
         switch( id)
         {
-            case SourceTupleSource ->
-            {
-                readValue( sourceTuple.getSourceId(), textContent);
-            }
-
-            case SourceTupleVolume ->
-            {
-                readValue( sourceTuple.getVolume(), textContent);
-            }
+            case SourceTupleSource -> readValue( sourceTuple.getSourceId(), textContent);
+            case SourceTupleVolume -> readValue( sourceTuple.getVolume(), textContent);
 
             default -> super.valueRead( id, textContent);
         }

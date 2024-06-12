@@ -38,7 +38,7 @@ public class SpecificSourcePanel extends JPanel
 		Number typeId = null;
 		Number modelId = null;
 
-		int sourceModelId = source.getModel().getValue();
+		int sourceModelId = source.getModelId().getValue();
 
 		if(( sourceModelId >= Model.MODEL_START) && ( sourceModelId <= Model.MODEL_END))
 		{

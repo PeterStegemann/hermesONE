@@ -122,7 +122,7 @@ public class TypedConnection
 
 				case TypedProtocol.T_ComplexEnd ->
 				{
-					debug("Reading complex close " + id);
+					debug( "Reading complex close " + id);
 
 					if( handler != null)
 					{

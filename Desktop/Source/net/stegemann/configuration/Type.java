@@ -18,6 +18,7 @@ public class Type extends ChangeObservable< Type> implements ChangeListener< Tex
 		USED
 	}
 
+	@ConfigurationField( name = Names.TYPE_ID)
 	private final Number id;
 	@ConfigurationField( name = Names.TYPE_NAME)
 	private final Text name;
@@ -71,7 +72,7 @@ public class Type extends ChangeObservable< Type> implements ChangeListener< Tex
 	}
 
 	@Override
-	public Number getModel()
+	public Number getModelId()
 	{
 		return id;
 	}

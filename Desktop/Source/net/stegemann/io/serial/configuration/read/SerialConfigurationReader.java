@@ -11,7 +11,7 @@ import net.stegemann.misc.ChangeListener;
 
 import java.util.ArrayList;
 
-public class SerialConfigurationReader
+public class SerialConfigurationReader implements TypedConnectionHandler
 {
     private static final boolean debug = false;
 
@@ -21,19 +21,19 @@ public class SerialConfigurationReader
 
     private final ArrayList< TypedConnectionHandler> handlerStack = new ArrayList<>();
 
-    public SerialConfigurationReader( ConfigurationProgress useConfigurationProgress, DesktopConnection useConnection)
+    public SerialConfigurationReader( ConfigurationProgress configurationProgress, DesktopConnection connection)
     {
-        configurationProgress = useConfigurationProgress;
-        connection = useConnection;
+        this.configurationProgress = configurationProgress;
+        this.connection = connection;
     }
 
-    public void readFromPort( Configuration configuration, String portName,
-                              ChangeListener< ConfigurationProgress> configurationListener)
+    public void readFromPort
+    (
+        Configuration configuration, String portName, ChangeListener< ConfigurationProgress> configurationListener
+    )
         throws ReadException
     {
-        TypedConnectionForwarder connectionForwarder = new TypedConnectionForwarder();
-
-        if( connection.open( portName, connectionForwarder) == false)
+        if( connection.open( portName, this) == false)
         {
             throw new ReadException( "Failed to open connection with port " + portName + ".");
         }
@@ -57,7 +57,7 @@ public class SerialConfigurationReader
         {
             configurationProgress.removeChangeListener( configurationListener);
 
-            handlerStack.remove( 0);
+            handlerStack.clear();
 
             connection.close();
         }
@@ -65,32 +65,32 @@ public class SerialConfigurationReader
 //		java.lang.System.err.println( "End, stack size: " + handlerStack.size());
     }
 
-    private class TypedConnectionForwarder
-        implements TypedConnectionHandler
+    @Override
+    public void complexOpened( byte id)
     {
-        @Override
-        public void complexOpened( byte id)
-        {
-//			java.lang.System.out.print( ".");
+        debug( "complexOpened " + id);
 
-            handlerStack.get( 0).complexOpened( id);
-        }
+        handlerStack.get( 0).complexOpened( id);
+    }
 
-        @Override
-        public void complexClosed( byte id)
-        {
-            handlerStack.get( 0).complexClosed( id);
+    @Override
+    public void complexClosed( byte id)
+    {
+        debug( "complexClosed " + id);
 
-            handlerStack.remove( 0);
+        handlerStack.get( 0).complexClosed( id);
+
+        handlerStack.remove( 0);
 
 //			java.lang.System.err.println( "Complex closed, stack size: " + handlerStack.size());
-        }
+    }
 
-        @Override
-        public void valueRead( byte id, String value)
-        {
-            handlerStack.get( 0).valueRead( id, value);
-        }
+    @Override
+    public void valueRead( byte id, String value)
+    {
+        debug( "valueRead " + id + " " + value);
+
+        handlerStack.get( 0).valueRead( id, value);
     }
 
     public void pushHandler( DesktopConnectionHandler handler)
@@ -101,7 +101,7 @@ public class SerialConfigurationReader
 
     private static void debug( String text)
     {
-        if( debug)
+        if( debug == true)
         {
             java.lang.System.out.println( text);
         }

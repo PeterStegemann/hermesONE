@@ -43,6 +43,7 @@ public class Names
 	public static final String MODEL									= "Model";
 	public static final String MODEL_STATE								= "ModelState";
 	public static final String MODEL_RF_MODE							= "ModelRFMode";
+	public static final String MODEL_ID 								= "ModelId";
 	public static final String MODEL_NAME								= "ModelName";
 	public static final String MODEL_TYPE								= "ModelType";
 	public static final String MODEL_STATUS_SOURCES						= "ModelStatusSources";
@@ -54,6 +55,7 @@ public class Names
 
 	public static final String TYPES									= "Types";
 	public static final String TYPE										= "Type";
+	public static final String TYPE_ID		    						= "TypeId";
 	public static final String TYPE_NAME								= "TypeName";
 	public static final String TYPE_STATE								= "TypeState";
 
@@ -70,11 +72,12 @@ public class Names
 
 	public static final String SOURCES									= "Sources";
 	public static final String SOURCE									= "Source";
+	public static final String SOURCE_ID								= "SourceId";
 	public static final String SOURCE_NAME								= "SourceName";
 	public static final String SOURCE_MODEL								= "SourceModel";
 
-	public static final String SOURCE_TUPEL_SOURCE_ID					= "SourceTupelSourceId";
-	public static final String SOURCE_TUPEL_VOLUME						= "SourceTupelVolume";
+	public static final String SOURCE_TUPLE_SOURCE_ID					= "SourceTupleSourceId";
+	public static final String SOURCE_TUPLE_VOLUME						= "SourceTupleVolume";
 
 	public static final String SOURCE_INPUT_ANALOG						= "SourceInputAnalog";
 	public static final String SOURCE_INPUT_ANALOG_INPUT				= "SourceInputAnalogInput";

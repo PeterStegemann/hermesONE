@@ -29,7 +29,7 @@ public class Controller
 		this.configuration = configuration;
 	}
 
-	public Model addModel( Number TypeId)
+	public Model addModel( Number typeId)
 	{
 		Models models = configuration.getModels();
 		Model model = new Model();
@@ -40,7 +40,7 @@ public class Controller
 
 		try
 		{
-			model.getTypeId().setValue( TypeId);
+			model.getTypeId().setValue( typeId);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
@@ -69,22 +69,22 @@ public class Controller
 	{
 		Models models = configuration.getModels();
 
-		Model NewModel = model.clone();
+		Model clonedModel = model.clone();
 
 		try
 		{
-			NewModel.getTypeId().setValue( type);
+			clonedModel.getTypeId().setValue( type);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
 			throw new RuntimeException( reason);
 		}
 
-		models.insertModel( NewModel);
+		models.insertModel( clonedModel);
 
 		// Give the cloned model a new name.
-		Text name = NewModel.getName();
-		name.setValue( name.getValue() + " " + NewModel.getId().getValue());
+		Text name = clonedModel.getName();
+		name.setValue( name.getValue() + " " + clonedModel.getId().getValue());
 
 		// Also copy the sources for this model.
 		Sources Sources = configuration.getSources();
@@ -96,28 +96,32 @@ public class Controller
 		// Add the type mappings.
 		sourcesMap.putAll( typeSourcesMap);
 
-		SourcesView ModelSourcesView = new SourcesView( Sources, PickGlobals.No, null, model.getId(),
-														HasEmpty.No, HasFixed.No, HasProxies.Yes);
+		SourcesView ModelSourcesView = new SourcesView
+		(
+            Sources, PickGlobals.No, null, model.getId(), HasEmpty.No, HasFixed.No, HasProxies.Yes
+        );
 
 		for( Source source: ModelSourcesView)
 		{
-			Source newSource = cloneSource( source, NewModel.getId());
+			Source newSource = cloneSource( source, clonedModel.getId());
 
 			sourcesMap.put( source.getId(), newSource.getId());
 		}
 
 		// Now adjust the source references in the new sources and the model.
-		SourcesView NewModelSourcesView = new SourcesView( Sources, PickGlobals.No, null, NewModel.getId(),
-														   HasEmpty.No, HasFixed.No, HasProxies.Yes);
+		SourcesView NewModelSourcesView = new SourcesView
+		(
+            Sources, PickGlobals.No, null, clonedModel.getId(), HasEmpty.No, HasFixed.No, HasProxies.Yes
+        );
 
 		for( Source source: NewModelSourcesView)
 		{
 			source.replaceSources( sourcesMap);
 		}
 
-		NewModel.replaceSources( sourcesMap);
+		clonedModel.replaceSources( sourcesMap);
 
-		return NewModel;
+		return clonedModel;
 	}
 
 	public void removeModel( int index)
@@ -133,21 +137,23 @@ public class Controller
 		removeModel( selectedModel);
 	}
 	
-	private void removeModel( Model Model)
+	private void removeModel( Model model)
 	{
-		Models Models = configuration.getModels();
+		Models models = configuration.getModels();
 
-		Models.removeModel( Model);
+		models.removeModel( model);
 
 		// Also remove the sources for this model.
-		Sources Sources = configuration.getSources();
+		Sources sources = configuration.getSources();
 
-		SourcesView ModelSourcesView = new SourcesView( Sources, PickGlobals.No, null, Model.getId(),
-														HasEmpty.No, HasFixed.No, HasProxies.Yes);
+		SourcesView modelSourcesView = new SourcesView
+		(
+            sources, PickGlobals.No, null, model.getId(), HasEmpty.No, HasFixed.No, HasProxies.Yes
+        );
 
-		for( Source Source: ModelSourcesView)
+		for( Source source: modelSourcesView)
 		{
-			removeSource( Source);
+			removeSource( source);
 		}
 	}
 
@@ -192,8 +198,10 @@ public class Controller
 		// Map of all the source ids that get cloned for this type.
 		HashMap< SourceId, SourceId> sourcesMap = new HashMap<>();
 
-		SourcesView typeSourcesView = new SourcesView( sources, PickGlobals.No, type.getId(), null,
-													   HasEmpty.No, HasFixed.No, HasProxies.Yes);
+		SourcesView typeSourcesView = new SourcesView
+		(
+            sources, PickGlobals.No, type.getId(), null, HasEmpty.No, HasFixed.No, HasProxies.Yes
+        );
 
 		for( Source source: typeSourcesView)
 		{
@@ -203,8 +211,10 @@ public class Controller
 		}
 
 		// Now adjust the source references in the new sources.
-		SourcesView newTypeSourcesView = new SourcesView( sources, PickGlobals.No, newType.getId(), null,
-														  HasEmpty.No, HasFixed.No, HasProxies.Yes);
+		SourcesView newTypeSourcesView = new SourcesView
+		(
+            sources, PickGlobals.No, newType.getId(), null, HasEmpty.No, HasFixed.No, HasProxies.Yes
+        );
 
 		for( Source source: newTypeSourcesView)
 		{
@@ -224,44 +234,46 @@ public class Controller
 		return newType;
 	}
 
-	public void removeType( int Index)
+	public void removeType( int index)
 	{
-		Types Types = configuration.getTypes();
-		Type SelectedType = Types.getTypeFromIndex( Index);
+		Types types = configuration.getTypes();
+		Type selectedType = types.getTypeFromIndex( index);
 
-		if( SelectedType == null)
+		if( selectedType == null)
 		{
 			return;
 		}
 
-		removeType( SelectedType);
+		removeType( selectedType);
 	}
 
-	private void removeType( Type Type)
+	private void removeType( Type type)
 	{
 		Types Types = configuration.getTypes();
 
-		Types.removeType( Type);
+		Types.removeType( type);
 
 		// Also remove the sources for this type.
 		Sources Sources = configuration.getSources();
 
-		SourcesView TypeSourcesView = new SourcesView( Sources, PickGlobals.No, Type.getId(), null,
-													   HasEmpty.No, HasFixed.No, HasProxies.Yes);
+		SourcesView typeSourcesView = new SourcesView
+		(
+            Sources, PickGlobals.No, type.getId(), null, HasEmpty.No, HasFixed.No, HasProxies.Yes
+        );
 
-		for( Source Source: TypeSourcesView)
+		for( Source source: typeSourcesView)
 		{
-			removeSource( Source);
+			removeSource( source);
 		}
 
 		// Also remove all the models of this type.
-		Models Models = configuration.getModels();
+		Models models = configuration.getModels();
 
-		ModelsView TypeModelsView =	new ModelsView( Models, Type.getId());
+		ModelsView typeModelsView =	new ModelsView( models, type.getId());
 
-		for( Model Model: TypeModelsView.toArray())
+		for( Model model: typeModelsView.toArray())
 		{
-			removeModel( Model);
+			removeModel( model);
 		}
 	}
 
@@ -273,7 +285,7 @@ public class Controller
 			return null;
 		}
 
-		source.setModel( modelId);
+		source.setModelId( modelId);
 
 		Sources sources = configuration.getSources();
 
@@ -311,7 +323,7 @@ public class Controller
 			// Move the source to another model.
 			try
 			{
-				newSource.setModel( model);
+				newSource.setModelId( model);
 			}
 			catch( ValueOutOfRangeException reason)
 			{
@@ -328,11 +340,11 @@ public class Controller
 		return newSource;
 	}
 
-	public void removeSource( int Index)
+	public void removeSource( int index)
 	{
 		Sources sources = configuration.getSources();
 
-		Source selectedSource = sources.getSourceFromIndex( Index);
+		Source selectedSource = sources.getSourceFromIndex( index);
 
 		if( selectedSource == null)
 		{

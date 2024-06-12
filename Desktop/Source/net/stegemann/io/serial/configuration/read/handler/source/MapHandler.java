@@ -18,15 +18,8 @@ class MapHandler extends DesktopConnectionHandler
 	{
         switch( id)
         {
-            case SourceMapInput ->
-            {
-                pushHandler( new SourceTupleHandler( map.getInput()));
-            }
-
-            case SourceMapPoints ->
-            {
-                pushHandler( new MapPointsHandler( map.getPoints()));
-            }
+            case SourceMapInput -> pushHandler( new SourceTupleHandler( map.getInput()));
+            case SourceMapPoints -> pushHandler( new MapPointsHandler( map.getPoints()));
 
             default -> super.complexOpened( id);
         }

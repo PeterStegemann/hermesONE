@@ -4,11 +4,11 @@ import net.stegemann.configuration.source.input.Button;
 import net.stegemann.io.serial.base.DesktopProtocol;
 import net.stegemann.io.serial.configuration.read.handler.DesktopConnectionHandler;
 
-public class InputButtonHandler extends DesktopConnectionHandler
+public class ButtonHandler extends DesktopConnectionHandler
 {
 	private final Button button;
 
-	public InputButtonHandler( Button button)
+	public ButtonHandler( Button button)
 	{
 		this.button = button;
 	}

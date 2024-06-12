@@ -26,7 +26,7 @@ public abstract class DesktopConnectionHandler implements TypedConnectionHandler
     @Override
     public void complexOpened( byte id)
     {
-        DesktopProtocol.Id desktopId = DesktopProtocol.enumFromByte(id);
+        DesktopProtocol.Id desktopId = DesktopProtocol.enumFromByte( id);
 
         debug("Reading complex open '" + desktopId + "'");
 
@@ -55,19 +55,18 @@ public abstract class DesktopConnectionHandler implements TypedConnectionHandler
 
     public void complexOpened( DesktopProtocol.Id id)
     {
-        java.lang.System.out.println( "Unknown complex opened: " + id);
+        java.lang.System.err.println( "Unknown complex opened: " + id);
 
         pushHandler( new UnknownTypeHandler());
     }
 
     public void complexClosed( DesktopProtocol.Id id)
     {
-        java.lang.System.out.println( "Unknown complex closed: " + id);
     }
 
     public void valueRead( DesktopProtocol.Id id, String textContent)
     {
-        java.lang.System.out.println( "Unknown value " + id.byteValue() + " {" + textContent + "}");
+        java.lang.System.err.println( "Unknown value " + id.byteValue() + " {" + textContent + "}");
     }
 
     protected static void readValue( Number value, String textContent)
@@ -76,9 +75,7 @@ public abstract class DesktopConnectionHandler implements TypedConnectionHandler
         {
             value.setConfigurationValue( textContent);
         }
-        catch( NumberFormatException | ValueOutOfRangeException ignored)
-        {
-        }
+        catch( NumberFormatException | ValueOutOfRangeException ignored) {}
     }
 
     protected static void readValue( Text value, String textContent)
@@ -93,7 +90,7 @@ public abstract class DesktopConnectionHandler implements TypedConnectionHandler
 
     protected static void debug( String text)
     {
-        if( debug)
+        if( debug == true)
         {
             System.out.println( text);
         }

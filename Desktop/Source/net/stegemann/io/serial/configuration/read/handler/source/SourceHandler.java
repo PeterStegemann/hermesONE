@@ -11,7 +11,7 @@ class SourceHandler extends DesktopConnectionHandler
 	private final Sources sources;
 	private final int sourceId;
 
-	private Source newSource = null;
+	private Source source = null;
 	private String name = null;
 	private String modelId = null;
 
@@ -28,96 +28,98 @@ class SourceHandler extends DesktopConnectionHandler
         {
             case SourceInputAnalog ->
             {
-                Analog NewSource = new Analog();
-                newSource = NewSource;
+                Analog analog = new Analog();
+                source = analog;
 
-                pushHandler( new InputAnalogHandler( NewSource));
+                pushHandler( new AnalogHandler( analog));
             }
 
             case SourceInputButton ->
             {
-                Button NewSource = new Button();
-                newSource = NewSource;
+                Button button = new Button();
+                source = button;
 
-                pushHandler( new InputButtonHandler( NewSource));
+                pushHandler( new ButtonHandler( button));
             }
 
             case SourceInputRotary ->
             {
-                Rotary NewSource = new Rotary();
-                newSource = NewSource;
+                Rotary rotary = new Rotary();
+                source = rotary;
 
-                pushHandler(new InputRotaryHandler( NewSource));
+                pushHandler(new RotaryHandler( rotary));
             }
 
             case SourceInputSwitch ->
             {
-                Switch NewSource = new Switch();
-                newSource = NewSource;
+                Switch aSwitch = new Switch();
+                source = aSwitch;
 
-                pushHandler( new InputSwitchHandler( NewSource));
+                pushHandler( new SwitchHandler( aSwitch));
             }
 
             case SourceInputTicker ->
             {
-                Ticker NewSource = new Ticker();
-                newSource = NewSource;
+                Ticker ticker = new Ticker();
+                source = ticker;
 
-                pushHandler( new InputTickerHandler( NewSource));
+                pushHandler( new TickerHandler( ticker));
             }
 
             case SourceMap ->
             {
-                Map NewSource = new Map();
-                newSource = NewSource;
+                Map map = new Map();
+                source = map;
 
-                pushHandler( new MapHandler( NewSource));
+                pushHandler( new MapHandler( map));
             }
-            case SourceMix -> {
-                Mix NewSource = new Mix();
-                newSource = NewSource;
 
-                pushHandler( new MixHandler( NewSource));
+            case SourceMix ->
+            {
+                Mix mix = new Mix();
+                source = mix;
+
+                pushHandler( new MixHandler( mix));
             }
 
             case SourceStore ->
             {
-                Store NewSource = new Store();
-                newSource = NewSource;
+                Store store = new Store();
+                source = store;
 
-                pushHandler( new StoreHandler( NewSource));
+                pushHandler( new StoreHandler( store));
             }
 
             case SourceFollower ->
             {
-                Follower NewSource = new Follower();
-                newSource = NewSource;
+                Follower follower = new Follower();
+                source = follower;
 
-                pushHandler( new FollowerHandler( NewSource));
+                pushHandler( new FollowerHandler( follower));
             }
 
             case SourceTimer ->
             {
-                Timer NewSource = new Timer();
-                newSource = NewSource;
+                Timer timer = new Timer();
+                source = timer;
 
-                pushHandler( new TimerHandler( NewSource));
+                pushHandler( new TimerHandler( timer));
             }
 
             case SourceProxy ->
             {
-                Proxy NewSource = new Proxy();
-                newSource = NewSource;
+                Proxy proxy = new Proxy();
+                source = proxy;
 
-                pushHandler( new ProxyHandler( NewSource));
+                pushHandler( new ProxyHandler( proxy));
             }
 
             case SourceTrimmer ->
             {
-                Trimmer NewSource = new Trimmer();
-                newSource = NewSource;
+                Trimmer trimmer = new Trimmer();
+                source = trimmer;
 
-                pushHandler( new TrimmerHandler( NewSource));
+                pushHandler( new TrimmerHandler( trimmer));
             }
 
             default -> super.complexOpened( id);
@@ -127,22 +129,22 @@ class SourceHandler extends DesktopConnectionHandler
 	@Override
 	public void complexClosed( DesktopProtocol.Id id)
 	{
-        if(( newSource == null)/*|| ( NewSource.GetType() == Source.Type.EMPTY)*/)
+        if( source == null)
         {
             return;
         }
 
         try
         {
-            newSource.getId().setValue( sourceId);
-            readValue( newSource.getName(), name);
-            readValue( newSource.getModel(), modelId);
+            source.getId().setValue( sourceId);
+            readValue( source.getName(), name);
+            readValue( source.getModelId(), modelId);
 
-            debug( id + "'" + newSource.getId().getValue() + "'/'" + newSource.getModel().getValue() + "'");
+            debug( id + "'" + source.getId().getValue() + "'/'" + source.getModelId().getValue() + "'");
 
-            sources.addSource( newSource);
+            sources.addSource( source);
 
-            getConfigurationProgress().setSourceCount( sources.getCount());
+            getConfigurationProgress().setSourcesCount( sources.getCount());
         }
         catch( Exception ignored) {}
     }
@@ -153,15 +155,8 @@ class SourceHandler extends DesktopConnectionHandler
         // Read and store these values to put them onto the concrete source later.
         switch( id)
         {
-            case SourceName ->
-            {
-                name = textContent;
-            }
-
-            case SourceModel ->
-            {
-                modelId = textContent;
-            }
+            case SourceName -> name = textContent;
+            case SourceModel -> modelId = textContent;
 
             default -> super.valueRead( id, textContent);
         }

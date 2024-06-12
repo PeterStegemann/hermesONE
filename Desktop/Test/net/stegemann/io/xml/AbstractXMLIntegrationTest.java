@@ -13,7 +13,7 @@ abstract class AbstractXMLIntegrationTest
     protected static final String TEST_CONFIGURATION_XML = "Test/XMLIntegrationTest.xml";
 
     protected static Configuration configuration()
-            throws ValueOutOfRangeException
+        throws ValueOutOfRangeException
     {
         Configuration configuration = new Configuration();
 
@@ -68,7 +68,7 @@ abstract class AbstractXMLIntegrationTest
     protected static void insertSource( Configuration configuration, Model model, Source source)
         throws ValueOutOfRangeException
     {
-        source.setModel( model.getId());
+        source.setModelId( model.getId());
         source.getName().setValue( source.getClass().getName());
         configuration.getSources().insertSource( source);
     }
@@ -76,7 +76,7 @@ abstract class AbstractXMLIntegrationTest
     protected static void insertSource( Configuration configuration, Type type, Source source)
         throws ValueOutOfRangeException
     {
-        source.setModel( type.getId());
+        source.setModelId( type.getId());
         source.getName().setValue( source.getClass().getName());
         configuration.getSources().insertSource( source);
     }

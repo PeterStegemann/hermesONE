@@ -10,9 +10,9 @@ import java.util.HashMap;
 @Getter
 public class SourceWithVolume
 {
-	@ConfigurationField( name = Names.SOURCE_TUPEL_SOURCE_ID)
+	@ConfigurationField( name = Names.SOURCE_TUPLE_SOURCE_ID)
 	private final SourceId sourceId;
-	@ConfigurationField( name = Names.SOURCE_TUPEL_VOLUME)
+	@ConfigurationField( name = Names.SOURCE_TUPLE_VOLUME)
 	private final Volume volume;
 
 	public SourceWithVolume( int minimum, int maximum, int signalPerValue)

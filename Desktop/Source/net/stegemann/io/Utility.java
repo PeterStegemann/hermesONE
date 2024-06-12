@@ -12,7 +12,8 @@ public class Utility
 		return convertModelState( Integer.parseInt( stateString));
 	}
 
-	/** Convert the model state number to the model state enum.
+	/**
+	 * Convert the model state number to the model state enum.
 	 * 
 	 * @param stateValue The state as numeric value.
 	 * 
@@ -41,7 +42,8 @@ public class Utility
 		return convertTypeState( Integer.parseInt( stateString));
 	}
 
-	/** Convert the type state number to the type state enum.
+	/**
+	 * Convert the type state number to the type state enum.
 	 * 
 	 * @param stateValue The state as numeric value.
 	 * 
@@ -71,7 +73,8 @@ public class Utility
 		return convertModelRFMode( Integer.parseInt( rfModeString));
 	}
 
-	/** Convert the model rf mode number to the model rf mode enum.
+	/**
+	 * Convert the model rf mode number to the model rf mode enum.
 	 * 
 	 * @param rfModeValue The rf mode as numeric value.
 	 * 
@@ -101,7 +104,8 @@ public class Utility
 		return convertSourceType( Integer.parseInt( typeString));
 	}
 */
-	/** Convert the source type number to the source type enum.
+	/**
+	 * Convert the source type number to the source type enum.
 	 * 
 	 * @param TypeValue The type as numeric value.
 	 * 

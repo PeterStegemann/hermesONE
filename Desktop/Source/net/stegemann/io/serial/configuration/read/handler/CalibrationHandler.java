@@ -15,27 +15,13 @@ class CalibrationHandler extends DesktopConnectionHandler
 	@Override
 	public void valueRead( DesktopProtocol.Id id, String textContent)
 	{
-		switch( id)
-		{
-			case CalibrationHigh :
-			{
-				readValue( calibration.getHigh(), textContent);
-			}
-			break;
+        switch( id)
+        {
+            case CalibrationHigh -> readValue( calibration.getHigh(), textContent);
+            case CalibrationCenter -> readValue( calibration.getCenter(), textContent);
+            case CalibrationLow -> readValue( calibration.getLow(), textContent);
 
-			case CalibrationCenter :
-			{
-				readValue( calibration.getCenter(), textContent);
-			}
-			break;
-
-			case CalibrationLow :
-			{
-				readValue( calibration.getLow(), textContent);
-			}
-			break;
-
-			default : super.valueRead( id, textContent); break;
-		}
+            default -> super.valueRead( id, textContent);
+        }
 	}
 }

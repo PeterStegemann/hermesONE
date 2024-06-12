@@ -37,12 +37,16 @@ public class PPM extends ChangeObservable< PPM> implements ChangeListener< Text>
 	@Override
 	public String toString()
 	{
-        return "PPM = {\n" +
-				" Inverted: " + inverted + "\n" +
-				" Center: " + center + "\n" +
-				" Name: " + name + "\n" +
-				channelMappings +
-				"}\n";
+        return String.format( """
+            PPM
+            {
+                inverted: %s
+                center: %s
+                name: %s
+                channelMappings: %s
+            }""",
+            inverted, center, name, channelMappings
+        );
 	}
 
 	public void clear( int outputChannels)

@@ -27,11 +27,12 @@ public abstract class Source extends ChangeObservable< Source>
     public static final int SOURCE_START = 0;
     public static final int SOURCE_END = SOURCE_NONE;
 
+    @ConfigurationField( name = Names.SOURCE_ID)
     private final SourceId id = new SourceId();
     @ConfigurationField( name = Names.SOURCE_NAME)
     private final Text name;
     @ConfigurationField( name = Names.SOURCE_MODEL)
-    private final Number model = new Number( Model.MODEL_START, Model.MODEL_GLOBAL);
+    private final Number modelId = new Number( Model.MODEL_START, Model.MODEL_GLOBAL);
 
     protected Source()
     {
@@ -46,7 +47,7 @@ public abstract class Source extends ChangeObservable< Source>
 
         try
         {
-            model.setValue( other.model);
+            modelId.setValue( other.modelId);
         }
         catch( ValueOutOfRangeException reason)
         {
@@ -64,11 +65,11 @@ public abstract class Source extends ChangeObservable< Source>
             {
                 id: %s
                 name: %s
-                model: %s
+                modelId: %s
             }""",
 			indent( id),
             indent( name),
-            indent( model)
+            indent( modelId)
 		);
     }
 
@@ -81,10 +82,10 @@ public abstract class Source extends ChangeObservable< Source>
         notifyChange( this);
     }
 
-    public void setModel( Number newModel)
+    public void setModelId( Number modelId)
         throws ValueOutOfRangeException
     {
-        model.setValue( newModel);
+        this.modelId.setValue( modelId);
     }
 
     public abstract void replaceSources( HashMap< SourceId, SourceId> sourcesMap);

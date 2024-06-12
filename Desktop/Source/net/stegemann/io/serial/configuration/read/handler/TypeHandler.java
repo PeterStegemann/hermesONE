@@ -21,30 +21,21 @@ class TypeHandler extends DesktopConnectionHandler
 	{
 		if( type.getState() == Type.State.USED)
 		{
-			types.addType( type);
+            types.addType( type);
 
-			getConfigurationProgress().setTypeCount( types.getCount());
+            getConfigurationProgress().setTypesCount( types.getCount());
 		}
 	}
 
 	@Override
 	public void valueRead( DesktopProtocol.Id id, String textContent)
 	{
-		switch( id)
-		{
-			case TypeName :
-			{
-				readValue( type.getName(), textContent);
-			}
-			break;
+        switch( id)
+        {
+            case TypeName -> readValue( type.getName(), textContent);
+            case TypeState -> type.setState( Utility.convertTypeState( textContent));
 
-			case TypeState :
-			{
-				type.setState( Utility.convertTypeState( textContent));
-			}
-			break;
-
-			default : super.valueRead( id, textContent); break;
-		}
+            default -> super.valueRead( id, textContent);
+        }
 	}
 }

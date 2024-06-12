@@ -4,11 +4,11 @@ import net.stegemann.configuration.source.input.Rotary;
 import net.stegemann.io.serial.base.DesktopProtocol;
 import net.stegemann.io.serial.configuration.read.handler.DesktopConnectionHandler;
 
-public class InputRotaryHandler extends DesktopConnectionHandler
+public class RotaryHandler extends DesktopConnectionHandler
 {
 	private final Rotary rotary;
 
-	public InputRotaryHandler( Rotary rotary)
+	public RotaryHandler( Rotary rotary)
 	{
 		this.rotary = rotary;
 	}
