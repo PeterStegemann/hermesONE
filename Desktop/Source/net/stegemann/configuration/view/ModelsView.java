@@ -15,7 +15,7 @@ public class ModelsView extends ChangeObservable< ModelsView>
 {
 	private final Models baseModels;
 
-	private final List< Model> models = new ArrayList< Model>();
+	private final List< Model> models = new ArrayList<>();
 	private Number typeId = null;
 
 	/**
@@ -24,8 +24,6 @@ public class ModelsView extends ChangeObservable< ModelsView>
 	 * @param models The models to pick from.
 	 * @param typeId Selects sources that are valid for this type id. If this is null, no sources
 	 * will be selected based on the type id.
-	 * @param ModelId Selects sources that are valid for this model id. If this is null, no sources
-	 * will be selected based on the model id.
 	 */
 	public ModelsView( Models models, Number typeId)
 	{
@@ -70,11 +68,9 @@ public class ModelsView extends ChangeObservable< ModelsView>
 
 	private boolean isMatchingModel( Model model)
 	{
-		Number ModelTypeId = model.getTypeId();
+		Number modelTypeId = model.getTypeId();
 
-		boolean IsMatching = (( typeId != null) && ( ModelTypeId.equals( typeId)));
-
-		return IsMatching;
+        return (( typeId != null) && ( modelTypeId.equals( typeId)));
 	}
 
 	/**
@@ -85,12 +81,12 @@ public class ModelsView extends ChangeObservable< ModelsView>
 		models.clear();
 
 		// Copy references to all matching models.
-		for( Model CurrentModel: baseModels)
+		for( Model model: baseModels)
 		{
 			// Match if the source is global, same type or same model.
-			if( isMatchingModel( CurrentModel) == true)
+			if( isMatchingModel( model) == true)
 			{
-				models.add( CurrentModel);
+				models.add( model);
 			}
 		}
 
@@ -149,9 +145,9 @@ public class ModelsView extends ChangeObservable< ModelsView>
 	{
 		int Index = 0;
 
-		for( Model CurrentModel: models)
+		for( Model model: models)
 		{
-			if( CurrentModel.getId().equals( id))
+			if( model.getId().equals( id))
 			{
 				return( Index);
 			}
@@ -167,9 +163,9 @@ public class ModelsView extends ChangeObservable< ModelsView>
 		return models.size();
 	}
 
-	private class ModelsViewIterator implements Iterator< Model>
+	private static class ModelsViewIterator implements Iterator< Model>
 	{
-		private Iterator< Model> iterator;
+		private final Iterator< Model> iterator;
 
 		public ModelsViewIterator( ModelsView modelsView)
 		{
@@ -195,17 +191,12 @@ public class ModelsView extends ChangeObservable< ModelsView>
 		}
 	}
 
-	public Model[] toArray()
+	public List< Model> toList()
 	{
-		Model Array[] = new Model[ getModelCount()];
+		List< Model> models = new ArrayList<>();
 
-		int Index = 0;
+        this.forEach( models::add);
 
-		for( Model Object: this)
-		{
-			Array[ Index++] = Object;
-		}
-
-		return Array;
+		return models;
 	}
 }

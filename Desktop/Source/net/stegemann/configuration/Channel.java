@@ -14,7 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @Getter
-public class Channel extends ChangeObservable< Channel> implements ChangeListener< Text>
+public class Channel extends ChangeObservable< Channel>
+                  implements ChangeListener< Text>
 {
 	public static final int INPUT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
 	public static final int TRIM_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
@@ -70,9 +71,9 @@ public class Channel extends ChangeObservable< Channel> implements ChangeListene
 			throw new RuntimeException( reason);
 		}
 
-		for( int Index = 0; Index < POINTS; Index++)
+		for( int count = 0; count < POINTS; count++)
 		{
-			points.add( new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, POINT_SIGNAL_PER_VALUE));
+			points.add( new Volume( POINT_SIGNAL_PER_VALUE));
 		}
 
 		try
@@ -135,6 +136,13 @@ public class Channel extends ChangeObservable< Channel> implements ChangeListene
 		input.replaceSource( sourcesMap);
 		trim.replaceSource( sourcesMap);
 		limit.replaceSource( sourcesMap);
+	}
+
+	public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+	{
+		input.switchSource( sourceIdOne, sourceIdTwo);
+		trim.switchSource( sourceIdOne, sourceIdTwo);
+		limit.switchSource( sourceIdOne, sourceIdTwo);
 	}
 
 	@Override

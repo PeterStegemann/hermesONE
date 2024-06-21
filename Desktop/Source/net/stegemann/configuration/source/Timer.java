@@ -9,7 +9,7 @@ import net.stegemann.configuration.type.Volume;
 import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
 
-import java.util.HashMap;
+import java.util.HashMap;import static net.stegemann.misc.Utility.indent;
 
 @Getter
 @ConfigurationField( name = Names.SOURCE_TIMER)
@@ -51,8 +51,8 @@ public final class Timer extends Source
 
 		trigger = new SourceId();
 
-		triggerLowLimit = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TRIGGER_SIGNAL_PER_VALUE);
-		triggerHighLimit = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TRIGGER_SIGNAL_PER_VALUE);
+		triggerLowLimit = new Volume( TRIGGER_SIGNAL_PER_VALUE);
+		triggerHighLimit = new Volume( TRIGGER_SIGNAL_PER_VALUE);
 
 		warnLowTime = new Number( 0, TIME_MAXIMUM_VALUE);
 		warnCriticalTime = new Number( 0, TIME_MAXIMUM_VALUE);
@@ -83,29 +83,7 @@ public final class Timer extends Source
 	}
 
 	@Override
-	public String toString()
-	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Timer = {\n");
-		Buffer.append( super.toString());
-		Buffer.append( " Init Time: " + initTime + "\n");
-		Buffer.append( " Current Time: " + currentTime + "\n");
-		Buffer.append( " Trigger Id: " + trigger + "\n");
-		Buffer.append( " Trigger Low Limit: " + triggerLowLimit + "\n");
-		Buffer.append( " Trigger High Limit: " + triggerHighLimit + "\n");
-		Buffer.append( " Warn Low Time: " + warnLowTime + "\n");
-		Buffer.append( " Warn Critical Time: " + warnCriticalTime + "\n");
-		Buffer.append( " Warn Pause Time: " + warnPauseTime + "\n");
-		Buffer.append( " Store: " + store + "\n");
-		Buffer.append( " Reverse: " + reverse + "\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
-	}
-
-	@Override
-	public Source clone()
+	public Source duplicate()
 	{
 		return new Timer( this);
 	}
@@ -114,5 +92,37 @@ public final class Timer extends Source
 	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
 	{
 		trigger.replaceSource( sourcesMap);
+	}
+
+    @Override
+    public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+    {
+		trigger.switchSource( sourceIdOne, sourceIdTwo);
+    }
+
+	@Override
+	public String toString()
+	{
+        return String.format
+        (
+            """
+            Timer
+            {
+                %s
+                initTime: %s
+                currentTime: %s
+                trigger: %s
+                triggerLowLimit: %s
+                triggerHighLimit: %s
+                warnLowTime: %s
+                warnCriticalTime: %s
+                warnPauseTime: %s
+                store: %s
+                reverse: %s
+            }
+            """,
+            indent( super.toString()), initTime, currentTime, trigger, triggerLowLimit, triggerHighLimit, warnLowTime,
+            warnCriticalTime, warnPauseTime, store, reverse
+        );
 	}
 }

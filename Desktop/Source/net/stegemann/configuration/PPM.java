@@ -11,7 +11,8 @@ import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
 @Getter
-public class PPM extends ChangeObservable< PPM> implements ChangeListener< Text>
+public class PPM extends ChangeObservable< PPM>
+              implements ChangeListener< Text>
 {
 	public static final int PPM_CENTER_MINIMUM = -5;
 	public static final int PPM_CENTER_MAXIMUM = 5;

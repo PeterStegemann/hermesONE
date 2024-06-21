@@ -14,132 +14,154 @@ import net.stegemann.configuration.view.SourcesView.HasEmpty;
 import net.stegemann.configuration.view.SourcesView.HasFixed;
 import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
-import net.stegemann.gui.components.source.SourceComponent;
+import net.stegemann.gui.components.source.SourceComponent;import java.io.Serial;
 
 public class StatusPanel extends JPanel
 {
-	private static final long serialVersionUID = 683481639057295222L;
+    @Serial
+    private static final long serialVersionUID = 683481639057295222L;
 
-	private final Configuration configuration;
+    private final Configuration configuration;
 
-	private final SourceComponent topTimeId;
-	private final SourceComponent bottomTimeId;
+    private final SourceComponent topTimeId, bottomTimeId;
+    private final SourceComponent leftSideId, leftBottomId, rightSideId, rightBottomId;
 
-	private final SourceComponent leftSideId;
-	private final SourceComponent leftBottomId;
-	private final SourceComponent rightSideId;
-	private final SourceComponent rightBottomId;
+    public StatusPanel( Configuration configuration)
+    {
+        this.configuration = configuration;
 
-	public StatusPanel( Configuration UseConfiguration)
-	{
-		configuration = UseConfiguration;
+        JLabel topTimeLabel = new JLabel( "Uhr Oben:");
+        topTimeId = new SourceComponent();
 
-		JLabel TopTimeLabel = new JLabel( "Uhr Oben:");
-		topTimeId = new SourceComponent();
+        JLabel bottomTimeLabel = new JLabel( "Uhr Unten:");
+        bottomTimeId = new SourceComponent();
 
-		JLabel BottomTimeLabel = new JLabel( "Uhr Unten:");
-		bottomTimeId = new SourceComponent();
+        JSeparator separator = new JSeparator();
 
-		JSeparator Separator = new JSeparator();
+        JLabel leftSideLabel = new JLabel( "Linke Seite:");
+        leftSideId = new SourceComponent();
 
-		JLabel LeftSideLabel = new JLabel( "Linke Seite:");
-		leftSideId = new SourceComponent();
+        JLabel leftBottomLabel = new JLabel( "Links Unten:");
+        leftBottomId = new SourceComponent();
 
-		JLabel LeftBottomLabel = new JLabel( "Links Unten:");
-		leftBottomId = new SourceComponent();
+        JLabel rightSideLabel = new JLabel( "Rechte Seite:");
+        rightSideId = new SourceComponent();
 
-		JLabel RightSideLabel = new JLabel( "Rechte Seite:");
-		rightSideId = new SourceComponent();
+        JLabel rightBottomLabel = new JLabel( "Rechts Unten:");
+        rightBottomId = new SourceComponent();
 
-		JLabel RightBottomLabel = new JLabel( "Rechts Unten:");
-		rightBottomId = new SourceComponent();
-
-		// Layout elements.
-		GroupLayout Layout = new GroupLayout( this);
-		setLayout( Layout);
+        // Layout elements.
+        GroupLayout layout = new GroupLayout( this);
+        setLayout( layout);
 
 //		Layout.setAutoCreateGaps( true);
-		Layout.setAutoCreateContainerGaps( true);
+        layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-			.addComponent( Separator)
-			.addGroup( Layout.createSequentialGroup()
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
-					.addComponent( TopTimeLabel)
-					.addComponent( BottomTimeLabel)
-					.addComponent( LeftSideLabel)
-					.addComponent( LeftBottomLabel)
-					.addComponent( RightSideLabel)
-					.addComponent( RightBottomLabel)
-				)
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-					.addComponent( topTimeId)
-					.addComponent( bottomTimeId)
-					.addComponent( leftSideId)
-					.addComponent( leftBottomId)
-					.addComponent( rightSideId)
-					.addComponent( rightBottomId)
-				)
-			)
-		);
+        layout.setHorizontalGroup
+        (
+            layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+            .addComponent( separator)
+            .addGroup
+            (
+                layout.createSequentialGroup()
+                .addGroup
+                (
+                    layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
+                    .addComponent( topTimeLabel)
+                    .addComponent( bottomTimeLabel)
+                    .addComponent( leftSideLabel)
+                    .addComponent( leftBottomLabel)
+                    .addComponent( rightSideLabel)
+                    .addComponent( rightBottomLabel)
+                )
+                .addGroup
+                (
+                    layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                    .addComponent( topTimeId)
+                    .addComponent( bottomTimeId)
+                    .addComponent( leftSideId)
+                    .addComponent( leftBottomId)
+                    .addComponent( rightSideId)
+                    .addComponent( rightBottomId)
+                )
+            )
+        );
 
-		Layout.setVerticalGroup( Layout.createSequentialGroup()
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( TopTimeLabel)
-				.addComponent( topTimeId)
-			)
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( BottomTimeLabel)
-				.addComponent( bottomTimeId)
-			)
-			.addComponent( Separator)
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( LeftSideLabel)
-				.addComponent( leftSideId)
-			)
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( LeftBottomLabel)
-				.addComponent( leftBottomId)
-			)
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( RightSideLabel)
-				.addComponent( rightSideId)
-			)
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( RightBottomLabel)
-				.addComponent( rightBottomId)
-			)
-		);
-	}
+        layout.setVerticalGroup
+        (
+            layout.createSequentialGroup()
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent( topTimeLabel)
+                .addComponent( topTimeId)
+            )
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent( bottomTimeLabel)
+                .addComponent( bottomTimeId)
+            )
+            .addComponent( separator)
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent( leftSideLabel)
+                .addComponent( leftSideId)
+            )
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent( leftBottomLabel)
+                .addComponent( leftBottomId)
+            )
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent( rightSideLabel)
+                .addComponent( rightSideId)
+            )
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent( rightBottomLabel)
+                .addComponent( rightBottomId)
+            )
+        );
+    }
 
-	public void Set( Model UseModel)
-	{
-		Sources UseSources = configuration.getSources();
+    public void Set( Model model)
+    {
+        Sources sources = configuration.getSources();
 
-		SourcesView UseSourcesView =
-			new SourcesView( UseSources, PickGlobals.Yes, UseModel.getTypeId(), UseModel.getId(),
-							 	  Timer.class, HasEmpty.Yes, HasFixed.No, HasProxies.No);
+        SourcesView sourcesView = new SourcesView
+        (
+            sources, PickGlobals.Yes, model.getTypeId(), model.getId(), Timer.class,
+            HasEmpty.Yes, HasFixed.No, HasProxies.No
+        );
 
-		topTimeId.setSourcesView( UseSourcesView);
-		topTimeId.attachValue( UseModel.getStatusTimeId( Model.StatusTime.TOP));
-	
-		bottomTimeId.setSourcesView( UseSourcesView);
-		bottomTimeId.attachValue( UseModel.getStatusTimeId( Model.StatusTime.BOTTOM));
+        topTimeId.setSourcesView( sourcesView);
+        topTimeId.attachValue( model.getStatusTimeId( Model.StatusTime.TOP));
 
-		UseSourcesView =
-			new SourcesView( UseSources, PickGlobals.Yes, UseModel.getTypeId(), UseModel.getId(),
-							 	  HasEmpty.Yes, HasFixed.Yes, HasProxies.Yes);
+        bottomTimeId.setSourcesView( sourcesView);
+        bottomTimeId.attachValue( model.getStatusTimeId( Model.StatusTime.BOTTOM));
 
-		leftSideId.setSourcesView( UseSourcesView);
-		leftSideId.attachValue( UseModel.getStatusSourceId( Model.StatusSource.LEFT_SIDE));
+        sourcesView = new SourcesView
+        (
+            sources, PickGlobals.Yes, model.getTypeId(), model.getId(),
+            HasEmpty.Yes, HasFixed.Yes, HasProxies.Yes
+        );
 
-		leftBottomId.setSourcesView( UseSourcesView);
-		leftBottomId.attachValue( UseModel.getStatusSourceId( Model.StatusSource.LEFT_BOTTOM));
+        leftSideId.setSourcesView( sourcesView);
+        leftSideId.attachValue( model.getStatusSourceId( Model.StatusSource.LEFT_SIDE));
 
-		rightSideId.setSourcesView( UseSourcesView);
-		rightSideId.attachValue( UseModel.getStatusSourceId( Model.StatusSource.RIGHT_SIDE));
+        leftBottomId.setSourcesView( sourcesView);
+        leftBottomId.attachValue( model.getStatusSourceId( Model.StatusSource.LEFT_BOTTOM));
 
-		rightBottomId.setSourcesView( UseSourcesView);
-		rightBottomId.attachValue( UseModel.getStatusSourceId( Model.StatusSource.RIGHT_BOTTOM));
-	}
+        rightSideId.setSourcesView( sourcesView);
+        rightSideId.attachValue( model.getStatusSourceId( Model.StatusSource.RIGHT_SIDE));
+
+        rightBottomId.setSourcesView( sourcesView);
+        rightBottomId.attachValue( model.getStatusSourceId( Model.StatusSource.RIGHT_BOTTOM));
+    }
 }

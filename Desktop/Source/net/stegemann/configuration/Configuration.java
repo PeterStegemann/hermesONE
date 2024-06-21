@@ -36,7 +36,8 @@ public class Configuration
                 types: %s
                 models: %s
                 sources: %s
-            }""",
+            }
+            """,
             indent( system), indent( types), indent( models), indent( sources)
         );
     }

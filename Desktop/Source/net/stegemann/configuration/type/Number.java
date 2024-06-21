@@ -3,7 +3,8 @@ package net.stegemann.configuration.type;
 import lombok.Getter;
 import net.stegemann.misc.ChangeObservable;
 
-public class Number extends ChangeObservable< Number> implements ConfigurationValue
+public class Number extends ChangeObservable< Number>
+                 implements Comparable< Number>, ConfigurationValue
 {
     private int minimum = Integer.MIN_VALUE;
     private int maximum = Integer.MAX_VALUE;
@@ -11,9 +12,7 @@ public class Number extends ChangeObservable< Number> implements ConfigurationVa
     @Getter
     private int value = 0;
 
-    public Number()
-    {
-    }
+    public Number() {}
 
     public Number( int value)
     {
@@ -51,18 +50,61 @@ public class Number extends ChangeObservable< Number> implements ConfigurationVa
         value = other.value;
     }
 
-    @Override
-    public String toString()
+    public void setValue( Number value)
+        throws ValueOutOfRangeException
     {
-        return String.format( """
-            Number
-            {
-                minimum: %s
-                maximum: %s
-                value: %s
-            }""",
-            minimum, maximum, value
-        );
+        if( value != null)
+        {
+            setValue( value.getValue());
+        }
+    }
+
+    public void setValue( int Value)
+        throws ValueOutOfRangeException
+    {
+        if(( Value > maximum) || ( Value < minimum))
+        {
+            throw new ValueOutOfRangeException( "Value " + Value + " not in range (" + minimum + " < " + maximum + ")");
+        }
+
+        value = Value;
+
+        notifyChange( this);
+    }
+
+    @Override
+    public void setConfigurationValue( String stringValue)
+        throws ValueOutOfRangeException, NumberFormatException
+    {
+        int intValue;
+
+        if( stringValue == null)
+        {
+            intValue = 0;
+        }
+        else
+        {
+            intValue = Integer.parseInt( stringValue);
+        }
+
+        setValue( intValue);
+    }
+
+    @Override
+    public String getConfigurationValue()
+    {
+        return Integer.toString( value);
+    }
+
+    @Override
+    public int compareTo( Number other)
+    {
+        if( other == null)
+        {
+            return 1;
+        }
+
+        return value - other.value;
     }
 
     @Override
@@ -102,61 +144,20 @@ public class Number extends ChangeObservable< Number> implements ConfigurationVa
         return value == other.value;
     }
 
-    public void setValue( Number value)
-        throws ValueOutOfRangeException
+    @Override
+    public String toString()
     {
-        if( value != null)
-        {
-            setValue( value.getValue());
-        }
-    }
-
-    public void setValue( int Value)
-        throws ValueOutOfRangeException
-    {
-        if(( Value > maximum) || ( Value < minimum))
-        {
-            throw new ValueOutOfRangeException( "Value " + Value + " not in range (" + minimum + " < " + maximum + ")");
-        }
-
-        value = Value;
-
-        notifyChange( this);
-    }
-
-    public void decrement()
-    {
-        if( value > 0)
-        {
-            try
+        return String.format
+        (
+            """
+            Number
             {
-                setValue( value - 1);
+                minimum: %s
+                maximum: %s
+                value: %s
             }
-            catch (ValueOutOfRangeException ignored) {}
-        }
-    }
-
-    @Override
-    public void setConfigurationValue( String stringValue)
-        throws ValueOutOfRangeException, NumberFormatException
-    {
-        int intValue;
-
-        if( stringValue == null)
-        {
-            intValue = 0;
-        }
-        else
-        {
-            intValue = Integer.parseInt( stringValue);
-        }
-
-        setValue( intValue);
-    }
-
-    @Override
-    public String getConfigurationValue()
-    {
-        return Integer.toString( value);
+            """,
+            minimum, maximum, value
+        );
     }
 }

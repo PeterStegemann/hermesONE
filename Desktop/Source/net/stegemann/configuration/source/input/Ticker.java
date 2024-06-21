@@ -1,14 +1,13 @@
 package net.stegemann.configuration.source.input;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.type.Volume;
 import net.stegemann.configuration.util.ConfigurationField;
-import net.stegemann.io.xml.Names;
+import net.stegemann.io.xml.Names;import static net.stegemann.misc.Utility.indent;
 
 @Getter
 @ConfigurationField( name = Names.SOURCE_INPUT_TICKER)
@@ -33,15 +32,14 @@ public final class Ticker extends Input
 	{
 		lowInputId = new Number( DIGITAL_INPUT_MINIMUM, DIGITAL_INPUT_MAXIMUM);
 		highInputId = new Number( DIGITAL_INPUT_MINIMUM, DIGITAL_INPUT_MAXIMUM);
-		init = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, INIT_SIGNAL_PER_VALUE);
+		init = new Volume( INIT_SIGNAL_PER_VALUE);
 		store = new Bool();
 
 		try
 		{
-			step = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, STEP_SIGNAL_PER_VALUE, STEP_DEFAULT_VALUE);
-			top = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TOP_SIGNAL_PER_VALUE,	TOP_DEFAULT_VALUE);
-			bottom = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, BOTTOM_SIGNAL_PER_VALUE,
-								 BOTTOM_DEFAULT_VALUE);
+			step = new Volume( STEP_SIGNAL_PER_VALUE, STEP_DEFAULT_VALUE);
+			top = new Volume( TOP_SIGNAL_PER_VALUE,	TOP_DEFAULT_VALUE);
+			bottom = new Volume( BOTTOM_SIGNAL_PER_VALUE, BOTTOM_DEFAULT_VALUE);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
@@ -63,23 +61,30 @@ public final class Ticker extends Input
 	}
 
 	@Override
-	public String toString()
+	public Source duplicate()
 	{
-        return "Ticker = {\n" +
-				super.toString() +
-				" Low Input Id: " + lowInputId + "\n" +
-				" High Input Id: " + highInputId + "\n" +
-				" Init: " + init + "\n" +
-				" Step: " + step + "\n" +
-				" Store: " + store + "\n" +
-				" Top: " + top + "\n" +
-				" Bottom: " + bottom + "\n" +
-				"}\n";
+		return new Ticker( this);
 	}
 
 	@Override
-	public Source clone()
+	public String toString()
 	{
-		return new Ticker( this);
+        return String.format
+        (
+            """
+            Rotary
+            {
+                %s
+                lowInputId: %s
+                highInputId: %s
+                init: %s
+                store: %s
+                step: %s
+                top: %s
+                bottom: %s
+            }
+            """,
+            indent( super.toString()), lowInputId, highInputId, init, store, step, top, bottom
+        );
 	}
 }

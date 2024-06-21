@@ -74,29 +74,34 @@ public class SerialConfigurationWriter
     {
         complex( Id.Configuration, () ->
         {
-            System system = configuration.getSystem();
+            system( configuration.getSystem());
 
-            value( Id.AnalogInputs, system.getAnalogInputs());
-            value( Id.DigitalInputs, system.getDigitalInputs());
-            value( Id.OutputChannels, system.getOutputChannels());
-            value( Id.Outputs, system.getOutputs());
-
-            value( Id.Owner, system.getOwner());
-            value( Id.SetupBacklight, system.getSetupBacklight());
-            value( Id.SetupBlankTime, system.getSetupBlankTime());
-            value( Id.StatusBacklight, system.getStatusBacklight());
-            value( Id.StatusContrast, system.getStatusContrast());
-            value( Id.StatusBlankTime, system.getStatusBlankTime());
-            value( Id.StatusInverted, system.getStatusInverted());
-            value( Id.SelectedModel, system.getSelectedModel());
-
-            battery( system.getBattery());
-            calibrations( system.getCalibrations());
             models( configuration.getModels());
             types( configuration.getTypes());
             sources( configuration.getSources());
-            ppms( system.getPpms());
         });
+    }
+
+    private void system( System system)
+        throws WriteException
+    {
+        value( Id.AnalogInputs, system.getAnalogInputs());
+        value( Id.DigitalInputs, system.getDigitalInputs());
+        value( Id.OutputChannels, system.getOutputChannels());
+        value( Id.Outputs, system.getOutputs());
+
+        value( Id.Owner, system.getOwner());
+        value( Id.SetupBacklight, system.getSetupBacklight());
+        value( Id.SetupBlankTime, system.getSetupBlankTime());
+        value( Id.StatusBacklight, system.getStatusBacklight());
+        value( Id.StatusContrast, system.getStatusContrast());
+        value( Id.StatusBlankTime, system.getStatusBlankTime());
+        value( Id.StatusInverted, system.getStatusInverted());
+        value( Id.SelectedModel, system.getSelectedModel());
+
+        battery( system.getBattery());
+        calibrations( system.getCalibrations());
+        ppms( system.getPpms());
     }
 
     private void ppms( PPMs ppms)

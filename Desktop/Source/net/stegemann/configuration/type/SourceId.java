@@ -34,18 +34,6 @@ public class SourceId extends Number
         super( other);
     }
 
-    @Override
-    public String toString()
-    {
-        return String.format("""
-            SourceId
-            {
-                %s
-            }""",
-            indent( super.toString())
-        );
-    }
-
     public void replaceSource( HashMap< SourceId, SourceId> sourcesMap)
     {
         SourceId newSourceId = sourcesMap.get( this);
@@ -63,5 +51,39 @@ public class SourceId extends Number
         {
             throw new RuntimeException( reason);
         }
+    }
+
+    public void switchSource( SourceId sourceIdOne, SourceId sourceIdTwo)
+    {
+        try
+        {
+            if( this.equals( sourceIdOne))
+            {
+                setValue( sourceIdTwo);
+            }
+            else if( this.equals( sourceIdTwo))
+            {
+                setValue( sourceIdOne);
+            }
+        }
+        catch( ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format
+        (
+            """
+            SourceId
+            {
+                %s
+            }
+            """,
+            indent( super.toString())
+        );
     }
 }

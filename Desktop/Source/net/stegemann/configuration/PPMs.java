@@ -46,28 +46,16 @@ public class PPMs implements Iterable< PPM>
 		}
 
 		// Fill up missing ppms.
-		int Fill = outputs - ppms.size();
+		int fill = outputs - ppms.size();
 
-		while( Fill > 0)
+		while( fill > 0)
 		{
 			ppms.add( new PPM( "Modul " + ( ppms.size() + 1), outputChannels));
 
-			Fill--;
+			fill--;
 		}
 	}
 
-	public void addPPM( PPM ppm)
-	{
-		ppms.add( ppm);
-	}
-/*
-	public void setPPM( int index, PPM ppm)
-	{
-		fill( index + 1);
-
-		ppms.set( index, ppm);
-	}
-*/
 	public PPM getPPM( int index)
 	{
 		if( index == -1)

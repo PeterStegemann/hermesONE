@@ -2,11 +2,12 @@ package net.stegemann.gui.panel;
 
 import net.stegemann.configuration.*;
 import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.view.ModelsView;
+import net.stegemann.configuration.type.ValueOutOfRangeException;import net.stegemann.configuration.view.ModelsView;
 import net.stegemann.controller.Controller;
 import net.stegemann.gui.Constants;
 import net.stegemann.gui.components.TextComponent;
 import net.stegemann.gui.frame.SystemFrame;
+import net.stegemann.gui.misc.hermesPanel;
 import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.ModelsViewComboBoxModel;
 import net.stegemann.gui.model.TypesComboBoxModel;
@@ -16,358 +17,403 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.Serial;
 
-public class MainPanel extends JPanel
-				    implements ActionListener, ListSelectionListener
+public class MainPanel extends hermesPanel
+                    implements ListSelectionListener
 {
-	@Serial
-	private static final long serialVersionUID = -4538240657987172398L;
+    @Serial
+    private static final long serialVersionUID = -4538240657987172398L;
 
-	private final Controller controller;
-	private final Configuration configuration;
+    private final Controller controller;
+    private final Configuration configuration;
 
-	private ModelsView modelsView;
+    private ModelsView modelsView;
 
-	private final JList< Type> typesList;
-	private final TextComponent typeName;
-	private final JButton addTypeButton;
-	private final JButton cloneTypeButton;
-	private final JButton removeTypeButton;
+    private final JList< Type> typesList;
+    private final TextComponent typeName;
+    private final JButton addTypeButton, duplicateTypeButton, removeTypeButton;
+    private final JButton upTypeButton, downTypeButton;
 
-	private final JList< Model> modelsList;
-	private final JButton addModelButton;
-	private final JButton cloneModelButton;
-	private final JButton removeModelButton;
+    private final JList< Model> modelsList;
+    private final JButton addModelButton, duplicateModelButton, removeModelButton;
+    private final JButton upModelButton, downModelButton;
 
-	private final ModelPanel modelPanel;
+    private final ModelPanel modelPanel;
 
-	private final JButton systemButton;
+    private final JButton systemButton;
 
-	public MainPanel( Controller useController)
-	{
-		controller = useController;
-		configuration = useController.getConfiguration();
-		
-		systemButton = new JButton( "System...");
-		systemButton.addActionListener( this);
+    public MainPanel( Controller useController)
+    {
+        controller = useController;
+        configuration = useController.getConfiguration();
 
-		JSeparator Separator = new JSeparator();
+        systemButton = button( "System...");
 
-		JLabel TypesListLabel = new JLabel( "Typen:");
+        JSeparator Separator = new JSeparator();
 
-		typesList = new JList<>();
-		typesList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
-		typesList.setLayoutOrientation( JList.VERTICAL);
-		typesList.addListSelectionListener( this);
-		typesList.setCellRenderer( new ListCellRenderer<Type>());
+        JLabel TypesListLabel = new JLabel( "Typen:");
 
-		JScrollPane TypesScrollPane = new JScrollPane( typesList);
-		TypesScrollPane.setMinimumSize( new Dimension( 150, 150));
-		TypesScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        typesList = new JList<>();
+        typesList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        typesList.setLayoutOrientation( JList.VERTICAL);
+        typesList.addListSelectionListener( this);
+        typesList.setCellRenderer( new ListCellRenderer< Type>());
 
-		typeName = new TextComponent( Constants.DEFAULT_TEXTFIELD_WIDTH);
+        JScrollPane TypesScrollPane = new JScrollPane( typesList);
+        TypesScrollPane.setMinimumSize( new Dimension( 150, 150));
+        TypesScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		addTypeButton = new JButton( "+");
-		addTypeButton.addActionListener( this);
-		cloneTypeButton = new JButton( "Kopieren");
-		cloneTypeButton.addActionListener( this);
-		removeTypeButton = new JButton( "-");
-		removeTypeButton.addActionListener( this);
+        typeName = new TextComponent( Constants.DEFAULT_TEXTFIELD_WIDTH);
 
-		JLabel ModelsListLabel = new JLabel( "Modelle:");
+        addTypeButton = button( "+");
+        upTypeButton = button( "<");
+        duplicateTypeButton = button( "Kopieren");
+        downTypeButton = button( ">");
+        removeTypeButton = button( "-");
 
-		modelsList = new JList<>();
-		modelsList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
-		modelsList.setLayoutOrientation( JList.VERTICAL);
-		modelsList.addListSelectionListener( this);
-		modelsList.setCellRenderer( new ListCellRenderer<Model>());
+        JLabel ModelsListLabel = new JLabel( "Modelle:");
 
-		JScrollPane ModelsScrollPane = new JScrollPane( modelsList);
-		ModelsScrollPane.setMinimumSize( new Dimension( 150, 150));
-		ModelsScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        modelsList = new JList<>();
+        modelsList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        modelsList.setLayoutOrientation( JList.VERTICAL);
+        modelsList.addListSelectionListener( this);
+        modelsList.setCellRenderer( new ListCellRenderer< Model>());
 
-		addModelButton = new JButton( "+");
-		addModelButton.addActionListener( this);
-		cloneModelButton = new JButton( "Kopieren");
-		cloneModelButton.addActionListener( this);
-		removeModelButton = new JButton( "-");
-		removeModelButton.addActionListener( this);
+        JScrollPane ModelsScrollPane = new JScrollPane( modelsList);
+        ModelsScrollPane.setMinimumSize( new Dimension( 150, 150));
+        ModelsScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		modelPanel = new ModelPanel( useController);
+        addModelButton = button( "+");
+        upModelButton = button( "<");
+        duplicateModelButton = button( "Kopieren");
+        downModelButton = button( ">");
+        removeModelButton = button( "-");
 
-		// Layout elements.
-		GroupLayout Layout = new GroupLayout( this);
-		setLayout( Layout);
+        modelPanel = new ModelPanel( useController);
 
-		Layout.setHonorsVisibility( false);
+        // Layout elements.
+        GroupLayout layout = new GroupLayout( this);
+        setLayout( layout);
+
+        layout.setHonorsVisibility( false);
 //		Layout.setAutoCreateGaps( true);
-		Layout.setAutoCreateContainerGaps( true);
+        layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup( Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-			.addComponent( systemButton)
-			.addComponent( Separator)
-			.addGroup( Layout.createSequentialGroup()
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-					.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-						.addComponent( TypesListLabel)
-						.addComponent( TypesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE,
-									   150, Integer.MAX_VALUE)
-						.addComponent( typeName)
-						.addGroup( Layout.createSequentialGroup()
-							.addComponent( addTypeButton)
-							.addComponent( cloneTypeButton)
-							.addComponent( removeTypeButton)
-						)
-					)
-					.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-						.addComponent( ModelsListLabel)
-						.addComponent( ModelsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE,
-									   150, Integer.MAX_VALUE)
-						.addGroup( Layout.createSequentialGroup()
-							.addComponent( addModelButton)
-							.addComponent( cloneModelButton)
-							.addComponent( removeModelButton)
-						)
-					)
-				)
-				.addComponent( modelPanel)
-			)
-		);
+        layout.setHorizontalGroup
+        (
+            layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+            .addComponent( systemButton)
+            .addComponent( Separator)
+            .addGroup
+            (
+                layout.createSequentialGroup()
+                .addGroup
+                (
+                    layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                    .addGroup
+                    (
+                        layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                        .addComponent( TypesListLabel)
+                        .addComponent
+                        (
+                            TypesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE,150, Integer.MAX_VALUE
+                        )
+                        .addComponent( typeName)
+                        .addGroup
+                        (
+                            layout.createSequentialGroup()
+                            .addComponent( addTypeButton)
+                            .addComponent( duplicateTypeButton)
+                            .addComponent( removeTypeButton)
+                        )
+                    )
+                    .addGroup
+                    (
+                        layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                        .addComponent( ModelsListLabel)
+                        .addComponent
+                        (
+                            ModelsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 150, Integer.MAX_VALUE
+                        )
+                        .addGroup
+                        (
+                            layout.createSequentialGroup()
+                            .addComponent( addModelButton)
+                            .addComponent( duplicateModelButton)
+                            .addComponent( removeModelButton)
+                        )
+                    )
+                )
+                .addComponent( modelPanel)
+            )
+        );
 
-		Layout.setVerticalGroup( Layout.createSequentialGroup()
-			.addComponent( systemButton)
-			.addComponent( Separator)
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-				.addGroup( Layout.createSequentialGroup()
-					.addGroup( Layout.createSequentialGroup()
-						.addComponent( TypesListLabel)
-						.addComponent( TypesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addComponent( typeName, javax.swing.GroupLayout.PREFERRED_SIZE,
-												 javax.swing.GroupLayout.PREFERRED_SIZE,
-												 javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-							.addComponent( addTypeButton)
-							.addComponent( cloneTypeButton)
-							.addComponent( removeTypeButton)
-						)
-					)
-					.addGroup( Layout.createSequentialGroup()
-						.addComponent( ModelsListLabel)
-						.addComponent( ModelsScrollPane)
-						.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-							.addComponent( addModelButton)
-							.addComponent( cloneModelButton)
-							.addComponent( removeModelButton)
-						)
-					)
-				)
-				.addComponent( modelPanel)
-			)
-		);
-	}
+        layout.setVerticalGroup
+        (
+            layout.createSequentialGroup()
+            .addComponent( systemButton)
+            .addComponent( Separator)
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+                .addGroup
+                (
+                    layout.createSequentialGroup()
+                    .addGroup
+                    (
+                        layout.createSequentialGroup()
+                        .addComponent( TypesListLabel)
+                        .addComponent
+                        (
+                            TypesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                             javax.swing.GroupLayout.PREFERRED_SIZE,
+                                             javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addComponent
+                        (
+                            typeName, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                      javax.swing.GroupLayout.PREFERRED_SIZE,
+                                      javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addGroup
+                        (
+                            layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+                            .addComponent( addTypeButton)
+                            .addComponent( duplicateTypeButton)
+                            .addComponent( removeTypeButton)
+                        )
+                    )
+                    .addGroup
+                    (
+                        layout.createSequentialGroup()
+                        .addComponent( ModelsListLabel)
+                        .addComponent( ModelsScrollPane)
+                        .addGroup
+                        (
+                            layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+                            .addComponent( addModelButton)
+                            .addComponent( duplicateModelButton)
+                            .addComponent( removeModelButton)
+                        )
+                    )
+                )
+                .addComponent( modelPanel)
+            )
+        );
+    }
 
-	public void set()
-	{
-		net.stegemann.configuration.System system = configuration.getSystem();
-		Types UseTypes = configuration.getTypes();
-		Models UseModels = configuration.getModels();
+    public void set()
+    {
+        net.stegemann.configuration.System system = configuration.getSystem();
+        Types types = configuration.getTypes();
+        Models models = configuration.getModels();
 
-		Number SelectedModel = system.getSelectedModel();
-		Model UseModel = UseModels.getModelFromId( SelectedModel);
+        Number selectedModelId = system.getSelectedModel();
+        Model model = models.getModelFromId( selectedModelId);
 
-		typesList.setModel( new TypesComboBoxModel( UseTypes));
+        typesList.setModel( new TypesComboBoxModel( types));
 
-		if( UseModel != null)
-		{
-			Number SelectedType = UseModel.getTypeId();
-			typesList.setSelectedIndex( UseTypes.getIndexFromId( SelectedType));
+        if( model != null)
+        {
+            Number selectedTypeId = model.getTypeId();
+            typesList.setSelectedIndex( types.getIndexFromId( selectedTypeId));
 
-			modelsView = new ModelsView( UseModels, SelectedType);
-			modelsList.setModel( new ModelsViewComboBoxModel( modelsView));
-			modelsList.setSelectedIndex( modelsView.getModelIndexFromId( SelectedModel));
-		}
-		else
-		{
-			modelsView = new ModelsView( UseModels, null);
-			modelsList.setModel( new ModelsViewComboBoxModel( modelsView));
-		}
-	}
+            modelsView = new ModelsView( models, selectedTypeId);
+            modelsList.setModel( new ModelsViewComboBoxModel( modelsView));
+            modelsList.setSelectedIndex( modelsView.getModelIndexFromId( selectedModelId));
+        }
+        else
+        {
+            modelsView = new ModelsView( models, null);
+            modelsList.setModel( new ModelsViewComboBoxModel( modelsView));
+        }
+    }
 
-	@Override
-	public void valueChanged( ListSelectionEvent Event)
-	{
-		if( Event.getValueIsAdjusting() == true)
-		{
-			return;
-		}
+    @Override
+    public void valueChanged( ListSelectionEvent event)
+    {
+        if( event.getValueIsAdjusting() == true)
+        {
+            return;
+        }
 
-		if( Event.getSource() == modelsList)
-		{
-			modelPanel.set( modelsView.getModelFromIndex( modelsList.getSelectedIndex()));
-		}
-		else if( Event.getSource() == typesList)
-		{
-			typeChanged();
-		}
-	}
+        if( event.getSource() == modelsList)
+        {
+            modelChanged();
+        }
+        else if( event.getSource() == typesList)
+        {
+            typeChanged();
+        }
+    }
 
-	private void typeChanged()
-	{
-		Models Models = configuration.getModels();
-		Types Types = configuration.getTypes();
+    @Override
+    public void actionPerformed( ActionEvent event)
+    {
+        try
+        {
+            int selectedTypeIndex = typesList.getSelectedIndex();
+            int selectedModelIndex = modelsList.getSelectedIndex();
 
-		modelPanel.set( null);
+            if( event.getSource() == systemButton)
+            {
+                openSystem();
+            }
+            else if( event.getSource() == addTypeButton)
+            {
+                createType();
+            }
+            else if( event.getSource() == duplicateTypeButton)
+            {
+                duplicateType( selectedTypeIndex);
+            }
+            else if( event.getSource() == removeTypeButton)
+            {
+                removeType( selectedTypeIndex);
+            }
+            else if( event.getSource() == addModelButton)
+            {
+                createModel( selectedTypeIndex);
+            }
+            else if( event.getSource() == duplicateModelButton)
+            {
+                duplicateModel( selectedModelIndex);
+            }
+            else if( event.getSource() == removeModelButton)
+            {
+                removeModel( selectedModelIndex);
+            }
+/*
+        if( selectedTypeIndex == typesList.getSelectedIndex())
+        {
+            // In this case, valueChanged wasn't triggered, so we set the panel here.
+            typeChanged();
+        }
 
-		Type SelectedType = Types.getTypeFromIndex( typesList.getSelectedIndex());
+        if( selectedModelIndex == modelsList.getSelectedIndex())
+        {
+            // In this case, valueChanged wasn't triggered, so we set the panel here.
+            modelsView.rescan();
+            modelPanel.set( modelsView.getModelFromIndex( selectedModelIndex));
+        }
+*/
+        }
+        catch( ValueOutOfRangeException exception)
+        {
+            throw new RuntimeException( exception);
+        }
+    }
 
-		if( SelectedType != null)
-		{
-			Number selectedTypeId = SelectedType.getId();
+    private void openSystem()
+    {
+        SystemFrame systemFrame = new SystemFrame( configuration);
 
-			modelsView = new ModelsView( Models, selectedTypeId);
-			modelsList.setModel( new ModelsViewComboBoxModel( modelsView));
+        systemFrame.set();
+        systemFrame.setLocationRelativeTo( this);
+        systemFrame.open();
+    }
 
-			typeName.attachValue( SelectedType.getName());
-		}
-		else
-		{
-			typeName.attachValue( null);
-		}
-	}
+    private void createType()
+    {
+        selectType( controller.createType());
+    }
 
-	@Override
-	public void actionPerformed( ActionEvent Event)
-	{
-		Types Types = configuration.getTypes();
+    private void duplicateType( int selectedIndex)
+    {
+        selectType( controller.duplicateType( selectedIndex));
+    }
 
-		if( Event.getSource() == systemButton)
-		{
-			SystemFrame SystemFrame = new SystemFrame( configuration);
+    private void removeType( int selectedIndex)
+    {
+        controller.removeType( selectedIndex);
 
-			SystemFrame.set();
-			SystemFrame.setLocationRelativeTo( this);
-			SystemFrame.open();
-		}
-		else if(( Event.getSource() == addTypeButton) ||
-				( Event.getSource() == cloneTypeButton) ||
-				( Event.getSource() == removeTypeButton))
-		{
-			typeEvent( Event, Types);
-		}
-		else if(( Event.getSource() == addModelButton) ||
-				( Event.getSource() == cloneModelButton) ||
-				( Event.getSource() == removeModelButton))
-		{
-			modelEvent( Event, Types);
-		}
-	}
+        if( selectedIndex > 0)
+        {
+            typesList.setSelectedIndex( selectedIndex - 1);
+        }
+        else
+        {
+            typeName.attachValue( null);
+        }
+    }
 
-	private void typeEvent( ActionEvent Event, Types Types)
-	{
-		int SelectedIndex = typesList.getSelectedIndex();
+    private void createModel( int typeIndex)
+        throws ValueOutOfRangeException
+    {
+        Type type = configuration.getTypes().getTypeFromIndex( typeIndex);
 
-		if( Event.getSource() == addTypeButton)
-		{
-			Type Type = controller.addType();
+        if( type == null)
+        {
+            return;
+        }
 
-			if( Type == null)
-			{
-				return;
-			}
+        selectModel( controller.createModel( type.getId()));
+    }
 
-			typesList.setSelectedIndex( Types.getIndexFromId( Type.getId()));
-		}
-		else if( Event.getSource() == cloneTypeButton)
-		{
-			Type NewType = controller.cloneType( SelectedIndex);
+    private void duplicateModel( int modelIndex)
+    {
+        selectModel( controller.duplicateModel( modelsView.getFullModelIndex( modelIndex)));
+    }
 
-			if( NewType == null)
-			{
-				return;
-			}
+    private void removeModel( int modelIndex)
+    {
+        controller.removeModel( modelsView.getFullModelIndex( modelIndex));
 
-			// Select new type.
-			typesList.setSelectedIndex( Types.getIndexFromId( NewType.getId()));
-		}
-		else if( Event.getSource() == removeTypeButton)
-		{
-			controller.removeType( SelectedIndex);
+        // Move model selection one position up.
+        if( modelIndex > 0)
+        {
+            modelsList.setSelectedIndex( modelIndex - 1);
+        }
+    }
 
-			if( SelectedIndex > 0)
-			{
-				typesList.setSelectedIndex( SelectedIndex - 1);
-			}
-			else
-			{
-				typeName.attachValue( null);
-			}
-		}
+    private void modelChanged()
+    {
+        modelPanel.set( modelsView.getModelFromIndex( modelsList.getSelectedIndex()));
+    }
 
-		if( SelectedIndex == typesList.getSelectedIndex())
-		{
-			// In this case, valueChanged wasn't triggered, so we set the panel here.
-			typeChanged();
-		}
-	}
+    private void typeChanged()
+    {
+        Models models = configuration.getModels();
+        Types types = configuration.getTypes();
 
-	private void modelEvent( ActionEvent Event, Types Types)
-	{
-		int SelectedTypeIndex = typesList.getSelectedIndex();
-		int SelectedModelIndex = modelsList.getSelectedIndex();
+        modelPanel.set( null);
 
-		if( Event.getSource() == addModelButton)
-		{
-			Type Type = Types.getTypeFromIndex( SelectedTypeIndex);
+        Type selectedType = types.getTypeFromIndex( typesList.getSelectedIndex());
 
-			if( Type == null)
-			{
-				return;
-			}
+        if( selectedType != null)
+        {
+            Number selectedTypeId = selectedType.getId();
 
-			Model Model = controller.addModel( Type.getId());
+            modelsView = new ModelsView( models, selectedTypeId);
+            modelsList.setModel( new ModelsViewComboBoxModel( modelsView));
 
-			if( Model == null)
-			{
-				return;
-			}
+            typeName.attachValue( selectedType.getName());
+        }
+        else
+        {
+            typeName.attachValue( null);
+        }
+    }
 
-			// Select new model.
-			modelsView.rescan();
-			modelsList.setSelectedIndex( modelsView.getModelIndexFromId( Model.getId()));
-		}
-		else if( Event.getSource() == cloneModelButton)
-		{
-			Model NewModel = controller.cloneModel( modelsView.getFullModelIndex( SelectedModelIndex));
+    private void selectType( Type type)
+    {
+        if( type == null)
+        {
+            return;
+        }
 
-			if( NewModel == null)
-			{
-				return;
-			}
+        typesList.setSelectedIndex( configuration.getTypes().getIndexFromId( type.getId()));
+    }
 
-			// Select new model.
-			modelsView.rescan();
-			modelsList.setSelectedIndex( modelsView.getModelIndexFromId( NewModel.getId()));
-		}
-		else if( Event.getSource() == removeModelButton)
-		{
-			controller.removeModel( modelsView.getFullModelIndex( SelectedModelIndex));
+    private void selectModel( Model model)
+    {
+        if( model == null)
+        {
+            return;
+        }
 
-			// Model selection one position up.
-			if( SelectedModelIndex > 0)
-			{
-				modelsList.setSelectedIndex( SelectedModelIndex - 1);
-			}
-		}
-
-		if( SelectedModelIndex == modelsList.getSelectedIndex())
-		{
-			// In this case, valueChanged wasn't triggered, so we set the panel here.
-			modelsView.rescan();
-			modelPanel.set( modelsView.getModelFromIndex( SelectedModelIndex));
-		}
-	}
+        modelsView.rescan();
+        modelsList.setSelectedIndex( modelsView.getModelIndexFromId( model.getId()));
+    }
 }

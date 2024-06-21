@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class Channels extends ChangeObservable< Channels> implements Iterable< Channel>, ChangeListener< Channel>
+public class Channels extends ChangeObservable< Channels>
+                   implements Iterable< Channel>, ChangeListener< Channel>
 {
 	private final List< Channel> channels = new ArrayList<>();
 
@@ -51,10 +52,12 @@ public class Channels extends ChangeObservable< Channels> implements Iterable< C
 
 	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
 	{
-		for( Channel channel: channels)
-		{
-			channel.replaceSources( sourcesMap);
-		}
+		channels.forEach( channel -> channel.replaceSources( sourcesMap));
+	}
+
+	public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+	{
+		channels.forEach( channel -> channel.switchSources(  sourceIdOne, sourceIdTwo));
 	}
 
 	@Override

@@ -57,24 +57,23 @@ public abstract class Source extends ChangeObservable< Source>
         name.addChangeListener( this);
     }
 
-    @Override
-    public String toString()
+    public void setModelId( Number modelId)
+        throws ValueOutOfRangeException
     {
-        return String.format( """
-            Source
-            {
-                id: %s
-                name: %s
-                modelId: %s
-            }""",
-			indent( id),
-            indent( name),
-            indent( modelId)
-		);
+        this.modelId.setValue( modelId);
     }
 
-	@Override
-    public abstract Source clone();
+	public abstract Source duplicate();
+
+    public abstract void replaceSources( HashMap< SourceId, SourceId> sourcesMap);
+
+    /**
+     * Switch two source ids. This is used to change the visible order of sources.
+     *
+     * @param sourceIdOne One source id
+     * @param sourceIdTwo Another source id
+     */
+    public abstract void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo);
 
     @Override
     public void hasChanged( Text object)
@@ -82,22 +81,33 @@ public abstract class Source extends ChangeObservable< Source>
         notifyChange( this);
     }
 
-    public void setModelId( Number modelId)
-        throws ValueOutOfRangeException
-    {
-        this.modelId.setValue( modelId);
-    }
-
-    public abstract void replaceSources( HashMap< SourceId, SourceId> sourcesMap);
-
     @Override
     public int compareTo( Source other)
     {
-        if(( other instanceof Empty) || ( other instanceof Fixed))
+        if( other == null)
         {
             return 1;
         }
 
-        return name.getValue().compareToIgnoreCase( other.name.getValue());
+        return id.compareTo( other.id);
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format
+        (
+            """
+            Source
+            {
+                id: %s
+                name: %s
+                modelId: %s
+            }
+            """,
+			indent( id),
+            indent( name),
+            indent( modelId)
+		);
     }
 }

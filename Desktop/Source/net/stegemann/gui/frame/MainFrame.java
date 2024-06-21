@@ -97,10 +97,8 @@ public class MainFrame extends JFrame implements ActionListener
 			newMenu, "Konfiguration speichern unter...", 'S', ActionEvent.SHIFT_MASK
 		);
 		newMenu.addSeparator();
-		openSystemMenuItem =
-			addMenuItem( newMenu, "Systemeinstellungen von Datei importieren...");
-		openModelsMenuItem =
-			addMenuItem( newMenu, "Modelleinstellungen von Datei importieren...");
+		openSystemMenuItem = addMenuItem( newMenu, "Systemeinstellungen von Datei importieren...");
+		openModelsMenuItem = addMenuItem( newMenu, "Modelleinstellungen von Datei importieren...");
 
 		newMenuBar.add( newMenu);
 

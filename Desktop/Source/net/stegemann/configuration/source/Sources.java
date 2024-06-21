@@ -1,14 +1,15 @@
 package net.stegemann.configuration.source;
 
-import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.type.SourceId;import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Comparator;import java.util.Iterator;
 import java.util.List;
 
-public class Sources extends ChangeObservable< Sources> implements Iterable< Source>, ChangeListener< Source>
+public class Sources extends ChangeObservable< Sources>
+                  implements Iterable< Source>, ChangeListener< Source>
 {
 	private final List< Source> sources = new ArrayList<>();
 
@@ -56,30 +57,30 @@ public class Sources extends ChangeObservable< Sources> implements Iterable< Sou
 
 	public void insertSource( Source source)
 	{
-		int FreeId = 0;
+		int freeId = 0;
 
 		// Find free source index.
 		for( Source CurrentSource: sources)
 		{
-			if( CurrentSource.getId().equals( FreeId) == false)
+			if( CurrentSource.getId().equals( freeId) == false)
 			{
 				// Here's a gap.
 				break;
 			}
 
-			FreeId++;
+			freeId++;
 		}
 
 		try
 		{
-			source.getId().setValue( FreeId);
+			source.getId().setValue( freeId);
 		}
 		catch( ValueOutOfRangeException reason)
 		{
 			throw new RuntimeException( reason);
 		}
 
-		sources.add( FreeId, source);
+		sources.add( freeId, source);
 
 		source.addChangeListener( this);
 		notifyChange( this);
@@ -97,6 +98,26 @@ public class Sources extends ChangeObservable< Sources> implements Iterable< Sou
 
 		return false;
 	}
+
+    public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+    {
+        sources.forEach( source -> source.switchSources( sourceIdOne, sourceIdTwo));
+
+        int sourceOneId = sourceIdOne.getValue();
+        int sourceTwoId = sourceIdTwo.getValue();
+
+        try
+        {
+            sourceIdOne.setValue( sourceTwoId);
+            sourceIdTwo.setValue( sourceOneId);
+        }
+        catch( ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
+
+        sources.sort( Comparator.comparing(Source::getId));
+    }
 
 	public Source getSourceFromIndex( int index)
 	{

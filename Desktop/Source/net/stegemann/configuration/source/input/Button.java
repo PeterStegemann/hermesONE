@@ -1,7 +1,6 @@
 package net.stegemann.configuration.source.input;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Bool;
 import net.stegemann.configuration.type.Number;
@@ -9,6 +8,8 @@ import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.type.Volume;
 import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
+
+import static net.stegemann.misc.Utility.indent;
 
 @Getter
 @ConfigurationField( name = Names.SOURCE_INPUT_BUTTON)
@@ -30,15 +31,14 @@ public final class Button extends Input
 	public Button()
 	{
 		inputId = new Number( DIGITAL_INPUT_MINIMUM, DIGITAL_INPUT_MAXIMUM);
-		init = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, INIT_SIGNAL_PER_VALUE);
+		init = new Volume( INIT_SIGNAL_PER_VALUE);
 		store = new Bool();
 		toggle = new Bool();
 
 		try
 		{
-			top = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TOP_SIGNAL_PER_VALUE, TOP_DEFAULT_VALUE);
-			bottom = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, BOTTOM_SIGNAL_PER_VALUE,
-								 BOTTOM_DEFAULT_VALUE);
+			top = new Volume( TOP_SIGNAL_PER_VALUE, TOP_DEFAULT_VALUE);
+			bottom = new Volume( BOTTOM_SIGNAL_PER_VALUE, BOTTOM_DEFAULT_VALUE);
 		}
 		catch( ValueOutOfRangeException e)
 		{
@@ -59,22 +59,29 @@ public final class Button extends Input
 	}
 
 	@Override
-	public String toString()
-	{
-        return "Button = {\n" +
-				super.toString() +
-				" Input Id: " + inputId + "\n" +
-				" Init: " + init + "\n" +
-				" Store: " + store + "\n" +
-				" Toggle: " + toggle + "\n" +
-				" Top: " + top + "\n" +
-				" Bottom: " + bottom + "\n" +
-				"}\n";
-	}
-
-	@Override
-	public Source clone()
+	public Source duplicate()
 	{
 		return new Button( this);
 	}
+
+	@Override
+	public String toString()
+	{
+        return String.format
+        (
+            """
+            Button
+            {
+                %s
+                inputId: %s
+                init: %s
+                store: %s
+                toggle: %s
+                top: %s
+                bottom: %s
+            }
+            """,
+            indent( super.toString()), inputId, init, store, toggle, top, bottom
+        );
+    }
 }

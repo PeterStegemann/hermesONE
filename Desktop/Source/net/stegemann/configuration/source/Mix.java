@@ -15,66 +15,69 @@ import java.util.List;
 @ConfigurationField( name = Names.SOURCE_MIX)
 public final class Mix extends Source
 {
-	public static final int INPUT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
+    public static final int INPUT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
 
-	public static final int INPUTS = 7;
+    public static final int INPUTS = 7;
 
-	@ConfigurationField( name = Names.SOURCE_MIX_INPUTS, itemName = Names.SOURCE_MIX_INPUT)
-	private final List< SourceWithVolume> inputs = new ArrayList<>();
+    @ConfigurationField( name = Names.SOURCE_MIX_INPUTS, itemName = Names.SOURCE_MIX_INPUT)
+    private final List< SourceWithVolume> inputs = new ArrayList<>();
 
-	public Mix()
-	{
-		for( int Count = 0; Count < INPUTS; Count++)
-		{
-			inputs.add( new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, INPUT_SIGNAL_PER_VALUE));
-		}
-	}
+    public Mix()
+    {
+        for( int count = 0; count < INPUTS; count++)
+        {
+            inputs.add( new SourceWithVolume( INPUT_SIGNAL_PER_VALUE));
+        }
+    }
 
-	public Mix( Mix other)
-	{
-		super( other);
+    public Mix( Mix other)
+    {
+        super( other);
 
-		for( SourceWithVolume otherInput: other.inputs)
-		{
-			inputs.add( new SourceWithVolume( otherInput));
-		}
-	}
+        for( SourceWithVolume otherInput: other.inputs)
+        {
+            inputs.add( new SourceWithVolume( otherInput));
+        }
+    }
 
-	@Override
-	public String toString()
-	{
-		StringBuffer Buffer = new StringBuffer();
+    @Override
+    public String toString()
+    {
+        StringBuffer Buffer = new StringBuffer();
 
-		Buffer.append( "Mix = {\n");
-		Buffer.append( super.toString());
+        Buffer.append( "Mix = {\n");
+        Buffer.append( super.toString());
 
-		for( SourceWithVolume CurrentSourceTupel: inputs)
-		{
-			Buffer.append( CurrentSourceTupel);
-		}
+        for( SourceWithVolume input: inputs)
+        {
+            Buffer.append( input);
+        }
 
-		Buffer.append( "}\n");
+        Buffer.append( "}\n");
 
-		return Buffer.toString();
-	}
+        return Buffer.toString();
+    }
 
-	@Override
-	public Source clone()
-	{
-		return new Mix( this);
-	}
+    public SourceWithVolume getInput( int index)
+    {
+        return inputs.get( index);
+    }
 
-	@Override
-	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
-	{
-		for( SourceWithVolume input: inputs)
-		{
-			input.replaceSource( sourcesMap);
-		}
-	}
+    @Override
+    public Source duplicate()
+    {
+        return new Mix( this);
+    }
 
-	public SourceWithVolume getInput( int index)
-	{
-		return inputs.get( index);
-	}
+    @Override
+    public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
+    {
+        inputs.forEach( input -> input.replaceSource( sourcesMap));
+    }
+
+    @Override
+    public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+    {
+        inputs.forEach( input -> input.switchSource( sourceIdOne, sourceIdTwo));
+    }
 }

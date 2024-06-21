@@ -4,99 +4,110 @@ import net.stegemann.configuration.Signal;
 
 public class Volume extends Number
 {
-	private final int signalPerValue;
+    private final int signalPerValue;
 
-	public Volume( int useSignalPerValue)
-		throws ValueOutOfRangeException
-	{
-		this( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, useSignalPerValue);
-	}
+    public Volume( int signalPerValue)
+    {
+        this( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, signalPerValue);
+    }
 
-	public Volume( int minimum, int maximum, int useSignalPerValue)
-	{
-		super( minimum / useSignalPerValue, maximum / useSignalPerValue);
+    public Volume( int signalPerValue, int value)
+        throws ValueOutOfRangeException
+    {
+        super( Signal.MINIMUM_VALUE / signalPerValue, Signal.MAXIMUM_VALUE / signalPerValue, value);
 
-		this.signalPerValue = useSignalPerValue;
-	}
+        this.signalPerValue = signalPerValue;
+    }
 
-	public Volume( int minimum, int maximum, int signalPerValue, int value)
-		throws ValueOutOfRangeException
-	{
-		super( minimum / signalPerValue, maximum / signalPerValue, value);
+    public Volume( int minimum, int maximum, int signalPerValue)
+    {
+        super( minimum / signalPerValue, maximum / signalPerValue);
 
-		this.signalPerValue = signalPerValue;
-	}
+        this.signalPerValue = signalPerValue;
+    }
 
-	public Volume( Volume other)
-	{
-		super( other);
+    public Volume( int minimum, int maximum, int signalPerValue, int value)
+        throws ValueOutOfRangeException
+    {
+        super( minimum / signalPerValue, maximum / signalPerValue, value);
 
-		signalPerValue = other.signalPerValue;
-	}
+        this.signalPerValue = signalPerValue;
+    }
 
-	@Override
-	public String toString()
-	{
-		return """
-			Volume
-			{
-				%s SignalPerValue: %s
-			}
-			""".formatted( super.toString(), signalPerValue);
-	}
+    public Volume( Volume other)
+    {
+        super( other);
 
-	@Override
-	public int hashCode()
-	{
-		final int prime = 31;
+        signalPerValue = other.signalPerValue;
+    }
 
-		int result = super.hashCode();
-		result = prime * result + signalPerValue;
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
 
-		return result;
-	}
+        int result = super.hashCode();
+        result = prime * result + signalPerValue;
 
-	@Override
-	public boolean equals( Object other)
-	{
-		if( this == other)
-		{
-			return true;
-		}
+        return result;
+    }
 
-		if(( other instanceof Volume) == false)
-		{
-			return false;
-		}
+    @Override
+    public boolean equals( Object other)
+    {
+        if( this == other)
+        {
+            return true;
+        }
 
-		return equals(( Volume) other);
-	}
+        if(( other instanceof Volume) == false)
+        {
+            return false;
+        }
 
-	boolean equals( Volume other)
-	{
-		if( super.equals( other) == false)
-		{
-			return false;
-		}
+        return equals(( Volume) other);
+    }
 
-		if( signalPerValue != other.signalPerValue)
-		{
-			return false;
-		}
+    boolean equals( Volume other)
+    {
+        if( super.equals( other) == false)
+        {
+            return false;
+        }
 
-		return true;
-	}
+        if( signalPerValue != other.signalPerValue)
+        {
+            return false;
+        }
 
-	@Override
-	public void setConfigurationValue( String StringValue)
-		throws ValueOutOfRangeException, NumberFormatException
-	{
-		setValue( Integer.parseInt( StringValue) / signalPerValue);
-	}
+        return true;
+    }
 
-	@Override
-	public String getConfigurationValue()
-	{
-		return Integer.toString( getValue() * signalPerValue);
-	}
+    @Override
+    public void setConfigurationValue( String stringValue)
+        throws ValueOutOfRangeException, NumberFormatException
+    {
+        setValue( Integer.parseInt( stringValue) / signalPerValue);
+    }
+
+    @Override
+    public String getConfigurationValue()
+    {
+        return Integer.toString( getValue() * signalPerValue);
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format
+        (
+            """
+            Volume
+            {
+                %s SignalPerValue: %s
+            }
+            """,
+            super.toString(), signalPerValue
+        );
+    }
 }

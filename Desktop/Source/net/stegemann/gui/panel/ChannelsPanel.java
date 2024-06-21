@@ -68,29 +68,31 @@ public class ChannelsPanel extends JPanel implements ActionListener, ListSelecti
 			layout.createSequentialGroup().addGroup
 			(
 				layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-					.addComponent( channelsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 150,
-							       Integer.MAX_VALUE)
-			)
+                .addComponent
+                (
+                    channelsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 150, Integer.MAX_VALUE
+                )
+            )
 			.addComponent( channelPanel)
 		);
 
 		layout.setVerticalGroup
 		(
 			layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-				.addGroup
-				(
-					layout.createSequentialGroup().addComponent( channelsScrollPane)
-				)
-				.addComponent( channelPanel)
+            .addGroup
+            (
+                layout.createSequentialGroup().addComponent( channelsScrollPane)
+            )
+            .addComponent( channelPanel)
 		);
 	}
 
-	public void set( Model useModel)
+	public void set( Model model)
 	{
-		model = useModel;
-		channels = model.getChannels();
+		this.model = model;
+		channels = this.model.getChannels();
 
 		channelsList.setModel( new ChannelsComboBoxModel( channels));
-		channelPanel.set( model, channels.getChannelFromIndex( channelsList.getSelectedIndex()));
+		channelPanel.set( this.model, channels.getChannelFromIndex( channelsList.getSelectedIndex()));
 	}
 }

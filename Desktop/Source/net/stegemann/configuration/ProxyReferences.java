@@ -104,10 +104,12 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 
 	public void replaceSources( HashMap< SourceId, SourceId> SourcesMap)
 	{
-		for( SourceWithVolume OldProxyReference: proxyReferences)
-		{
-			OldProxyReference.replaceSource( SourcesMap);
-		}
+		proxyReferences.forEach( proxyReference -> proxyReference.replaceSource( SourcesMap));
+	}
+
+	public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+	{
+		proxyReferences.forEach( proxyReference -> proxyReference.switchSource( sourceIdOne, sourceIdTwo));
 	}
 
 	private static class ProxyReferenceIterator implements Iterator< SourceWithVolume>

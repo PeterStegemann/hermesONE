@@ -3,6 +3,7 @@ package net.stegemann.gui.panel;
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Models;
 import net.stegemann.configuration.PPMs;
+import net.stegemann.configuration.System;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.gui.Constants;
 import net.stegemann.gui.components.ModelIdComponent;
@@ -19,131 +20,148 @@ import java.util.List;
 
 public class SystemPanel extends Panel implements ActionListener
 {
-	@Serial
-	private static final long serialVersionUID = -2820312553040435152L;
+    @Serial
+    private static final long serialVersionUID = -2820312553040435152L;
 
-	private final Configuration configuration;
+    private final Configuration configuration;
 
-	private final TextComponent owner;
-	private final ModelIdComponent selectedModel;
+    private final TextComponent owner;
+    private final ModelIdComponent selectedModel;
 
-	private final StatusDisplayPanel statusDisplay;
-	private final SetupDisplayPanel setupDisplay;
+    private final StatusDisplayPanel statusDisplay;
+    private final SetupDisplayPanel setupDisplay;
 
-	private final BatteryWarnPanel batteryWarn;
-	private final BatteryCalibrationPanel batteryCalibration;
+    private final BatteryWarnPanel batteryWarn;
+    private final BatteryCalibrationPanel batteryCalibration;
 
-	private final CalibrationsPanel calibration;
+    private final CalibrationsPanel calibration;
 
-	private final List<PPMPanel> ppms = new ArrayList<PPMPanel>();
+    private final List<PPMPanel> ppms = new ArrayList<>();
 
-	public SystemPanel( Configuration Configuration)
-	{
-		configuration = Configuration;
+    public SystemPanel( Configuration configuration)
+    {
+        this.configuration = configuration;
 
-		JLabel OwnerLabel = new JLabel( "Besitzer:");
-		owner = new TextComponent( Constants.DEFAULT_TEXTFIELD_WIDTH);
+        JLabel ownerLabel = new JLabel( "Besitzer:");
+        owner = new TextComponent( Constants.DEFAULT_TEXTFIELD_WIDTH);
 
-		JLabel SelectedModelLabel = new JLabel( "Aktives Modell:");
-		selectedModel = new ModelIdComponent();
+        JLabel selectedModelLabel = new JLabel( "Aktives Modell:");
+        selectedModel = new ModelIdComponent();
 
-		JSeparator MainSeparator = new JSeparator();
+        JSeparator mainSeparator = new JSeparator();
 
-		JTabbedPane MainTabPane = new JTabbedPane();
+        JTabbedPane mainTabPane = new JTabbedPane();
 
-		statusDisplay = new StatusDisplayPanel( configuration.getSystem());
-		setupDisplay = new SetupDisplayPanel( configuration.getSystem());
+        statusDisplay = new StatusDisplayPanel( this.configuration.getSystem());
+        setupDisplay = new SetupDisplayPanel( this.configuration.getSystem());
 
-		JTabbedPane DisplayTabPane = new JTabbedPane();
-		DisplayTabPane.add( statusDisplay, "Status");
-		DisplayTabPane.add( setupDisplay, "Setup");
+        JTabbedPane displayTabPane = new JTabbedPane();
+        displayTabPane.add( statusDisplay, "Status");
+        displayTabPane.add( setupDisplay, "Setup");
 
-		MainTabPane.add( DisplayTabPane, "Bildschirm");
+        mainTabPane.add( displayTabPane, "Bildschirm");
 
-		batteryWarn = new BatteryWarnPanel( configuration.getSystem().getBattery());
-		batteryCalibration = new BatteryCalibrationPanel( configuration.getSystem().getBattery());
+        batteryWarn = new BatteryWarnPanel( this.configuration.getSystem().getBattery());
+        batteryCalibration = new BatteryCalibrationPanel( this.configuration.getSystem().getBattery());
 
-		JTabbedPane BatteryTabPane = new JTabbedPane();
-		BatteryTabPane.add( batteryWarn, "Warnung");
-		BatteryTabPane.add( batteryCalibration, "Kalibrierung");
+        JTabbedPane batteryTabPane = new JTabbedPane();
+        batteryTabPane.add( batteryWarn, "Warnung");
+        batteryTabPane.add( batteryCalibration, "Kalibrierung");
 
-		MainTabPane.add( BatteryTabPane, "Batterie");
+        mainTabPane.add( batteryTabPane, "Batterie");
 
-		PPMs UsePPMs = configuration.getSystem().getPpms();
+        PPMs ppms = this.configuration.getSystem().getPpms();
 
-		for( int ppmCount = 0; ppmCount < UsePPMs.getPPMCount(); ppmCount++) {
-			PPMPanel ppm = new PPMPanel( UsePPMs.getPPM( ppmCount));
-			ppms.add( ppm);
+        for( int ppmCount = 0; ppmCount < ppms.getPPMCount(); ppmCount++)
+        {
+            PPMPanel ppm = new PPMPanel( ppms.getPPM( ppmCount));
+            this.ppms.add( ppm);
 
-			MainTabPane.add( ppm, "Modul " + ( ppmCount + 1));
-		}
+            mainTabPane.add( ppm, "Modul " + ( ppmCount + 1));
+        }
 
-		calibration = new CalibrationsPanel( configuration.getSystem().getCalibrations());
+        calibration = new CalibrationsPanel( this.configuration.getSystem().getCalibrations());
 
-		MainTabPane.add( calibration, "Kalibrierung");
+        mainTabPane.add( calibration, "Kalibrierung");
 
-		// Layout elements.
-		GroupLayout Layout = new GroupLayout( this);
-		setLayout( Layout);
+        // Layout elements.
+        GroupLayout layout = new GroupLayout( this);
+        setLayout( layout);
 
 //		Layout.setAutoCreateGaps( true);
-		Layout.setAutoCreateContainerGaps( true);
+        layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup( Layout.createSequentialGroup()
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
-				.addGroup( Layout.createSequentialGroup()
-					.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
-						.addComponent( OwnerLabel)
-						.addComponent( SelectedModelLabel)
-					)
-					.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
-						.addComponent( selectedModel)
-						.addComponent( owner)
-					)
-				)
-				.addComponent( MainSeparator)
-				.addComponent( MainTabPane)
-			)
-		);
+        layout.setHorizontalGroup
+        (
+            layout.createSequentialGroup()
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
+                .addGroup
+                (
+                    layout.createSequentialGroup()
+                    .addGroup
+                    (
+                        layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
+                        .addComponent( ownerLabel)
+                        .addComponent( selectedModelLabel)
+                    )
+                    .addGroup
+                    (
+                        layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
+                        .addComponent( selectedModel)
+                        .addComponent( owner)
+                    )
+                )
+                .addComponent( mainSeparator)
+                .addComponent( mainTabPane)
+            )
+        );
 
-		Layout.setVerticalGroup( Layout.createSequentialGroup()
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( OwnerLabel)
-				.addComponent( owner)
-			)
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( SelectedModelLabel)
-				.addComponent( selectedModel)
-			)
-			.addComponent( MainSeparator)
-			.addComponent( MainTabPane)
-		);
-	}
+        layout.setVerticalGroup
+        (
+            layout.createSequentialGroup()
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent( ownerLabel)
+                .addComponent( owner)
+            )
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent( selectedModelLabel)
+                .addComponent( selectedModel)
+            )
+            .addComponent( mainSeparator)
+            .addComponent( mainTabPane)
+        );
+    }
 
-	public void Set()
-	{
-		net.stegemann.configuration.System System = configuration.getSystem();
-		Models UseModels = configuration.getModels();
+    public void Set()
+    {
+        System system = configuration.getSystem();
+        Models models = configuration.getModels();
 
-		owner.attachValue( System.getOwner());
+        owner.attachValue( system.getOwner());
 
-		Number SelectedModel = System.getSelectedModel();
+        Number selectedModelId = system.getSelectedModel();
 
-		selectedModel.setModels( UseModels);
-		selectedModel.attachValue( SelectedModel);
+        selectedModel.setModels( models);
+        selectedModel.attachValue( selectedModelId);
 
-		statusDisplay.set();
-		setupDisplay.set();
-		batteryWarn.Set();
-		batteryCalibration.set();
+        statusDisplay.set();
+        setupDisplay.set();
+        batteryWarn.Set();
+        batteryCalibration.set();
 
-		calibration.Set();
+        calibration.Set();
 
-		ppms.forEach( PPMPanel::Set);
-	}
+        ppms.forEach( PPMPanel::Set);
+    }
 
-	@Override
-	public void actionPerformed( ActionEvent Event)
-	{
-	}
+    @Override
+    public void actionPerformed( ActionEvent event)
+    {
+    }
 }

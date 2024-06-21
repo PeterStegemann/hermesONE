@@ -16,91 +16,94 @@ import java.util.List;
 @ConfigurationField( name = Names.SOURCE_MAP)
 public final class Map extends Source
 {
-	public static final int INPUT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
-	public static final int POINT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 200);
+    public static final int INPUT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
+    public static final int POINT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 200);
 
-	public static final int POINTS = 7;
+    public static final int POINTS = 7;
 
-	private static final int DEFAULT_INPUT_VOLUME = 100;
-	private static final int DEFAULT_POINT_VOLUME = 0;
+    private static final int DEFAULT_INPUT_VOLUME = 100;
+    private static final int DEFAULT_POINT_VOLUME = 0;
 
-	@ConfigurationField( name = Names.SOURCE_MAP_INPUT)
-	private final SourceWithVolume input;
-	@ConfigurationField( name = Names.SOURCE_MAP_POINTS, itemName = Names.SOURCE_MAP_POINT)
-	private final List< SourceWithVolume> points = new ArrayList<>();
+    @ConfigurationField( name = Names.SOURCE_MAP_INPUT)
+    private final SourceWithVolume input;
+    @ConfigurationField( name = Names.SOURCE_MAP_POINTS, itemName = Names.SOURCE_MAP_POINT)
+    private final List< SourceWithVolume> points = new ArrayList<>();
 
-	public Map()
-	{
-		try
-		{
-			input = new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, INPUT_SIGNAL_PER_VALUE,
-										  DEFAULT_INPUT_VOLUME);
+    public Map()
+    {
+        try
+        {
+            input = new SourceWithVolume( INPUT_SIGNAL_PER_VALUE, DEFAULT_INPUT_VOLUME);
 
-			for( int Count = 0; Count < POINTS; Count++)
-			{
-				points.add( new SourceWithVolume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, POINT_SIGNAL_PER_VALUE,
-												  DEFAULT_POINT_VOLUME));
-			}
-		}
-		catch( ValueOutOfRangeException reason)
-		{
-			throw new RuntimeException( reason);
-		}
-	}
+            for( int count = 0; count < POINTS; count++)
+            {
+                points.add( new SourceWithVolume( POINT_SIGNAL_PER_VALUE, DEFAULT_POINT_VOLUME));
+            }
+        }
+        catch( ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
+    }
 
-	public Map( Map other)
-	{
-		super( other);
+    public Map( Map other)
+    {
+        super( other);
 
-		input = new SourceWithVolume( other.input);
+        input = new SourceWithVolume( other.input);
 
-		for( SourceWithVolume otherPoint: other.points)
-		{
-			points.add( new SourceWithVolume( otherPoint));
-		}
-	}
+        for( SourceWithVolume otherPoint: other.points)
+        {
+            points.add( new SourceWithVolume( otherPoint));
+        }
+    }
 
-	@Override
-	public String toString()
-	{
-		StringBuffer Buffer = new StringBuffer();
+    @Override
+    public String toString()
+    {
+        StringBuffer Buffer = new StringBuffer();
 
-		Buffer.append( "Map = {\n");
-		Buffer.append( super.toString());
-		Buffer.append( " Input: " + input + "\n");
+        Buffer.append( "Map = {\n");
+        Buffer.append( super.toString());
+        Buffer.append( " Input: " + input + "\n");
 
-		Buffer.append( " Points = {\n");
+        Buffer.append( " Points = {\n");
 
-		for( SourceWithVolume CurrentSourceTupel: points)
-		{
-			Buffer.append( CurrentSourceTupel);
-		}
+        for( SourceWithVolume point: points)
+        {
+            Buffer.append( point);
+        }
 
-		Buffer.append( " }\n");
-		Buffer.append( "}\n");
+        Buffer.append( " }\n");
+        Buffer.append( "}\n");
 
-		return Buffer.toString();
-	}
+        return Buffer.toString();
+    }
 
-	@Override
-	public Source clone()
-	{
-		return new Map( this);
-	}
+    public SourceWithVolume getPoint( int index)
+    {
+        return points.get( index);
+    }
 
-	@Override
-	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
-	{
-		input.replaceSource( sourcesMap);
+    @Override
+    public Source duplicate()
+    {
+        return new Map( this);
+    }
 
-		for( SourceWithVolume point: points)
-		{
-			point.replaceSource( sourcesMap);
-		}
-	}
+    @Override
+    public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
+    {
+        input.replaceSource( sourcesMap);
 
-	public SourceWithVolume getPoint( int Index)
-	{
-		return points.get( Index);
-	}
+        points.forEach( point -> point.replaceSource( sourcesMap));
+    }
+
+    @Override
+    public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+    {
+        input.switchSource( sourceIdOne, sourceIdTwo);
+
+        points.forEach( point -> point.switchSource( sourceIdOne, sourceIdTwo));
+    }
 }

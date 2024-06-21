@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Types extends ChangeObservable< Types> implements Iterable< Type>, ChangeListener< Type>
+public class Types extends ChangeObservable< Types>
+                implements Iterable< Type>, ChangeListener< Type>
 {
 	private final List< Type> types = new ArrayList<>();
 

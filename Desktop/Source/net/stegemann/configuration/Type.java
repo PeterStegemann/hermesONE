@@ -10,7 +10,8 @@ import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
 @Getter
-public class Type extends ChangeObservable< Type> implements ChangeListener< Text>, Named
+public class Type extends ChangeObservable< Type>
+               implements ChangeListener< Text>, Named
 {
 	public enum State
 	{
@@ -47,22 +48,16 @@ public class Type extends ChangeObservable< Type> implements ChangeListener< Tex
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Type = {\n");
-		Buffer.append(  " Id: " + id + "\n");
-		Buffer.append(  " Name: " + name + "\n");
-		Buffer.append(  " State: " + state + "\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
-	}
-
-	@SuppressWarnings("MethodDoesntCallSuperMethod")
-	@Override
-	public Type clone()
-	{
-		return new Type( this);
+        return String.format( """
+            Type
+            {
+                id: %s
+                name: %s
+                state: %s
+            }
+            """,
+            id, name, state
+		);
 	}
 
 	@Override

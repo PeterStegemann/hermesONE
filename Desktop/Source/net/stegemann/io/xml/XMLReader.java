@@ -38,17 +38,11 @@ public class XMLReader
     {
         Document document = documentGenerator.readDocument( fileName);
 
-        if( mode == Mode.All)
+        switch( mode)
         {
-            configuration.clear();
-        }
-        else if( mode == Mode.Models)
-        {
-            configuration.clearModels();
-        }
-        else if( mode == Mode.System)
-        {
-            configuration.clearSystem();
+            case All -> configuration.clear();
+            case Models -> configuration.clearModels();
+            case System -> configuration.clearSystem();
         }
 
         interpretDocument( configuration, document, mode);
@@ -80,13 +74,11 @@ public class XMLReader
 
             if(( mode == Mode.All) || ( mode == Mode.System))
             {
-                if( Names.SYSTEM.compareToIgnoreCase( nodeName) == 0)
+                switch( nodeName)
                 {
-                    importSystem( configuration.getSystem(), getChildNodes( childNode));
-                }
-                else
-                {
-                    systemResult = false;
+                    case Names.SYSTEM -> importSystem( configuration.getSystem(), getChildNodes( childNode));
+
+                    default -> systemResult = false;
                 }
             }
 
@@ -128,69 +120,28 @@ public class XMLReader
             String nodeName = childNode.getNodeName();
             String textContent = childNode.getTextContent();
 
-            if( Names.SYSTEM_ANALOG_INPUTS.compareToIgnoreCase( nodeName) == 0)
+            switch( nodeName)
             {
-                readValue( system.getAnalogInputs(), textContent);
-            }
-            else if( Names.SYSTEM_DIGITAL_INPUTS.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getDigitalInputs(), textContent);
-            }
-            else if( Names.SYSTEM_OUTPUT_CHANNELS.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getOutputChannels(), textContent);
-            }
-            else if( Names.SYSTEM_OUTPUTS.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getOutputs(), textContent);
-            }
-            else if( Names.SYSTEM_OWNER.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getOwner(), textContent);
-            }
-            else if( Names.SYSTEM_SETUP_BACKLIGHT.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getSetupBacklight(), textContent);
-            }
-            else if( Names.SYSTEM_SETUP_BLANK_TIME.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getSetupBlankTime(), textContent);
-            }
-            else if( Names.SYSTEM_STATUS_BACKLIGHT.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getStatusBacklight(), textContent);
-            }
-            else if( Names.SYSTEM_STATUS_CONTRAST.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getStatusContrast(), textContent);
-            }
-            else if( Names.SYSTEM_STATUS_BLANK_TIME.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getStatusBlankTime(), textContent);
-            }
-            else if( Names.SYSTEM_STATUS_INVERTED.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getStatusInverted(), textContent);
-            }
-            else if( Names.SYSTEM_SELECTED_MODEL.compareToIgnoreCase( nodeName) == 0)
-            {
-                readValue( system.getSelectedModel(), textContent);
-            }
-            else if( Names.BATTERY.compareToIgnoreCase( nodeName) == 0)
-            {
-                importBattery( system.getBattery(), getChildNodes( childNode));
-            }
-            else if( Names.CALIBRATIONS.compareToIgnoreCase( nodeName) == 0)
-            {
-                importCalibrations( system.getCalibrations(), getChildNodes( childNode));
-            }
-            else if( Names.PPMS.compareToIgnoreCase( nodeName) == 0)
-            {
-                importPPMs( system.getPpms(), getChildNodes( childNode));
-            }
-            else
-            {
-                if( debug) java.lang.System.out.println( nodeName + " " + textContent);
+                case Names.SYSTEM_ANALOG_INPUTS -> readValue( system.getAnalogInputs(), textContent);
+                case Names.SYSTEM_DIGITAL_INPUTS -> readValue( system.getDigitalInputs(), textContent);
+                case Names.SYSTEM_OUTPUT_CHANNELS -> readValue( system.getOutputChannels(), textContent);
+                case Names.SYSTEM_OUTPUTS -> readValue( system.getOutputs(), textContent);
+                case Names.SYSTEM_OWNER -> readValue( system.getOwner(), textContent);
+                case Names.SYSTEM_SETUP_BACKLIGHT -> readValue( system.getSetupBacklight(), textContent);
+                case Names.SYSTEM_SETUP_BLANK_TIME -> readValue( system.getSetupBlankTime(), textContent);
+                case Names.SYSTEM_STATUS_BACKLIGHT -> readValue( system.getStatusBacklight(), textContent);
+                case Names.SYSTEM_STATUS_CONTRAST -> readValue( system.getStatusContrast(), textContent);
+                case Names.SYSTEM_STATUS_BLANK_TIME -> readValue( system.getStatusBlankTime(), textContent);
+                case Names.SYSTEM_STATUS_INVERTED -> readValue( system.getStatusInverted(), textContent);
+                case Names.SYSTEM_SELECTED_MODEL -> readValue( system.getSelectedModel(), textContent);
+                case Names.BATTERY -> importBattery( system.getBattery(), getChildNodes( childNode));
+                case Names.CALIBRATIONS -> importCalibrations( system.getCalibrations(), getChildNodes( childNode));
+                case Names.PPMS -> importPPMs( system.getPpms(), getChildNodes( childNode));
+
+                default ->
+                {
+                    if( debug) java.lang.System.out.println( nodeName + " " + textContent);
+                }
             }
         }
     }
@@ -647,8 +598,6 @@ public class XMLReader
 
     private void importSources( Sources sources, IterableNodeList childNodes)
     {
-        int sourceId = 0;
-
         for( Node childNode: childNodes)
         {
             String nodeName = childNode.getNodeName();
@@ -656,13 +605,7 @@ public class XMLReader
 
             if( source != null)
             {
-//                try
-                {
-//                    source.getId().setValue( sourceId++);
-
-                    sources.addSource( source);
-                }
-//                catch( ValueOutOfRangeException ignored) {}
+                sources.addSource( source);
             }
             else
             {

@@ -24,70 +24,84 @@ public class PPMPanel extends Panel implements ActionListener
 
 	private final ChannelMappingsPanel channelMapping;
 
-	public PPMPanel( PPM UsePPM)
+	public PPMPanel( PPM ppm)
 	{
-		ppm = UsePPM;
+		this.ppm = ppm;
 
-		JLabel NameLabel = new JLabel( "Name:");
+		JLabel nameLabel = new JLabel( "Name:");
 		name = new TextComponent( net.stegemann.gui.Constants.DEFAULT_TEXTFIELD_WIDTH);
 
-		JSeparator InvertedPPMSeparator = new JSeparator( SwingConstants.VERTICAL);
+		JSeparator invertedPPMSeparator = new JSeparator( SwingConstants.VERTICAL);
 
-		JLabel PPMCenterLabel = new JLabel( "PPM Mitte:");
+		JLabel ppmCenterLabel = new JLabel( "PPM Mitte:");
 		ppmCenter = new MilliSecondComponent( PPM.PPM_CENTER_MINIMUM, PPM.PPM_CENTER_MAXIMUM, 15);
 
-		JLabel InvertedPPMLabel = new JLabel( "PPM Invertieren");
+		JLabel invertedPPMLabel = new JLabel( "PPM Invertieren");
 		invertedPPM = new BoolComponent();
 
-		JSeparator ChannelMappingsSeparator = new JSeparator();
+		JSeparator channelMappingsSeparator = new JSeparator();
 
-		JLabel ChannelMappingLabel = new JLabel( "Kanalzuweisung:");
-		channelMapping = new ChannelMappingsPanel( ppm.getChannelMappings());
+		JLabel channelMappingLabel = new JLabel( "Kanalzuweisung:");
+		channelMapping = new ChannelMappingsPanel( this.ppm.getChannelMappings());
 
 		// Layout elements.
-		GroupLayout Layout = new GroupLayout( this);
-		setLayout( Layout);
+		GroupLayout layout = new GroupLayout( this);
+		setLayout( layout);
 
 //		Layout.setAutoCreateGaps( true);
-		Layout.setAutoCreateContainerGaps( true);
+		layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup( Layout.createSequentialGroup()
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-				.addGroup( Layout.createSequentialGroup()
-					.addComponent( NameLabel)
+		layout.setHorizontalGroup
+		(
+            layout.createSequentialGroup()
+			.addGroup
+			(
+                layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+				.addGroup
+				(
+                    layout.createSequentialGroup()
+					.addComponent( nameLabel)
 					.addComponent( name, javax.swing.GroupLayout.PREFERRED_SIZE,
 										 javax.swing.GroupLayout.PREFERRED_SIZE,
 										 javax.swing.GroupLayout.PREFERRED_SIZE)
 				)
-				.addGroup( Layout.createSequentialGroup()
-					.addComponent( PPMCenterLabel)
+				.addGroup
+				(
+                    layout.createSequentialGroup()
+					.addComponent( ppmCenterLabel)
 					.addComponent( ppmCenter)
-					.addComponent( InvertedPPMSeparator)
+					.addComponent( invertedPPMSeparator)
 					.addComponent( invertedPPM)
-					.addComponent( InvertedPPMLabel)
+					.addComponent( invertedPPMLabel)
 				)
-				.addComponent( ChannelMappingsSeparator)
-				.addComponent( ChannelMappingLabel)
+				.addComponent( channelMappingsSeparator)
+				.addComponent( channelMappingLabel)
 				.addComponent( channelMapping)
 			)
 		);
 
-		Layout.setVerticalGroup( Layout.createSequentialGroup()
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( NameLabel)
+		layout.setVerticalGroup
+		(
+            layout.createSequentialGroup()
+			.addGroup
+			(
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+				.addComponent( nameLabel)
 				.addComponent( name, javax.swing.GroupLayout.PREFERRED_SIZE,
 									 javax.swing.GroupLayout.PREFERRED_SIZE,
 									 javax.swing.GroupLayout.PREFERRED_SIZE)
 			)
-			.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-				.addComponent( PPMCenterLabel)
+			.addGroup
+			(
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+				.addComponent( ppmCenterLabel)
 				.addComponent( ppmCenter)
-				.addComponent( InvertedPPMSeparator)
+				.addComponent( invertedPPMSeparator)
 				.addComponent( invertedPPM)
-				.addComponent( InvertedPPMLabel)
+				.addComponent( invertedPPMLabel)
 			)
-			.addComponent( ChannelMappingsSeparator)
-			.addComponent( ChannelMappingLabel)
+			.addComponent( channelMappingsSeparator)
+			.addComponent( channelMappingLabel)
 			.addComponent( channelMapping)
 		);
 	}
@@ -102,7 +116,7 @@ public class PPMPanel extends Panel implements ActionListener
 	}
 
 	@Override
-	public void actionPerformed( ActionEvent e)
+	public void actionPerformed( ActionEvent event)
 	{
 	}
 }

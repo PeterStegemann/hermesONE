@@ -5,7 +5,6 @@ import net.stegemann.configuration.Model;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.source.Sources;
 import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.view.SourcesView;
 import net.stegemann.configuration.view.SourcesView.HasEmpty;
 import net.stegemann.configuration.view.SourcesView.HasFixed;
@@ -13,7 +12,7 @@ import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
 import net.stegemann.controller.Controller;
 import net.stegemann.controller.SourceUtility;
-import net.stegemann.gui.model.ListCellRenderer;
+import net.stegemann.gui.misc.hermesPanel;import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.SourcesComboBoxModel;
 import net.stegemann.gui.panel.source.SourcePanel;
 
@@ -22,234 +21,269 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.Serial;
 
-public class SourcesPanel extends JPanel implements ActionListener, ListSelectionListener
+public class SourcesPanel extends hermesPanel
+                       implements ListSelectionListener
 {
-	@Serial
-	private static final long serialVersionUID = 2773055623640369468L;
+    @Serial
+    private static final long serialVersionUID = 2773055623640369468L;
 
-	public enum PanelType
-	{
-		GLOBAL,
-		TYPE,
-		MODEL
-	}
+    public enum PanelType
+    {
+        GLOBAL,
+        TYPE,
+        MODEL
+    }
 
-	private final Controller controller;
-	private final Configuration configuration;
-	private SourcesView sourcesView;
-	private Model model;
+    private final Controller controller;
+    private final Configuration configuration;
+    private SourcesView sourcesView;
+    private Model model;
 
-	private final PanelType panelType;
+    private final PanelType panelType;
 
-	private Number modelId;
+    private Number modelId;
 
-	private final JList< Source> sourcesList;
-	private final JButton addButton;
-	private final JButton cloneButton;
-	private final JButton removeButton;
+    private final JList< Source> sourcesList;
+    private final JButton addButton, cloneButton, removeButton;
+    private final JButton upButton, downButton;
 
-	private final SourcePanel sourcePanel;
+    private final SourcePanel sourcePanel;
 
-	public SourcesPanel( PanelType PanelType, Controller Controller)
-	{
-		this.panelType = PanelType;
-		this.controller = Controller;
-		this.configuration = Controller.getConfiguration();
+    public SourcesPanel( PanelType panelType, Controller controller)
+    {
+        this.panelType = panelType;
+        this.controller = controller;
+        this.configuration = controller.getConfiguration();
 
-		sourcesList = new JList<>();
-		sourcesList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
-		sourcesList.setLayoutOrientation( JList.VERTICAL);
-		sourcesList.addListSelectionListener( this);
-		sourcesList.setCellRenderer( new ListCellRenderer<Source>());
+        sourcesList = new JList<>();
+        sourcesList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
+        sourcesList.setLayoutOrientation( JList.VERTICAL);
+        sourcesList.addListSelectionListener( this);
+        sourcesList.setCellRenderer( new ListCellRenderer< Source>());
 
-		JScrollPane SourcesScrollPane = new JScrollPane( sourcesList);
-		SourcesScrollPane.setMinimumSize( new Dimension( 150, 150));
-		SourcesScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        JScrollPane sourcesScrollPane = new JScrollPane( sourcesList);
+        sourcesScrollPane.setMinimumSize( new Dimension( 150, 150));
+        sourcesScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		addButton = new JButton( "+");
-		addButton.addActionListener( this);
-		cloneButton = new JButton( "Kopieren");
-		cloneButton.addActionListener( this);
-		removeButton = new JButton( "-");
-		removeButton.addActionListener( this);
+        addButton = button("+");
+        upButton = button("<");
+        cloneButton = button( "Kopieren");
+        downButton = button( ">");
+        removeButton = button( "-");
 
-		sourcePanel = new SourcePanel( configuration);
+        sourcePanel = new SourcePanel( configuration);
 
-		// Layout elements.
-		GroupLayout Layout = new GroupLayout( this);
-		setLayout( Layout);
+        // Layout elements.
+        GroupLayout layout = new GroupLayout( this);
+        setLayout( layout);
 
-		Layout.setHonorsVisibility( false);
+        layout.setHonorsVisibility( false);
 //		Layout.setAutoCreateGaps( true);
-		Layout.setAutoCreateContainerGaps( true);
+        layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup
-		(
-			Layout.createSequentialGroup()
-				.addGroup
-				(
-					Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-						.addComponent
-						(
-							SourcesScrollPane,
-							javax.swing.GroupLayout.PREFERRED_SIZE,
-							150,
-							Integer.MAX_VALUE
-						)
-						.addGroup
-						(
-							Layout.createSequentialGroup()
-								.addComponent( addButton)
-								.addComponent( cloneButton)
-								.addComponent( removeButton)
-						)
-				)
-				.addComponent( sourcePanel)
-		);
+        layout.setHorizontalGroup
+        (
+            layout.createSequentialGroup()
+            .addGroup
+            (
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                .addComponent
+                (
+                    sourcesScrollPane,
+                    javax.swing.GroupLayout.PREFERRED_SIZE,
+                    150,
+                    Integer.MAX_VALUE
+                )
+                .addGroup
+                (
+                    layout.createSequentialGroup()
+                    .addComponent( addButton)
+                    .addComponent( upButton)
+                    .addComponent( cloneButton)
+                    .addComponent( downButton)
+                    .addComponent( removeButton)
+                )
+            )
+            .addComponent( sourcePanel)
+        );
 
-		Layout.setVerticalGroup
-		(
-			Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-				.addGroup
-				(
-					Layout.createSequentialGroup()
-						.addComponent( SourcesScrollPane)
-						.addGroup
-						(
-							Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-								.addComponent( addButton)
-								.addComponent( cloneButton)
-								.addComponent( removeButton)
-						)
-				)
-				.addComponent( sourcePanel)
-		);
-	}
+        layout.setVerticalGroup
+        (
+            layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+            .addGroup
+            (
+                layout.createSequentialGroup()
+                .addComponent( sourcesScrollPane)
+                .addGroup
+                (
+                    layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+                    .addComponent( addButton)
+                    .addComponent( upButton)
+                    .addComponent( cloneButton)
+                    .addComponent( downButton)
+                    .addComponent( removeButton)
+                )
+            )
+            .addComponent( sourcePanel)
+        );
+    }
 
-	@Override
-	public void valueChanged( ListSelectionEvent Event)
-	{
-		if( Event.getValueIsAdjusting() == false)
-		{
-			sourcePanel.set( model, sourcesView.getSourceFromIndex( sourcesList.getSelectedIndex()));
-		}
-	}
+    @Override
+    public void valueChanged( ListSelectionEvent event)
+    {
+        if( event.getValueIsAdjusting() == false)
+        {
+            sourcePanel.set( model, sourcesView.getSourceFromIndex( sourcesList.getSelectedIndex()));
+        }
+    }
 
-	@Override
-	public void actionPerformed( ActionEvent Event)
-	{
-		int SelectedSourceIndex = sourcesList.getSelectedIndex();
+    @Override
+    public void actionPerformed( ActionEvent event)
+    {
+        int selectedSourceIndex = sourcesList.getSelectedIndex();
 
-		if( Event.getSource() == addButton)
-		{
-			addEvent();
-		}
-		else if( Event.getSource() == cloneButton)
-		{
-			cloneEvent( SelectedSourceIndex);
-		}
-		else if( Event.getSource() == removeButton)
-		{
-			removeEvent( SelectedSourceIndex);
-		}
+        if( event.getSource() == addButton)
+        {
+            addEvent();
+        }
+        else if( event.getSource() == upButton)
+        {
+            upEvent( selectedSourceIndex);
+        }
+        else if( event.getSource() == cloneButton)
+        {
+            cloneEvent( selectedSourceIndex);
+        }
+        else if( event.getSource() == downButton)
+        {
+            downEvent( selectedSourceIndex);
+        }
+        else if( event.getSource() == removeButton)
+        {
+            removeEvent( selectedSourceIndex);
+        }
 
-		if( SelectedSourceIndex == sourcesList.getSelectedIndex())
-		{
-			// In this case, valueChanged wasn't triggered, so we set the panel here.
-			sourcesView.rescan();
-			sourcePanel.set( model, sourcesView.getSourceFromIndex( SelectedSourceIndex));
-		}
-	}
+        if( selectedSourceIndex == sourcesList.getSelectedIndex())
+        {
+            // In this case, valueChanged wasn't triggered, so we set the panel here.
+            sourcesView.rescan();
+            sourcePanel.set( model, sourcesView.getSourceFromIndex( selectedSourceIndex));
+        }
+    }
 
-	private void addEvent()
-	{
-		Object[] Options = SourceUtility.getSelectableTypeNames();
+    private void addEvent()
+    {
+        Object[] options = SourceUtility.getSelectableTypeNames();
 
-		String TypeName = ( String) JOptionPane.showInputDialog(
-			this, null, "Neuen Mischer Typ auswählen...",
-			JOptionPane.PLAIN_MESSAGE, null, Options, Options[ 0]);
+        String typeName = ( String) JOptionPane.showInputDialog
+        (
+            this, null, "Neuen Quellentyp auswählen...",
+            JOptionPane.PLAIN_MESSAGE, null, options, options[ 0]
+        );
 
-		Source NewSource;
+        Source newSource = controller.addSource( SourceUtility.createSourceForTypeName( typeName), modelId);
 
-		try
-		{
-			NewSource = controller.addSource( SourceUtility.createSourceForTypeName( TypeName), modelId);
-		}
-		catch( ValueOutOfRangeException Reason)
-		{
-			throw new RuntimeException( Reason);
-		}
+        if( newSource == null)
+        {
+            return;
+        }
 
-		if( NewSource == null)
-		{
-			return;
-		}
+        // Select new source.
+        sourcesView.rescan();
+        sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( newSource.getId()));
+    }
 
-		// Select new source.
-		sourcesView.rescan();
-		sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( NewSource.getId()));
-	}
+    private void upEvent( int selectedSourceIndex)
+    {
+        if( selectedSourceIndex == 0)
+        {
+            return;
+        }
 
-	private void cloneEvent( int SelectedSourceIndex)
-	{
-		Source NewSource = controller.cloneSource( sourcesView.getFullSourceIndex( SelectedSourceIndex));
+        switchSources( selectedSourceIndex, selectedSourceIndex - 1);
+    }
 
-		if( NewSource == null)
-		{
-			return;
-		}
+    private void cloneEvent( int selectedSourceIndex)
+    {
+        Source newSource = controller.duplicateSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
 
-		// Select new source.
-		sourcesView.rescan();
-		sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( NewSource.getId()));
-	}
+        if( newSource == null)
+        {
+            return;
+        }
 
-	private void removeEvent( int SelectedSourceIndex)
-	{
-		controller.removeSource( sourcesView.getFullSourceIndex( SelectedSourceIndex));
+        // Select new source.
+        sourcesView.rescan();
+        sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( newSource.getId()));
+    }
 
-		if( SelectedSourceIndex > 0)
-		{
-			sourcesList.setSelectedIndex( SelectedSourceIndex - 1);
-		}
-	}
+    private void downEvent( int selectedSourceIndex)
+    {
+        if( selectedSourceIndex == sourcesView.getCount() - 1)
+        {
+            return;
+        }
 
-	public void set( Model model)
-	{
-		this.model = model;
+        switchSources( selectedSourceIndex, selectedSourceIndex + 1);
+    }
 
-		Sources sources = configuration.getSources();
+    private void removeEvent( int selectedSourceIndex)
+    {
+        controller.removeSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
 
-		switch( panelType)
-		{
-			case GLOBAL ->
-			{
-				modelId = Model.Global;
-				sourcesView = sourcesView( sources, PickGlobals.Yes, null, null);
-			}
+        if( selectedSourceIndex > 0)
+        {
+            sourcesList.setSelectedIndex( selectedSourceIndex - 1);
+        }
+    }
 
-			case TYPE ->
-			{
-				modelId = model.getTypeId();
-				sourcesView = sourcesView( sources, PickGlobals.No, modelId, null);
-			}
+    private void switchSources( int indexOne, int indexTwo)
+    {
+        Source sourceOne = sourcesView.getSourceFromIndex( indexOne);
+        Source sourceTwo = sourcesView.getSourceFromIndex( indexTwo);
 
-			case MODEL ->
-			{
-				modelId = model.getId();
-				sourcesView = sourcesView( sources, PickGlobals.No, null, modelId);
-			}
-		}
+        controller.switchSources( sourceOne, sourceTwo);
 
-		sourcesList.setModel( new SourcesComboBoxModel( sourcesView));
-		sourcePanel.set( model, sourcesView.getSourceFromIndex( sourcesList.getSelectedIndex()));
-	}
+        // Select new source.
+        sourcesView.rescan();
+        sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( sourceOne.getId()));
+    }
 
-	private SourcesView sourcesView( Sources sources, PickGlobals pickGlobals, Number typeId, Number modelId)
-	{
-		return new SourcesView( sources, pickGlobals, typeId, modelId, HasEmpty.No, HasFixed.No, HasProxies.No);
-	}
+    public void set( Model model)
+    {
+        this.model = model;
+
+        Sources sources = configuration.getSources();
+
+        switch( panelType)
+        {
+            case GLOBAL ->
+            {
+                modelId = Model.Global;
+                sourcesView = sourcesView( sources, PickGlobals.Yes, null, null);
+            }
+
+            case TYPE ->
+            {
+                modelId = model.getTypeId();
+                sourcesView = sourcesView( sources, PickGlobals.No, modelId, null);
+            }
+
+            case MODEL ->
+            {
+                modelId = model.getId();
+                sourcesView = sourcesView( sources, PickGlobals.No, null, modelId);
+            }
+        }
+
+        sourcesList.setModel( new SourcesComboBoxModel( sourcesView));
+        sourcePanel.set( model, sourcesView.getSourceFromIndex( sourcesList.getSelectedIndex()));
+    }
+
+    private SourcesView sourcesView( Sources sources, PickGlobals pickGlobals, Number typeId, Number modelId)
+    {
+        return new SourcesView( sources, pickGlobals, typeId, modelId, HasEmpty.No, HasFixed.No, HasProxies.No);
+    }
 }

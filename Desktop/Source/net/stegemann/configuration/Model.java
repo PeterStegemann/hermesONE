@@ -117,12 +117,12 @@ public class Model extends ChangeObservable< Model>
             throw new RuntimeException( reason);
         }
 
-        for( int Count = 0; Count < StatusSource.values().length; Count++)
+        for( int index = 0; index < StatusSource.values().length; index++)
         {
             statusSourceIds.add( new SourceId());
         }
 
-        for( int Count = 0; Count < StatusTime.values().length; Count++)
+        for( int index = 0; index < StatusTime.values().length; index++)
         {
             statusTimeIds.add( new SourceId());
         }
@@ -130,25 +130,18 @@ public class Model extends ChangeObservable< Model>
         name.addChangeListener( this);
     }
 
-    public Model( Model other)
+    public Model( Model other, Number newTypeId)
     {
 		id = new Number( other.id);
         name = new Text( other.name);
         state = other.state;
         rfMode = other.rfMode;
-        typeId = new Number( other.typeId);
+        typeId = new Number( newTypeId);
         channels = new Channels( other.channels);
         proxyReferences = new ProxyReferences( other.proxyReferences);
 
-        for( SourceId otherSourceId: other.statusSourceIds)
-        {
-            statusSourceIds.add( new SourceId( otherSourceId));
-        }
-
-        for( SourceId otherSourceId: other.statusTimeIds)
-        {
-            statusTimeIds.add( new SourceId( otherSourceId));
-        }
+        other.statusSourceIds.forEach( sourceId -> statusSourceIds.add( new SourceId( sourceId)));
+        other.statusTimeIds.forEach( sourceId -> statusTimeIds.add( new SourceId( sourceId)));
 
         name.addChangeListener( this);
     }
@@ -183,13 +176,6 @@ public class Model extends ChangeObservable< Model>
         return builder.toString();
     }
 
-    @SuppressWarnings( "MethodDoesntCallSuperMethod" )
-    @Override
-    public Model clone()
-    {
-        return new Model( this);
-    }
-
     @Override
     public void hasChanged( Text object)
     {
@@ -222,38 +208,26 @@ public class Model extends ChangeObservable< Model>
         channels.replaceSources( sourcesMap);
         proxyReferences.replaceSources( sourcesMap);
 
-        for( SourceId oldSourceId: statusSourceIds)
-        {
-            SourceId newSourceId = sourcesMap.get( oldSourceId);
+        replaceSources( statusSourceIds, sourcesMap);
+        replaceSources( statusTimeIds, sourcesMap);
+    }
 
-            if( newSourceId != null)
-            {
-                try
-                {
-                    oldSourceId.setValue( newSourceId.getValue());
-                }
-                catch( ValueOutOfRangeException reason)
-                {
-                    throw new RuntimeException( reason);
-                }
-            }
-        }
+    private void replaceSources( List< SourceId> sourceIds, HashMap< SourceId, SourceId> sourcesMap)
+    {
+        sourceIds.forEach( sourceId -> sourceId.replaceSource( sourcesMap));
+    }
 
-        for( SourceId oldSourceId: statusTimeIds)
-        {
-            SourceId newSourceId = sourcesMap.get( oldSourceId);
+    public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+    {
+        channels.switchSources( sourceIdOne, sourceIdTwo);
+        proxyReferences.switchSources( sourceIdOne, sourceIdTwo);
 
-            if( newSourceId != null)
-            {
-                try
-                {
-                    oldSourceId.setValue( newSourceId.getValue());
-                }
-                catch( ValueOutOfRangeException reason)
-                {
-                    throw new RuntimeException( reason);
-                }
-            }
-        }
+        switchSources( statusSourceIds, sourceIdOne, sourceIdTwo);
+        switchSources( statusTimeIds, sourceIdOne, sourceIdTwo);
+    }
+
+    private void switchSources( List< SourceId> sourceIds, SourceId sourceIdOne, SourceId sourceIdTwo)
+    {
+        sourceIds.forEach( sourceId -> sourceId.switchSource( sourceIdOne, sourceIdTwo));
     }
 }

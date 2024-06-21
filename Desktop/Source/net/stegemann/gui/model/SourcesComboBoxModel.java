@@ -44,7 +44,7 @@ public class SourcesComboBoxModel extends AbstractListModel< Source>
 	@Override
 	public int getSize()
 	{
-		return sourcesView.getSourceCount();
+		return sourcesView.getCount();
 	}
 
 	@Override

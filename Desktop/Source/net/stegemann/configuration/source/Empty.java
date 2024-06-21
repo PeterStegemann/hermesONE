@@ -28,26 +28,16 @@ public final class Empty extends Source
 	}
 
 	@Override
-	public String toString()
-	{
-		return String.format( """
-			Empty
-			{
-			    %s
-			}""",
-			indent( super.toString()));
-	}
-
-	@Override
-	public Source clone()
+	public Source duplicate()
 	{
 		return new Empty( this);
 	}
 
 	@Override
-	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
-	{
-	}
+	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap) {}
+
+    @Override
+    public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo) {}
 
 	@Override
 	public int compareTo( Source other)
@@ -58,5 +48,20 @@ public final class Empty extends Source
 		}
 
 		return -1;
+	}
+
+	@Override
+	public String toString()
+	{
+		return String.format
+		(
+            """
+			Empty
+			{
+			    %s
+			}
+			""",
+			indent( super.toString())
+        );
 	}
 }

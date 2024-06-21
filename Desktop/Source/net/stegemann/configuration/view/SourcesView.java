@@ -70,12 +70,11 @@ public class SourcesView extends ChangeObservable< SourcesView>
 	 * This view presents a limited selection of sources based on the given criteria.
 	 * 
 	 * @param sources The sources to pick from.
-	 * @param pickGlobals There's no id for globals, so this switch turns selection of globals on
-	 * or off.
-	 * @param typeId Selects sources that are valid for this type id. If this is null, no sources
-	 * will be selected based on the type id.
-	 * @param modelId Selects sources that are valid for this model id. If this is null, no sources
-	 * will be selected based on the model id.
+	 * @param pickGlobals There's no id for globals, so this switch turns selection of globals on or off.
+	 * @param typeId Selects sources that are valid for this type id. If this is null, no sources will be selected based
+	 *               on the type id.
+	 * @param modelId Selects sources that are valid for this model id. If this is null, no sources will be selected
+	 *                based on the model id.
 	 * @param type Limits the above selections to sources of the given type.
 	 * @param hasEmpty Sources will contain the empty source element.
 	 * @param hasFixed Sources will contain the fixed source element.
@@ -105,9 +104,9 @@ public class SourcesView extends ChangeObservable< SourcesView>
 
 		builder.append( "SourcesView = {\n");
 
-		for( Source Source: sources)
+		for( Source source: sources)
 		{
-			builder.append( Source);
+			builder.append( source);
 		}
 
 		builder.append( "}\n");
@@ -257,7 +256,7 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		return -1;
 	}
 
-	public int getSourceCount()
+	public int getCount()
 	{
 		return sources.size();
 	}
@@ -288,5 +287,14 @@ public class SourcesView extends ChangeObservable< SourcesView>
 		{
 			iterator.remove();
 		}
+	}
+
+	public List< Source> toList()
+	{
+		List< Source> sources = new ArrayList<>();
+
+        this.forEach( sources::add);
+
+		return sources;
 	}
 }

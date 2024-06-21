@@ -1,7 +1,6 @@
 package net.stegemann.configuration.source.input;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
@@ -31,10 +30,8 @@ public final class Switch extends Input
 
         try
         {
-            top = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, TOP_SIGNAL_PER_VALUE,
-                              TOP_DEFAULT_VALUE);
-            bottom = new Volume( Signal.MINIMUM_VALUE, Signal.MAXIMUM_VALUE, BOTTOM_SIGNAL_PER_VALUE,
-                                 BOTTOM_DEFAULT_VALUE);
+            top = new Volume( TOP_SIGNAL_PER_VALUE, TOP_DEFAULT_VALUE);
+            bottom = new Volume( BOTTOM_SIGNAL_PER_VALUE, BOTTOM_DEFAULT_VALUE);
         }
         catch( ValueOutOfRangeException reason)
         {
@@ -53,9 +50,17 @@ public final class Switch extends Input
     }
 
     @Override
+    public Source duplicate()
+    {
+        return new Switch( this);
+    }
+
+    @Override
     public String toString()
     {
-        return String.format( """
+        return String.format
+        (
+            """
             Switch
             {
                 %s
@@ -63,18 +68,9 @@ public final class Switch extends Input
                 highInputId: %s
                 top: %s
                 bottom: %s
-            }""",
-            indent( super.toString()),
-            lowInputId,
-            highInputId,
-            top,
-            bottom
+            }
+            """,
+            indent( super.toString()), lowInputId, highInputId, top, bottom
         );
-    }
-
-    @Override
-    public Source clone()
-    {
-        return new Switch( this);
     }
 }

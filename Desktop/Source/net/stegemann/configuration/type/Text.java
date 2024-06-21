@@ -24,18 +24,6 @@ public class Text extends ChangeObservable< Text> implements ConfigurationValue
     }
 
     @Override
-    public String toString()
-    {
-        return String.format( """
-            Text
-            {
-                value: %s
-            }""",
-            value
-        );
-    }
-
-    @Override
     public int hashCode()
     {
         return value.hashCode();
@@ -99,5 +87,20 @@ public class Text extends ChangeObservable< Text> implements ConfigurationValue
     public String getConfigurationValue()
     {
         return value;
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format
+        (
+            """
+            Text
+            {
+                value: %s
+            }
+            """,
+            value
+        );
     }
 }
