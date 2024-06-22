@@ -1,10 +1,12 @@
 package net.stegemann.controller;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import lombok.Getter;
 import net.stegemann.configuration.*;
 import net.stegemann.configuration.source.Proxy;
 import net.stegemann.configuration.source.Source;
-import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.type.ModelId;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.view.ModelsView;
@@ -13,9 +15,6 @@ import net.stegemann.configuration.view.SourcesView.HasEmpty;
 import net.stegemann.configuration.view.SourcesView.HasFixed;
 import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
-
-import java.util.Arrays;
-import java.util.HashMap;
 
 @Getter
 public class Controller
@@ -27,15 +26,22 @@ public class Controller
         this.configuration = configuration;
     }
 
-    public Model createModel( Number typeId)
-        throws ValueOutOfRangeException
+    public Model createModel( ModelId typeId)
     {
         Model model = new Model();
         configuration.getModels().insertModel( model);
 
         model.setState( Model.State.USED);
-        model.getTypeId().setValue( typeId);
         model.getName().setValue( "Modell " + model.getId().getValue());
+
+        try
+        {
+            model.getTypeId().setValue( typeId);
+        }
+        catch( ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
 
         return model;
     }
@@ -52,9 +58,9 @@ public class Controller
         return duplicateModel( model, model.getTypeId(), new HashMap<>());
     }
 
-    private Model duplicateModel( Model model, Number typeId, HashMap< SourceId, SourceId> typeSourcesMap)
+    private Model duplicateModel( Model model, ModelId newTypeId, HashMap< SourceId, SourceId> typeSourcesMap)
     {
-        Model newModel = new Model( model, typeId);
+        Model newModel = new Model( model, newTypeId);
         configuration.getModels().insertModel( newModel);
 
         // Map of all the sources that get cloned for this model. We need this later to change the references.
@@ -177,7 +183,7 @@ public class Controller
         typeSources( type).toList().forEach( this::removeSource);
     }
 
-    public Source addSource( Source source, Number modelId)
+    public Source addSource( Source source, ModelId modelId)
     {
         if( source == null)
         {
@@ -212,7 +218,7 @@ public class Controller
         return duplicateSource( selectedSource, null);
     }
 
-    private Source duplicateSource( Source source, Number modelId)
+    private Source duplicateSource( Source source, ModelId modelId)
     {
         Source newSource = source.duplicate();
         configuration.getSources().insertSource( newSource);
@@ -250,7 +256,7 @@ public class Controller
         configuration.getSources().removeSource( source);
     }
 
-    public Proxy addProxy( Number modelId)
+    public Proxy addProxy( ModelId modelId)
     {
         int newSlot = findEmptyProxySlot();
 
@@ -316,11 +322,23 @@ public class Controller
         removeSource( index);
     }
 
-    public void switchSources( Source sourceOne, Source sourceTwo)
+    public void switchTypes( ModelId typeOneId, ModelId typeTwoId)
     {
-        configuration.getSources().switchSources( sourceOne.getId(), sourceTwo.getId());
+        configuration.getSources().switchModels( typeOneId, typeTwoId);
+        configuration.getModels().switchTypes( typeOneId, typeTwoId);
+        configuration.getTypes().switchTypes( typeOneId, typeTwoId);
+    }
 
-        configuration.getModels().forEach( model -> model.switchSources( sourceOne.getId(), sourceTwo.getId()));
+    public void switchModels( ModelId modelOneId, ModelId modelTwoId)
+    {
+        configuration.getSources().switchModels( modelOneId, modelTwoId);
+        configuration.getModels().switchModels( modelOneId, modelTwoId);
+    }
+
+    public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+    {
+        configuration.getSources().switchSources( sourceIdOne, sourceIdTwo);
+        configuration.getModels().switchSources( sourceIdOne, sourceIdTwo);
     }
 
     private ModelsView typeModels( Type type)

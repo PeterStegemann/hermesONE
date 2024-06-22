@@ -12,7 +12,6 @@ import net.stegemann.gui.misc.hermesPanel;import net.stegemann.gui.panel.Sources
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.Serial;
 
 public class ModelPanel extends hermesPanel
@@ -58,43 +57,43 @@ public class ModelPanel extends hermesPanel
 		proxiesPanel = new ProxiesPanel( controller);
 		channelsPanel = new ChannelsPanel( configuration);
 
-		JTabbedPane SourcesPane = new JTabbedPane();
-		SourcesPane.add( modelSourcesPanel, "Modell");
-		SourcesPane.add( typeSourcesPanel, "Typ");
-		SourcesPane.add( globalSourcesPanel, "Global");
-		SourcesPane.add( proxiesPanel, "Proxies");
-		SourcesPane.add( channelsPanel, "Kanäle");
+		JTabbedPane sourcesPane = new JTabbedPane();
+		sourcesPane.add( modelSourcesPanel, "Modell");
+		sourcesPane.add( typeSourcesPanel, "Typ");
+		sourcesPane.add( globalSourcesPanel, "Global");
+		sourcesPane.add( proxiesPanel, "Proxies");
+		sourcesPane.add( channelsPanel, "Kanäle");
 
 		// Layout elements.
-		GroupLayout Layout = new GroupLayout( this);
-		setLayout( Layout);
+		GroupLayout layout = new GroupLayout( this);
+		setLayout( layout);
 
 //		Layout.setAutoCreateGaps( true);
-		Layout.setAutoCreateContainerGaps( true);
+		layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup
+		layout.setHorizontalGroup
 		(
-			Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+			layout.createParallelGroup( GroupLayout.Alignment.CENTER)
             .addGroup
             (
-                Layout.createSequentialGroup()
-                    .addComponent( nameLabel)
-                    .addComponent( name)
-                    .addComponent( typeLabel)
-                    .addComponent( typeId)
-                    .addComponent( rfModelabel)
-                    .addComponent( rfMode)
-                    .addComponent( statusSourcesButton)
+                layout.createSequentialGroup()
+                .addComponent( nameLabel)
+                .addComponent( name)
+                .addComponent( typeLabel)
+                .addComponent( typeId)
+                .addComponent( rfModelabel)
+                .addComponent( rfMode)
+                .addComponent( statusSourcesButton)
             )
-            .addComponent( SourcesPane)
+            .addComponent( sourcesPane)
 		);
 
-		Layout.setVerticalGroup
+		layout.setVerticalGroup
 		(
-            Layout.createSequentialGroup()
+            layout.createSequentialGroup()
 			.addGroup
 			(
-                Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
 				.addComponent
 				(
                     nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -138,7 +137,7 @@ public class ModelPanel extends hermesPanel
                                          javax.swing.GroupLayout.PREFERRED_SIZE
                 )
 			)
-			.addComponent( SourcesPane)
+			.addComponent( sourcesPane)
 		);
 	}
 

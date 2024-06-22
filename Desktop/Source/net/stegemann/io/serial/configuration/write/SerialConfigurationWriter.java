@@ -569,19 +569,19 @@ public class SerialConfigurationWriter
     private void value( DesktopProtocol.Id id, Bool value)
         throws WriteException
     {
-        value( id, value.getConfigurationValue());
+        value( id, value.getStringValue());
     }
 
     private void value( DesktopProtocol.Id id, Text value)
         throws WriteException
     {
-        value( id, value.getConfigurationValue());
+        value( id, value.getStringValue());
     }
 
     private void value( DesktopProtocol.Id id, Number value)
         throws WriteException
     {
-        value( id, value.getConfigurationValue());
+        value( id, value.getStringValue());
     }
 
     private void value( DesktopProtocol.Id id, int value)

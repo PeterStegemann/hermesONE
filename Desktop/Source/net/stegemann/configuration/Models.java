@@ -1,14 +1,14 @@
 package net.stegemann.configuration;
 
+import java.util.ArrayList;
+import java.util.Comparator;import java.util.Iterator;
+import java.util.List;
 import lombok.ToString;
-import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.type.ModelId;
+import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 @ToString
 public class Models extends ChangeObservable< Models>
@@ -100,6 +100,34 @@ public class Models extends ChangeObservable< Models>
 		return model;
 	}
 
+    public void switchTypes( ModelId typeIdOne, ModelId typeIdTwo)
+    {
+        models.forEach( model -> model.switchType( typeIdOne, typeIdTwo));
+    }
+
+    public void switchModels( ModelId modelIdOne, ModelId modelIdTwo)
+    {
+        int modelIdOneValue = modelIdOne.getValue();
+        int modelIdTwoValue = modelIdTwo.getValue();
+
+        try
+        {
+            modelIdOne.setValue( modelIdTwoValue);
+            modelIdTwo.setValue( modelIdOneValue);
+        }
+        catch( ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
+
+        models.sort( Comparator.comparing( Model::getId));
+    }
+
+    public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
+    {
+        models.forEach( model -> model.switchSources( sourceIdOne, sourceIdTwo));
+    }
+
 	public Model getModelFromIndex( int Index)
 	{
 		if( Index == -1)
@@ -117,7 +145,7 @@ public class Models extends ChangeObservable< Models>
 		}
 	}
 
-	public Number getIdFromIndex( int Index)
+	public ModelId getIdFromIndex( int Index)
 	{
 		Model currentModel = getModelFromIndex( Index);
 
@@ -129,7 +157,7 @@ public class Models extends ChangeObservable< Models>
 		return currentModel.getId();
 	}
 
-	public Model getModelFromId( Number Id)
+	public Model getModelFromId( ModelId Id)
 	{
 		return getModelFromIndex( getIndexFromId( Id));
 	}
@@ -141,7 +169,7 @@ public class Models extends ChangeObservable< Models>
 	 * 
 	 * @return The index in this container.
 	 */
-	public int getIndexFromId( Number id)
+	public int getIndexFromId( ModelId id)
 	{
 		int index = 0;
 

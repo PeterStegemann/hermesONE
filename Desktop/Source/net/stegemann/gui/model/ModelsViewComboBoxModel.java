@@ -44,7 +44,7 @@ public class ModelsViewComboBoxModel extends AbstractListModel< Model>
 	@Override
 	public int getSize()
 	{
-		return modelsView.getModelCount();
+		return modelsView.getCount();
 	}
 
 	@Override

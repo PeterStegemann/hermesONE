@@ -1,11 +1,17 @@
 package net.stegemann.gui.panel;
 
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.Serial;
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.source.Proxy;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.source.Sources;
-import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.type.ModelId;
 import net.stegemann.configuration.view.SourcesView;
 import net.stegemann.configuration.view.SourcesView.HasEmpty;
 import net.stegemann.configuration.view.SourcesView.HasFixed;
@@ -16,13 +22,6 @@ import net.stegemann.gui.misc.hermesPanel;
 import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.SourcesComboBoxModel;
 import net.stegemann.gui.panel.source.SourcePanel;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.io.Serial;
 
 public class ProxiesPanel extends hermesPanel
                        implements ListSelectionListener
@@ -35,7 +34,7 @@ public class ProxiesPanel extends hermesPanel
     private SourcesView proxiesView;
     private Model model;
 
-    private Number typeId;
+    private ModelId typeId;
 
     private final JList< Source> proxiesList;
     private final JButton addButton, removeButton;

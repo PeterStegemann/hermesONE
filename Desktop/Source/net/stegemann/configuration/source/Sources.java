@@ -1,6 +1,6 @@
 package net.stegemann.configuration.source;
 
-import net.stegemann.configuration.type.SourceId;import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.type.ModelId;import net.stegemann.configuration.type.Number;import net.stegemann.configuration.type.SourceId;import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
@@ -103,20 +103,25 @@ public class Sources extends ChangeObservable< Sources>
     {
         sources.forEach( source -> source.switchSources( sourceIdOne, sourceIdTwo));
 
-        int sourceOneId = sourceIdOne.getValue();
-        int sourceTwoId = sourceIdTwo.getValue();
+        int sourceIdOneValue = sourceIdOne.getValue();
+        int sourceIdTwoValue = sourceIdTwo.getValue();
 
         try
         {
-            sourceIdOne.setValue( sourceTwoId);
-            sourceIdTwo.setValue( sourceOneId);
+            sourceIdOne.setValue( sourceIdTwoValue);
+            sourceIdTwo.setValue( sourceIdOneValue);
         }
         catch( ValueOutOfRangeException reason)
         {
             throw new RuntimeException( reason);
         }
 
-        sources.sort( Comparator.comparing(Source::getId));
+        sources.sort( Comparator.comparing( Source::getId));
+    }
+
+    public void switchModels( ModelId modelIdOne, ModelId modelIdTwo)
+    {
+        sources.forEach( source -> source.switchModel( modelIdOne, modelIdTwo));
     }
 
 	public Source getSourceFromIndex( int index)

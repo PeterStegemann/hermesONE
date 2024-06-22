@@ -1,8 +1,14 @@
 package net.stegemann.gui.panel;
 
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.Serial;
 import net.stegemann.configuration.*;
-import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.ValueOutOfRangeException;import net.stegemann.configuration.view.ModelsView;
+import net.stegemann.configuration.type.ModelId;import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.view.ModelsView;
 import net.stegemann.controller.Controller;
 import net.stegemann.gui.Constants;
 import net.stegemann.gui.components.TextComponent;
@@ -11,13 +17,6 @@ import net.stegemann.gui.misc.hermesPanel;
 import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.ModelsViewComboBoxModel;
 import net.stegemann.gui.model.TypesComboBoxModel;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.io.Serial;
 
 public class MainPanel extends hermesPanel
                     implements ListSelectionListener
@@ -32,21 +31,21 @@ public class MainPanel extends hermesPanel
 
     private final JList< Type> typesList;
     private final TextComponent typeName;
-    private final JButton addTypeButton, duplicateTypeButton, removeTypeButton;
+    private final JButton createTypeButton, duplicateTypeButton, removeTypeButton;
     private final JButton upTypeButton, downTypeButton;
 
     private final JList< Model> modelsList;
-    private final JButton addModelButton, duplicateModelButton, removeModelButton;
+    private final JButton createModelButton, duplicateModelButton, removeModelButton;
     private final JButton upModelButton, downModelButton;
 
     private final ModelPanel modelPanel;
 
     private final JButton systemButton;
 
-    public MainPanel( Controller useController)
+    public MainPanel( Controller controller)
     {
-        controller = useController;
-        configuration = useController.getConfiguration();
+        this.controller = controller;
+        configuration = controller.getConfiguration();
 
         systemButton = button( "System...");
 
@@ -66,11 +65,11 @@ public class MainPanel extends hermesPanel
 
         typeName = new TextComponent( Constants.DEFAULT_TEXTFIELD_WIDTH);
 
-        addTypeButton = button( "+");
-        upTypeButton = button( "<");
-        duplicateTypeButton = button( "Kopieren");
-        downTypeButton = button( ">");
-        removeTypeButton = button( "-");
+        createTypeButton = createButton();
+        upTypeButton = upButton();
+        duplicateTypeButton = duplicateButton();
+        downTypeButton = downButton();
+        removeTypeButton = removeButton();
 
         JLabel ModelsListLabel = new JLabel( "Modelle:");
 
@@ -84,13 +83,13 @@ public class MainPanel extends hermesPanel
         ModelsScrollPane.setMinimumSize( new Dimension( 150, 150));
         ModelsScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        addModelButton = button( "+");
-        upModelButton = button( "<");
-        duplicateModelButton = button( "Kopieren");
-        downModelButton = button( ">");
-        removeModelButton = button( "-");
+        createModelButton = createButton();
+        upModelButton = upButton();
+        duplicateModelButton = duplicateButton();
+        downModelButton = downButton();
+        removeModelButton = removeButton();
 
-        modelPanel = new ModelPanel( useController);
+        modelPanel = new ModelPanel( controller);
 
         // Layout elements.
         GroupLayout layout = new GroupLayout( this);
@@ -123,8 +122,10 @@ public class MainPanel extends hermesPanel
                         .addGroup
                         (
                             layout.createSequentialGroup()
-                            .addComponent( addTypeButton)
+                            .addComponent( createTypeButton)
+                            .addComponent( upTypeButton)
                             .addComponent( duplicateTypeButton)
+                            .addComponent( downTypeButton)
                             .addComponent( removeTypeButton)
                         )
                     )
@@ -139,8 +140,10 @@ public class MainPanel extends hermesPanel
                         .addGroup
                         (
                             layout.createSequentialGroup()
-                            .addComponent( addModelButton)
+                            .addComponent( createModelButton)
+                            .addComponent( upModelButton)
                             .addComponent( duplicateModelButton)
+                            .addComponent( downModelButton)
                             .addComponent( removeModelButton)
                         )
                     )
@@ -179,8 +182,10 @@ public class MainPanel extends hermesPanel
                         .addGroup
                         (
                             layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-                            .addComponent( addTypeButton)
+                            .addComponent( createTypeButton)
+                            .addComponent( upTypeButton)
                             .addComponent( duplicateTypeButton)
+                            .addComponent( downTypeButton)
                             .addComponent( removeTypeButton)
                         )
                     )
@@ -192,8 +197,10 @@ public class MainPanel extends hermesPanel
                         .addGroup
                         (
                             layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-                            .addComponent( addModelButton)
+                            .addComponent( createModelButton)
+                            .addComponent( upModelButton)
                             .addComponent( duplicateModelButton)
+                            .addComponent( downModelButton)
                             .addComponent( removeModelButton)
                         )
                     )
@@ -209,7 +216,7 @@ public class MainPanel extends hermesPanel
         Types types = configuration.getTypes();
         Models models = configuration.getModels();
 
-        Number selectedModelId = system.getSelectedModel();
+        ModelId selectedModelId = system.getSelectedModel();
         Model model = models.getModelFromId( selectedModelId);
 
         typesList.setModel( new TypesComboBoxModel( types));
@@ -251,39 +258,53 @@ public class MainPanel extends hermesPanel
     @Override
     public void actionPerformed( ActionEvent event)
     {
-        try
-        {
-            int selectedTypeIndex = typesList.getSelectedIndex();
-            int selectedModelIndex = modelsList.getSelectedIndex();
+        int selectedTypeIndex = typesList.getSelectedIndex();
+        int selectedModelIndex = modelsList.getSelectedIndex();
 
-            if( event.getSource() == systemButton)
-            {
-                openSystem();
-            }
-            else if( event.getSource() == addTypeButton)
-            {
-                createType();
-            }
-            else if( event.getSource() == duplicateTypeButton)
-            {
-                duplicateType( selectedTypeIndex);
-            }
-            else if( event.getSource() == removeTypeButton)
-            {
-                removeType( selectedTypeIndex);
-            }
-            else if( event.getSource() == addModelButton)
-            {
-                createModel( selectedTypeIndex);
-            }
-            else if( event.getSource() == duplicateModelButton)
-            {
-                duplicateModel( selectedModelIndex);
-            }
-            else if( event.getSource() == removeModelButton)
-            {
-                removeModel( selectedModelIndex);
-            }
+        if( event.getSource() == systemButton)
+        {
+            openSystem();
+        }
+        else if( event.getSource() == createTypeButton)
+        {
+            createType();
+        }
+        else if( event.getSource() == upTypeButton)
+        {
+            upType( selectedTypeIndex);
+        }
+        else if( event.getSource() == duplicateTypeButton)
+        {
+            duplicateType( selectedTypeIndex);
+        }
+        else if( event.getSource() == downTypeButton)
+        {
+            downType( selectedTypeIndex);
+        }
+        else if( event.getSource() == removeTypeButton)
+        {
+            removeType( selectedTypeIndex);
+        }
+        else if( event.getSource() == createModelButton)
+        {
+            createModel( selectedTypeIndex);
+        }
+        else if( event.getSource() == upModelButton)
+        {
+            upModel( selectedModelIndex);
+        }
+        else if( event.getSource() == duplicateModelButton)
+        {
+            duplicateModel( selectedModelIndex);
+        }
+        else if( event.getSource() == downModelButton)
+        {
+            downModel( selectedModelIndex);
+        }
+        else if( event.getSource() == removeModelButton)
+        {
+            removeModel( selectedModelIndex);
+        }
 /*
         if( selectedTypeIndex == typesList.getSelectedIndex())
         {
@@ -298,11 +319,6 @@ public class MainPanel extends hermesPanel
             modelPanel.set( modelsView.getModelFromIndex( selectedModelIndex));
         }
 */
-        }
-        catch( ValueOutOfRangeException exception)
-        {
-            throw new RuntimeException( exception);
-        }
     }
 
     private void openSystem()
@@ -319,9 +335,29 @@ public class MainPanel extends hermesPanel
         selectType( controller.createType());
     }
 
+    private void upType( int selectedIndex)
+    {
+        if( selectedIndex == 0)
+        {
+            return;
+        }
+
+        switchTypes( selectedIndex, selectedIndex - 1);
+    }
+
     private void duplicateType( int selectedIndex)
     {
         selectType( controller.duplicateType( selectedIndex));
+    }
+
+    private void downType( int selectedIndex)
+    {
+        if( selectedIndex == configuration.getTypes().getCount() - 1)
+        {
+            return;
+        }
+
+        switchTypes( selectedIndex, selectedIndex + 1);
     }
 
     private void removeType( int selectedIndex)
@@ -339,7 +375,6 @@ public class MainPanel extends hermesPanel
     }
 
     private void createModel( int typeIndex)
-        throws ValueOutOfRangeException
     {
         Type type = configuration.getTypes().getTypeFromIndex( typeIndex);
 
@@ -351,9 +386,29 @@ public class MainPanel extends hermesPanel
         selectModel( controller.createModel( type.getId()));
     }
 
+    private void upModel( int selectedIndex)
+    {
+        if( selectedIndex == 0)
+        {
+            return;
+        }
+
+        switchModels( selectedIndex, selectedIndex - 1);
+    }
+
     private void duplicateModel( int modelIndex)
     {
         selectModel( controller.duplicateModel( modelsView.getFullModelIndex( modelIndex)));
+    }
+
+    private void downModel( int selectedIndex)
+    {
+        if( selectedIndex == modelsView.getCount() - 1)
+        {
+            return;
+        }
+
+        switchModels( selectedIndex, selectedIndex + 1);
     }
 
     private void removeModel( int modelIndex)
@@ -365,6 +420,29 @@ public class MainPanel extends hermesPanel
         {
             modelsList.setSelectedIndex( modelIndex - 1);
         }
+    }
+
+    private void switchTypes( int indexOne, int indexTwo)
+    {
+        ModelId typeIdOne = configuration.getTypes().getTypeIdFromIndex( indexOne);
+        ModelId typeIdTwo = configuration.getTypes().getTypeIdFromIndex( indexTwo);
+
+        controller.switchTypes( typeIdOne, typeIdTwo);
+
+        // Select new type.
+        typesList.setSelectedIndex( configuration.getTypes().getIndexFromId( typeIdOne));
+    }
+
+    private void switchModels( int indexOne, int indexTwo)
+    {
+        ModelId modelIdOne = modelsView.getModelIdFromIndex( indexOne);
+        ModelId modelIdTwo = modelsView.getModelIdFromIndex( indexTwo);
+
+        controller.switchModels( modelIdOne,modelIdTwo);
+
+        // Select new model.
+        modelsView.rescan();
+        modelsList.setSelectedIndex( modelsView.getModelIndexFromId( modelIdOne));
     }
 
     private void modelChanged()

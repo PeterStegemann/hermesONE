@@ -1,11 +1,8 @@
 package net.stegemann.configuration;
 
 import lombok.Getter;
-import net.stegemann.configuration.type.Bool;
-import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.Text;
-import net.stegemann.configuration.type.ValueOutOfRangeException;
-import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.configuration.type.*;
+import net.stegemann.configuration.type.Number;import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
 
 @Getter
@@ -47,7 +44,7 @@ public class System
 	@ConfigurationField( name = Names.SYSTEM_STATUS_INVERTED)
 	private final Bool statusInverted = new Bool();
 	@ConfigurationField( name = Names.SYSTEM_SELECTED_MODEL)
-	private final Number selectedModel = new Number( Model.MODEL_START, Model.MODEL_END);
+	private final ModelId selectedModel = new ModelId( Model.MODEL_START, Model.MODEL_END);
 
 	@ConfigurationField( name = Names.BATTERY)
 	private final Battery battery = new Battery();

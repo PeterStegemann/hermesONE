@@ -121,7 +121,7 @@ public class DocumentGenerator
 
 	public void appendNode( Document document, Node node, String nodeTag, ConfigurationValue value)
 	{
-		appendNode( document, node, nodeTag, value.getConfigurationValue());
+		appendNode( document, node, nodeTag, value.getStringValue());
 	}
 
 	public void appendNode( Document document,	Node node,	String nodeTag, int value)

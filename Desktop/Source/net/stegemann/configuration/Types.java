@@ -1,13 +1,13 @@
 package net.stegemann.configuration;
 
+import java.util.ArrayList;
+import java.util.Comparator;import java.util.Iterator;
+import java.util.List;
+import net.stegemann.configuration.type.ModelId;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class Types extends ChangeObservable< Types>
                 implements Iterable< Type>, ChangeListener< Type>
@@ -102,6 +102,24 @@ public class Types extends ChangeObservable< Types>
 		return false;
 	}
 
+    public void switchTypes( ModelId modelIdOne, ModelId modelIdTwo)
+    {
+        int modelIdOneValue = modelIdOne.getValue();
+        int modelIdTwoValue = modelIdTwo.getValue();
+
+        try
+        {
+            modelIdOne.setValue( modelIdTwoValue);
+            modelIdTwo.setValue( modelIdOneValue);
+        }
+        catch( ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
+
+        types.sort( Comparator.comparing( Type::getId));
+    }
+
 	public Type getTypeFromIndex( int index)
 	{
 		if( index == -1)
@@ -119,21 +137,16 @@ public class Types extends ChangeObservable< Types>
 		}
 	}
 
-	public Number getTypeIdFromIndex( int index)
+	public ModelId getTypeIdFromIndex( int index)
 	{
-		Type CurrentType = getTypeFromIndex( index);
+		Type type = getTypeFromIndex( index);
 
-		if( CurrentType == null)
+		if( type == null)
 		{
 			return null;
 		}
 
-		return CurrentType.getId();
-	}
-
-	public Type getTypeFromId( Number id)
-	{
-		return getTypeFromIndex( getIndexFromId( id));
+		return type.getId();
 	}
 
 	/** Get the index of a type in this container from its id.

@@ -2,7 +2,7 @@ package net.stegemann.configuration.view;
 
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.Models;
-import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.type.ModelId;import net.stegemann.configuration.type.Number;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
@@ -128,19 +128,19 @@ public class ModelsView extends ChangeObservable< ModelsView>
 			return -1;
 		}
 	}
-/*
-	public Number getSourceIdFromIndex( int index)
-	{
-		Source CurrentSource = getSourceFromIndex( index);
 
-		if( CurrentSource == null)
+	public ModelId getModelIdFromIndex( int index)
+	{
+		Model model = getModelFromIndex( index);
+
+		if( model == null)
 		{
 			return null;
 		}
 
-		return CurrentSource.getId();
+		return model.getId();
 	}
-*/
+
 	public int getModelIndexFromId( Number id)
 	{
 		int Index = 0;
@@ -158,7 +158,7 @@ public class ModelsView extends ChangeObservable< ModelsView>
 		return -1;
 	}
 
-	public int getModelCount()
+	public int getCount()
 	{
 		return models.size();
 	}

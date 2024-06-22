@@ -78,13 +78,13 @@ public class Text extends ChangeObservable< Text> implements ConfigurationValue
     }
 
     @Override
-    public void setConfigurationValue( String value)
+    public void setStringValue( String value)
     {
         setValue( value);
     }
 
     @Override
-    public String getConfigurationValue()
+    public String getStringValue()
     {
         return value;
     }

@@ -2,11 +2,8 @@ package net.stegemann.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.SourceId;
-import net.stegemann.configuration.type.Text;
-import net.stegemann.configuration.type.ValueOutOfRangeException;
-import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.configuration.type.*;
+import net.stegemann.configuration.type.Number;import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
@@ -57,10 +54,10 @@ public class Model extends ChangeObservable< Model>
     public static final int CHANNELS		= 9;
     public static final int PROXIES			= 25;
 
-    public final static Number Global;
+    public final static ModelId Global = new ModelId( MODEL_GLOBAL, MODEL_GLOBAL);
 
     @ConfigurationField( name = Names.MODEL_ID)
-	private final Number id;
+	private final ModelId id;
     @ConfigurationField( name = Names.MODEL_NAME)
     private final Text name;
     @Setter
@@ -69,7 +66,7 @@ public class Model extends ChangeObservable< Model>
     @ConfigurationField( name = Names.MODEL_RF_MODE)
     private final Number rfMode;
     @ConfigurationField( name = Names.MODEL_TYPE)
-    private final Number typeId;
+    private final ModelId typeId;
     @ConfigurationField( name = Names.MODEL_STATUS_SOURCES, itemName = Names.MODEL_STATUS_SOURCE)
     private final List< SourceId> statusSourceIds = new ArrayList<>();
     @ConfigurationField( name = Names.MODEL_STATUS_TIMES, itemName = Names.MODEL_STATUS_TIME)
@@ -79,21 +76,9 @@ public class Model extends ChangeObservable< Model>
     @ConfigurationField( name = Names.MODEL_PROXY_REFERENCES, itemName = Names.MODEL_PROXY_REFERENCE)
     private final ProxyReferences proxyReferences;
 
-    static
-    {
-        try
-        {
-            Global = new Number( MODEL_GLOBAL, MODEL_GLOBAL, MODEL_GLOBAL);
-        }
-        catch( ValueOutOfRangeException reason)
-        {
-            throw new RuntimeException( reason);
-        }
-    }
-
     public Model()
     {
-		id = new Number( MODEL_START, MODEL_END);
+		id = new ModelId( MODEL_START, MODEL_END);
         name = new Text();
         state = State.EMPTY;
         channels = new Channels( CHANNELS);
@@ -108,14 +93,7 @@ public class Model extends ChangeObservable< Model>
             throw new RuntimeException( reason);
         }
 
-        try
-        {
-            typeId = new Number( TYPE_START, TYPE_END, TYPE_START);
-        }
-        catch( ValueOutOfRangeException reason)
-        {
-            throw new RuntimeException( reason);
-        }
+        typeId = new ModelId( TYPE_START, TYPE_END);
 
         for( int index = 0; index < StatusSource.values().length; index++)
         {
@@ -130,13 +108,13 @@ public class Model extends ChangeObservable< Model>
         name.addChangeListener( this);
     }
 
-    public Model( Model other, Number newTypeId)
+    public Model( Model other, ModelId newTypeId)
     {
-		id = new Number( other.id);
+		id = new ModelId( other.id);
         name = new Text( other.name);
         state = other.state;
         rfMode = other.rfMode;
-        typeId = new Number( newTypeId);
+        typeId = new ModelId( newTypeId);
         channels = new Channels( other.channels);
         proxyReferences = new ProxyReferences( other.proxyReferences);
 
@@ -215,6 +193,11 @@ public class Model extends ChangeObservable< Model>
     private void replaceSources( List< SourceId> sourceIds, HashMap< SourceId, SourceId> sourcesMap)
     {
         sourceIds.forEach( sourceId -> sourceId.replaceSource( sourcesMap));
+    }
+
+    public void switchType( ModelId typeIdOne, ModelId typeIdTwo)
+    {
+        typeId.switchModel( typeIdOne, typeIdTwo);
     }
 
     public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)

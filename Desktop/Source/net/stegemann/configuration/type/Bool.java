@@ -70,13 +70,13 @@ public class Bool implements ConfigurationValue
 	}
 
 	@Override
-	public void setConfigurationValue( String stringValue)
+	public void setStringValue( String stringValue)
 	{
 		value = Boolean.parseBoolean( stringValue);
 	}
 
 	@Override
-	public String getConfigurationValue()
+	public String getStringValue()
 	{
 		return Boolean.toString( value);
 	}

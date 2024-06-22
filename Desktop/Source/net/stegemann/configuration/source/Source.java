@@ -1,18 +1,14 @@
 package net.stegemann.configuration.source;
 
+import java.util.HashMap;
 import lombok.Getter;
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.Named;
-import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.SourceId;
-import net.stegemann.configuration.type.Text;
-import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.type.*;
 import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
-
-import java.util.HashMap;
 
 import static net.stegemann.misc.Utility.indent;
 
@@ -32,7 +28,7 @@ public abstract class Source extends ChangeObservable< Source>
     @ConfigurationField( name = Names.SOURCE_NAME)
     private final Text name;
     @ConfigurationField( name = Names.SOURCE_MODEL)
-    private final Number modelId = new Number( Model.MODEL_START, Model.MODEL_GLOBAL);
+    private final ModelId modelId = new ModelId( Model.MODEL_START, Model.MODEL_GLOBAL);
 
     protected Source()
     {
@@ -57,7 +53,7 @@ public abstract class Source extends ChangeObservable< Source>
         name.addChangeListener( this);
     }
 
-    public void setModelId( Number modelId)
+    public void setModelId( ModelId modelId)
         throws ValueOutOfRangeException
     {
         this.modelId.setValue( modelId);
@@ -74,6 +70,11 @@ public abstract class Source extends ChangeObservable< Source>
      * @param sourceIdTwo Another source id
      */
     public abstract void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo);
+
+    public void switchModel( ModelId modelIdOne, ModelId modelIdTwo)
+    {
+        modelId.switchModel( modelIdOne, modelIdTwo);
+    }
 
     @Override
     public void hasChanged( Text object)

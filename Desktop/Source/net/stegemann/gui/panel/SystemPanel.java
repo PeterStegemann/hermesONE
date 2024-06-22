@@ -1,22 +1,21 @@
 package net.stegemann.gui.panel;
 
-import net.stegemann.configuration.Configuration;
-import net.stegemann.configuration.Models;
-import net.stegemann.configuration.PPMs;
-import net.stegemann.configuration.System;
-import net.stegemann.configuration.type.Number;
-import net.stegemann.gui.Constants;
-import net.stegemann.gui.components.ModelIdComponent;
-import net.stegemann.gui.components.TextComponent;
-import net.stegemann.gui.panel.system.*;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
+import net.stegemann.configuration.Configuration;
+import net.stegemann.configuration.Models;
+import net.stegemann.configuration.PPMs;
+import net.stegemann.configuration.System;
+import net.stegemann.configuration.type.ModelId;
+import net.stegemann.gui.Constants;
+import net.stegemann.gui.components.ModelIdComponent;
+import net.stegemann.gui.components.TextComponent;
+import net.stegemann.gui.panel.system.*;
 
 public class SystemPanel extends Panel implements ActionListener
 {
@@ -145,7 +144,7 @@ public class SystemPanel extends Panel implements ActionListener
 
         owner.attachValue( system.getOwner());
 
-        Number selectedModelId = system.getSelectedModel();
+        ModelId selectedModelId = system.getSelectedModel();
 
         selectedModel.setModels( models);
         selectedModel.attachValue( selectedModelId);

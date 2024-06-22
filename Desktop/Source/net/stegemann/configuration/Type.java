@@ -2,7 +2,7 @@ package net.stegemann.configuration;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.type.ModelId;import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.Text;
 import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
@@ -20,7 +20,7 @@ public class Type extends ChangeObservable< Type>
 	}
 
 	@ConfigurationField( name = Names.TYPE_ID)
-	private final Number id;
+	private final ModelId id;
 	@ConfigurationField( name = Names.TYPE_NAME)
 	private final Text name;
 	@Setter
@@ -29,7 +29,7 @@ public class Type extends ChangeObservable< Type>
 
 	public Type()
 	{
-		id = new Number( Model.TYPE_START, Model.TYPE_END);
+		id = new ModelId( Model.TYPE_START, Model.TYPE_END);
 		name = new Text();
 		state = State.USED;
 
@@ -38,7 +38,7 @@ public class Type extends ChangeObservable< Type>
 
 	public Type( Type other)
 	{
-		id = new Number( other.id);
+		id = new ModelId( other.id);
 		name = new Text( other.name);
 		state = other.state;
 

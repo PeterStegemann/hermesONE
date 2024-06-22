@@ -73,19 +73,19 @@ public abstract class DesktopConnectionHandler implements TypedConnectionHandler
     {
         try
         {
-            value.setConfigurationValue( textContent);
+            value.setStringValue( textContent);
         }
         catch( NumberFormatException | ValueOutOfRangeException ignored) {}
     }
 
     protected static void readValue( Text value, String textContent)
     {
-        value.setConfigurationValue( textContent);
+        value.setStringValue( textContent);
     }
 
     protected static void readValue( Bool value, String textContent)
     {
-        value.setConfigurationValue( textContent);
+        value.setStringValue( textContent);
     }
 
     protected static void debug( String text)

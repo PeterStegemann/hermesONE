@@ -16,21 +16,15 @@ public class Number extends ChangeObservable< Number>
 
     public Number( int value)
     {
-        try
-        {
-            setValue( value);
-        }
-        catch( ValueOutOfRangeException reason)
-        {
-            // No exception possible here.
-            throw new RuntimeException( reason);
-        }
+        this.value = value;
     }
 
     public Number( int minimum, int maximum)
     {
         this.minimum = minimum;
         this.maximum = maximum;
+
+        this.value = minimum;
     }
 
     public Number( int minimum, int maximum, int value)
@@ -73,7 +67,7 @@ public class Number extends ChangeObservable< Number>
     }
 
     @Override
-    public void setConfigurationValue( String stringValue)
+    public void setStringValue( String stringValue)
         throws ValueOutOfRangeException, NumberFormatException
     {
         int intValue;
@@ -91,7 +85,7 @@ public class Number extends ChangeObservable< Number>
     }
 
     @Override
-    public String getConfigurationValue()
+    public String getStringValue()
     {
         return Integer.toString( value);
     }

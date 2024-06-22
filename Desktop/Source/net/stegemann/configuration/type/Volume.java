@@ -84,14 +84,14 @@ public class Volume extends Number
     }
 
     @Override
-    public void setConfigurationValue( String stringValue)
+    public void setStringValue( String stringValue)
         throws ValueOutOfRangeException, NumberFormatException
     {
         setValue( Integer.parseInt( stringValue) / signalPerValue);
     }
 
     @Override
-    public String getConfigurationValue()
+    public String getStringValue()
     {
         return Integer.toString( getValue() * signalPerValue);
     }

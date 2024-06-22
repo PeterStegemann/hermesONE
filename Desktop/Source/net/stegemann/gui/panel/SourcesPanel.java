@@ -1,9 +1,16 @@
 package net.stegemann.gui.panel;
 
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.Serial;
 import net.stegemann.configuration.Configuration;
 import net.stegemann.configuration.Model;
 import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.source.Sources;
+import net.stegemann.configuration.type.ModelId;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.view.SourcesView;
 import net.stegemann.configuration.view.SourcesView.HasEmpty;
@@ -12,16 +19,10 @@ import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
 import net.stegemann.controller.Controller;
 import net.stegemann.controller.SourceUtility;
-import net.stegemann.gui.misc.hermesPanel;import net.stegemann.gui.model.ListCellRenderer;
+import net.stegemann.gui.misc.hermesPanel;
+import net.stegemann.gui.model.ListCellRenderer;
 import net.stegemann.gui.model.SourcesComboBoxModel;
 import net.stegemann.gui.panel.source.SourcePanel;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.io.Serial;
 
 public class SourcesPanel extends hermesPanel
                        implements ListSelectionListener
@@ -43,10 +44,10 @@ public class SourcesPanel extends hermesPanel
 
     private final PanelType panelType;
 
-    private Number modelId;
+    private ModelId modelId;
 
     private final JList< Source> sourcesList;
-    private final JButton addButton, cloneButton, removeButton;
+    private final JButton createButton, duplicateButton, removeButton;
     private final JButton upButton, downButton;
 
     private final SourcePanel sourcePanel;
@@ -67,11 +68,11 @@ public class SourcesPanel extends hermesPanel
         sourcesScrollPane.setMinimumSize( new Dimension( 150, 150));
         sourcesScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        addButton = button("+");
-        upButton = button("<");
-        cloneButton = button( "Kopieren");
-        downButton = button( ">");
-        removeButton = button( "-");
+        createButton = createButton();
+        upButton = upButton();
+        duplicateButton = duplicateButton();
+        downButton = downButton();
+        removeButton = removeButton();
 
         sourcePanel = new SourcePanel( configuration);
 
@@ -99,9 +100,9 @@ public class SourcesPanel extends hermesPanel
                 .addGroup
                 (
                     layout.createSequentialGroup()
-                    .addComponent( addButton)
+                    .addComponent( createButton)
                     .addComponent( upButton)
-                    .addComponent( cloneButton)
+                    .addComponent( duplicateButton)
                     .addComponent( downButton)
                     .addComponent( removeButton)
                 )
@@ -119,9 +120,9 @@ public class SourcesPanel extends hermesPanel
                 .addGroup
                 (
                     layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-                    .addComponent( addButton)
+                    .addComponent( createButton)
                     .addComponent( upButton)
-                    .addComponent( cloneButton)
+                    .addComponent( duplicateButton)
                     .addComponent( downButton)
                     .addComponent( removeButton)
                 )
@@ -144,25 +145,25 @@ public class SourcesPanel extends hermesPanel
     {
         int selectedSourceIndex = sourcesList.getSelectedIndex();
 
-        if( event.getSource() == addButton)
+        if( event.getSource() == createButton)
         {
-            addEvent();
+            createSource();
         }
         else if( event.getSource() == upButton)
         {
-            upEvent( selectedSourceIndex);
+            upSource( selectedSourceIndex);
         }
-        else if( event.getSource() == cloneButton)
+        else if( event.getSource() == duplicateButton)
         {
-            cloneEvent( selectedSourceIndex);
+            duplicateSource( selectedSourceIndex);
         }
         else if( event.getSource() == downButton)
         {
-            downEvent( selectedSourceIndex);
+            downSource( selectedSourceIndex);
         }
         else if( event.getSource() == removeButton)
         {
-            removeEvent( selectedSourceIndex);
+            removeSource( selectedSourceIndex);
         }
 
         if( selectedSourceIndex == sourcesList.getSelectedIndex())
@@ -173,7 +174,7 @@ public class SourcesPanel extends hermesPanel
         }
     }
 
-    private void addEvent()
+    private void createSource()
     {
         Object[] options = SourceUtility.getSelectableTypeNames();
 
@@ -195,7 +196,7 @@ public class SourcesPanel extends hermesPanel
         sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( newSource.getId()));
     }
 
-    private void upEvent( int selectedSourceIndex)
+    private void upSource( int selectedSourceIndex)
     {
         if( selectedSourceIndex == 0)
         {
@@ -205,7 +206,7 @@ public class SourcesPanel extends hermesPanel
         switchSources( selectedSourceIndex, selectedSourceIndex - 1);
     }
 
-    private void cloneEvent( int selectedSourceIndex)
+    private void duplicateSource( int selectedSourceIndex)
     {
         Source newSource = controller.duplicateSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
 
@@ -219,7 +220,7 @@ public class SourcesPanel extends hermesPanel
         sourcesList.setSelectedIndex( sourcesView.getSourceIndexFromId( newSource.getId()));
     }
 
-    private void downEvent( int selectedSourceIndex)
+    private void downSource( int selectedSourceIndex)
     {
         if( selectedSourceIndex == sourcesView.getCount() - 1)
         {
@@ -229,7 +230,7 @@ public class SourcesPanel extends hermesPanel
         switchSources( selectedSourceIndex, selectedSourceIndex + 1);
     }
 
-    private void removeEvent( int selectedSourceIndex)
+    private void removeSource( int selectedSourceIndex)
     {
         controller.removeSource( sourcesView.getFullSourceIndex( selectedSourceIndex));
 
@@ -244,7 +245,7 @@ public class SourcesPanel extends hermesPanel
         Source sourceOne = sourcesView.getSourceFromIndex( indexOne);
         Source sourceTwo = sourcesView.getSourceFromIndex( indexTwo);
 
-        controller.switchSources( sourceOne, sourceTwo);
+        controller.switchSources(   sourceOne.getId(),sourceTwo.getId());
 
         // Select new source.
         sourcesView.rescan();

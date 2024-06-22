@@ -12,4 +12,29 @@ public abstract class hermesPanel extends JPanel implements ActionListener
 
         return button;
     }
+
+    protected JButton createButton()
+    {
+        return button("+");
+    }
+
+    protected JButton removeButton()
+    {
+        return button("-");
+    }
+
+    protected JButton duplicateButton()
+        {
+            return button("Kopieren");
+        }
+
+    protected JButton upButton()
+    {
+        return button("↑");
+    }
+
+    protected JButton downButton()
+    {
+        return button("↓");
+    }
 }

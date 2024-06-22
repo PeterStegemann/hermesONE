@@ -1162,19 +1162,19 @@ public class XMLReader
 
     private void readValue( Bool value, String textContent)
     {
-        value.setConfigurationValue( textContent);
+        value.setStringValue( textContent);
     }
 
     private void readValue( Text value, String textContent)
     {
-        value.setConfigurationValue( textContent);
+        value.setStringValue( textContent);
     }
 
     private void readValue( Number value, String textContent)
     {
         try
         {
-            value.setConfigurationValue( textContent);
+            value.setStringValue( textContent);
         }
         catch( NumberFormatException | ValueOutOfRangeException ignored) {}
     }
