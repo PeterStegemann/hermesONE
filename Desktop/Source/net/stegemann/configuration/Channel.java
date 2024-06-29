@@ -5,17 +5,18 @@ import net.stegemann.configuration.source.Source;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.*;
 import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.configuration.util.Validatable;
 import net.stegemann.io.xml.Names;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.List;import static net.stegemann.misc.Utility.doAll;
 
 @Getter
 public class Channel extends ChangeObservable< Channel>
-                  implements ChangeListener< Text>
+                  implements ChangeListener< Text>, Validatable
 {
 	public static final int INPUT_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
 	public static final int TRIM_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 600);
@@ -106,31 +107,6 @@ public class Channel extends ChangeObservable< Channel>
 		}
 	}
 
-	@Override
-	public String toString()
-	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Channel = {\n");
-		Buffer.append( " Name: " + name + "\n");
-		Buffer.append( input);
-		Buffer.append( trim);
-		Buffer.append( limit);
-		Buffer.append( " Mode: " + mode + "\n");
-		Buffer.append( " Reverse: " + reverse + "\n");
-		Buffer.append( " Points = {\n");
-
-		for( Volume Point: points)
-		{
-			Buffer.append( "  Point: " + Point + "\n");
-		}
-
-		Buffer.append( "}\n");
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
-	}
-
 	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
 	{
 		input.replaceSource( sourcesMap);
@@ -154,5 +130,49 @@ public class Channel extends ChangeObservable< Channel>
 	public Volume getPoint( int index)
 	{
 		return points.get( index);
+	}
+
+    public boolean validate( Configuration configuration, ModelId modelId)
+    {
+        return doAll
+        (
+            () -> validateReferencedSourceWithVolume( configuration, modelId, input, "input"),
+            () -> validateReferencedSourceWithVolume( configuration, modelId, trim, "trim"),
+            () -> validateReferencedSourceWithVolume( configuration, modelId, limit, "limit")
+        );
+    }
+
+    @Override
+    public String validationName( Configuration configuration, ModelId modelId)
+    {
+        return "channel %s of model %s (%s)".formatted
+        (
+            name.getValue(), modelId.getValue(), nameFromModelId( configuration, modelId)
+        );
+    }
+
+	@Override
+	public String toString()
+	{
+		StringBuffer Buffer = new StringBuffer();
+
+		Buffer.append( "Channel = {\n");
+		Buffer.append( " Name: " + name + "\n");
+		Buffer.append( input);
+		Buffer.append( trim);
+		Buffer.append( limit);
+		Buffer.append( " Mode: " + mode + "\n");
+		Buffer.append( " Reverse: " + reverse + "\n");
+		Buffer.append( " Points = {\n");
+
+		for( Volume Point: points)
+		{
+			Buffer.append( "  Point: " + Point + "\n");
+		}
+
+		Buffer.append( "}\n");
+		Buffer.append( "}\n");
+
+		return Buffer.toString();
 	}
 }

@@ -6,6 +6,7 @@ import net.stegemann.configuration.source.Sources;
 import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
 
+import static net.stegemann.misc.Utility.doAll;
 import static net.stegemann.misc.Utility.indent;
 
 @Getter
@@ -26,19 +27,13 @@ public class Configuration
         clear();
     }
 
-    @Override
-    public String toString()
+    public boolean validate()
     {
-        return String.format( """
-            Configuration
-            {
-                system: %s
-                types: %s
-                models: %s
-                sources: %s
-            }
-            """,
-            indent( system), indent( types), indent( models), indent( sources)
+        return doAll
+        (
+            () -> types.validate( this),
+            () -> models.validate( this),
+            () -> sources.validate( this)
         );
     }
 
@@ -64,5 +59,23 @@ public class Configuration
     {
         system.fill();
         models.fillChannels( system.getOutputChannels().getValue());
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format
+        (
+            """
+            Configuration
+            {
+                system: %s
+                types: %s
+                models: %s
+                sources: %s
+            }
+            """,
+            indent( system), indent( types), indent( models), indent( sources)
+        );
     }
 }

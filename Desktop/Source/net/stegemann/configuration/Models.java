@@ -2,13 +2,13 @@ package net.stegemann.configuration;
 
 import java.util.ArrayList;
 import java.util.Comparator;import java.util.Iterator;
-import java.util.List;
+import java.util.List;import java.util.function.Function;
 import lombok.ToString;
 import net.stegemann.configuration.type.ModelId;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
-import net.stegemann.misc.ChangeObservable;
+import net.stegemann.misc.ChangeObservable;import static net.stegemann.misc.Utility.doAll;
 
 @ToString
 public class Models extends ChangeObservable< Models>
@@ -58,19 +58,7 @@ public class Models extends ChangeObservable< Models>
 	 */
 	public Model insertModel( Model model)
 	{
-		int freeId = 0;
-
-		// Find free model index.
-		for( Model currentModel: models)
-		{
-			if( currentModel.getId().equals( freeId) == false)
-			{
-				// Here's a gap.
-				break;
-			}
-
-			freeId++;
-		}
+		int freeId = findFreeModelId();
 
 		try
 		{ 
@@ -88,6 +76,24 @@ public class Models extends ChangeObservable< Models>
 
 		return model;
 	}
+
+    private int findFreeModelId()
+    {
+		int freeId = 0;
+
+		for( Model model: models)
+		{
+			if( model.getId().equals( freeId) == false)
+			{
+				// Here's a gap.
+				break;
+			}
+
+			freeId++;
+		}
+
+        return freeId;
+    }
 
 	public Model removeModel( Model model)
 	{
@@ -128,16 +134,16 @@ public class Models extends ChangeObservable< Models>
         models.forEach( model -> model.switchSources( sourceIdOne, sourceIdTwo));
     }
 
-	public Model getModelFromIndex( int Index)
+	public Model getModelFromIndex( int index)
 	{
-		if( Index == -1)
+		if( index == -1)
 		{
 			return null;
 		}
 
 		try
 		{
-			return models.get( Index);
+			return models.get( index);
 		}
 		catch( IndexOutOfBoundsException Reason)
 		{
@@ -145,16 +151,16 @@ public class Models extends ChangeObservable< Models>
 		}
 	}
 
-	public ModelId getIdFromIndex( int Index)
+	public ModelId getIdFromIndex( int index)
 	{
-		Model currentModel = getModelFromIndex( Index);
+		Model model = getModelFromIndex( index);
 
-		if( currentModel == null)
+		if( model == null)
 		{
 			return null;
 		}
 
-		return currentModel.getId();
+		return model.getId();
 	}
 
 	public Model getModelFromId( ModelId Id)
@@ -173,9 +179,9 @@ public class Models extends ChangeObservable< Models>
 	{
 		int index = 0;
 
-		for( Model currentModel: models)
+		for( Model model: models)
 		{
-			if( currentModel.getId().equals( id) == true)
+			if( model.getId().equals( id) == true)
 			{
 				return index;
 			}
@@ -195,4 +201,9 @@ public class Models extends ChangeObservable< Models>
 	{
 		return models.size();
 	}
+
+    public boolean validate( Configuration configuration)
+    {
+        return doAll( models, model -> model.validate( configuration));
+    }
 }

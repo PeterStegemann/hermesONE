@@ -1,20 +1,21 @@
 package net.stegemann.configuration;
 
-import lombok.Getter;
-import lombok.Setter;
-import net.stegemann.configuration.type.*;
-import net.stegemann.configuration.type.Number;import net.stegemann.configuration.util.ConfigurationField;
-import net.stegemann.io.xml.Names;
-import net.stegemann.misc.ChangeListener;
-import net.stegemann.misc.ChangeObservable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import net.stegemann.configuration.type.*;
+import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.configuration.util.Validatable;
+import net.stegemann.io.xml.Names;
+import net.stegemann.misc.ChangeListener;
+import net.stegemann.misc.ChangeObservable;import static net.stegemann.misc.Utility.doAll;
 
 @Getter
 public class Model extends ChangeObservable< Model>
-                implements ChangeListener< Text>, Named
+                implements ChangeListener< Text>, Named, Validatable
 {
     public enum State
     {
@@ -125,36 +126,6 @@ public class Model extends ChangeObservable< Model>
     }
 
     @Override
-    public String toString()
-    {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append( "Model = {\n");
-		builder.append( " Id: " + id + "\n");
-        builder.append( " Name: " + name + "\n");
-        builder.append( " State: " + state + "\n");
-        builder.append( " RFMode: " + rfMode + "\n");
-        builder.append( " Type Id: " + typeId + "\n");
-        builder.append( channels);
-        builder.append( " Status Source Ids = {\n");
-        for( SourceId StatusSourceId: statusSourceIds)
-        {
-            builder.append( "  Status Source Id: " + StatusSourceId + "\n");
-        }
-        builder.append( "}\n");
-        builder.append( " Status Time Ids = {\n");
-        for( SourceId StatusTimeId: statusTimeIds)
-        {
-            builder.append( "  Status Time Id: " + StatusTimeId + "\n");
-        }
-        builder.append( "}\n");
-        builder.append( proxyReferences);
-        builder.append( "}\n");
-
-        return builder.toString();
-    }
-
-    @Override
     public void hasChanged( Text object)
     {
         notifyChange( this);
@@ -212,5 +183,92 @@ public class Model extends ChangeObservable< Model>
     private void switchSources( List< SourceId> sourceIds, SourceId sourceIdOne, SourceId sourceIdTwo)
     {
         sourceIds.forEach( sourceId -> sourceId.switchSource( sourceIdOne, sourceIdTwo));
+    }
+
+    public boolean validate( Configuration configuration)
+    {
+        return doAll
+        (
+            () -> validateChannels( configuration, id, channels),
+            () -> validateProxyReferences(configuration),
+            () -> validateReferencedSources( configuration, id, statusTimeIds,  "statusTimeId"),
+            () -> validateReferencedSources( configuration, id, statusSourceIds,  "statusSourceId")
+        );
+    }
+
+    private boolean validateProxyReferences( Configuration configuration)
+    {
+        return validateReferencedSourceWithVolumes( configuration, id, proxyReferences,  "proxyReference");
+    }
+
+    private boolean validateChannels( Configuration configuration, ModelId modelId, Iterable< Channel> channels)
+    {
+        return doAll( channels, channel -> channel.validate( configuration, modelId));
+    }
+
+    @Override
+    public String validationName( Configuration configuration, ModelId modelId)
+    {
+        return "model %s (%s)".formatted( id.getValue(), name.getValue());
+    }
+
+    public static boolean isNone( ModelId id)
+    {
+        return id.getValue() == MODEL_NONE;
+    }
+
+    public static boolean isGlobal( ModelId id)
+    {
+        return id.getValue() == MODEL_GLOBAL;
+    }
+
+    public static boolean isType( ModelId id)
+    {
+        int idValue = id.getValue();
+
+        return idValue >= TYPE_START && idValue <= TYPE_END;
+    }
+
+    public static boolean isModel( ModelId id)
+    {
+        int idValue = id.getValue();
+
+        return idValue >= MODEL_START && idValue <= MODEL_END;
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append
+        (
+            """
+            Model
+            {
+            """
+        );
+		builder.append( " Id: " + id + "\n");
+        builder.append( " Name: " + name + "\n");
+        builder.append( " State: " + state + "\n");
+        builder.append( " RFMode: " + rfMode + "\n");
+        builder.append( " Type Id: " + typeId + "\n");
+        builder.append( channels);
+        builder.append( " Status Source Ids = {\n");
+        for( SourceId StatusSourceId: statusSourceIds)
+        {
+            builder.append( "  Status Source Id: " + StatusSourceId + "\n");
+        }
+        builder.append( "}\n");
+        builder.append( " Status Time Ids = {\n");
+        for( SourceId StatusTimeId: statusTimeIds)
+        {
+            builder.append( "  Status Time Id: " + StatusTimeId + "\n");
+        }
+        builder.append( "}\n");
+        builder.append( proxyReferences);
+        builder.append( "}\n");
+
+        return builder.toString();
     }
 }

@@ -1,7 +1,7 @@
 package net.stegemann.configuration.source;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
+import net.stegemann.configuration.Configuration;import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.SourceWithVolume;
 import net.stegemann.configuration.util.ConfigurationField;
@@ -40,24 +40,6 @@ public final class Mix extends Source
         }
     }
 
-    @Override
-    public String toString()
-    {
-        StringBuffer Buffer = new StringBuffer();
-
-        Buffer.append( "Mix = {\n");
-        Buffer.append( super.toString());
-
-        for( SourceWithVolume input: inputs)
-        {
-            Buffer.append( input);
-        }
-
-        Buffer.append( "}\n");
-
-        return Buffer.toString();
-    }
-
     public SourceWithVolume getInput( int index)
     {
         return inputs.get( index);
@@ -79,5 +61,31 @@ public final class Mix extends Source
     public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
     {
         inputs.forEach( input -> input.switchSource( sourceIdOne, sourceIdTwo));
+    }
+
+    @Override
+    public boolean validate( Configuration configuration)
+    {
+        return
+            super.validate( configuration) &&
+            validateReferencedSources( configuration, inputs,"inputs");
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuffer Buffer = new StringBuffer();
+
+        Buffer.append( "Mix = {\n");
+        Buffer.append( super.toString());
+
+        for( SourceWithVolume input: inputs)
+        {
+            Buffer.append( input);
+        }
+
+        Buffer.append( "}\n");
+
+        return Buffer.toString();
     }
 }

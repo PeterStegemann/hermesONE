@@ -1,7 +1,7 @@
 package net.stegemann.configuration.source;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
+import net.stegemann.configuration.Configuration;import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.SourceWithVolume;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
@@ -58,28 +58,6 @@ public final class Map extends Source
         }
     }
 
-    @Override
-    public String toString()
-    {
-        StringBuffer Buffer = new StringBuffer();
-
-        Buffer.append( "Map = {\n");
-        Buffer.append( super.toString());
-        Buffer.append( " Input: " + input + "\n");
-
-        Buffer.append( " Points = {\n");
-
-        for( SourceWithVolume point: points)
-        {
-            Buffer.append( point);
-        }
-
-        Buffer.append( " }\n");
-        Buffer.append( "}\n");
-
-        return Buffer.toString();
-    }
-
     public SourceWithVolume getPoint( int index)
     {
         return points.get( index);
@@ -105,5 +83,36 @@ public final class Map extends Source
         input.switchSource( sourceIdOne, sourceIdTwo);
 
         points.forEach( point -> point.switchSource( sourceIdOne, sourceIdTwo));
+    }
+
+    @Override
+    public boolean validate( Configuration configuration)
+    {
+        return
+            super.validate( configuration) &&
+            validateReferencedSource( configuration, input,"input") &&
+            validateReferencedSources( configuration, points,"points");
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuffer Buffer = new StringBuffer();
+
+        Buffer.append( "Map = {\n");
+        Buffer.append( super.toString());
+        Buffer.append( " Input: " + input + "\n");
+
+        Buffer.append( " Points = {\n");
+
+        for( SourceWithVolume point: points)
+        {
+            Buffer.append( point);
+        }
+
+        Buffer.append( " }\n");
+        Buffer.append( "}\n");
+
+        return Buffer.toString();
     }
 }

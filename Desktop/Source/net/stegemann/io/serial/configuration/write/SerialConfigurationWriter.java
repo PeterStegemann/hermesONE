@@ -45,8 +45,8 @@ public class SerialConfigurationWriter
         }
 
         configurationProgress.reset();
-        configurationProgress.setModelsMaximum( configuration.getModels().getCount());
         configurationProgress.setTypesMaximum( configuration.getTypes().getCount());
+        configurationProgress.setModelsMaximum( configuration.getModels().getCount());
         configurationProgress.setSourcesMaximum( configuration.getSources().getCount());
 
         configurationProgress.addChangeListener( configurationListener);
@@ -76,8 +76,8 @@ public class SerialConfigurationWriter
         {
             system( configuration.getSystem());
 
-            models( configuration.getModels());
             types( configuration.getTypes());
+            models( configuration.getModels());
             sources( configuration.getSources());
         });
     }
@@ -107,7 +107,7 @@ public class SerialConfigurationWriter
     private void ppms( PPMs ppms)
         throws WriteException
     {
-        complex( Id.PPMs, () -> forEach( this::ppm, ppms));
+        complex( Id.PPMs, () -> forEach( ppms, this::ppm ));
     }
 
     private void ppm( PPM ppm)
@@ -127,7 +127,7 @@ public class SerialConfigurationWriter
         throws WriteException
     {
         complex( Id.ChannelMappings, () ->
-            forEach(( channelMapping) -> value( Id.ChannelMapping, channelMapping), channelMappings)
+            forEach( channelMappings,( channelMapping) -> value( Id.ChannelMapping, channelMapping))
         );
     }
 
@@ -286,7 +286,7 @@ public class SerialConfigurationWriter
             sourceTuple( Id.SourceMapInput, map.getInput());
 
             complex( Id.SourceMapPoints, () ->
-                forEach(( point) -> sourceTuple( Id.SourceMapPoint, point ),  map.getPoints())
+                forEach( map.getPoints(),( point) -> sourceTuple( Id.SourceMapPoint, point))
             );
         });
     }
@@ -296,7 +296,7 @@ public class SerialConfigurationWriter
     {
         complex( Id.SourceMix, () ->
             complex( Id.SourceMixInputs, () ->
-                forEach(( input) -> sourceTuple( Id.SourceMixInput, input ),  mix.getInputs())
+                forEach( mix.getInputs(),( input) -> sourceTuple( Id.SourceMixInput, input))
             )
         );
     }
@@ -365,7 +365,7 @@ public class SerialConfigurationWriter
         throws WriteException
     {
         complex( Id.SourceTrimmerPoints, () ->
-            forEach(( point) -> value( Id.SourceTrimmerPoint, point),  trimmer.getPoints())
+            forEach( trimmer.getPoints(),( point) -> value( Id.SourceTrimmerPoint, point))
         );
     }
 
@@ -459,7 +459,7 @@ public class SerialConfigurationWriter
         throws WriteException
     {
         complex( Id.ModelProxyReferences, () ->
-            forEach(( proxyReference) -> sourceTuple( Id.ModelProxyReference, proxyReference ), proxyReferences)
+            forEach( proxyReferences,( proxyReference) -> sourceTuple( Id.ModelProxyReference, proxyReference))
         );
     }
 
@@ -488,7 +488,7 @@ public class SerialConfigurationWriter
     private void exportChannels( Channels channels)
         throws WriteException
     {
-        complex( Id.Channels, () -> forEach( this::exportChannel, channels));
+        complex( Id.Channels, () -> forEach( channels, this::exportChannel));
     }
 
     private void exportChannel( Channel channel)
@@ -512,7 +512,7 @@ public class SerialConfigurationWriter
         throws WriteException
     {
         complex( Id.ChannelPoints, () ->
-            forEach(( point) -> value( Id.ChannelPoint, point), channel.getPoints())
+            forEach( channel.getPoints(),( point) -> value( Id.ChannelPoint, point))
         );
     }
 
@@ -542,7 +542,7 @@ public class SerialConfigurationWriter
     private void calibrations( Calibrations calibrations)
         throws WriteException
     {
-        complex( Id.Calibrations, () -> forEach( this::exportCalibration, calibrations));
+        complex( Id.Calibrations, () -> forEach( calibrations, this::exportCalibration));
     }
 
     private void exportCalibration( Calibration calibration)

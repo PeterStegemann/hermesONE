@@ -50,11 +50,6 @@ public class Calibrations implements Iterable< Calibration>
 		}
 	}
 
-	public void addCalibration( Calibration calibration)
-	{
-		calibrations.add( calibration);
-	}
-
 	public void setCalibration( int index, Calibration calibration)
 	{
 		fill( index + 1);

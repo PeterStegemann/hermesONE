@@ -1,34 +1,22 @@
 package net.stegemann.configuration.source;
 
-import net.stegemann.configuration.type.ModelId;import net.stegemann.configuration.type.Number;import net.stegemann.configuration.type.SourceId;import net.stegemann.configuration.type.ValueOutOfRangeException;
+import net.stegemann.configuration.Configuration;
+import net.stegemann.configuration.type.ModelId;
+import net.stegemann.configuration.type.SourceId;
+import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
-import net.stegemann.misc.ChangeObservable;
+import net.stegemann.misc.ChangeObservable;import net.stegemann.misc.Utility;
 
 import java.util.ArrayList;
 import java.util.Comparator;import java.util.Iterator;
 import java.util.List;
 
+import static net.stegemann.misc.Utility.doAll;
+
 public class Sources extends ChangeObservable< Sources>
                   implements Iterable< Source>, ChangeListener< Source>
 {
 	private final List< Source> sources = new ArrayList<>();
-
-	@Override
-	public String toString()
-	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Sources = {\n");
-
-		for( Source Source: sources)
-		{
-			Buffer.append( Source);
-		}
-
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
-	}
 
 	@Override
 	public void hasChanged( Source object)
@@ -141,22 +129,18 @@ public class Sources extends ChangeObservable< Sources>
 		}
 	}
 
-	public int getIndexFromId( int id)
-	{
-		int Index = 0;
-
-		for( Source CurrentSource: sources)
+    public Source getSourceFromId( SourceId id)
+    {
+		for( Source source: sources)
 		{
-			if( CurrentSource.getId().getValue() == id)
+			if( source.getId().getValue() == id.getValue())
 			{
-				return Index;
+				return source;
 			}
+        }
 
-			Index++;
-		}
-
-		return -1;
-	}
+		return null;
+    }
 
 	public int getIndexFromSource( Source source)
 	{
@@ -167,6 +151,11 @@ public class Sources extends ChangeObservable< Sources>
 	{
 		return sources.size();
 	}
+
+    public boolean validate( Configuration configuration)
+    {
+        return doAll( sources, source -> source.validate( configuration));
+    }
 
 	private static class SourcesIterator implements Iterator< Source>
 	{
@@ -194,5 +183,22 @@ public class Sources extends ChangeObservable< Sources>
 		{
 			iterator.remove();
 		}
+	}
+
+	@Override
+	public String toString()
+	{
+		StringBuffer Buffer = new StringBuffer();
+
+		Buffer.append( "Sources = {\n");
+
+		for( Source Source: sources)
+		{
+			Buffer.append( Source);
+		}
+
+		Buffer.append( "}\n");
+
+		return Buffer.toString();
 	}
 }

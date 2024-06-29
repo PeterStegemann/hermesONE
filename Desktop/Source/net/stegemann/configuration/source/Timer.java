@@ -1,12 +1,9 @@
 package net.stegemann.configuration.source;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
-import net.stegemann.configuration.type.Bool;
-import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.SourceId;
-import net.stegemann.configuration.type.Volume;
-import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.configuration.Configuration;import net.stegemann.configuration.Signal;
+import net.stegemann.configuration.type.*;
+import net.stegemann.configuration.type.Number;import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
 
 import java.util.HashMap;import static net.stegemann.misc.Utility.indent;
@@ -52,7 +49,17 @@ public final class Timer extends Source
 		trigger = new SourceId();
 
 		triggerLowLimit = new Volume( TRIGGER_SIGNAL_PER_VALUE);
-		triggerHighLimit = new Volume( TRIGGER_SIGNAL_PER_VALUE);
+		try
+		{
+            triggerHighLimit = new Volume
+            (
+                TRIGGER_SIGNAL_PER_VALUE, Signal.MAXIMUM_VALUE / TRIGGER_SIGNAL_PER_VALUE
+            );
+        }
+        catch( ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
 
 		warnLowTime = new Number( 0, TIME_MAXIMUM_VALUE);
 		warnCriticalTime = new Number( 0, TIME_MAXIMUM_VALUE);
@@ -98,6 +105,14 @@ public final class Timer extends Source
     public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
     {
 		trigger.switchSource( sourceIdOne, sourceIdTwo);
+    }
+
+    @Override
+    public boolean validate( Configuration configuration)
+    {
+        return
+            super.validate( configuration) &&
+            validateReferencedSource( configuration, trigger,"trigger");
     }
 
 	@Override

@@ -108,21 +108,21 @@ public class SourcePanel extends JPanel
 		);
 	}
 
-	public void set( Model UseModel, Source UseSource)
+	public void set( Model model, Source source)
 	{
-		if( UseSource == null)
+		if( source == null)
 		{
 			clear();
 
 			return;
 		}
 
-		name.attachValue( UseSource.getName());
-		type.setText( SourceUtility.getTypeNameForSource( UseSource));
+		name.attachValue( source.getName());
+		type.setText( SourceUtility.getTypeNameForSource( source));
 
 		sourceTypePanel.unset();
 
-		SpecificSourcePanel NewSourceTypePanel = setPanel( UseModel, UseSource);
+		SpecificSourcePanel NewSourceTypePanel = setPanel( model, source);
 
 		// Replace existing panel.
 		layout.replace( sourceTypePanel, NewSourceTypePanel);
@@ -131,66 +131,66 @@ public class SourcePanel extends JPanel
 		setVisible( true);
 	}
 
-	private SpecificSourcePanel setPanel( Model UseModel, Source UseSource)
+	private SpecificSourcePanel setPanel( Model model, Source source)
 	{
-		if( UseSource instanceof Analog)
+		if( source instanceof Analog)
 		{
-			analogPanel.set(( Analog) UseSource);
+			analogPanel.set(( Analog) source);
 			return analogPanel;
 		}
-		else if( UseSource instanceof Button)
+		else if( source instanceof Button)
 		{
-			buttonPanel.set(( Button) UseSource);
+			buttonPanel.set(( Button) source);
 			return buttonPanel;
 		}
-		else if( UseSource instanceof Rotary)
+		else if( source instanceof Rotary)
 		{
-			rotaryPanel.set(( Rotary) UseSource);
+			rotaryPanel.set(( Rotary) source);
 			return rotaryPanel;
 		}
-		else if( UseSource instanceof Switch)
+		else if( source instanceof Switch)
 		{
-			switchPanel.set(( Switch) UseSource);
+			switchPanel.set(( Switch) source);
 			return switchPanel;
 		}
-		else if( UseSource instanceof Ticker)
+		else if( source instanceof Ticker)
 		{
-			tickerPanel.set(( Ticker) UseSource);
+			tickerPanel.set(( Ticker) source);
 			return tickerPanel;
 		}
-		else if( UseSource instanceof Map)
+		else if( source instanceof Map)
 		{
-			mapPanel.set( UseModel, ( Map) UseSource);
+			mapPanel.set( model, ( Map) source);
 			return mapPanel;
 		}
-		else if( UseSource instanceof Mix)
+		else if( source instanceof Mix)
 		{
-			mixPanel.set( UseModel, ( Mix) UseSource);
+			mixPanel.set( model, ( Mix) source);
 			return mixPanel;
 		}
-		else if( UseSource instanceof Store)
+		else if( source instanceof Store)
 		{
-			storePanel.set( UseModel, ( Store) UseSource);
+			storePanel.set( model, ( Store) source);
 			return storePanel;
 		}
-		else if( UseSource instanceof Follower)
+		else if( source instanceof Follower)
 		{
-			followerPanel.set( UseModel, ( Follower) UseSource);
+			followerPanel.set( model, ( Follower) source);
 			return followerPanel;
 		}
-		else if( UseSource instanceof Timer)
+		else if( source instanceof Timer)
 		{
-			timerPanel.set( UseModel, ( Timer) UseSource);
+			timerPanel.set( model, ( Timer) source);
 			return timerPanel;
 		}
-		else if( UseSource instanceof Trimmer)
+		else if( source instanceof Trimmer)
 		{
-			trimPanel.set( UseModel, (Trimmer) UseSource);
+			trimPanel.set( model, (Trimmer) source);
 			return trimPanel;
 		}
-		else if( UseSource instanceof Proxy)
+		else if( source instanceof Proxy)
 		{
-			proxyPanel.set( UseModel, ( Proxy) UseSource);
+			proxyPanel.set( model, ( Proxy) source);
 			return proxyPanel;
 		}
 		else

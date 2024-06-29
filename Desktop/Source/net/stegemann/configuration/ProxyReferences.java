@@ -14,22 +14,22 @@ import java.util.List;
 public class ProxyReferences extends ChangeObservable< ProxyReferences>
 						  implements Iterable< SourceWithVolume>, ChangeListener< SourceWithVolume>
 {
-	public static final int PROXY_REFERENCE_SIGNAL_PER_VALUE = ( Signal.VALUE_RANGE / 200);
+	public static final int PROXY_REFERENCE_SIGNAL_PER_VALUE = Signal.VALUE_RANGE / 200;
 
 	private static final int DEFAULT_PROXY_REFERENCE_VOLUME = 100;
 
 	private final List< SourceWithVolume> proxyReferences = new ArrayList<>();
 
-	public ProxyReferences( int Proxies)
+	public ProxyReferences( int proxies)
 	{
-		fill( Proxies);
+		fill( proxies);
 	}
 
 	public ProxyReferences( final ProxyReferences other)
 	{
-		for( SourceWithVolume OtherProxyReference: other.proxyReferences)
+		for( SourceWithVolume otherProxyReference: other.proxyReferences)
 		{
-			proxyReferences.add( new SourceWithVolume( OtherProxyReference));
+			proxyReferences.add( new SourceWithVolume( otherProxyReference));
 		}
 	}
 
@@ -38,7 +38,7 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 	{
 		StringBuffer Buffer = new StringBuffer();
 
-		Buffer.append( "ProxyReferencess = {\n");
+		Buffer.append( "ProxyReferences = {\n");
 
 		for( SourceWithVolume ProxyReference: proxyReferences)
 		{
@@ -73,8 +73,10 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 		{
 			try
 			{
-				proxyReferences.add( new SourceWithVolume( PROXY_REFERENCE_SIGNAL_PER_VALUE,
-														   DEFAULT_PROXY_REFERENCE_VOLUME));
+				proxyReferences.add
+				(
+                    new SourceWithVolume( PROXY_REFERENCE_SIGNAL_PER_VALUE, DEFAULT_PROXY_REFERENCE_VOLUME)
+                );
 			}
 			catch( ValueOutOfRangeException reason)
 			{
@@ -85,16 +87,16 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 		}
 	}
 
-	public SourceWithVolume getProxyReferenceFromIndex(int Index)
+	public SourceWithVolume getProxyReferenceFromIndex( int index)
 	{
-		if( Index == -1)
+		if( index == -1)
 		{
 			return( null);
 		}
 
 		try
 		{
-			return proxyReferences.get( Index);
+			return proxyReferences.get( index);
 		}
 		catch( IndexOutOfBoundsException reason)
 		{
@@ -102,9 +104,9 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 		}
 	}
 
-	public void replaceSources( HashMap< SourceId, SourceId> SourcesMap)
+	public void replaceSources( HashMap< SourceId, SourceId> sourcesMap)
 	{
-		proxyReferences.forEach( proxyReference -> proxyReference.replaceSource( SourcesMap));
+		proxyReferences.forEach( proxyReference -> proxyReference.replaceSource( sourcesMap));
 	}
 
 	public void switchSources( SourceId sourceIdOne, SourceId sourceIdTwo)
@@ -116,9 +118,9 @@ public class ProxyReferences extends ChangeObservable< ProxyReferences>
 	{
 		private final Iterator< SourceWithVolume> iterator;
 
-		public ProxyReferenceIterator( ProxyReferences UseProxies)
+		public ProxyReferenceIterator( ProxyReferences proxies)
 		{
-			iterator = UseProxies.proxyReferences.iterator();
+			iterator = proxies.proxyReferences.iterator();
 		}
 
 		@Override

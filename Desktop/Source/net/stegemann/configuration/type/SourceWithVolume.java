@@ -1,7 +1,7 @@
 package net.stegemann.configuration.type;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
+import net.stegemann.configuration.Configuration;import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
 

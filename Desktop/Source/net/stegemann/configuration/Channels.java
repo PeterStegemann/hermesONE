@@ -125,11 +125,6 @@ public class Channels extends ChangeObservable< Channels>
 		}
 	}
 
-	public int getChannelIndexFromChannel( Channel channel)
-	{
-		return( channels.indexOf( channel));
-	}
-
 	public int getChannelCount()
 	{
 		return channels.size();

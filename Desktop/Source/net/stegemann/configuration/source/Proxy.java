@@ -15,7 +15,7 @@ import java.util.HashMap;import static net.stegemann.misc.Utility.indent;
 public final class Proxy extends Source
 {
     public static final int SLOT_MINIMUM = 0;
-    public static final int SLOT_MAXIMUM = ( SLOT_MINIMUM + Model.PROXIES - 1);
+    public static final int SLOT_MAXIMUM = SLOT_MINIMUM + Model.PROXIES - 1;
 
     @ConfigurationField( name = Names.SOURCE_PROXY_SLOT)
     private final Number slot;

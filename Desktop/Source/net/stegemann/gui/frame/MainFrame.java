@@ -265,10 +265,12 @@ public class MainFrame extends JFrame implements ActionListener
 			}
 			catch( DocumentException reason)
 			{
-				System.out.println( "Failed opening configuration, reason: " + reason.getMessage());
+                readErrorDialog( "Die Konfiguration konnte nicht geöffnet werden!");
 
 				reason.printStackTrace();
 			}
+
+            validateConfiguration();
 
 			set();
 		}
@@ -317,7 +319,7 @@ public class MainFrame extends JFrame implements ActionListener
 		}
 		catch( DocumentException reason)
 		{
-			System.out.println( "Failed writing configuration, reason: " + reason.getMessage());
+            writeErrorDialog( "Die Konfiguration konnte nicht gespeichert werden: " + reason.getMessage());
 
 			reason.printStackTrace();
 		}
@@ -329,21 +331,18 @@ public class MainFrame extends JFrame implements ActionListener
 
 		if( activeItem == null)
 		{
-			JOptionPane.showMessageDialog
-			(
-				this,
-				"Es ist kein serieller Port ausgewaehlt!",
-				"Fehler beim Lesen",
-				JOptionPane.ERROR_MESSAGE
-			);
+			readErrorDialog("Es ist kein serieller Port ausgewaehlt!");
 
 			return;
 		}
 
-		String portName = activeItem.getText();
 		ProgressDialog progressDialog = new ProgressDialog( this, "Lese Konfiguration...");
 
+        String portName = activeItem.getText();
+
 		runWithProgress( progressDialog, () -> readConfiguration( portName, progressDialog));
+
+        validateConfiguration();
 
 		set();
 	}
@@ -356,7 +355,7 @@ public class MainFrame extends JFrame implements ActionListener
 		}
 		catch( ReadException reason)
 		{
-			System.out.println( "Failed reading configuration, reason: " + reason.getMessage());
+            readErrorDialog( "Die Konfiguration konnte nicht gelesen werden: " + reason.getMessage());
 
 			reason.printStackTrace();
 		}
@@ -368,19 +367,14 @@ public class MainFrame extends JFrame implements ActionListener
 
 		if( activeItem == null)
 		{
-			JOptionPane.showMessageDialog
-			(
-				this,
-				"Es ist kein serieller Port ausgewaehlt!",
-				"Fehler beim Schreiben",
-				JOptionPane.ERROR_MESSAGE
-			);
+			writeErrorDialog( "Es ist kein serieller Port ausgewählt!");
 
 			return;
 		}
 
-		String portName = activeItem.getText();
 		ProgressDialog progressDialog = new ProgressDialog( this, "Schreibe Konfiguration..." );
+
+        String portName = activeItem.getText();
 
 		runWithProgress( progressDialog, () -> writeConfiguration( portName, progressDialog));
 
@@ -395,11 +389,40 @@ public class MainFrame extends JFrame implements ActionListener
 		}
 		catch( WriteException reason)
 		{
-			System.out.println( "Failed writing configuration, reason: " + reason.getMessage());
+            writeErrorDialog( "Die Konfiguration konnte nicht geschrieben werden: " + reason.getMessage());
 
 			reason.printStackTrace();
 		}
 	}
+
+    private void validateConfiguration()
+    {
+        if( configuration.validate() == false)
+        {
+            readErrorDialog( "Die Konfiguration hat Fehler!");
+        }
+    }
+
+    private void readErrorDialog(String message)
+    {
+        errorDialog( message, "Fehler beim Lesen");
+    }
+
+    private void writeErrorDialog(String message)
+    {
+        errorDialog( message, "Fehler beim Schreiben");
+    }
+
+    private void errorDialog( String message, String title)
+    {
+        JOptionPane.showMessageDialog
+        (
+            this,
+            message,
+            title,
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
 
 	private void runWithProgress( ProgressDialog progressDialog, Runnable runnable)
 	{

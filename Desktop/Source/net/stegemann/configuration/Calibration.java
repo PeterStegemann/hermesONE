@@ -21,13 +21,16 @@ public class Calibration
     @Override
     public String toString()
     {
-        return String.format( """
+        return String.format
+        (
+            """
             Calibration
             {
                 high: %s
                 center: %s
                 low: %s
-            }""",
+            }
+            """,
             high, center, low
 		);
     }

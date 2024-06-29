@@ -37,7 +37,7 @@ public class ProxiesPanel extends hermesPanel
     private ModelId typeId;
 
     private final JList< Source> proxiesList;
-    private final JButton addButton, removeButton;
+    private final JButton createButton, removeButton;
 
     private final SourcePanel proxyPanel;
 
@@ -50,14 +50,14 @@ public class ProxiesPanel extends hermesPanel
         proxiesList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
         proxiesList.setLayoutOrientation( JList.VERTICAL);
         proxiesList.addListSelectionListener( this);
-        proxiesList.setCellRenderer( new ListCellRenderer<Source>());
+        proxiesList.setCellRenderer( new ListCellRenderer< Source>());
 
         JScrollPane ProxiesScrollPane = new JScrollPane( proxiesList);
         ProxiesScrollPane.setMinimumSize( new Dimension( 150, 150));
         ProxiesScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        addButton = button( "+");
-        removeButton = button( "-");
+        createButton = createButton();
+        removeButton = removeButton();
 
         proxyPanel = new SourcePanel( configuration);
 
@@ -79,7 +79,7 @@ public class ProxiesPanel extends hermesPanel
                 .addGroup
                 (
                     Layout.createSequentialGroup()
-                    .addComponent( addButton)
+                    .addComponent( createButton)
                     .addComponent( removeButton)
                 )
             )
@@ -96,7 +96,7 @@ public class ProxiesPanel extends hermesPanel
                 .addGroup
                 (
                     Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
-                    .addComponent( addButton)
+                    .addComponent( createButton)
                     .addComponent( removeButton)
                 )
             )
@@ -136,7 +136,7 @@ public class ProxiesPanel extends hermesPanel
     {
         int selectedIndex = proxiesList.getSelectedIndex();
 
-        if( event.getSource() == addButton)
+        if( event.getSource() == createButton)
         {
             Proxy proxy = controller.addProxy( typeId);
 

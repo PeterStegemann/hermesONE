@@ -14,10 +14,11 @@ import net.stegemann.configuration.view.SourcesView.HasProxies;
 import net.stegemann.configuration.view.SourcesView.PickGlobals;
 import net.stegemann.gui.components.source.SourceWithVolumeComponent;
 
-import javax.swing.*;
+import javax.swing.*;import java.io.Serial;
 
 public class ProxyPanel extends SpecificSourcePanel
 {
+	@Serial
 	private static final long serialVersionUID = 2207731913976777397L;
 
 	private final SourceWithVolumeComponent proxyReference;
@@ -27,10 +28,11 @@ public class ProxyPanel extends SpecificSourcePanel
 		super( UseConfiguration);
 
 		JLabel SlotLabel = new JLabel( "Quelle:");
-		proxyReference = new SourceWithVolumeComponent( Signal.MINIMUM_VALUE /
-											 ProxyReferences.PROXY_REFERENCE_SIGNAL_PER_VALUE,
-											 Signal.MAXIMUM_VALUE /
-											 ProxyReferences.PROXY_REFERENCE_SIGNAL_PER_VALUE);
+		proxyReference = new SourceWithVolumeComponent
+		(
+            Signal.MINIMUM_VALUE / ProxyReferences.PROXY_REFERENCE_SIGNAL_PER_VALUE,
+            Signal.MAXIMUM_VALUE / ProxyReferences.PROXY_REFERENCE_SIGNAL_PER_VALUE
+        );
 
 		// Layout elements.
 		GroupLayout Layout = new GroupLayout( this);
@@ -39,12 +41,20 @@ public class ProxyPanel extends SpecificSourcePanel
 //		Layout.setAutoCreateGaps( true);
 		Layout.setAutoCreateContainerGaps( true);
 
-		Layout.setHorizontalGroup( Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-			.addGroup( Layout.createSequentialGroup()
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
+		Layout.setHorizontalGroup
+		(
+            Layout.createParallelGroup( GroupLayout.Alignment.CENTER)
+			.addGroup
+			(
+                Layout.createSequentialGroup()
+				.addGroup
+				(
+                    Layout.createParallelGroup( GroupLayout.Alignment.TRAILING)
 					.addComponent( SlotLabel)
 				)
-				.addGroup( Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
+				.addGroup
+				(
+                    Layout.createParallelGroup( GroupLayout.Alignment.LEADING)
 					.addComponent( proxyReference)
 				)
 			)
@@ -75,10 +85,12 @@ public class ProxyPanel extends SpecificSourcePanel
 			new SourcesView( sources, PickGlobals.Yes, typeId, modelId, HasEmpty.Yes, HasFixed.Yes,
 							 HasProxies.Yes);
 
-		ProxyReferences UseProxyReferences = model.getProxyReferences();
+		ProxyReferences proxyReferences = model.getProxyReferences();
 
-		proxyReference.set( sourcesView, UseProxyReferences.getProxyReferenceFromIndex(
-							source.getSlot().getValue()));
+		proxyReference.set
+		(
+            sourcesView, proxyReferences.getProxyReferenceFromIndex( source.getSlot().getValue())
+        );
 
 		setVisible( true);
 	}

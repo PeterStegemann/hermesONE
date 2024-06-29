@@ -1,11 +1,10 @@
 package net.stegemann.configuration;
 
-import net.stegemann.configuration.type.Number;
-import net.stegemann.configuration.type.ValueOutOfRangeException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.type.ValueOutOfRangeException;
 
 public class ChannelMappings implements Iterable< Number>
 {
@@ -57,11 +56,6 @@ public class ChannelMappings implements Iterable< Number>
 		}
 	}
 
-	public void addChannelMapping( Number channelMapping)
-	{
-		channelMappings.add( channelMapping);
-	}
-
 	public void setChannelMapping( int index, Number channelMapping)
 	{
 		fill( index + 1);
@@ -77,11 +71,6 @@ public class ChannelMappings implements Iterable< Number>
 		}
 
 		return channelMappings.get( index);
-	}
-
-	public int getChannelMappingCount()
-	{
-		return channelMappings.size();
 	}
 
 	private static class ChannelMappingsIterator implements Iterator< Number>

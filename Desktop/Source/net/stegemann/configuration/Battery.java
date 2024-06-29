@@ -9,48 +9,54 @@ import net.stegemann.io.xml.Names;
 @Getter
 public class Battery
 {
-	public static final int VOLTAGE_MINIMUM = 0;
-	public static final int VOLTAGE_MAXIMUM = 120;
-	public static final int CALIBRATION_VOLTAGE_MINIMUM = 0;
-	public static final int CALIBRATION_VOLTAGE_MAXIMUM = 180;
+    public static final int VOLTAGE_MINIMUM = 0;
+    public static final int VOLTAGE_MAXIMUM = 120;
+    public static final int CALIBRATION_VOLTAGE_MINIMUM = 0;
+    public static final int CALIBRATION_VOLTAGE_MAXIMUM = 180;
 
-	@ConfigurationField( name = Names.BATTERY_WARN_LOW_VOLTAGE)
-	private final Number warnLowVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
-	@ConfigurationField( name = Names.BATTERY_WARN_CRITICAL_VOLTAGE)
-	private final Number warnCriticalVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
-	@ConfigurationField( name = Names.BATTERY_MINIMUM_VOLTAGE)
-	private final Number minimumVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
-	@ConfigurationField( name = Names.BATTERY_MAXIMUM_VOLTAGE)
-	private final Number maximumVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
-	@ConfigurationField( name = Names.BATTERY_CALIBRATION_VOLTAGE)
-	private final Number calibrationVoltage = new Number( CALIBRATION_VOLTAGE_MINIMUM, CALIBRATION_VOLTAGE_MAXIMUM);
+    @ConfigurationField( name = Names.BATTERY_WARN_LOW_VOLTAGE)
+    private final Number warnLowVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
+    @ConfigurationField( name = Names.BATTERY_WARN_CRITICAL_VOLTAGE)
+    private final Number warnCriticalVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
+    @ConfigurationField( name = Names.BATTERY_MINIMUM_VOLTAGE)
+    private final Number minimumVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
+    @ConfigurationField( name = Names.BATTERY_MAXIMUM_VOLTAGE)
+    private final Number maximumVoltage = new Number( VOLTAGE_MINIMUM, VOLTAGE_MAXIMUM);
+    @ConfigurationField( name = Names.BATTERY_CALIBRATION_VOLTAGE)
+    private final Number calibrationVoltage = new Number( CALIBRATION_VOLTAGE_MINIMUM, CALIBRATION_VOLTAGE_MAXIMUM);
 
-	@Override
-	public String toString()
-	{
+    @Override
+    public String toString()
+    {
+        return String.format
+        (
+            """
+            Battery
+            {
+                warnLowVoltage: %s
+                warnCriticalVoltage: %s
+                minimumVoltage: %s
+                maximumVoltage: %s
+                calibrationVoltage: %s
+            }
+            """,
+            warnLowVoltage, warnCriticalVoltage, minimumVoltage, maximumVoltage, calibrationVoltage
+        );
+    }
 
-        return "Battery = {\n" +
-				" WarnLowVoltage: " + warnLowVoltage + "\n" +
-				" WarnCriticalVoltage: " + warnCriticalVoltage + "\n" +
-				" MinimumVoltage: " + minimumVoltage + "\n" +
-				" MaximumVoltage: " + maximumVoltage + "\n" +
-				" CalibrationVoltage: " + calibrationVoltage + "\n" +
-				"}\n";
-	}
-
-	public void clear()
-	{
-		try
-		{ 
-			warnLowVoltage.setValue( VOLTAGE_MAXIMUM / 2);
-			warnCriticalVoltage.setValue( VOLTAGE_MAXIMUM / 2);
-			minimumVoltage.setValue( VOLTAGE_MAXIMUM / 2);
-			maximumVoltage.setValue( VOLTAGE_MAXIMUM / 2);
-			calibrationVoltage.setValue( VOLTAGE_MAXIMUM / 2);
-		}
-		catch( ValueOutOfRangeException reason)
-		{
-			throw new RuntimeException( reason);
-		}
-	}
+    public void clear()
+    {
+        try
+        {
+            warnLowVoltage.setValue( VOLTAGE_MAXIMUM / 2);
+            warnCriticalVoltage.setValue( VOLTAGE_MAXIMUM / 2);
+            minimumVoltage.setValue( VOLTAGE_MAXIMUM / 2);
+            maximumVoltage.setValue( VOLTAGE_MAXIMUM / 2);
+            calibrationVoltage.setValue( VOLTAGE_MAXIMUM / 2);
+        }
+        catch( ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
+    }
 }

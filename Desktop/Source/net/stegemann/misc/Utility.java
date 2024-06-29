@@ -1,5 +1,10 @@
 package net.stegemann.misc;
 
+import java.util.Arrays;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.StreamSupport;
+
 public class Utility
 {
 	public static String formatTime( int time)
@@ -103,8 +108,20 @@ public class Utility
 		return object.toString().indent(4).trim();
 	}
 
+    public static String toString( Iterable< ?> items)
+    {
+        StringBuilder builder = new StringBuilder();
+
+		for( Object item: items)
+		{
+			builder.append( indent( item));
+		}
+
+        return builder.toString();
+    }
+
 	public static < Type, IterableType extends Iterable< Type>, ExceptionType extends Exception>
-		void forEach( ThrowingConsumer< Type, ExceptionType> consumer, IterableType iterable)
+		void forEach( IterableType iterable, ThrowingConsumer< Type, ExceptionType> consumer)
 			throws ExceptionType
 	{
 		for( Type item : iterable)
@@ -112,4 +129,17 @@ public class Utility
 			consumer.accept( item);
 		}
 	}
+
+    public static < T> Boolean doAll( Iterable< T> items, Function< T, Boolean> function)
+    {
+        return StreamSupport.stream(items.spliterator(), false)
+            .map( function).reduce(( a,b) -> a && b)
+            .orElse(true);
+    }
+
+    @SafeVarargs
+    public static boolean doAll( Supplier< Boolean> ... suppliers)
+    {
+        return Arrays.stream( suppliers).map( Supplier::get).reduce(( a,b) -> a && b).orElse(true);
+    }
 }

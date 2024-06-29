@@ -1,7 +1,7 @@
 package net.stegemann.configuration.source;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
+import net.stegemann.configuration.Configuration;import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.SourceWithVolume;
 import net.stegemann.configuration.type.Volume;
@@ -72,6 +72,16 @@ public final class Follower extends Source
         target.switchSource( sourceIdOne, sourceIdTwo);
         step.switchSource( sourceIdOne, sourceIdTwo);
         trigger.switchSource( sourceIdOne, sourceIdTwo);
+    }
+
+    @Override
+    public boolean validate( Configuration configuration)
+    {
+        return
+            super.validate( configuration) &&
+            validateReferencedSource( configuration, target,"target") &&
+            validateReferencedSource( configuration, step,"step") &&
+            validateReferencedSource( configuration, trigger,"trigger");
     }
 
     @Override

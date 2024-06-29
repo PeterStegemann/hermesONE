@@ -99,7 +99,7 @@ public class Connection
 
 		if( echo != value)
 		{
-			throw new WriteException( "Echo doesn't match byte sent! ( " +  echo +" !=" + value + " )");
+			throw new WriteException( "Echo doesn't match byte sent! ( " +  echo + " != " + value + ")");
 		}
 	}
 

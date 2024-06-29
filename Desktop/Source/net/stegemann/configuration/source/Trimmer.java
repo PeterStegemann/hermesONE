@@ -1,7 +1,7 @@
 package net.stegemann.configuration.source;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
+import net.stegemann.configuration.Configuration;import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.type.*;
 import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
@@ -96,30 +96,6 @@ public final class Trimmer extends Source
         }
     }
 
-    @Override
-    public String toString()
-    {
-        StringBuffer Buffer = new StringBuffer();
-
-        Buffer.append( "Trimmer = {\n");
-        Buffer.append( super.toString());
-        Buffer.append( input);
-        Buffer.append( trim);
-        Buffer.append( limit);
-        Buffer.append( " Reverse: " + reverse + "\n");
-        Buffer.append( " Points = {\n");
-
-        for( Volume point: points)
-        {
-            Buffer.append( "  Point: " + point + "\n");
-        }
-
-        Buffer.append( "}\n");
-        Buffer.append( "}\n");
-
-        return Buffer.toString();
-    }
-
     public Volume getPoint( int index)
     {
         return points.get( index);
@@ -145,5 +121,39 @@ public final class Trimmer extends Source
         input.switchSource( sourceIdOne, sourceIdTwo);
         trim.switchSource( sourceIdOne, sourceIdTwo);
         limit.switchSource( sourceIdOne, sourceIdTwo);
+    }
+
+    @Override
+    public boolean validate( Configuration configuration)
+    {
+        return
+            super.validate( configuration) &&
+            validateReferencedSource( configuration, input, "input") &&
+            validateReferencedSource( configuration, trim, "trim") &&
+            validateReferencedSource( configuration, limit, "limit");
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuffer Buffer = new StringBuffer();
+
+        Buffer.append( "Trimmer = {\n");
+        Buffer.append( super.toString());
+        Buffer.append( input);
+        Buffer.append( trim);
+        Buffer.append( limit);
+        Buffer.append( " Reverse: " + reverse + "\n");
+        Buffer.append( " Points = {\n");
+
+        for( Volume point: points)
+        {
+            Buffer.append( "  Point: " + point + "\n");
+        }
+
+        Buffer.append( "}\n");
+        Buffer.append( "}\n");
+
+        return Buffer.toString();
     }
 }

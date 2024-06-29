@@ -1079,7 +1079,7 @@ public class XMLReader
         return source;
     }
 
-    private Source importSourceTrimmer(Trimmer source, IterableNodeList childNodes)
+    private Source importSourceTrimmer( Trimmer source, IterableNodeList childNodes)
     {
         for( Node childNode: childNodes)
         {
@@ -1115,7 +1115,7 @@ public class XMLReader
         return source;
     }
 
-    private void importSourceTrimmerPoints(Trimmer trim, IterableNodeList childNodes)
+    private void importSourceTrimmerPoints( Trimmer trim, IterableNodeList childNodes)
     {
         int pointIndex = 0;
 
@@ -1176,6 +1176,9 @@ public class XMLReader
         {
             value.setStringValue( textContent);
         }
-        catch( NumberFormatException | ValueOutOfRangeException ignored) {}
+        catch( NumberFormatException | ValueOutOfRangeException reason)
+        {
+            throw new RuntimeException( reason);
+        }
     }
 }

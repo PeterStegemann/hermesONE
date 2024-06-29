@@ -5,8 +5,9 @@ import net.stegemann.configuration.source.*;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.misc.ChangeListener;
 import net.stegemann.misc.ChangeObservable;
+import net.stegemann.misc.Utility;
 
-import java.util.*;
+import java.util.*;import static net.stegemann.misc.Utility.indent;
 
 public class SourcesView extends ChangeObservable< SourcesView>
 					  implements Iterable< Source>, ChangeListener< Sources>
@@ -50,18 +51,25 @@ public class SourcesView extends ChangeObservable< SourcesView>
 	 * This view presents a limited selection of sources based on the given criteria.
 	 * 
 	 * @param sources The sources to pick from.
-	 * @param pickGlobals There's no id for globals, so this switch turns selection of globals on
-	 * or off.
-	 * @param typeId Selects sources that are valid for this type id. If this is null, no sources
-	 * will be selected based on the type id.
-	 * @param modelId Selects sources that are valid for this model id. If this is null, no sources
-	 * will be selected based on the model id.
+	 * @param pickGlobals There's no id for globals, so this switch turns selection of globals on or off.
+	 * @param typeId Selects sources that are valid for this type id. If this is null, no sources will be selected based
+	 *               on the type id.
+	 * @param modelId Selects sources that are valid for this model id. If this is null, no sources will be selected
+	 *                based on the model id.
 	 * @param hasEmpty Sources will contain the empty source element.
 	 * @param hasFixed Sources will contain the fixed source element.
 	 * @param hasProxies Sources will contain proxies.
 	 */
-	public SourcesView( Sources sources, PickGlobals pickGlobals, Number typeId, Number modelId,
-						HasEmpty hasEmpty, HasFixed hasFixed, HasProxies hasProxies)
+	public SourcesView
+	(
+        Sources sources,
+        PickGlobals pickGlobals,
+        Number typeId,
+        Number modelId,
+        HasEmpty hasEmpty,
+        HasFixed hasFixed,
+        HasProxies hasProxies
+    )
 	{
 		this( sources, pickGlobals, typeId, modelId, null, hasEmpty, hasFixed, hasProxies);
 	}
@@ -80,8 +88,17 @@ public class SourcesView extends ChangeObservable< SourcesView>
 	 * @param hasFixed Sources will contain the fixed source element.
 	 * @param hasProxies Sources will contain proxies.
 	 */
-	public SourcesView( Sources sources, PickGlobals pickGlobals, Number typeId, Number modelId, Class< ?> type,
-						HasEmpty hasEmpty, HasFixed hasFixed, HasProxies hasProxies)
+	public SourcesView
+	(
+        Sources sources,
+        PickGlobals pickGlobals,
+        Number typeId,
+        Number modelId,
+        Class< ?> type,
+        HasEmpty hasEmpty,
+        HasFixed hasFixed,
+        HasProxies hasProxies
+    )
 	{
 		baseSources = sources;
 		baseSources.addChangeListener( this);
@@ -100,18 +117,20 @@ public class SourcesView extends ChangeObservable< SourcesView>
 	@Override
 	public String toString()
 	{
-		StringBuilder builder = new StringBuilder();
+		return String.format
+		(
+            """
+            SourcesView
+            {
+                sources
+                {
+                    %s
+                }
+            }
+            """,
+            indent( Utility.toString( sources))
+        );
 
-		builder.append( "SourcesView = {\n");
-
-		for( Source source: sources)
-		{
-			builder.append( source);
-		}
-
-		builder.append( "}\n");
-
-		return builder.toString();
 	}
 
 	@Override

@@ -1,35 +1,22 @@
 package net.stegemann.configuration;
 
 import java.util.ArrayList;
-import java.util.Comparator;import java.util.Iterator;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import net.stegemann.configuration.type.ModelId;
 import net.stegemann.configuration.type.Number;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.misc.ChangeListener;
-import net.stegemann.misc.ChangeObservable;
+import net.stegemann.misc.ChangeObservable;import net.stegemann.misc.Utility;
+
+import static net.stegemann.misc.Utility.doAll;
+import static net.stegemann.misc.Utility.indent;
 
 public class Types extends ChangeObservable< Types>
                 implements Iterable< Type>, ChangeListener< Type>
 {
 	private final List< Type> types = new ArrayList<>();
-
-	@Override
-	public String toString()
-	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "Types = {\n");
-
-		for( Type CurrentType: types)
-		{
-			Buffer.append( CurrentType);
-		}
-
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
-	}
 
 	@Override
 	public void hasChanged( Type object)
@@ -157,23 +144,61 @@ public class Types extends ChangeObservable< Types>
 	 */
 	public int getIndexFromId( Number Id)
 	{
-		int Index = 0;
+		int index = 0;
 
-		for( Type CurrentType: types)
+		for( Type type: types)
 		{
-			if( CurrentType.getId().equals( Id) == true)
+			if( type.getId().equals( Id) == true)
 			{
-				return Index;
+				return index;
 			}
 
-			Index++;
+			index++;
 		}
 
 		return -1;
 	}
 
+	public Type getTypeFromId( ModelId Id)
+	{
+		return getTypeFromIndex( getIndexFromId( Id));
+	}
+
 	public int getCount()
 	{
 		return types.size();
+	}
+
+    public boolean validate( Configuration configuration)
+    {
+        return doAll( types, type -> type.validate( configuration));
+    }
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+
+		builder.append
+		(
+            """
+            Types
+            {
+            """
+        );
+
+        for( Type type: types)
+        {
+            builder.append( indent( type));
+        }
+
+		builder.append
+		(
+            """
+            }
+            """
+        );
+
+		return builder.toString();
 	}
 }

@@ -1,7 +1,7 @@
 package net.stegemann.configuration.source;
 
 import lombok.Getter;
-import net.stegemann.configuration.Signal;
+import net.stegemann.configuration.Configuration;import net.stegemann.configuration.Signal;
 import net.stegemann.configuration.type.SourceId;
 import net.stegemann.configuration.type.ValueOutOfRangeException;
 import net.stegemann.configuration.type.Volume;
@@ -24,15 +24,14 @@ public final class Store extends Source
     public Store()
     {
         input = new SourceId();
-        init = new Volume( INIT_SIGNAL_PER_VALUE);
 
         try
         {
+            init = new Volume( INIT_SIGNAL_PER_VALUE, Signal.NEUTRAL_VALUE / INIT_SIGNAL_PER_VALUE);
             input.setValue( Source.SOURCE_NONE);
         }
         catch( ValueOutOfRangeException reason)
         {
-            // Can't happen here.
             throw new RuntimeException( reason);
         }
     }
@@ -64,6 +63,14 @@ public final class Store extends Source
     }
 
     @Override
+    public boolean validate( Configuration configuration)
+    {
+        return
+            super.validate( configuration) &&
+            validateReferencedSource( configuration, input,"input");
+    }
+
+    @Override
     public String toString()
     {
         return String.format
@@ -76,7 +83,7 @@ public final class Store extends Source
                 init: %s
             }
             """,
-            indent( super.toString()), input, init
+            indent( super.toString()), indent( input), indent( init)
         );
     }
 }
