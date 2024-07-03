@@ -65,8 +65,11 @@ class Serial_DesktopConnection
             sendLong( Serial_DesktopProtocol::I_OutputChannels, SIGNAL_PPM_CHANNELS);
             sendLong( Serial_DesktopProtocol::I_Outputs, SIGNAL_SERVICE_PPMS);
 
-            sendString( Serial_DesktopProtocol::I_Owner,
-               GLOBAL.SetupService.GetOwner( connection.GetStringBuffer(), SERIAL_STRING_SIZE));
+            sendString
+            (
+                Serial_DesktopProtocol::I_Owner,
+                GLOBAL.SetupService.GetOwner( connection.GetStringBuffer(), SERIAL_STRING_SIZE)
+            );
             sendLong( Serial_DesktopProtocol::I_SetupBlankTime, GLOBAL.SetupService.GetSetupBlankTime());
             sendLong( Serial_DesktopProtocol::I_StatusBlankTime, GLOBAL.SetupService.GetStatusBlankTime());
             sendLong( Serial_DesktopProtocol::I_SetupBacklight, GLOBAL.SetupService.GetSetupBacklight());
@@ -97,12 +100,12 @@ class Serial_DesktopConnection
 
                     GLOBAL.SetupService.GetCalibration( CalibrationId, &Calibration);
 
-                    sendLong( Serial_DesktopProtocol::I_CalibrationHigh,
-                        Calibration.Value[ Setup_Calibration::V_High]);
-                    sendLong( Serial_DesktopProtocol::I_CalibrationCenter,
-                        Calibration.Value[ Setup_Calibration::V_Center]);
-                    sendLong( Serial_DesktopProtocol::I_CalibrationLow,
-                        Calibration.Value[ Setup_Calibration::V_Low]);
+                    sendLong( Serial_DesktopProtocol::I_CalibrationHigh, Calibration.Value[ Setup_Calibration::V_High]);
+                    sendLong
+                    (
+                        Serial_DesktopProtocol::I_CalibrationCenter, Calibration.Value[ Setup_Calibration::V_Center]
+                    );
+                    sendLong( Serial_DesktopProtocol::I_CalibrationLow, Calibration.Value[ Setup_Calibration::V_Low]);
 
                 closeComplex();
             }
@@ -141,8 +144,11 @@ class Serial_DesktopConnection
 
                 sendBoolean( Serial_DesktopProtocol::I_PPMInverted, PPM.Inverted);
                 sendLong( Serial_DesktopProtocol::I_PPMCenter, PPM.Center);
-                sendString( Serial_DesktopProtocol::I_PPMName,
-                    GLOBAL.SetupService.GetPPMName( PPMId, connection.GetStringBuffer(), SERIAL_STRING_SIZE));
+                sendString
+                (
+                    Serial_DesktopProtocol::I_PPMName,
+                    GLOBAL.SetupService.GetPPMName( PPMId, connection.GetStringBuffer(), SERIAL_STRING_SIZE)
+                );
 
                 sendChannelMappings( PPM.ChannelMapping);
 
@@ -311,11 +317,20 @@ class Serial_DesktopConnection
 
                     if( GLOBAL.SetupService.GetSourceType( SourceId) != Signal_Source_Source::T_Empty)
                     {
-                        sendString( Serial_DesktopProtocol::I_SourceName, GLOBAL.SetupService.GetSourceName(
-                            SourceId, connection.GetStringBuffer(), SERIAL_STRING_SIZE));
+                        sendString
+                        (
+                            Serial_DesktopProtocol::I_SourceName,
+                            GLOBAL.SetupService.GetSourceName
+                            (
+                                SourceId, connection.GetStringBuffer(), SERIAL_STRING_SIZE
+                            )
+                        );
 
-                        sendLong( Serial_DesktopProtocol::I_SourceModel,
-                            GLOBAL.SetupService.GetSourceModelId( SourceId));
+                        sendLong
+                        (
+                            Serial_DesktopProtocol::I_SourceModel,
+                            GLOBAL.SetupService.GetSourceModelId( SourceId)
+                        );
 
                         switch( GLOBAL.SetupService.GetSourceType( SourceId))
                         {
@@ -634,8 +649,10 @@ class Serial_DesktopConnection
 
                                         case Serial_DesktopProtocol::I_StatusInverted :
                                         {
-                                            GLOBAL.SetupService.SetStatusInverted(
-                                                avr::String::String2Boolean( connection.GetStringBuffer()));
+                                            GLOBAL.SetupService.SetStatusInverted
+                                            (
+                                                avr::String::String2Boolean( connection.GetStringBuffer())
+                                            );
                                         }
                                         break;
 
@@ -1099,6 +1116,13 @@ class Serial_DesktopConnection
                 default : connection.ConsumeItem( Type); break;
             }
         }
+/* Too slow
+        while( ModelId < SETUP_MODELS)
+        {
+            // All other sources have been deleted.
+            GLOBAL.SetupService.SetModelState( ModelId, Setup_Service::MS_Empty);
+        }
+*/
     }
 
     void receiveModel( uint8_t ModelId)
@@ -1653,6 +1677,14 @@ class Serial_DesktopConnection
                 default : connection.ConsumeItem( Type); break;
             }
         }
+
+/* Too slow
+        while( TypeId < SETUP_MODEL_TYPES_END)
+        {
+            // All other sources have been deleted.
+            GLOBAL.SetupService.SetTypeState( TypeId, Setup_Service::TS_Empty);
+        }
+*/
     }
 
     void receiveType( uint8_t TypeId)
@@ -1746,6 +1778,14 @@ class Serial_DesktopConnection
                 default : connection.ConsumeItem( Type); break;
             }
         }
+
+/* Too slow
+        while( SourceId < SETUP_SOURCES)
+        {
+            // All other sources have been deleted.
+            GLOBAL.SetupService.SetSourceType( SourceId++, Signal_Source_Source::T_Empty);
+        }
+*/
     }
 
     void receiveSource( uint16_t SourceId)

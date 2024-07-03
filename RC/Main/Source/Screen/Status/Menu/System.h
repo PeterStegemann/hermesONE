@@ -115,7 +115,7 @@ class Screen_Status_Menu_System : public Screen_Status_Menu_Base
                     {
                         GLOBAL.SetupService.Reset();
 
-                        GLOBAL.SignalProcessor.LoadModel();
+//                        GLOBAL.SignalProcessor.LoadModel();
 
                         avr::Utility::HardReset();
                         // No comin' back.

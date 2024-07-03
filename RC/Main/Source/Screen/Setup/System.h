@@ -244,7 +244,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 
         GLOBAL.SetupService.Reset();
 
-        GLOBAL.SignalProcessor.LoadModel();
+//        GLOBAL.SignalProcessor.LoadModel();
 
         avr::Utility::HardReset();
         // No comin' back.
