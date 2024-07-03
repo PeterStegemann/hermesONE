@@ -10,11 +10,8 @@ public class ConfigurationProgress extends ChangeObservable< ConfigurationProgre
 	private int typesCount;
 	private int sourcesCount;
 
-    @Setter
 	private int modelsMaximum;
-    @Setter
 	private int typesMaximum;
-    @Setter
 	private int sourcesMaximum;
 
 	ConfigurationProgress()
@@ -39,7 +36,28 @@ public class ConfigurationProgress extends ChangeObservable< ConfigurationProgre
 	public void setSourcesCount( int sourcesCount)
 	{
 		this.sourcesCount = sourcesCount;
-	
+
+		notifyChange( this);
+	}
+
+	public void setTypesMaximum( int typesMaximum)
+	{
+		this.typesMaximum = typesMaximum;
+
+		notifyChange( this);
+	}
+
+	public void setModelsMaximum( int modelsMaximum)
+	{
+		this.modelsMaximum = modelsMaximum;
+
+		notifyChange( this);
+	}
+
+	public void setSourcesMaximum( int sourcesMaximum)
+	{
+		this.sourcesMaximum = sourcesMaximum;
+
 		notifyChange( this);
 	}
 
@@ -61,5 +79,7 @@ public class ConfigurationProgress extends ChangeObservable< ConfigurationProgre
         modelsMaximum = 0;
         typesMaximum = 0;
 	    sourcesMaximum = 0;
+
+		notifyChange( this);
 	}
 }

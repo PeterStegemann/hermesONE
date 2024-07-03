@@ -41,24 +41,42 @@ class ConfigurationHandler extends DesktopConnectionHandler
 	@Override
 	public void valueRead( DesktopProtocol.Id id, String textContent)
 	{
-		System UseSystem = configuration.getSystem();
+		System system = configuration.getSystem();
 
         switch( id)
         {
-            case Owner -> readValue( UseSystem.getOwner(), textContent);
-            case AnalogInputs -> readValue( UseSystem.getAnalogInputs(), textContent);
-            case DigitalInputs -> readValue( UseSystem.getDigitalInputs(), textContent);
-            case OutputChannels -> readValue( UseSystem.getOutputChannels(), textContent);
-            case Outputs -> readValue( UseSystem.getOutputs(), textContent);
-            case SetupBacklight -> readValue( UseSystem.getSetupBacklight(), textContent);
-            case SetupBlankTime -> readValue( UseSystem.getSetupBlankTime(), textContent);
-            case StatusBacklight -> readValue( UseSystem.getStatusBacklight(), textContent);
-            case StatusContrast -> readValue( UseSystem.getStatusContrast(), textContent);
-            case StatusBlankTime -> readValue( UseSystem.getStatusBlankTime(), textContent);
-            case StatusInverted -> readValue( UseSystem.getStatusInverted(), textContent);
-            case SelectedModel -> readValue( UseSystem.getSelectedModel(), textContent);
+            case AnalogInputs -> readValue( system.getAnalogInputs(), textContent);
+            case DigitalInputs -> readValue( system.getDigitalInputs(), textContent);
+            case OutputChannels -> readValue( system.getOutputChannels(), textContent);
+            case Outputs -> readValue( system.getOutputs(), textContent);
+            case Owner -> readValue( system.getOwner(), textContent);
+            case SelectedModel -> readValue( system.getSelectedModel(), textContent);
+            case SetupBacklight -> readValue( system.getSetupBacklight(), textContent);
+            case SetupBlankTime -> readValue( system.getSetupBlankTime(), textContent);
+            case StatusBacklight -> readValue( system.getStatusBacklight(), textContent);
+            case StatusBlankTime -> readValue( system.getStatusBlankTime(), textContent);
+            case StatusContrast -> readValue( system.getStatusContrast(), textContent);
+            case StatusInverted -> readValue( system.getStatusInverted(), textContent);
+
+            case StorageModels ->
+            {
+                 readValue( system.getStorageModels(), textContent);
+                 getConfigurationProgress().setModelsMaximum( system.getStorageModels().getValue());
+            }
+
+            case StorageSources ->
+            {
+                readValue( system.getStorageSources(), textContent);
+                getConfigurationProgress().setSourcesMaximum( system.getStorageSources().getValue());
+            }
+
+            case StorageTypes ->
+            {
+                readValue( system.getStorageTypes(), textContent);
+                getConfigurationProgress().setTypesMaximum( system.getStorageTypes().getValue());
+            }
 
             default -> super.valueRead( id, textContent);
         }
-	}
+    }
 }

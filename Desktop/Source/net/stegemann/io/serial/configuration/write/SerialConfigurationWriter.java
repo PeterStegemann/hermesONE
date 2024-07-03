@@ -74,11 +74,13 @@ public class SerialConfigurationWriter
     {
         complex( Id.Configuration, () ->
         {
-            system( configuration.getSystem());
+            System system = configuration.getSystem();
 
-            types( configuration.getTypes());
-            models( configuration.getModels());
-            sources( configuration.getSources());
+            system( system);
+
+            types( configuration.getTypes(), system.getStorageTypes().getValue());
+            models( configuration.getModels(), system.getStorageModels().getValue());
+            sources( configuration.getSources(), system.getStorageSources().getValue());
         });
     }
 
@@ -102,6 +104,36 @@ public class SerialConfigurationWriter
         battery( system.getBattery());
         calibrations( system.getCalibrations());
         ppms( system.getPpms());
+    }
+
+    private void battery( Battery battery)
+        throws WriteException
+    {
+        complex( Id.Battery, () ->
+        {
+            value( Id.BatteryWarnLowVoltage, battery.getWarnLowVoltage());
+            value( Id.BatteryWarnCriticalVoltage, battery.getWarnCriticalVoltage());
+            value( Id.BatteryMinimumVoltage, battery.getMinimumVoltage());
+            value( Id.BatteryMaximumVoltage, battery.getMaximumVoltage());
+            value( Id.BatteryCalibrationValue, battery.getCalibrationVoltage());
+        });
+    }
+
+    private void calibrations( Calibrations calibrations)
+        throws WriteException
+    {
+        complex( Id.Calibrations, () -> forEach( calibrations, this::calibration));
+    }
+
+    private void calibration( Calibration calibration)
+        throws WriteException
+    {
+        complex( Id.Calibration, () ->
+        {
+            value( Id.CalibrationHigh, calibration.getHigh());
+            value( Id.CalibrationCenter, calibration.getCenter());
+            value( Id.CalibrationLow, calibration.getLow());
+        });
     }
 
     private void ppms( PPMs ppms)
@@ -131,7 +163,123 @@ public class SerialConfigurationWriter
         );
     }
 
-    private void sources( Sources sources)
+    private void types( Types types, int total)
+        throws WriteException
+    {
+        complex( Id.Types, () ->
+        {
+            // Type ids don't start with zero!
+            int typeId = Model.TYPE_START;
+
+            for( Type type: types)
+            {
+                // Fill with empty types until we reach the current type id.
+                typeId = fillTypes( typeId, type.getId().getValue());
+
+                type( type);
+
+                typeId++;
+
+                configurationProgress.setTypesCount( typeId - Model.TYPE_START);
+            }
+
+            fillTypes( typeId, Model.TYPE_START + total - 1);
+        });
+    }
+
+    private int fillTypes( int typeId, int types)
+        throws WriteException
+    {
+        while( typeId < types)
+        {
+            emptyType();
+
+            typeId++;
+
+            configurationProgress.setTypesCount( typeId - Model.TYPE_START);
+        }
+
+        return typeId;
+    }
+
+    private void emptyType()
+        throws WriteException
+    {
+        complex( Id.Type, () -> {});
+    }
+
+    private void type( Type type)
+        throws WriteException
+    {
+        complex( Id.Type, () ->
+        {
+            value( Id.TypeName, type.getName());
+            value( Id.TypeState, Utility.convertTypeState( type.getState()));
+        });
+    }
+
+    private void models( Models models, int total)
+        throws WriteException
+    {
+        complex( Id.Models, () ->
+        {
+            int modelId = 0;
+
+            for( Model model: models)
+            {
+                // Fill with empty models until we reach the current model id.
+                modelId = fillModels( modelId, model.getId().getValue());
+
+                model( model);
+
+                modelId++;
+
+                configurationProgress.setModelsCount( modelId);
+            }
+
+            fillModels( modelId, total - 1);
+        });
+    }
+
+    private int fillModels( int modelId, int models)
+        throws WriteException
+    {
+        while( modelId < models)
+        {
+            emptyModel();
+
+            modelId++;
+
+            configurationProgress.setTypesCount( modelId);
+        }
+
+        return modelId;
+    }
+
+    private void emptyModel()
+        throws WriteException
+    {
+        complex( Id.Model, () -> {});
+    }
+
+    private void model( Model model)
+        throws WriteException
+    {
+        complex( Id.Model, () ->
+        {
+            value( Id.ModelName, model.getName());
+            value( Id.ModelState, Utility.convertModelState( model.getState()));
+            value( Id.ModelRFMode, model.getRfMode());
+            value( Id.ModelType, model.getTypeId());
+
+            statusSources( model);
+            statusTimes( model);
+            channels( model.getChannels());
+            proxyReferences( model.getProxyReferences());
+        });
+    }
+
+    private void sources( Sources sources, int total)
         throws WriteException
     {
         complex( Id.Sources, () ->
@@ -141,12 +289,7 @@ public class SerialConfigurationWriter
             for( Source source: sources)
             {
                 // Fill with empty sources until we reach the current source id.
-                while( sourceId < source.getId().getValue())
-                {
-                    complex( Id.Source, () -> {});
-
-                    sourceId++;
-                }
+                sourceId = fillSources( sourceId, source.getId().getValue());
 
                 source( source);
 
@@ -154,7 +297,30 @@ public class SerialConfigurationWriter
 
                 configurationProgress.setSourcesCount( sourceId);
             }
+
+            fillSources( sourceId, total - 1);
         });
+    }
+
+    private int fillSources( int sourceId, int sources)
+        throws WriteException
+    {
+        while( sourceId < sources)
+        {
+            emptySource();
+
+            sourceId++;
+
+            configurationProgress.setSourcesCount( sourceId);
+        }
+
+        return sourceId;
+    }
+
+    private void emptySource()
+        throws WriteException
+    {
+        complex( Id.Source, () -> {});
     }
 
     private void source( Source source)
@@ -375,86 +541,6 @@ public class SerialConfigurationWriter
         complex( Id.SourceProxy, () -> value( Id.SourceProxySlot, proxy.getSlot()));
     }
 
-    private void types( Types types)
-        throws WriteException
-    {
-        complex( Id.Types, () ->
-        {
-            // Type ids don't start with zero!
-            int typeId = Model.TYPE_START;
-
-            for( Type type: types)
-            {
-                // Fill with empty types until we reach the current type id.
-                while( typeId < type.getId().getValue())
-                {
-                    complex( Id.Type, () -> {});
-
-                    typeId++;
-                }
-
-                type( type);
-
-                typeId++;
-
-                configurationProgress.setTypesCount( typeId - Model.TYPE_START);
-            }
-        });
-    }
-
-    private void type( Type type)
-        throws WriteException
-    {
-        complex( Id.Type, () ->
-        {
-            value( Id.TypeName, type.getName());
-            value( Id.TypeState, Utility.convertTypeState( type.getState()));
-        });
-    }
-
-    private void models( Models models)
-        throws WriteException
-    {
-        complex( Id.Models, () ->
-        {
-            int modelId = 0;
-
-            for( Model model: models)
-            {
-                // Fill with empty models until we reach the current model id.
-                while( modelId < model.getId().getValue())
-                {
-                    complex( Id.Model, () -> {});
-
-                    modelId++;
-                }
-
-                model( model);
-
-                modelId++;
-
-                configurationProgress.setModelsCount( modelId);
-            }
-        });
-    }
-
-    private void model( Model model)
-        throws WriteException
-    {
-        complex( Id.Model, () ->
-        {
-            value( Id.ModelName, model.getName());
-            value( Id.ModelState, Utility.convertModelState( model.getState()));
-            value( Id.ModelRFMode, model.getRfMode());
-            value( Id.ModelType, model.getTypeId());
-
-            statusSources( model);
-            statusTimes( model);
-            exportChannels( model.getChannels());
-            proxyReferences( model.getProxyReferences());
-        });
-    }
-
     private void proxyReferences( ProxyReferences proxyReferences)
         throws WriteException
     {
@@ -485,13 +571,13 @@ public class SerialConfigurationWriter
         });
     }
 
-    private void exportChannels( Channels channels)
+    private void channels( Channels channels)
         throws WriteException
     {
-        complex( Id.Channels, () -> forEach( channels, this::exportChannel));
+        complex( Id.Channels, () -> forEach( channels, this::channel));
     }
 
-    private void exportChannel( Channel channel)
+    private void channel( Channel channel)
         throws WriteException
     {
         complex( Id.Channel, () ->
@@ -525,36 +611,6 @@ public class SerialConfigurationWriter
             value( Id.SourceTupleVolume, sourceTuple.getVolume());
         });
    }
-
-    private void battery( Battery battery)
-        throws WriteException
-    {
-        complex( Id.Battery, () ->
-        {
-            value( Id.BatteryWarnLowVoltage, battery.getWarnLowVoltage());
-            value( Id.BatteryWarnCriticalVoltage, battery.getWarnCriticalVoltage());
-            value( Id.BatteryMinimumVoltage, battery.getMinimumVoltage());
-            value( Id.BatteryMaximumVoltage, battery.getMaximumVoltage());
-            value( Id.BatteryCalibrationValue, battery.getCalibrationVoltage());
-        });
-    }
-
-    private void calibrations( Calibrations calibrations)
-        throws WriteException
-    {
-        complex( Id.Calibrations, () -> forEach( calibrations, this::exportCalibration));
-    }
-
-    private void exportCalibration( Calibration calibration)
-        throws WriteException
-    {
-        complex( Id.Calibration, () ->
-        {
-            value( Id.CalibrationHigh, calibration.getHigh());
-            value( Id.CalibrationCenter, calibration.getCenter());
-            value( Id.CalibrationLow, calibration.getLow());
-        });
-    }
 
     private void complex( Id id, ThrowingFunction< WriteException> content)
         throws WriteException

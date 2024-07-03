@@ -2,8 +2,10 @@ package net.stegemann.configuration;
 
 import lombok.Getter;
 import net.stegemann.configuration.type.*;
-import net.stegemann.configuration.type.Number;import net.stegemann.configuration.util.ConfigurationField;
+import net.stegemann.configuration.type.Number;
+import net.stegemann.configuration.util.ConfigurationField;
 import net.stegemann.io.xml.Names;
+import static net.stegemann.misc.Utility.indent;
 
 @Getter
 public class System
@@ -12,6 +14,10 @@ public class System
 	public static final int SYSTEM_DIGITAL_INPUTS_DEFAULT	= 16;
 	public static final int SYSTEM_OUTPUTS_DEFAULT			= 2;
 	public static final int SYSTEM_OUTPUT_CHANNELS_DEFAULT	= 9;
+
+    public static final int SYSTEM_STORAGE_TYPES_DEFAULT   = 0;
+    public static final int SYSTEM_STORAGE_MODELS_DEFAULT  = 0;
+    public static final int SYSTEM_STORAGE_SOURCES_DEFAULT = 0;
 
 	public static final int SYSTEM_BACKLIGHT_MINIMUM	= 0;
 	public static final int SYSTEM_BACKLIGHT_MAXIMUM	= 100;
@@ -28,6 +34,13 @@ public class System
 	private final Number outputChannels = new Number();
 	@ConfigurationField( name = Names.SYSTEM_OUTPUTS)
 	private final Number outputs = new Number();
+
+    @ConfigurationField( name = Names.SYSTEM_STORAGE_TYPES)
+    private final Number storageTypes = new Number();
+    @ConfigurationField( name = Names.SYSTEM_STORAGE_MODELS)
+    private final Number storageModels = new Number();
+    @ConfigurationField( name = Names.SYSTEM_STORAGE_SOURCES)
+    private final Number storageSources = new Number();
 
 	@ConfigurationField( name = Names.SYSTEM_OWNER)
 	private final Text owner = new Text();
@@ -61,27 +74,37 @@ public class System
 	@Override
 	public String toString()
 	{
-		StringBuffer Buffer = new StringBuffer();
-
-		Buffer.append( "System = {\n");
-		Buffer.append( " Analog Inputs: " + analogInputs + "\n");
-		Buffer.append( " Digital Inputs: " + digitalInputs + "\n");
-		Buffer.append( " Output Channels: " + outputChannels + "\n");
-		Buffer.append( " Outputs: " + outputs + "\n");
-		Buffer.append( " Owner: " + owner + "\n");
-		Buffer.append( " Setup Backlight: " + setupBacklight + "\n");
-		Buffer.append( " Setup BlankTime: " + setupBlankTime + "\n");
-		Buffer.append( " Status Backlight: " + statusBacklight + "\n");
-		Buffer.append( " Status Contrast: " + statusContrast + "\n");
-		Buffer.append( " Status BlankTime: " + statusBlankTime + "\n");
-		Buffer.append( " Status Inverted: " + statusInverted + "\n");
-		Buffer.append( " Selected Model: " + selectedModel + "\n");
-		Buffer.append( battery);
-		Buffer.append( calibrations);
-		Buffer.append( ppms);
-		Buffer.append( "}\n");
-
-		return Buffer.toString();
+        return String.format( """
+            System
+            {
+                analogInputs: %s
+                digitalInputs: %s
+                outputChannels: %s
+                storageTypes: %s
+                storageModels: %s
+                storageSources: %s
+                outputs: %s
+                owner: %s
+                setupBacklight: %s
+                setupBlankTime: %s
+                statusBacklight: %s
+                statusContrast: %s
+                statusBlankTime: %s
+                statusInverted: %s
+                selectedModel: %s
+                battery: %s
+                calibrations: %s
+                ppms: %s
+            }
+            """,
+            analogInputs, digitalInputs, outputChannels,
+            storageTypes, storageModels, storageSources,
+            outputs, owner,
+            setupBacklight, setupBlankTime,
+            statusBacklight, statusContrast, statusBlankTime, statusInverted,
+            selectedModel,
+            indent( battery), indent( calibrations), indent( ppms)
+        );
 	}
 
 	public void clear()
@@ -92,6 +115,10 @@ public class System
 			digitalInputs.setValue( SYSTEM_DIGITAL_INPUTS_DEFAULT);
 			outputChannels.setValue( SYSTEM_OUTPUT_CHANNELS_DEFAULT);
 			outputs.setValue( SYSTEM_OUTPUTS_DEFAULT);
+
+            storageTypes.setValue( SYSTEM_STORAGE_TYPES_DEFAULT);
+            storageModels.setValue( SYSTEM_STORAGE_MODELS_DEFAULT);
+            storageSources.setValue( SYSTEM_STORAGE_SOURCES_DEFAULT);
 
 			owner.setValue( "");
 			setupBacklight.setValue( SYSTEM_BACKLIGHT_MAXIMUM / 2);

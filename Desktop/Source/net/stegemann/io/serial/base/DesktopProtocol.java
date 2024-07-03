@@ -205,6 +205,10 @@ public class DesktopProtocol
         SourceTrimmerLimit,
         SourceTrimmerReverse,
 
+        StorageTypes,
+        StorageModels,
+        StorageSources,
+
         // Always keep this at the end. It doesn't really exist in the protocol.
         Unknown;
 

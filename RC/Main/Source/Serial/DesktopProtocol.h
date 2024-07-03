@@ -178,7 +178,7 @@ class Serial_DesktopProtocol : public avr::serial::Protocol
 
 		I_StorageTypes,
 		I_StorageModels,
-        I_StorageSources
+        I_StorageSources,
 
 		I_IdCount
 	};

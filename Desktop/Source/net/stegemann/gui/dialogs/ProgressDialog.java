@@ -13,9 +13,9 @@ public class ProgressDialog extends JDialog implements ChangeListener< Configura
     @Serial
     private static final long serialVersionUID = 108509389789556744L;
 
-    private final JLabel typesValue = new JLabel( "0");
-    private final JLabel modelsValue = new JLabel( "0");
-    private final JLabel sourcesValue = new JLabel( "0");
+    private final JLabel typesValue = new JLabel( "0/0");
+    private final JLabel modelsValue = new JLabel( "0/0");
+    private final JLabel sourcesValue = new JLabel( "0/0");
     private final JProgressBar progressBar = new JProgressBar();
 
     // This flag is set on close and is respected by open, just for the case that close is called before open. In that
@@ -164,8 +164,8 @@ public class ProgressDialog extends JDialog implements ChangeListener< Configura
         progressBar.setMaximum( configurationProgress.getTotalMaximum());
         progressBar.setValue( configurationProgress.getTotalCount());
 
-        typesValue.setText( String.valueOf( configurationProgress.getTypesCount()));
-        modelsValue.setText( String.valueOf( configurationProgress.getModelsCount()));
-        sourcesValue.setText( String.valueOf( configurationProgress.getSourcesCount()));
+        typesValue.setText( configurationProgress.getTypesCount() + "/" + configurationProgress.getTypesMaximum());
+        modelsValue.setText( configurationProgress.getModelsCount() + "/" + configurationProgress.getModelsMaximum());
+        sourcesValue.setText( configurationProgress.getSourcesCount() + "/" + configurationProgress.getSourcesMaximum());
     }
 }

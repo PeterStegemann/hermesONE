@@ -90,13 +90,13 @@ public class XMLReader
                 {
                     importModels( configuration.getModels(), getChildNodes( childNode));
                 }
-                else if( Names.TYPES.compareToIgnoreCase( nodeName) == 0)
-                {
-                    importTypes( configuration.getTypes(), getChildNodes( childNode));
-                }
                 else if( Names.SOURCES.compareToIgnoreCase( nodeName) == 0)
                 {
                     importSources( configuration.getSources(), getChildNodes( childNode));
+                }
+                else if( Names.TYPES.compareToIgnoreCase( nodeName) == 0)
+                {
+                    importTypes( configuration.getTypes(), getChildNodes( childNode));
                 }
                 else
                 {
@@ -122,21 +122,24 @@ public class XMLReader
 
             switch( nodeName)
             {
+                case Names.BATTERY -> importBattery( system.getBattery(), getChildNodes( childNode));
+                case Names.CALIBRATIONS -> importCalibrations( system.getCalibrations(), getChildNodes( childNode));
+                case Names.PPMS -> importPPMs( system.getPpms(), getChildNodes( childNode));
                 case Names.SYSTEM_ANALOG_INPUTS -> readValue( system.getAnalogInputs(), textContent);
                 case Names.SYSTEM_DIGITAL_INPUTS -> readValue( system.getDigitalInputs(), textContent);
                 case Names.SYSTEM_OUTPUT_CHANNELS -> readValue( system.getOutputChannels(), textContent);
                 case Names.SYSTEM_OUTPUTS -> readValue( system.getOutputs(), textContent);
                 case Names.SYSTEM_OWNER -> readValue( system.getOwner(), textContent);
+                case Names.SYSTEM_SELECTED_MODEL -> readValue( system.getSelectedModel(), textContent);
                 case Names.SYSTEM_SETUP_BACKLIGHT -> readValue( system.getSetupBacklight(), textContent);
                 case Names.SYSTEM_SETUP_BLANK_TIME -> readValue( system.getSetupBlankTime(), textContent);
                 case Names.SYSTEM_STATUS_BACKLIGHT -> readValue( system.getStatusBacklight(), textContent);
                 case Names.SYSTEM_STATUS_CONTRAST -> readValue( system.getStatusContrast(), textContent);
                 case Names.SYSTEM_STATUS_BLANK_TIME -> readValue( system.getStatusBlankTime(), textContent);
                 case Names.SYSTEM_STATUS_INVERTED -> readValue( system.getStatusInverted(), textContent);
-                case Names.SYSTEM_SELECTED_MODEL -> readValue( system.getSelectedModel(), textContent);
-                case Names.BATTERY -> importBattery( system.getBattery(), getChildNodes( childNode));
-                case Names.CALIBRATIONS -> importCalibrations( system.getCalibrations(), getChildNodes( childNode));
-                case Names.PPMS -> importPPMs( system.getPpms(), getChildNodes( childNode));
+                case Names.SYSTEM_STORAGE_TYPES -> readValue( system.getStorageTypes(), textContent);
+                case Names.SYSTEM_STORAGE_MODELS -> readValue( system.getStorageModels(), textContent);
+                case Names.SYSTEM_STORAGE_SOURCES -> readValue( system.getStorageSources(), textContent);
 
                 default ->
                 {

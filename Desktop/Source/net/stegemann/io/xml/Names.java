@@ -8,6 +8,9 @@ public class Names
 	public static final String SYSTEM_ANALOG_INPUTS						= "AnalogInputs";
 	public static final String SYSTEM_DIGITAL_INPUTS					= "DigitalInputs";
 	public static final String SYSTEM_OUTPUT_CHANNELS					= "OutputChannels";
+    public static final String SYSTEM_STORAGE_TYPES                     = "StorageTypes";
+    public static final String SYSTEM_STORAGE_MODELS                    = "StorageModels";
+    public static final String SYSTEM_STORAGE_SOURCES                   = "StorageSources";
 	public static final String SYSTEM_OUTPUTS							= "Outputs";
 	public static final String SYSTEM_OWNER								= "Owner";
 	public static final String SYSTEM_SETUP_BACKLIGHT					= "SetupBacklight";
