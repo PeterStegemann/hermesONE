@@ -65,6 +65,10 @@ class Serial_DesktopConnection
             sendLong( Serial_DesktopProtocol::I_OutputChannels, SIGNAL_PPM_CHANNELS);
             sendLong( Serial_DesktopProtocol::I_Outputs, SIGNAL_SERVICE_PPMS);
 
+            sendLong( Serial_DesktopProtocol::I_StorageTypes, SETUP_MODEL_TYPES);
+            sendLong( Serial_DesktopProtocol::I_StorageModels, SETUP_MODELS);
+            sendLong( Serial_DesktopProtocol::I_StorageSources, SETUP_SOURCES);
+
             sendString
             (
                 Serial_DesktopProtocol::I_Owner,

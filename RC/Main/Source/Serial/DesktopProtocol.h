@@ -176,6 +176,10 @@ class Serial_DesktopProtocol : public avr::serial::Protocol
 		I_SourceTrimmerLimitSource,
 		I_SourceTrimmerReverse,
 
+		I_StorageTypes,
+		I_StorageModels,
+        I_StorageSources
+
 		I_IdCount
 	};
 };

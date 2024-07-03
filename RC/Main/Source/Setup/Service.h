@@ -222,6 +222,11 @@ class Setup_Service
     // Reset type.
     void ResetType( uint8_t TypeId, TypeState State);
     // Reset source.
-    void ResetSource( Signal_Source_Source* SignalSource, uint8_t ModelId, uint16_t SetupSourceId,
-                      Signal_Source_Source::Type SourceType);
+    void ResetSource
+    (
+        Signal_Source_Source* SignalSource,
+        uint8_t ModelId,
+        uint16_t SetupSourceId,
+        Signal_Source_Source::Type SourceType
+    );
 };
