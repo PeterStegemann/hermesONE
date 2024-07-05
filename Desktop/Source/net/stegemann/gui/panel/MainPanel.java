@@ -49,9 +49,9 @@ public class MainPanel extends hermesPanel
 
         systemButton = button( "System...");
 
-        JSeparator Separator = new JSeparator();
+        JSeparator separator = new JSeparator();
 
-        JLabel TypesListLabel = new JLabel( "Typen:");
+        JLabel typesListLabel = new JLabel( "Typen:");
 
         typesList = new JList<>();
         typesList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
@@ -59,9 +59,9 @@ public class MainPanel extends hermesPanel
         typesList.addListSelectionListener( this);
         typesList.setCellRenderer( new ListCellRenderer< Type>());
 
-        JScrollPane TypesScrollPane = new JScrollPane( typesList);
-        TypesScrollPane.setMinimumSize( new Dimension( 150, 150));
-        TypesScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        JScrollPane typesScrollPane = new JScrollPane( typesList);
+        typesScrollPane.setMinimumSize( new Dimension( 150, 150));
+        typesScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         typeName = new TextComponent( Constants.DEFAULT_TEXTFIELD_WIDTH);
 
@@ -71,7 +71,7 @@ public class MainPanel extends hermesPanel
         downTypeButton = downButton();
         removeTypeButton = removeButton();
 
-        JLabel ModelsListLabel = new JLabel( "Modelle:");
+        JLabel modelsListLabel = new JLabel( "Modelle:");
 
         modelsList = new JList<>();
         modelsList.setSelectionMode( ListSelectionModel.SINGLE_SELECTION);
@@ -79,9 +79,9 @@ public class MainPanel extends hermesPanel
         modelsList.addListSelectionListener( this);
         modelsList.setCellRenderer( new ListCellRenderer< Model>());
 
-        JScrollPane ModelsScrollPane = new JScrollPane( modelsList);
-        ModelsScrollPane.setMinimumSize( new Dimension( 150, 150));
-        ModelsScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        JScrollPane modelsScrollPane = new JScrollPane( modelsList);
+        modelsScrollPane.setMinimumSize( new Dimension( 150, 150));
+        modelsScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         createModelButton = createButton();
         upModelButton = upButton();
@@ -103,7 +103,7 @@ public class MainPanel extends hermesPanel
         (
             layout.createParallelGroup( GroupLayout.Alignment.LEADING)
             .addComponent( systemButton)
-            .addComponent( Separator)
+            .addComponent( separator)
             .addGroup
             (
                 layout.createSequentialGroup()
@@ -113,10 +113,10 @@ public class MainPanel extends hermesPanel
                     .addGroup
                     (
                         layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-                        .addComponent( TypesListLabel)
+                        .addComponent( typesListLabel)
                         .addComponent
                         (
-                            TypesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE,150, Integer.MAX_VALUE
+                            typesScrollPane, 150,150, Integer.MAX_VALUE
                         )
                         .addComponent( typeName)
                         .addGroup
@@ -132,10 +132,10 @@ public class MainPanel extends hermesPanel
                     .addGroup
                     (
                         layout.createParallelGroup( GroupLayout.Alignment.CENTER)
-                        .addComponent( ModelsListLabel)
+                        .addComponent( modelsListLabel)
                         .addComponent
                         (
-                            ModelsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 150, Integer.MAX_VALUE
+                            modelsScrollPane, 150, 150, Integer.MAX_VALUE
                         )
                         .addGroup
                         (
@@ -156,7 +156,7 @@ public class MainPanel extends hermesPanel
         (
             layout.createSequentialGroup()
             .addComponent( systemButton)
-            .addComponent( Separator)
+            .addComponent( separator)
             .addGroup
             (
                 layout.createParallelGroup( GroupLayout.Alignment.LEADING)
@@ -166,10 +166,10 @@ public class MainPanel extends hermesPanel
                     .addGroup
                     (
                         layout.createSequentialGroup()
-                        .addComponent( TypesListLabel)
+                        .addComponent( typesListLabel)
                         .addComponent
                         (
-                            TypesScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE,
+                            typesScrollPane, 150,
                                              javax.swing.GroupLayout.PREFERRED_SIZE,
                                              javax.swing.GroupLayout.PREFERRED_SIZE
                         )
@@ -192,8 +192,8 @@ public class MainPanel extends hermesPanel
                     .addGroup
                     (
                         layout.createSequentialGroup()
-                        .addComponent( ModelsListLabel)
-                        .addComponent( ModelsScrollPane)
+                        .addComponent( modelsListLabel)
+                        .addComponent( modelsScrollPane)
                         .addGroup
                         (
                             layout.createParallelGroup( GroupLayout.Alignment.LEADING)

@@ -81,6 +81,10 @@ public class ModelPanel extends hermesPanel
                 .addComponent( name)
                 .addComponent( typeLabel)
                 .addComponent( typeId)
+            )
+            .addGroup
+            (
+                layout.createSequentialGroup()
                 .addComponent( rfModelabel)
                 .addComponent( rfMode)
                 .addComponent( statusSourcesButton)
@@ -118,6 +122,10 @@ public class ModelPanel extends hermesPanel
                             javax.swing.GroupLayout.PREFERRED_SIZE,
                             javax.swing.GroupLayout.PREFERRED_SIZE
                 )
+            )
+			.addGroup
+			(
+                layout.createParallelGroup( GroupLayout.Alignment.CENTER)
 				.addComponent
 				(
                     rfModelabel, javax.swing.GroupLayout.PREFERRED_SIZE,

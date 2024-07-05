@@ -44,10 +44,7 @@ public class SerialConfigurationWriter
             throw new WriteException( "Failed to open connection with port " + portName + ".");
         }
 
-        configurationProgress.reset();
-        configurationProgress.setTypesMaximum( configuration.getTypes().getCount());
-        configurationProgress.setModelsMaximum( configuration.getModels().getCount());
-        configurationProgress.setSourcesMaximum( configuration.getSources().getCount());
+        setupConfigurationProgress( configuration);
 
         configurationProgress.addChangeListener( configurationListener);
 
@@ -67,6 +64,40 @@ public class SerialConfigurationWriter
 
             connection.close();
         }
+    }
+
+    private void setupConfigurationProgress( Configuration configuration)
+    {
+        configurationProgress.reset();
+
+        int maximumTypes = configuration.getSystem().getStorageTypes().getValue();
+
+        if( maximumTypes == 0)
+        {
+            maximumTypes = configuration.getTypes().getCount();
+        }
+
+        configurationProgress.setTypesMaximum( maximumTypes);
+
+
+        int maximumModels = configuration.getSystem().getStorageModels().getValue();
+
+        if( maximumModels == 0)
+        {
+            maximumModels = configuration.getModels().getCount();
+        }
+
+        configurationProgress.setModelsMaximum( maximumModels);
+
+
+        int maximumSources = configuration.getSystem().getStorageSources().getValue();
+
+        if( maximumSources == 0)
+        {
+            maximumSources = configuration.getSources().getCount();
+        }
+
+        configurationProgress.setSourcesMaximum( maximumSources);
     }
 
     private void configuration( Configuration configuration)
@@ -180,7 +211,7 @@ public class SerialConfigurationWriter
 
                 typeId++;
 
-                configurationProgress.setTypesCount( typeId - Model.TYPE_START);
+                configurationProgress.setTypesCount( typeId - Model.TYPE_START + 1);
             }
 
             fillTypes( typeId, Model.TYPE_START + total - 1);
@@ -196,7 +227,7 @@ public class SerialConfigurationWriter
 
             typeId++;
 
-            configurationProgress.setTypesCount( typeId - Model.TYPE_START);
+            configurationProgress.setTypesCount( typeId - Model.TYPE_START + 1);
         }
 
         return typeId;
@@ -234,7 +265,7 @@ public class SerialConfigurationWriter
 
                 modelId++;
 
-                configurationProgress.setModelsCount( modelId);
+                configurationProgress.setModelsCount( modelId + 1);
             }
 
             fillModels( modelId, total - 1);
@@ -250,7 +281,7 @@ public class SerialConfigurationWriter
 
             modelId++;
 
-            configurationProgress.setTypesCount( modelId);
+            configurationProgress.setModelsCount( modelId + 1);
         }
 
         return modelId;
@@ -295,7 +326,7 @@ public class SerialConfigurationWriter
 
                 sourceId++;
 
-                configurationProgress.setSourcesCount( sourceId);
+                configurationProgress.setSourcesCount( sourceId + 1);
             }
 
             fillSources( sourceId, total - 1);
@@ -311,7 +342,7 @@ public class SerialConfigurationWriter
 
             sourceId++;
 
-            configurationProgress.setSourcesCount( sourceId);
+            configurationProgress.setSourcesCount( sourceId + 1);
         }
 
         return sourceId;
