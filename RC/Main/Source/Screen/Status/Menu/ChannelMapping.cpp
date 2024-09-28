@@ -15,9 +15,10 @@
 
 Screen_Status_Menu_ChannelMapping::Screen_Status_Menu_ChannelMapping
 (
-    Input_Service* InputService, uint8_t PPMId
+    Input_Service* InputService, Signal_Service* SignalService, uint8_t PPMId
 )
     : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Three)
+    , signalService( SignalService)
     , ppmId( PPMId)
 {
 	GLOBAL.SetupService.GetPPM( ppmId, &ppmSetup);
@@ -44,7 +45,7 @@ void Screen_Status_Menu_ChannelMapping::updateChannelMapping( int8_t Value)
 
 		SetText(( Level)( menuLevel + 1), String);
 
-		GLOBAL.SignalService.GetPPM( ppmId)->SetChannelMapping( ChannelIndex, Value);
+		signalService->GetPPM( ppmId)->SetChannelMapping( ChannelIndex, Value);
 	}
 }
 

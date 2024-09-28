@@ -14,6 +14,8 @@
 class Screen_Setup_System_PPM : public Screen_Setup_BaseList
 {
   private:
+    Signal_Service* signalService;
+
     GUI_Setup_Select select;
 
     uint8_t ppmId;
@@ -55,6 +57,7 @@ class Screen_Setup_System_PPM : public Screen_Setup_BaseList
     (
         Input_Service* InputService,
         Interrupt_Service* InterruptService,
+        Signal_Service* signalService,
         Screen_Status_Status* StatusScreen,
         uint8_t PPMId
     );

@@ -15,6 +15,7 @@ class Screen_Setup_Main : public Screen_Setup_Base
 {
   private:
     Interrupt_Service* interruptService;
+    Signal_Service* signalService;
     Status_Battery* statusBattery;
 
   	virtual void display( void)
@@ -186,7 +187,7 @@ class Screen_Setup_Main : public Screen_Setup_Base
     {
         Screen_Setup_System SystemScreen
         (
-            inputService, interruptService, statusBattery, statusScreen
+            inputService, interruptService, signalService, statusBattery, statusScreen
         );
         SystemScreen.Run();
     }
@@ -196,11 +197,13 @@ class Screen_Setup_Main : public Screen_Setup_Base
     (
         Input_Service* InputService,
         Interrupt_Service* InterruptService,
+        Signal_Service* SignalService,
         Status_Battery* StatusBattery,
         Screen_Status_Status* StatusScreen
     )
         : Screen_Setup_Base( InputService, StatusScreen, 0b1100101110100101, Text::Main)
         , interruptService( InterruptService)
+        , signalService( SignalService)
         , statusBattery( StatusBattery)
     {
     }

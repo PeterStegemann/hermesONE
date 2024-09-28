@@ -155,8 +155,8 @@ void Signal_Processor::Process( void)
 	}
 
 	// If ppm services are not ready, we won't calculate new data.
-	if(( GLOBAL.SignalService.GetPPM( 0)->ReadyForData() == false) ||
-	   ( GLOBAL.SignalService.GetPPM( 1)->ReadyForData() == false))
+	if(( signalService->GetPPM( 0)->ReadyForData() == false) ||
+	   ( signalService->GetPPM( 1)->ReadyForData() == false))
 	{
 		// Give way for the next processing loop.
 		inProcessing = false;
@@ -213,24 +213,24 @@ void Signal_Processor::Process( void)
 		// Now set value.
 		if( isRFModuleActive( Setup_Service::RF_Module_0))
 		{
-			GLOBAL.SignalService.GetPPM( 0)->SetChannel( ChannelId, Value);
+			signalService->GetPPM( 0)->SetChannel( ChannelId, Value);
 		}
 
 		if( isRFModuleActive( Setup_Service::RF_Module_1))
 		{
-			GLOBAL.SignalService.GetPPM( 1)->SetChannel( ChannelId, Value);
+			signalService->GetPPM( 1)->SetChannel( ChannelId, Value);
 		}
 	}
 
 	// Activate new channels.
 	if( isRFModuleActive( Setup_Service::RF_Module_0))
 	{
-		GLOBAL.SignalService.GetPPM( 0)->SetChannelsValid();
+		signalService->GetPPM( 0)->SetChannelsValid();
 	}
 
 	if( isRFModuleActive( Setup_Service::RF_Module_1))
 	{
-		GLOBAL.SignalService.GetPPM( 1)->SetChannelsValid();
+		signalService->GetPPM( 1)->SetChannelsValid();
 	}
 
 	// Give way for the next processing loop.
@@ -242,8 +242,8 @@ void Signal_Processor::SetRFMode( Setup_Service::RFMode RFMode)
 	rfMode = RFMode;
 
 	// Activate the used rf module(s).
-    GLOBAL.SignalService.GetPPM( 0)->SetRFEnabled( isRFModuleActive( Setup_Service::RF_Module_0));
-    GLOBAL.SignalService.GetPPM( 1)->SetRFEnabled( isRFModuleActive( Setup_Service::RF_Module_1));
+    signalService->GetPPM( 0)->SetRFEnabled( isRFModuleActive( Setup_Service::RF_Module_0));
+    signalService->GetPPM( 1)->SetRFEnabled( isRFModuleActive( Setup_Service::RF_Module_1));
 }
 
 Signal_Calibration* Signal_Processor::GetCalibration( uint8_t CalibrationId)

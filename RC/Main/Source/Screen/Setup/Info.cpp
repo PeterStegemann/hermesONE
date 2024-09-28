@@ -99,7 +99,7 @@ void Screen_Setup_Info::update( void)
 	GLOBAL.SetupDisplay.PrintFormat( 10, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
 									 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_Green,
 									 LCD_65K_RGB::C_Black, LCD::PO_Proportional, "sync %ld ",
-									 GLOBAL.SignalService.GetPPM(0)->GetSync());
+									 signalService->GetPPM(0)->GetSync());
 
 	uint8_t ChannelId = 0;
 
@@ -108,7 +108,7 @@ void Screen_Setup_Info::update( void)
 		GLOBAL.SetupDisplay.PrintFormat( 10, frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
 										 SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_Green,
 										 LCD_65K_RGB::C_Black, LCD::PO_Proportional, "%d %d ",
-										 ChannelId, GLOBAL.SignalService.GetPPM(0)->GetChannel( ChannelId));
+										 ChannelId, signalService->GetPPM(0)->GetChannel( ChannelId));
 
 		ChannelId++;
 	}

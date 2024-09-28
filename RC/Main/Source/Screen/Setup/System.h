@@ -17,6 +17,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 {
   private:
     Interrupt_Service* interruptService;
+    Signal_Service* signalService;
     Status_Battery* statusBattery;
 
     GUI_Setup_CheckBox debugCheckBox;
@@ -205,7 +206,10 @@ class Screen_Setup_System : public Screen_Setup_Base
 
     void doPPM( uint8_t Id)
     {
-        Screen_Setup_System_PPM PPMScreen( inputService, interruptService, statusScreen, Id);
+        Screen_Setup_System_PPM PPMScreen
+        (
+            inputService, interruptService, signalService, statusScreen, Id
+        );
         PPMScreen.Run();
 
         ReDisplay();
@@ -262,11 +266,13 @@ class Screen_Setup_System : public Screen_Setup_Base
     (
         Input_Service* InputService,
         Interrupt_Service* InterruptService,
+        Signal_Service* SignalService,
         Status_Battery* StatusBattery,
         Screen_Status_Status* StatusScreen
     )
         : Screen_Setup_Base( InputService, StatusScreen, 0b1101001100110101, Text::System)
         , interruptService( InterruptService)
+        , signalService( SignalService)
         , statusBattery( StatusBattery)
     {
     }

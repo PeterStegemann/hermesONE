@@ -26,6 +26,7 @@ class Screen_Status_Menu_Main : public Screen_Status_Menu_Base
         MENU_COUNT
     };
 
+    Signal_Service* signalService;
     Status_Battery* statusBattery;
 
     // Return false if the screen should exit.
@@ -85,14 +86,14 @@ class Screen_Status_Menu_Main : public Screen_Status_Menu_Base
 
                     case MENU_PPM_0 :
                     {
-                        Screen_Status_Menu_PPM PPMScreen( inputService, 0);
+                        Screen_Status_Menu_PPM PPMScreen( inputService, signalService, 0);
                         PPMScreen.Run();
                     }
                     break;
 
                     case MENU_PPM_1 :
                     {
-                        Screen_Status_Menu_PPM PPMScreen( inputService, 1);
+                        Screen_Status_Menu_PPM PPMScreen( inputService, signalService, 1);
                         PPMScreen.Run();
                     }
                     break;
@@ -125,8 +126,12 @@ class Screen_Status_Menu_Main : public Screen_Status_Menu_Base
     }
 
   public:
-    Screen_Status_Menu_Main( Input_Service* InputService, Status_Battery* StatusBattery)
+    Screen_Status_Menu_Main
+    (
+        Input_Service* InputService, Signal_Service* SignalService, Status_Battery* StatusBattery
+    )
         : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_One)
+        , signalService( SignalService)
         , statusBattery( StatusBattery)
     {
     }

@@ -23,20 +23,21 @@ class Main_Base
 {
   private:
     uint16_t lastStoreModifiedTime;
-    bool debug;
 
   protected:
     Input_Service inputService;
     Interrupt_Service interruptService;
+    Signal_Service signalService;
     Status_Battery statusBattery;
     Status_Service statusService;
     Status_Time statusTime;
 
     Screen_Status_Status statusScreen;
 
+    bool debug;
+
   public:
     Setup_Service SetupService;
-    Signal_Service SignalService;
     Signal_Processor SignalProcessor;
 
     avr::SPI Spi;
@@ -49,13 +50,13 @@ class Main_Base
   public:
     Main_Base( void)
         : lastStoreModifiedTime( 0)
-        , debug( false)
         , inputService( &statusTime)
         , interruptService( &inputService, &SignalProcessor, &statusBattery, &statusService, &statusTime)
         , statusBattery( &SignalProcessor, &statusService)
-        , statusService( &SignalService)
+        , statusService( &signalService)
         , statusScreen( &inputService, &statusBattery, &statusTime, &StatusDisplay)
-        , SignalProcessor( &inputService, &statusService, &statusTime)
+        , debug( false)
+        , SignalProcessor( &inputService, &signalService, &statusService, &statusTime)
     {
     }
 
@@ -100,7 +101,7 @@ class Main_Base
         sei();
 
         // Run ppm engine.
-        SignalService.Start();
+        signalService.Start();
 
         //	StatusService.Beep();
 

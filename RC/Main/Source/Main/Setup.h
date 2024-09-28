@@ -16,6 +16,8 @@ class Main_Setup : public Main_Base
 	uint16_t setupBlankTime;
 	uint16_t statusBlankTime;
 
+    uint16_t lastSequence;
+
   public:
 	LCD_SerialOled< OLED_SERIAL_ID> SetupDisplay;
 
@@ -30,6 +32,8 @@ class Main_Setup : public Main_Base
 	void doSetupStatus( void);		
 	void doSetupMain( void);
 
+	void blank( void);
+
   public:
 	Main_Setup( void);
 	virtual ~Main_Setup( void);
@@ -41,6 +45,5 @@ class Main_Setup : public Main_Base
 	// Set new status blank time.
 	void SetStatusBlankTime( uint16_t StatusBlankTime);
 
-	// From Main_Base.
 	virtual void ClearScreens( void);
 };

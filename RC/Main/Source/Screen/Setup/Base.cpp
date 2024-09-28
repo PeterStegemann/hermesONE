@@ -23,7 +23,6 @@ Screen_Setup_Base::Screen_Setup_Base
      : Screen_Base( InputService, MenuPattern)
      , manageMenuMarker( ManageMenuMarker)
      , title( Title)
-     , lastSequence( 0)
      , statusScreen( StatusScreen)
      , frameLeft( 0)
      , frameTop( 0)
@@ -41,15 +40,6 @@ Screen_Setup_Base::~Screen_Setup_Base( void)
 {
 }
 
-extern unsigned int __data_start;
-extern unsigned int __data_end;
-extern unsigned int __bss_start;
-extern unsigned int __bss_end;
-extern unsigned int __noinit_start;
-extern unsigned int __noinit_end;
-extern unsigned int __heap_start;
-extern unsigned int __heap_end;
-
 void Screen_Setup_Base::update( void)
 {
 	statusScreen->Update();
@@ -58,65 +48,6 @@ void Screen_Setup_Base::update( void)
     {
         return;
     }
-
-	uint16_t Sequence = GLOBAL.SignalService.GetPPM( 0)->GetSequence();
-
-	if( Sequence != lastSequence)
-	{
-    	lastSequence = Sequence;
-
-    	uint16_t Left = frameLeft + frameWidth - 60;
-    	uint16_t Top = frameTop + 1;
-
-		GLOBAL.SetupDisplay.PrintFormat
-		(
-		    Left, Top, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-            "Stack: %04x", RAMEND - SP
-        );
-		GLOBAL.SetupDisplay.PrintFormat
-		(
-		    Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-            "Free:  %04x", SP - __data_start
-        );
-/*
-		GLOBAL.SetupDisplay.PrintFormat
-		(
-		    Left, Top, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-		    "data:   %04x %04x", __data_start, __data_end
-        );
-		GLOBAL.SetupDisplay.PrintFormat
-		(
-    		Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-            "bss:    %04x %04x", __bss_start, __bss_end
-        );
-		GLOBAL.SetupDisplay.PrintFormat
-		(
-    		Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-            "noinit: %04x %04x", __noinit_start, __noinit_end
-        );
-		GLOBAL.SetupDisplay.PrintFormat
-		(
-    		Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-            "heap:   %04x %04x", __heap_start, __heap_end
-        );
-		GLOBAL.SetupDisplay.PrintFormat
-		(
-		    Left, Top += 10, avr::font::FI_Mini, LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-            "RAMEND: %04x SP: %04x size: %04x", RAMEND, SP, RAMEND - SP
-        );
-*/
-/*
-		//  	uint8_t Diff = Sequence - lastSequence;
-        //		uint8_t Frames = 450 / Diff;
-
-        GLOBAL.SetupDisplay.PrintFormat( frameLeft + 250, frameTop + 1, avr::font::FI_Mini,
-										 LCD_65K_RGB::C_Red, LCD_65K_RGB::C_Black, LCD::PO_Fixed,
-										 "%u %d %d.%01d  ", Sequence,
-										 GLOBAL.SignalService.GetPPM( 0)->GetWaited(), Frames / 10,
-										 Frames % 10);
-*/
-		//		avr::Utility::PrintByteBits( &( GLOBAL.SetupDisplay), frameLeft + 250, frameTop + 10, "A: ", PINA);
-	}
 }
 
 void Screen_Setup_Base::staticUpdate( void* Object)

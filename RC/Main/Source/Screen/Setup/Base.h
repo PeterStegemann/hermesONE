@@ -21,8 +21,6 @@ class Screen_Setup_Base : public Screen_Base
     bool manageMenuMarker;
     const flash_char* title;
 
-    uint16_t lastSequence;
-
     // Draw this screens frame. This will also set the left and top value depending on the space the frame needs.
     void drawFrame( void);
 

@@ -19,6 +19,8 @@ class Screen_Status_Menu_PPM : public Screen_Status_Menu_Base
         MENU_COUNT
     };
 
+    Signal_Service* signalService;
+
     uint8_t ppmId;
     Setup_PPM ppmSetup;
 
@@ -77,7 +79,7 @@ class Screen_Status_Menu_PPM : public Screen_Status_Menu_Base
                         ppmSetup.Inverted = avr::Utility::Invert( ppmSetup.Inverted);
 
                         GLOBAL.SetupService.SetPPM( ppmId, &ppmSetup);
-                        GLOBAL.SignalService.GetPPM( ppmId)->SetInverted( ppmSetup.Inverted);
+                        signalService->GetPPM( ppmId)->SetInverted( ppmSetup.Inverted);
 
                         updateBoolean( ppmSetup.Inverted);
                     }
@@ -88,7 +90,7 @@ class Screen_Status_Menu_PPM : public Screen_Status_Menu_Base
     //					PPMInverted = UTILITY_Invert( PPMInverted);
 
     //					GLOBAL.SetupService.SetPPM( ppmId, &ppmSetup);
-    //					GLOBAL.SignalService.SetPPMInverted( PPMInverted);
+    //					signalService->SetPPMInverted( PPMInverted);
 
     //					updateBoolean( PPMInverted);
                     }
@@ -96,7 +98,10 @@ class Screen_Status_Menu_PPM : public Screen_Status_Menu_Base
 
                     case MENU_CHANNEL_MAPPING :
                     {
-                        Screen_Status_Menu_ChannelMapping ChannelMappingScreen( inputService, ppmId);
+                        Screen_Status_Menu_ChannelMapping ChannelMappingScreen
+                        (
+                            inputService, signalService, ppmId
+                        );
                         ChannelMappingScreen.Run();
 
                         GLOBAL.SetupService.GetPPM( ppmId, &ppmSetup);
@@ -122,8 +127,12 @@ class Screen_Status_Menu_PPM : public Screen_Status_Menu_Base
     }
 
   public:
-    Screen_Status_Menu_PPM( Input_Service* InputService, uint8_t PPMId)
+    Screen_Status_Menu_PPM
+    (
+        Input_Service* InputService, Signal_Service* SignalService, uint8_t PPMId
+    )
         : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Two)
+        , signalService( SignalService)
         , ppmId( PPMId)
     {
     	GLOBAL.SetupService.GetPPM( ppmId, &ppmSetup);

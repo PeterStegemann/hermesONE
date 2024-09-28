@@ -20,6 +20,7 @@ class Signal_Processor
 {
   private:
     Input_Service* inputService;
+    Signal_Service* signalService;
     Status_Service* statusService;
     Status_Time* statusTime;
 
@@ -49,39 +50,36 @@ class Signal_Processor
   public:
     Signal_Processor
     (
-        Input_Service* InputService, Status_Service* StatusService, Status_Time* StatusTime
+        Input_Service* InputService,
+        Signal_Service* SignalService,
+        Status_Service* StatusService,
+        Status_Time* StatusTime
     )
         : inputService( InputService)
+        , signalService( SignalService)
         , statusService( StatusService)
         , statusTime( StatusTime)
     {
     }
 
-    // Initialize processing.
     void Initialize( void);
 
-    // Load model data.
     void LoadModel( void);
 
-    // Store modified sources.
     void StoreModifiedSources( void);
 
     // This is for the interrupt, not for you.
     void Process( void);
 
-    // Set rf mode.
     void SetRFMode( Setup_Service::RFMode RFMode);
 
-    // Get calibration object.
     Signal_Calibration* GetCalibration( uint8_t CalibrationId);
 
-    // Get channel object.
     Signal_Channel* GetChannel( uint8_t ChannelId);
 
     // Find next free source slot in the signal memory. Returns false if all slots are used.
     bool FindNextEmptySource( uint8_t* SignalSourceId);
 
-    // Get source object.
     Signal_Source_Source* GetSource( uint8_t SignalSourceId);
 /*
 		// Calculate the value of a given source.
@@ -93,12 +91,9 @@ class Signal_Processor
 		// Calculate the value of a given channel.
 		int16_t CalculateChannelValue( uint8_t ChannelId);
 */
-    // Get the current value of a given channel.
     int16_t GetChannelValue( uint8_t ChannelId);
 
-    // Get a raw input value.
     int16_t GetRawAnalogValue( uint8_t InputId) const;
-    // Get a calibrated input value.
     int16_t GetCalibratedAnalogValue( uint8_t InputId) const;
 
     // Support stuff...

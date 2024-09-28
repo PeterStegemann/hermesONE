@@ -35,10 +35,12 @@ Screen_Setup_System_PPM::Screen_Setup_System_PPM
 (
     Input_Service* InputService,
     Interrupt_Service* InterruptService,
+    Signal_Service* SignalService,
     Screen_Status_Status* StatusScreen,
     uint8_t PPMId
 )
     : Screen_Setup_BaseList( InputService, StatusScreen, getTitle( PPMId))
+    , signalService( SignalService)
     , select( InputService, InterruptService)
     , ppmId( PPMId)
     , ppmNameInput( InputService, InterruptService)
@@ -155,7 +157,7 @@ void Screen_Setup_System_PPM::updateCenter( void)
 	// Display with a center of 1.5ms.
 	centerLabel.SetMillisecond( ppmSetup.Center + 15);
 
-	GLOBAL.SignalService.GetPPM( ppmId)->SetCenter( ppmSetup.Center);
+	signalService->GetPPM( ppmId)->SetCenter( ppmSetup.Center);
 }
 
 void Screen_Setup_System_PPM::updateCenter( void* Object, GUI_Setup_Label* Label, int8_t Value)
@@ -170,7 +172,7 @@ void Screen_Setup_System_PPM::updateSourceChannel( GUI_Setup_Label* Label, int8_
 
 	uint8_t ChannelIndex = ( currentMenuEntry - firstLine) - 4;
 
-	GLOBAL.SignalService.GetPPM( ppmId)->SetChannelMapping( ChannelIndex, Value);
+	signalService->GetPPM( ppmId)->SetChannelMapping( ChannelIndex, Value);
 }
 
 void Screen_Setup_System_PPM::updateSourceChannel( void* Object, GUI_Setup_Label* Label, int8_t Value)
@@ -262,7 +264,7 @@ void Screen_Setup_System_PPM::doInverted( void)
 	ppmSetup.Inverted = !ppmSetup.Inverted;
 
 	GLOBAL.SetupService.SetPPM( ppmId, &ppmSetup);
-	GLOBAL.SignalService.GetPPM( ppmId)->SetInverted( ppmSetup.Inverted);
+	signalService->GetPPM( ppmId)->SetInverted( ppmSetup.Inverted);
 
 	invertedCheckBox.Display( ppmSetup.Inverted);
 }
