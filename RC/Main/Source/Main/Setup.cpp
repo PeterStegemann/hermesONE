@@ -10,8 +10,6 @@
 #include "AVR/Source/Utility.h"
 
 Main_Setup::Main_Setup( void)
-          : setupBlankTime( SetupService.GetSetupBlankTime())
-		  , statusBlankTime( SetupService.GetStatusBlankTime())
 {
 }
 
@@ -21,6 +19,9 @@ Main_Setup::~Main_Setup( void)
 
 void Main_Setup::run( void)
 {
+    setupBlankTime = SetupService.GetSetupBlankTime();
+	statusBlankTime = SetupService.GetStatusBlankTime();
+
   	// Set up setup lcd and check if it's there.
     hasSetupDisplay = SetupDisplay.Initialize( 5);
 

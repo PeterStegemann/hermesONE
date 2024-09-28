@@ -51,16 +51,15 @@ class Status_Battery
     }
 
   public:
-    Status_Battery
-    (
-        Signal_Processor* SignalProcessor,
-        Setup_Service* SetupService,
-        Status_Service* StatusService
-    )
+    Status_Battery( Signal_Processor* SignalProcessor, Status_Service* StatusService)
         : signalProcessor( SignalProcessor)
         , statusService( StatusService)
         // Initialize this with a pause to avoid false alarms on startup.
         , warnCount( BATTERY_WARN_LOW_PAUSE)
+    {
+    }
+
+    void Initialize( Setup_Service* SetupService)
     {
     	SetupService->GetBattery( &batterySetup);
 

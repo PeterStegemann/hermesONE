@@ -5,7 +5,6 @@
 #include "Screen/Status/Menu/Main.h"
 
 Main_Status::Main_Status( void)
-		   : statusBlankTime( SetupService.GetStatusBlankTime())
 {
 }
 
@@ -15,6 +14,8 @@ Main_Status::~Main_Status( void)
 
 void Main_Status::run( void)
 {
+    statusBlankTime = SetupService.GetStatusBlankTime();
+
 	// Loop between status and menu forever.
 	while( true)
 	{

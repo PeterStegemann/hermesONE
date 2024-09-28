@@ -48,6 +48,8 @@ class Setup_Service
   public:
     Setup_Service( void);
 
+    void Initialize( void);
+
     void SetOwner( const char* Owner);
     // Supply the size of the target buffer, including room for termination.
     char* GetOwner( char* Owner, uint8_t Size);

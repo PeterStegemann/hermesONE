@@ -25,15 +25,15 @@
 #define SPI_DDR                                     DDRB
 
 #define SPI_SS                                      PB0
-#define SPI_CLOCK                                   PB1                    // Clock
-#define SPI_DATA_OUTPUT                             PB2                    // Send Data
-#define SPI_RESET                                   PB3                    // Reset SPI devices
-#define SPI_DC                                      PB0                    // Data/Command
+#define SPI_CLOCK                                   PB1                     // Clock
+#define SPI_DATA_OUTPUT                             PB2                     // Send Data
+#define SPI_RESET                                   PB3                     // Reset SPI devices
+#define SPI_DC                                      PB0                     // Data/Command
 
-#define SPI_0_SELECT                                LCD_DOG_SELECT        // Cable Select
+#define SPI_0_SELECT                                LCD_DOG_SELECT          // Cable Select
 
 // LCD DOG
-#define LCD_DOG_SPI_ID                              0                    // SPI Select
+#define LCD_DOG_SPI_ID                              0                       // SPI Select
 
 #define LCD_DOG_TIMERA                              TCCR1A
 #define LCD_DOG_TIMERB                              TCCR1B
@@ -41,8 +41,8 @@
 #define LCD_DOG_PORT                                PORTB
 #define LCD_DOG_DDR                                 DDRB
 
-#define LCD_DOG_SELECT                              PB4                    // Cable Select
-#define LCD_DOG_LIGHT                               PB5                    // Light on/off
+#define LCD_DOG_SELECT                              PB4                     // Cable Select
+#define LCD_DOG_LIGHT                               PB5                     // Light on/off
 
 // Beep
 #define BUZZER_PORT                                 PORTD

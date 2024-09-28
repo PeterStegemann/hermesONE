@@ -49,7 +49,7 @@ class Main_Base
     Main_Base( void)
         : lastStoreModifiedTime( 0)
         , debug( false)
-        , StatusBattery( &SignalProcessor, &SetupService, &StatusService)
+        , StatusBattery( &SignalProcessor, &StatusService)
         , StatusService( &SignalService)
         , StatusScreen( &StatusDisplay)
     {
@@ -68,16 +68,19 @@ class Main_Base
         // Wait some time for the controller and other components to stabilize.
     	avr::Utility::Pause( 100);
 
+        // Setup goes first.
+        SetupService.Initialize();
+
     	// Get debug state.
 //    	debug = SetupService.GetDebug();
 
-        // Initialize status.
         StatusService.Initialize();
 
-        // Initialize input.
         InputService.Initialize();
 
-        // Init SPI.
+        StatusBattery.Initialize( &SetupService);
+
+        // Spi needs to go before displays that might need spi.
         Spi.Initialize();
 
         // Set up head lcd.

@@ -70,6 +70,10 @@ Setup_Service::Setup_Service( void)
 	}
 }
 
+void Setup_Service::Initialize( void)
+{
+}
+
 void Setup_Service::writeString( const char* String, void* EepromString, uint8_t EepromSize)
 {
 	// Measure size of string including termination.
