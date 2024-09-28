@@ -5,13 +5,17 @@
 #include "Ports.h"
 #include "Rotary.h"
 
+#include "Status/Time.h"
+
 #include "AVR/Source/Types.h"
 
-#include <stdio.h>
+//#include <stdio.h>
 
 class Input_Service
 {
   private:
+    Status_Time* statusTime;
+
 	volatile uint8_t digitalInput[ ( INPUT_DIGITAL_PORTS - 1) / 8 + 1];
 
 	Input_Rotary rotary;
@@ -24,7 +28,11 @@ class Input_Service
 	uint16_t lastActivityUptime;
 
   public:
-	// Initialize.
+    Input_Service( Status_Time* StatusTime)
+        : statusTime( StatusTime)
+    {
+    }
+
 	void Initialize( void);
 
 	// This is for the interrupt, not for you.

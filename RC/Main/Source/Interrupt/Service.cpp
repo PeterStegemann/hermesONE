@@ -41,7 +41,7 @@ void Interrupt_Service::Process( void)
 	{
 		timeMillis = 0;
 
-		GLOBAL.StatusTime.Process();
+		statusTime->Process();
 	}
 	else
 	{
@@ -55,7 +55,7 @@ void Interrupt_Service::Process( void)
 	// Dezisecond?
 	if(( timeMillis % 100) == 0)
 	{
-		GLOBAL.StatusBattery.Process();
+		statusBattery->Process();
 	}
 }
 

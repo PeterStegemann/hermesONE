@@ -11,6 +11,8 @@
 #include "Timer.h"
 #include "Trimmer.h"
 
+#include "Status/Time.h"
+
 #include "AVR/Source/Types.h"
 
 union Signal_Source_Union
@@ -83,7 +85,10 @@ class Signal_Source_Source
 
 		// Be aware that to connect sources, they all of them have to be loaded by the signal
 		// processor.
-		void Initialize( Input_Service* InputService);
+		void Initialize
+		(
+		    Input_Service* InputService, Status_Service* StatusService, Status_Time* StatusTime
+        );
 		void Reset( Type SourceType, uint16_t SetupSourceId, uint8_t ModelId);
 
 		// Load setup for this source.

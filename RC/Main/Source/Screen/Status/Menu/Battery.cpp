@@ -17,11 +17,15 @@
 #define MENU_CALIBRATION_VOLTAGE		5
 #define MENU_COUNT						6
 
-Screen_Status_Menu_Battery::Screen_Status_Menu_Battery( Input_Service* InputService)
-						  : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Three)
+Screen_Status_Menu_Battery::Screen_Status_Menu_Battery
+(
+    Input_Service* InputService, Status_Battery* StatusBattery
+)
+    : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Three)
+    , statusBattery( StatusBattery)
 {
-    batterySetup = GLOBAL.StatusBattery.GetBatterySetup();
-	voltage = GLOBAL.StatusBattery.GetVoltage();
+    batterySetup = StatusBattery->GetBatterySetup();
+	voltage = StatusBattery->GetVoltage();
 }
 
 Screen_Status_Menu_Battery::~Screen_Status_Menu_Battery( void)
@@ -49,7 +53,7 @@ void Screen_Status_Menu_Battery::updateVoltage( void* Object, int8_t Value)
 
 void Screen_Status_Menu_Battery::updateCalibrationVoltage( int8_t Value)
 {
-    GLOBAL.StatusBattery.UpdateCalibrationValue( Value);
+    statusBattery->UpdateCalibrationValue( Value);
 
 	updateVoltage( Value);
 }

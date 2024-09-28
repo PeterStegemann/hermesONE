@@ -10,6 +10,8 @@
 #include "GUI/Status/TimeLabel.h"
 #include "GUI/Status/VoltageLabel.h"
 #include "Setup/Defines.h"
+#include "Status/Battery.h"
+#include "Status/Time.h"
 
 #include "AVR/Source/LCD/DOG/DOG.h"
 #include "AVR/Source/Types.h"
@@ -17,6 +19,8 @@
 class Screen_Status_Status : public Screen_Base
 {
   private:
+    Status_Battery* statusBattery;
+    Status_Time* statusTime;
     LCD_DOG* statusDisplay;
 
     char modelName[ SETUP_MODEL_NAME_SIZE + 1];
@@ -58,8 +62,16 @@ class Screen_Status_Status : public Screen_Base
     virtual void update( void);
 
   public:
-    Screen_Status_Status( Input_Service* InputService, LCD_DOG* StatusDisplay)
+    Screen_Status_Status
+    (
+        Input_Service* InputService,
+        Status_Battery* StatusBattery,
+        Status_Time* StatusTime,
+        LCD_DOG* StatusDisplay
+    )
         : Screen_Base( InputService)
+        , statusBattery( StatusBattery)
+        , statusTime( StatusTime)
         , statusDisplay( StatusDisplay)
         , modelNameLabel( StatusDisplay)
         , typeNameLabel( StatusDisplay)

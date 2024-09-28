@@ -3,33 +3,38 @@
 #pragma once
 
 #include "Setup/Source/Timer.h"
+#include "Status/Service.h"
+#include "Status/Time.h"
 
 class Signal_Processor;
 
 class Signal_Source_Timer
 {
-	private:
-		volatile int16_t time;
+  private:
+    Status_Service* statusService;
+    Status_Time* statusTime;
 
-		// Signals whether the setup of this source was modified since the last time it was stored
-		// or loaded.
-		bool modified;
+    volatile int16_t time;
 
-		int16_t lastUptime;
-		int16_t lastWarnTime;
+    // Signals whether the setup of this source was modified since the last time it was stored
+    // or loaded.
+    bool modified;
 
-	public:
-		Setup_Source_Timer Setup;
+    int16_t lastUptime;
+    int16_t lastWarnTime;
 
-		uint8_t TriggerSignalSourceId;
+  public:
+    Setup_Source_Timer Setup;
 
-		void Initialize( void);
-		void Reset( void);
-		void LoadSetup( uint16_t SetupSourceId);
-		void StoreIfModified( uint16_t SetupSourceId);
+    uint8_t TriggerSignalSourceId;
 
-		int16_t CalculateValue( Signal_Processor* SignalProcessor);
+    void Initialize( Status_Service* StatusService, Status_Time* StatusTime);
+    void Reset( void);
+    void LoadSetup( uint16_t SetupSourceId);
+    void StoreIfModified( uint16_t SetupSourceId);
 
-		int16_t GetTime( void);
-		void ResetTime( void);
+    int16_t CalculateValue( Signal_Processor* SignalProcessor);
+
+    int16_t GetTime( void);
+    void ResetTime( void);
 };

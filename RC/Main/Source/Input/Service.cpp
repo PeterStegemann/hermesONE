@@ -35,7 +35,7 @@ void Input_Service::Initialize( void)
 
 	rotary.Initialize( LowInput, HighInput);
 
-	lastActivityUptime = GLOBAL.StatusTime.GetUptime();
+	lastActivityUptime = statusTime->GetUptime();
 
 	// All used pins to input and set internal pull up resistors.
 	#if defined( INPUT_DIGITAL_H_I_DDR)
@@ -87,8 +87,10 @@ uint8_t Processor::GetKeys( uint8_t* Changed)
 	return( NewKeys);
 }
 */
-void Input_Service::GetRotary( int8_t* Select, uint8_t* Button, bool* CurrentButton,
-							   uint16_t* ButtonTime)
+void Input_Service::GetRotary
+(
+    int8_t* Select, uint8_t* Button, bool* CurrentButton, uint16_t* ButtonTime
+)
 {
 	if( Select != NULL)
 	{
@@ -169,7 +171,7 @@ void Input_Service::Process( void)
 
 		if( RotaryButtonPressed == false)
 		{
-			// React on button beeing released;
+			// React on button being released;
 			rotaryButton++;
 		}
 		else
@@ -200,6 +202,6 @@ void Input_Service::Process( void)
 	if( HasUserActivity == true)
 	{
 		// Update activity uptime.
-		lastActivityUptime = GLOBAL.StatusTime.GetUptime();
+		lastActivityUptime = statusTime->GetUptime();
 	}
 }

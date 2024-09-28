@@ -14,9 +14,13 @@
 Screen_Setup_Status::Screen_Setup_Status
 (
     Input_Service* InputService,
+    Status_Battery* StatusBattery,
+    Status_Time* StatusTime,
     Screen_Status_Status* StatusScreen
 )
     : Screen_Setup_Base( InputService, StatusScreen, 0b1, Text::Status, false)
+    , statusBattery( StatusBattery)
+    , statusTime( StatusTime)
 {
 	statusGauge[ SETUP_STATUS_SOURCE_LEFT_SIDE].SetOptions
 	(
@@ -234,13 +238,13 @@ void Screen_Setup_Status::update( void)
 	}
 
 	// Battery
-	batteryLabel.SetVoltage( GLOBAL.StatusBattery.GetVoltage());
+	batteryLabel.SetVoltage( statusBattery->GetVoltage());
 
 	batteryGauge.Display
 	(
-        GLOBAL.StatusBattery.GetBatterySetup()->MinimumVoltage,
-        GLOBAL.StatusBattery.GetBatterySetup()->MaximumVoltage,
-        GLOBAL.StatusBattery.GetVoltage()
+        statusBattery->GetBatterySetup()->MinimumVoltage,
+        statusBattery->GetBatterySetup()->MaximumVoltage,
+        statusBattery->GetVoltage()
     );
 
 	// Timer
@@ -254,7 +258,7 @@ void Screen_Setup_Status::update( void)
 		{
 			if( SystemTimeShown == false)
 			{
-				timerLabel[ TimerId].SetTime( GLOBAL.StatusTime.GetUptime());
+				timerLabel[ TimerId].SetTime( statusTime->GetUptime());
 
 				SystemTimeShown = true;
 			}

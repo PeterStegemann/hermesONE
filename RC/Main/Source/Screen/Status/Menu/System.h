@@ -21,6 +21,8 @@ class Screen_Status_Menu_System : public Screen_Status_Menu_Base
         MENU_COUNT
     };
 
+    Status_Battery* statusBattery;
+
     // Return false if the screen should exit.
     virtual bool processMenu( DoMenuResult Result)
     {
@@ -103,7 +105,7 @@ class Screen_Status_Menu_System : public Screen_Status_Menu_Base
 
                     case MENU_BATTERY :
                     {
-                        Screen_Status_Menu_Battery BatteryScreen( inputService);
+                        Screen_Status_Menu_Battery BatteryScreen( inputService, statusBattery);
                         BatteryScreen.Run();
 
                         clearSubMenuLine();
@@ -138,8 +140,9 @@ class Screen_Status_Menu_System : public Screen_Status_Menu_Base
     }
 
   public:
-    Screen_Status_Menu_System( Input_Service* InputService)
+    Screen_Status_Menu_System( Input_Service* InputService, Status_Battery* StatusBattery)
         : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Two)
+        , statusBattery( StatusBattery)
     {
     }
 

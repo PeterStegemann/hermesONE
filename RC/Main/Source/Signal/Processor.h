@@ -20,6 +20,8 @@ class Signal_Processor
 {
   private:
     Input_Service* inputService;
+    Status_Service* statusService;
+    Status_Time* statusTime;
 
     // This signals the process routine that it is already running. It's used for overrun protection.
     volatile bool inProcessing;
@@ -45,8 +47,13 @@ class Signal_Processor
     bool isRFModuleActive( Setup_Service::RFMode RFMode);
 
   public:
-    Signal_Processor( Input_Service* InputService)
+    Signal_Processor
+    (
+        Input_Service* InputService, Status_Service* StatusService, Status_Time* StatusTime
+    )
         : inputService( InputService)
+        , statusService( StatusService)
+        , statusTime( StatusTime)
     {
     }
 

@@ -51,8 +51,8 @@ void Screen_Status_Status::display( void)
 
 	batteryGauge.Display
 	(
-	    GLOBAL.StatusBattery.GetBatterySetup()->MinimumVoltage,
-	    GLOBAL.StatusBattery.GetBatterySetup()->MaximumVoltage,
+	    statusBattery->GetBatterySetup()->MinimumVoltage,
+	    statusBattery->GetBatterySetup()->MaximumVoltage,
 	    0
     );
 
@@ -75,7 +75,7 @@ void Screen_Status_Status::update( void)
 	displayGauge( &leftBottomStatusGauge, SETUP_STATUS_SOURCE_LEFT_BOTTOM);
 	displayGauge( &rightBottomStatusGauge, SETUP_STATUS_SOURCE_RIGHT_BOTTOM);
 
-	uint8_t Voltage = GLOBAL.StatusBattery.GetVoltage();
+	uint8_t Voltage = statusBattery->GetVoltage();
 
 	batteryGauge.Display( Voltage);
 	batteryLabel.SetVoltage( Voltage);
@@ -84,7 +84,7 @@ void Screen_Status_Status::update( void)
 
 	if( SetupSourceId == SETUP_SOURCE_NONE)
 	{
-		timeLabel.SetTime( GLOBAL.StatusTime.GetUptime());
+		timeLabel.SetTime( statusTime->GetUptime());
 	}
 	else
 	{

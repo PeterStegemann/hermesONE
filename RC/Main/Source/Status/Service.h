@@ -23,7 +23,7 @@
 class Status_Service
 {
   private:
-      Signal_Service* signalService;
+    Signal_Service* signalService;
 
     // Blink count.
     uint16_t blinkCount;
@@ -44,7 +44,6 @@ class Status_Service
     {
     }
 
-    // Initialize status engine.
     void Initialize( void)
     {
     	UTILITY_SetBit( STATUS_SERVICE_DDR, STATUS_SERVICE_GREEN);

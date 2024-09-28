@@ -17,9 +17,10 @@
 #define BUZZ_TICK_PAUSE			0
 #define BUZZ_TICK_REPEAT		1
 
-void Signal_Source_Input::Initialize( Input_Service* InputService)
+void Signal_Source_Input::Initialize( Input_Service* InputService, Status_Service* StatusService)
 {
     inputService = InputService;
+    statusService = StatusService;
 
 	value = Setup.InitVolume;
 	lastLowInput = inputService->GetDigitalInput( Setup.InputIdA);
@@ -187,15 +188,13 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 				{
 					NewValue = BottomLimit;
 
-					GLOBAL.StatusService.Buzz( BUZZ_LIMIT_LENGTH, BUZZ_LIMIT_PAUSE,
-											   BUZZ_LIMIT_REPEAT);
+					statusService->Buzz( BUZZ_LIMIT_LENGTH, BUZZ_LIMIT_PAUSE, BUZZ_LIMIT_REPEAT);
 				}
 				else if( NewValue > TopLimit)
 				{
 					NewValue = TopLimit;
 
-					GLOBAL.StatusService.Buzz( BUZZ_LIMIT_LENGTH, BUZZ_LIMIT_PAUSE,
-											   BUZZ_LIMIT_REPEAT);
+					statusService->Buzz( BUZZ_LIMIT_LENGTH, BUZZ_LIMIT_PAUSE, BUZZ_LIMIT_REPEAT);
 				}
 				else
 				{
@@ -217,13 +216,12 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 
 					if( NewValue == 0)
 					{				
-						GLOBAL.StatusService.Buzz( BUZZ_CENTER_LENGTH, BUZZ_CENTER_PAUSE,
-												   BUZZ_CENTER_REPEAT);
+						statusService->Buzz( BUZZ_CENTER_LENGTH, BUZZ_CENTER_PAUSE,
+                                             BUZZ_CENTER_REPEAT);
 					}
 					else
 					{
-						GLOBAL.StatusService.Buzz( BUZZ_TICK_LENGTH, BUZZ_TICK_PAUSE,
-												   BUZZ_TICK_REPEAT);
+						statusService->Buzz( BUZZ_TICK_LENGTH, BUZZ_TICK_PAUSE, BUZZ_TICK_REPEAT);
 					}
 				}
 
@@ -244,9 +242,11 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 		case Setup_Source_Input::IT_Rotary :
 		{
 			int8_t Difference =
-				rotary.CalculateDifference(
+				rotary.CalculateDifference
+				(
 					inputService->GetDigitalInput( Setup.InputIdA),
-					inputService->GetDigitalInput( Setup.InputIdB));
+					inputService->GetDigitalInput( Setup.InputIdB)
+                );
 			
 			if( Difference != 0)
 			{
@@ -268,15 +268,13 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 				{
 					NewValue = Setup.BottomVolume;
 
-					GLOBAL.StatusService.Buzz( BUZZ_LIMIT_LENGTH, BUZZ_LIMIT_PAUSE,
-											   BUZZ_LIMIT_REPEAT);
+					statusService->Buzz( BUZZ_LIMIT_LENGTH, BUZZ_LIMIT_PAUSE, BUZZ_LIMIT_REPEAT);
 				}
 				else if( NewValue > Setup.TopVolume)
 				{
 					NewValue = Setup.TopVolume;
 
-					GLOBAL.StatusService.Buzz( BUZZ_LIMIT_LENGTH, BUZZ_LIMIT_PAUSE,
-											   BUZZ_LIMIT_REPEAT);
+					statusService->Buzz( BUZZ_LIMIT_LENGTH, BUZZ_LIMIT_PAUSE, BUZZ_LIMIT_REPEAT);
 				}
 				else
 				{
@@ -298,13 +296,12 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 
 					if( NewValue == 0)
 					{				
-						GLOBAL.StatusService.Buzz( BUZZ_CENTER_LENGTH, BUZZ_CENTER_PAUSE,
-												   BUZZ_CENTER_REPEAT);
+						statusService->Buzz( BUZZ_CENTER_LENGTH, BUZZ_CENTER_PAUSE,
+                                             BUZZ_CENTER_REPEAT);
 					}
 					else
 					{
-						GLOBAL.StatusService.Buzz( BUZZ_TICK_LENGTH, BUZZ_TICK_PAUSE,
-												   BUZZ_TICK_REPEAT);
+						statusService->Buzz( BUZZ_TICK_LENGTH, BUZZ_TICK_PAUSE, BUZZ_TICK_REPEAT);
 					}
 				}
 
@@ -326,21 +323,21 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 				{
 					NewValue = SIGNAL_MINIMUM_VALUE;
 
-					GLOBAL.StatusService.Beep();
+					statusService->Beep();
 				}
 				else if( NewValue > SIGNAL_MAXIMUM_VALUE)
 				{
 					NewValue = SIGNAL_MAXIMUM_VALUE;
 
-					GLOBAL.StatusService.Beep();
+					statusService->Beep();
 				}
 				else if( NewValue == 0)
 				{				
-					GLOBAL.StatusService.Beep();
+					statusService->Beep();
 				}
 				else
 				{
-					GLOBAL.StatusService.Tick();
+					statusService->Tick();
 				}
 
 				value = NewValue;

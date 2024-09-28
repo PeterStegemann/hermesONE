@@ -5,26 +5,29 @@
 #include "Base.h"
 
 #include "Setup/Battery.h"
+#include "Status/Battery.h"
 
 class Screen_Status_Menu_Battery : public Screen_Status_Menu_Base
 {
-	private:
-		Setup_Battery* batterySetup;
-		uint8_t voltage;
+  private:
+    Setup_Battery* batterySetup;
+    Status_Battery* statusBattery;
 
-		void updateVoltage( int8_t Value);
-		static void updateVoltage( void* Object, int8_t Value);
-		void updateCalibrationVoltage( int8_t Value);
-		static void updateCalibrationVoltage( void* Object, int8_t Value);
+    uint8_t voltage;
 
-		// Return false if the screen should exit.
-		virtual bool processMenu( DoMenuResult Result);
+    void updateVoltage( int8_t Value);
+    static void updateVoltage( void* Object, int8_t Value);
+    void updateCalibrationVoltage( int8_t Value);
+    static void updateCalibrationVoltage( void* Object, int8_t Value);
 
-	protected:
-		// Initial display.
-		virtual void display( void);
+    // Return false if the screen should exit.
+    virtual bool processMenu( DoMenuResult Result);
 
-	public:
-		Screen_Status_Menu_Battery( Input_Service* InputService);
-		virtual ~Screen_Status_Menu_Battery( void);
+  protected:
+    // Initial display.
+    virtual void display( void);
+
+  public:
+    Screen_Status_Menu_Battery( Input_Service* InputService, Status_Battery* StatusBattery);
+    virtual ~Screen_Status_Menu_Battery( void);
 };

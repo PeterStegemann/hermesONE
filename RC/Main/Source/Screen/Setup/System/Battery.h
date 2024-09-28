@@ -11,6 +11,7 @@
 class Screen_Setup_System_Battery : public Screen_Setup_Base
 {
   private:
+    Status_Battery* statusBattery;
     Setup_Battery* batterySetup;
 
     GUI_Setup_Select select;
@@ -124,14 +125,14 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
     {
         Screen_Setup_Base::update();
 
-        voltage = GLOBAL.StatusBattery.GetVoltage();
+        voltage = statusBattery->GetVoltage();
 
     	calibrationVoltageLabel.SetVoltage( voltage);
         batteryGauge.Display( batterySetup->MinimumVoltage, batterySetup->MaximumVoltage, voltage);
 /*
         // RawVoltage == Value
         uint8_t CalibrationValue = batterySetup->CalibrationValue;
-        uint16_t RawVoltage = GLOBAL.StatusBattery.GetRawVoltage();
+        uint16_t RawVoltage = statusBattery->GetRawVoltage();
 
         GLOBAL.SetupDisplay.PrintFormat
         (
@@ -233,9 +234,17 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 
     static void updateCalibrationValue( void* Object, GUI_Setup_Label* Label, int8_t Value)
     {
-        (( GUI_Setup_VoltageLabel*) Label)->SetVoltage(( uint8_t) Value);
+        (( Screen_Setup_System_Battery*) Object)->updateCalibrationValue
+        (
+            ( GUI_Setup_VoltageLabel* ) Label, ( uint8_t) Value
+        );
+    }
 
-        GLOBAL.StatusBattery.UpdateCalibrationValue( Value);
+    void updateCalibrationValue( GUI_Setup_VoltageLabel* Label, uint8_t Value)
+    {
+        Label->SetVoltage( Value);
+
+        statusBattery->UpdateCalibrationValue( Value);
     }
 
   public:
@@ -243,12 +252,14 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
     (
         Input_Service* InputService,
         Interrupt_Service* InterruptService,
+        Status_Battery* StatusBattery,
         Screen_Status_Status* StatusScreen
     )
         : Screen_Setup_Base( InputService, StatusScreen, 0b10110011001, Text::Battery)
+        , statusBattery( StatusBattery)
         , select( InputService, InterruptService)
     {
-        batterySetup = GLOBAL.StatusBattery.GetBatterySetup();
-        voltage = GLOBAL.StatusBattery.GetVoltage();
+        batterySetup = statusBattery->GetBatterySetup();
+        voltage = statusBattery->GetVoltage();
     }
 };

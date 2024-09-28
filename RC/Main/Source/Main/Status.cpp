@@ -41,7 +41,7 @@ void Main_Status::Update( void)
 	
 	if( statusBlankTime != 0)
 	{
-		uint16_t CurrentUptime = GLOBAL.StatusTime.GetUptime();
+		uint16_t CurrentUptime = statusTime.GetUptime();
 		uint16_t LastActivityUptime = inputService->GetLastActivityUptime();
 
 		// Blank status screen if the user sleeps.

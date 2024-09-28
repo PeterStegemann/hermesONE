@@ -28,15 +28,16 @@ class Main_Base
   protected:
     Input_Service inputService;
     Interrupt_Service interruptService;
+    Status_Battery statusBattery;
+    Status_Service statusService;
+    Status_Time statusTime;
+
     Screen_Status_Status statusScreen;
 
   public:
     Setup_Service SetupService;
     Signal_Service SignalService;
     Signal_Processor SignalProcessor;
-    Status_Battery StatusBattery;
-    Status_Service StatusService;
-    Status_Time StatusTime;
 
     avr::SPI Spi;
 
@@ -49,11 +50,12 @@ class Main_Base
     Main_Base( void)
         : lastStoreModifiedTime( 0)
         , debug( false)
-        , interruptService( &inputService, &SignalProcessor, &StatusService)
-        , statusScreen( &inputService, &StatusDisplay)
-        , SignalProcessor( &inputService)
-        , StatusBattery( &SignalProcessor, &StatusService)
-        , StatusService( &SignalService)
+        , inputService( &statusTime)
+        , interruptService( &inputService, &SignalProcessor, &statusBattery, &statusService, &statusTime)
+        , statusBattery( &SignalProcessor, &statusService)
+        , statusService( &SignalService)
+        , statusScreen( &inputService, &statusBattery, &statusTime, &StatusDisplay)
+        , SignalProcessor( &inputService, &statusService, &statusTime)
     {
     }
 
@@ -76,11 +78,11 @@ class Main_Base
     	// Get debug state.
 //    	debug = SetupService.GetDebug();
 
-        StatusService.Initialize();
+        statusService.Initialize();
 
         inputService.Initialize();
 
-        StatusBattery.Initialize( &SetupService);
+        statusBattery.Initialize( &SetupService);
 
         // Spi needs to go before displays that might need spi.
         Spi.Initialize();
@@ -105,8 +107,8 @@ class Main_Base
         // Initialize processing.
         SignalProcessor.Initialize();
 
-        // Run timer.
-        StatusTime.Initialize();
+        // Initialize timer.
+        statusTime.Initialize();
 
         // Run interrupt service last.
         interruptService.Start();
@@ -120,7 +122,7 @@ class Main_Base
     // Called by the screens in regular intervals.
     virtual void Update( void)
     {
-    	uint16_t Uptime = StatusTime.GetUptime();
+    	uint16_t Uptime = statusTime.GetUptime();
 
     	// Store modified sources on a regular basis.
 	    if(( Uptime - lastStoreModifiedTime) >= SYSTEM_STORE_MODIFIED_DELAY)

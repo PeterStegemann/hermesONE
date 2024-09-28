@@ -54,7 +54,7 @@ void Main_Setup::doStatusStatus( void)
 
 void Main_Setup::doStatusMain( void)
 {
-	Screen_Status_Menu_Main MainScreen( &inputService);
+	Screen_Status_Menu_Main MainScreen( &inputService, &statusBattery);
 	MainScreen.Run();
 }
 
@@ -76,13 +76,16 @@ void Main_Setup::runOnSetupDisplay( void)
 
 void Main_Setup::doSetupStatus( void)
 {
-	Screen_Setup_Status SetupStatusScreen( &inputService, &statusScreen);
+	Screen_Setup_Status SetupStatusScreen( &inputService, &statusBattery, &statusTime, &statusScreen);
 	SetupStatusScreen.Run();
 }
 
 void Main_Setup::doSetupMain( void)
 {
-	Screen_Setup_Main SetupMainScreen( &inputService, &interruptService, &statusScreen);
+	Screen_Setup_Main SetupMainScreen
+	(
+	    &inputService, &interruptService, &statusBattery, &statusScreen
+    );
 	SetupMainScreen.Run();
 }
 
@@ -95,7 +98,7 @@ void Main_Setup::Update( void)
 	    return;
 	}
 
-    uint16_t CurrentUptime = GLOBAL.StatusTime.GetUptime();
+    uint16_t CurrentUptime = statusTime.GetUptime();
     uint16_t LastActivityUptime = inputService.GetLastActivityUptime();
 
     if( hasSetupDisplay == true)

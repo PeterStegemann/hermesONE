@@ -30,7 +30,10 @@ void Signal_Processor::Initialize( void)
 	INPUT_ANALOG_A_D_PORT = 0x00;
 
 	// Activate ADC with pre-scaler 128 --> 14Mhz/128 = 115.2kHz
-	ADCSRA = UTILITY_BitValue( ADEN) | UTILITY_BitValue( ADPS2) | UTILITY_BitValue( ADPS1) | UTILITY_BitValue( ADPS0);
+	ADCSRA = UTILITY_BitValue( ADEN) |
+	         UTILITY_BitValue( ADPS2) |
+	         UTILITY_BitValue( ADPS1) |
+	         UTILITY_BitValue( ADPS0);
 }
 
 void Signal_Processor::LoadModel( void)
@@ -115,7 +118,7 @@ void Signal_Processor::LoadModel( void)
 	for( uint8_t CurrentSourceId = 0; CurrentSourceId < SIGNAL_SOURCES; CurrentSourceId++)
 	{
 		// Tell source to pick up its source connections.
-		source[ CurrentSourceId].Initialize( inputService);
+		source[ CurrentSourceId].Initialize( inputService, statusService, statusTime);
 	}
 
 	// Allow processing again.

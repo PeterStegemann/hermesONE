@@ -19,8 +19,11 @@
 #define TIMER_WARN_LOW_REPEAT					1
 #define TIMER_WARN_REPEAT_RANGE					( TIMER_WARN_CRITICAL_REPEAT - TIMER_WARN_LOW_REPEAT)
 
-void Signal_Source_Timer::Initialize( void)
+void Signal_Source_Timer::Initialize( Status_Service* StatusService, Status_Time* StatusTime)
 {
+    statusService = StatusService;
+    statusTime = StatusTime;
+
 	TriggerSignalSourceId = GLOBAL.SignalProcessor.GetSignalSourceId( Setup.TriggerSource);
 
 	if( Setup.Store == true)
@@ -32,7 +35,7 @@ void Signal_Source_Timer::Initialize( void)
 		time = Setup.InitTime;
 	}
 
-	lastUptime = GLOBAL.StatusTime.GetUptime();
+	lastUptime = statusTime->GetUptime();
 	lastWarnTime = 0;
 
 	modified = false;
@@ -53,7 +56,7 @@ void Signal_Source_Timer::Reset( void)
 	Setup.WarnPauseTime = 10;
 
 	time = 0;
-	lastUptime = GLOBAL.StatusTime.GetUptime();
+	lastUptime = statusTime->GetUptime();
 	lastWarnTime = 0;
 
 	modified = true;
@@ -105,7 +108,7 @@ int16_t Signal_Source_Timer::CalculateValue( Signal_Processor* SignalProcessor)
 		}
 	}
 
-	int16_t NewUptime = GLOBAL.StatusTime.GetUptime();
+	int16_t NewUptime = statusTime->GetUptime();
 
 	if( NewUptime != lastUptime)
 	{
@@ -146,8 +149,8 @@ int16_t Signal_Source_Timer::CalculateValue( Signal_Processor* SignalProcessor)
 	// Give a special beep when the low level is reached.
 	if( time == Setup.WarnLowTime)
 	{
-		GLOBAL.StatusService.Buzz( TIMER_WARN_BEEP_BORDER_LENGTH, TIMER_WARN_BEEP_BORDER_PAUSE,
-								   TIMER_WARN_BEEP_BORDER_START_REPEAT);
+		statusService->Buzz( TIMER_WARN_BEEP_BORDER_LENGTH, TIMER_WARN_BEEP_BORDER_PAUSE,
+                             TIMER_WARN_BEEP_BORDER_START_REPEAT);
 
 		lastWarnTime = time;
 
@@ -157,11 +160,11 @@ int16_t Signal_Source_Timer::CalculateValue( Signal_Processor* SignalProcessor)
 	// Give a special beep when the stop level is reached.
 	if( time == Setup.WarnCriticalTime)
 	{
-		GLOBAL.StatusService.Buzz( TIMER_WARN_BEEP_BORDER_LENGTH, TIMER_WARN_BEEP_BORDER_PAUSE,
-								   TIMER_WARN_BEEP_BORDER_STOP_REPEAT);
-		
+		statusService->Buzz( TIMER_WARN_BEEP_BORDER_LENGTH, TIMER_WARN_BEEP_BORDER_PAUSE,
+                             TIMER_WARN_BEEP_BORDER_STOP_REPEAT);
+
 		lastWarnTime = time;
-		
+
 		return( SIGNAL_NEUTRAL_VALUE);
 	}
 
@@ -219,7 +222,7 @@ int16_t Signal_Source_Timer::CalculateValue( Signal_Processor* SignalProcessor)
 	WarnRepeat /= WarnTimeRange;
 	WarnRepeat += TIMER_WARN_LOW_REPEAT;
 
-	GLOBAL.StatusService.Buzz( TIMER_WARN_BEEP_LENGTH, TIMER_WARN_BEEP_PAUSE, WarnRepeat);
+	statusService->Buzz( TIMER_WARN_BEEP_LENGTH, TIMER_WARN_BEEP_PAUSE, WarnRepeat);
 
 	lastWarnTime = time;
 

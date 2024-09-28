@@ -17,6 +17,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 {
   private:
     Interrupt_Service* interruptService;
+    Status_Battery* statusBattery;
 
     GUI_Setup_CheckBox debugCheckBox;
 
@@ -193,7 +194,10 @@ class Screen_Setup_System : public Screen_Setup_Base
 
     void doBattery( void)
     {
-        Screen_Setup_System_Battery BatteryScreen( inputService, interruptService, statusScreen);
+        Screen_Setup_System_Battery BatteryScreen
+        (
+            inputService, interruptService, statusBattery, statusScreen
+        );
         BatteryScreen.Run();
 
         ReDisplay();
@@ -258,10 +262,12 @@ class Screen_Setup_System : public Screen_Setup_Base
     (
         Input_Service* InputService,
         Interrupt_Service* InterruptService,
+        Status_Battery* StatusBattery,
         Screen_Status_Status* StatusScreen
     )
         : Screen_Setup_Base( InputService, StatusScreen, 0b1101001100110101, Text::System)
         , interruptService( InterruptService)
+        , statusBattery( StatusBattery)
     {
     }
 };

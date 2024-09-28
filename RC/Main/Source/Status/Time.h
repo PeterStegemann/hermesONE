@@ -15,7 +15,6 @@ class Status_Time
     {
     }
 
-    // Initialize status engine.
     void Initialize( void)
     {
     }

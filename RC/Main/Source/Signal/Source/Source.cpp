@@ -45,7 +45,10 @@ uint16_t Signal_Source_Source::GetSetupSourceId( void) const
 	return( setupSourceId);
 }
 
-void Signal_Source_Source::Initialize( Input_Service* InputService)
+void Signal_Source_Source::Initialize
+(
+    Input_Service* InputService, Status_Service* StatusService, Status_Time* StatusTime
+)
 {
 	cachedValue = SIGNAL_NEUTRAL_VALUE;
 	valueCached = false;
@@ -54,12 +57,24 @@ void Signal_Source_Source::Initialize( Input_Service* InputService)
 	switch( sourceType)
 	{
 		case Signal_Source_Source::T_Follower :	Body.Follower.Initialize();	break;
-		case Signal_Source_Source::T_Input :	Body.Input.Initialize( InputService);	break;
+
+		case Signal_Source_Source::T_Input :
+        {
+            Body.Input.Initialize( InputService, StatusService);
+        }
+        break;
+
 		case Signal_Source_Source::T_Map :		Body.Map.Initialize();		break;
 		case Signal_Source_Source::T_Mix :		Body.Mix.Initialize();		break;
 		case Signal_Source_Source::T_Proxy :	Body.Proxy.Initialize();	break;
 		case Signal_Source_Source::T_Store :	Body.Store.Initialize();	break;
-		case Signal_Source_Source::T_Timer :	Body.Timer.Initialize();	break;
+
+		case Signal_Source_Source::T_Timer :
+        {
+            Body.Timer.Initialize( StatusService, StatusTime);
+        }
+        break;
+
 		case Signal_Source_Source::T_Trimmer :	Body.Trimmer.Initialize();	break;
 
 		default : break;
