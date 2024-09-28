@@ -4,8 +4,6 @@
 
 #include "Signal/Source/Source.h"
 
-#define EEPROMAddress( Address)	(( uint16_t) &( Address))
-
 class Setup_Battery;
 class Setup_Calibration;
 class Setup_Channel;

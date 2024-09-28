@@ -80,8 +80,8 @@ void Screen_Setup_Info::display( void)
 									   frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
 									   SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White,
 									   LCD_65K_RGB::C_Black, LCD::PO_Proportional,
-									   Text::ExternalEEPROMSize, SETUP_EXTENSIONSTRUCT_SIZE,
-									   EEPROM_SIZE);
+									   Text::ExternalEEPROMSize,
+									   SETUP_EXTENSIONSTRUCT_SIZE, EEPROM_SIZE);
 
 	Line++;
 

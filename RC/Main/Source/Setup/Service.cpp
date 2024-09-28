@@ -404,7 +404,7 @@ void Setup_Service::SetTypeName( uint8_t TypeId, const char* TypeName)
 	TypeId -= SETUP_MODEL_TYPES_START;
 
 	eeprom_write_block( TypeName, Eeprom.Type[ TypeId].Name, SETUP_MODEL_TYPE_NAME_SIZE);
-//	EEPROM_WriteString( EEPROMAddress( ExtensionEeprom.Type[ TypeId].Name),
+//	avr::EEPROM::WriteString( EEPROM_Address( ExtensionEeprom.Type[ TypeId].Name),
 //						SETUP_MODEL_TYPE_NAME_SIZE, TypeName);
 }
 
@@ -420,7 +420,7 @@ char* Setup_Service::GetTypeName( uint8_t TypeId, char* TypeName, uint8_t Size)
 		TypeId -= SETUP_MODEL_TYPES_START;
 
 		eeprom_read_block( TypeName, &( Eeprom.Type[ TypeId].Name), Size);
-//		EEPROM_ReadString( EEPROMAddress( ExtensionEeprom.Type[ TypeId].Name),
+//		avr::EEPROM::ReadString( EEPROM_Address( ExtensionEeprom.Type[ TypeId].Name),
 //						   SETUP_MODEL_TYPE_NAME_SIZE, TypeName, Size);
 	}
 
@@ -435,7 +435,7 @@ void Setup_Service::SetModelName( uint8_t ModelId, const char* ModelName)
 		return;
 	}
 
-	EEPROM_WriteString( EEPROMAddress( ExtensionEeprom.Model[ ModelId].Name), SETUP_MODEL_NAME_SIZE, ModelName);
+	avr::EEPROM::WriteString( EEPROM_Address( ExtensionEeprom.Model[ ModelId].Name), SETUP_MODEL_NAME_SIZE, ModelName);
 }
 
 char* Setup_Service::GetModelName( uint8_t ModelId, char* ModelName, uint8_t Size)
@@ -447,7 +447,7 @@ char* Setup_Service::GetModelName( uint8_t ModelId, char* ModelName, uint8_t Siz
 	}
 	else
 	{
-		EEPROM_ReadString( EEPROMAddress( ExtensionEeprom.Model[ ModelId].Name), SETUP_MODEL_NAME_SIZE, ModelName, Size);
+		avr::EEPROM::ReadString( EEPROM_Address( ExtensionEeprom.Model[ ModelId].Name), SETUP_MODEL_NAME_SIZE, ModelName, Size);
 	}
 
 	return( ModelName);
@@ -461,7 +461,7 @@ void Setup_Service::SetModelState( uint8_t ModelId, ModelState State)
 		return;
 	}
 
-	EEPROM_WriteByte( EEPROMAddress( ExtensionEeprom.Model[ ModelId].State), State);
+	avr::EEPROM::WriteByte( EEPROM_Address( ExtensionEeprom.Model[ ModelId].State), State);
 }
 
 Setup_Service::ModelState Setup_Service::GetModelState( uint8_t ModelId)
@@ -474,7 +474,7 @@ Setup_Service::ModelState Setup_Service::GetModelState( uint8_t ModelId)
 
 	uint8_t Result;
 
-	EEPROM_ReadByte( EEPROMAddress( ExtensionEeprom.Model[ ModelId].State), &Result);
+	avr::EEPROM::ReadByte( EEPROM_Address( ExtensionEeprom.Model[ ModelId].State), &Result);
 
 	return(( Setup_Service::ModelState) Result);
 }
@@ -490,7 +490,7 @@ void Setup_Service::SetTypeState( uint8_t TypeId, TypeState State)
 	TypeId -= SETUP_MODEL_TYPES_START;
 
 	eeprom_write_byte( &( Eeprom.Type[ TypeId].State), State);
-//	EEPROM_WriteByte( EEPROMAddress( ExtensionEeprom.Type[ TypeId].State), State);
+//	avr::EEPROM::WriteByte( EEPROM_Address( ExtensionEeprom.Type[ TypeId].State), State);
 }
 
 Setup_Service::TypeState Setup_Service::GetTypeState( uint8_t TypeId)
@@ -506,7 +506,7 @@ Setup_Service::TypeState Setup_Service::GetTypeState( uint8_t TypeId)
 	uint8_t Result;
 
 	Result = eeprom_read_byte( &( Eeprom.Type[ TypeId].State));
-//	EEPROM_ReadByte( EEPROMAddress( ExtensionEeprom.Type[ TypeId].State), &Result);
+//	avr::EEPROM::ReadByte( EEPROM_Address( ExtensionEeprom.Type[ TypeId].State), &Result);
 
 	return(( Setup_Service::TypeState) Result);
 }
@@ -555,7 +555,7 @@ void Setup_Service::SetSourceName( uint16_t SetupSourceId, const char* SourceNam
 		return;
 	}
 
-	EEPROM_WriteString( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].Name),
+	avr::EEPROM::WriteString( EEPROM_Address( ExtensionEeprom.Source[ SetupSourceId].Name),
 						SETUP_SOURCE_NAME_SIZE, SourceName);
 }
 
@@ -568,7 +568,7 @@ char* Setup_Service::GetSourceName( uint16_t SetupSourceId, char* SourceName, ui
 	}
 	else
 	{
-		EEPROM_ReadString( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].Name), SETUP_SOURCE_NAME_SIZE,
+		avr::EEPROM::ReadString( EEPROM_Address( ExtensionEeprom.Source[ SetupSourceId].Name), SETUP_SOURCE_NAME_SIZE,
 		                   SourceName, Size);
 	}
 
@@ -583,7 +583,7 @@ void Setup_Service::SetSourceType( uint16_t SetupSourceId, Signal_Source_Source:
 		return;
 	}
 
-	EEPROM_WriteByte( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].Type), SourceType);
+	avr::EEPROM::WriteByte( EEPROM_Address( ExtensionEeprom.Source[ SetupSourceId].Type), SourceType);
 }
 
 Signal_Source_Source::Type Setup_Service::GetSourceType( uint16_t SetupSourceId)
@@ -596,7 +596,7 @@ Signal_Source_Source::Type Setup_Service::GetSourceType( uint16_t SetupSourceId)
 
 	uint8_t Result;
 
-	EEPROM_ReadByte( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].Type), &Result);
+	avr::EEPROM::ReadByte( EEPROM_Address( ExtensionEeprom.Source[ SetupSourceId].Type), &Result);
 
 	return(( Signal_Source_Source::Type) Result);
 }
@@ -609,7 +609,7 @@ void Setup_Service::SetSourceModelId( uint16_t SetupSourceId, uint8_t ModelId)
 		return;
 	}
 
-	EEPROM_WriteByte( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].ModelId), ModelId);
+	avr::EEPROM::WriteByte( EEPROM_Address( ExtensionEeprom.Source[ SetupSourceId].ModelId), ModelId);
 }
 
 uint8_t Setup_Service::GetSourceModelId( uint16_t SetupSourceId)
@@ -622,7 +622,7 @@ uint8_t Setup_Service::GetSourceModelId( uint16_t SetupSourceId)
 
 	uint8_t Result;
 
-	EEPROM_ReadByte( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].ModelId), &Result);
+	avr::EEPROM::ReadByte( EEPROM_Address( ExtensionEeprom.Source[ SetupSourceId].ModelId), &Result);
 
 	return( Result);
 }
@@ -701,7 +701,7 @@ void Setup_Service::setSource( uint16_t SetupSourceId, const void* Source, size_
 		return;
 	}
 
-	EEPROM_WriteBytes( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].Body), Size, Source);
+	avr::EEPROM::WriteBytes( EEPROM_Address( ExtensionEeprom.Source[ SetupSourceId].Body), Size, Source);
 }
 
 void Setup_Service::getSource( uint16_t SetupSourceId, void* Source, size_t Size)
@@ -712,7 +712,7 @@ void Setup_Service::getSource( uint16_t SetupSourceId, void* Source, size_t Size
 		return;
 	}
 
-	EEPROM_ReadBytes( EEPROMAddress( ExtensionEeprom.Source[ SetupSourceId].Body), Size, Source);
+	avr::EEPROM::ReadBytes( EEPROM_Address( ExtensionEeprom.Source[ SetupSourceId].Body), Size, Source);
 }
 
 void Setup_Service::SetSourceFollower( uint16_t SetupSourceId, const Setup_Source_Follower* SourceFollower)
@@ -816,14 +816,14 @@ void Setup_Service::SetSelectedTypeId( uint8_t ModelId, uint8_t TypeId)
 		return;
 	}
 
-	EEPROM_WriteByte( EEPROMAddress( ExtensionEeprom.Model[ ModelId].SelectedTypeId), TypeId);
+	avr::EEPROM::WriteByte( EEPROM_Address( ExtensionEeprom.Model[ ModelId].SelectedTypeId), TypeId);
 }
 
 uint8_t Setup_Service::GetSelectedTypeId( uint8_t ModelId)
 {
 	uint8_t TypeId;
 	
-	EEPROM_ReadByte( EEPROMAddress( ExtensionEeprom.Model[ ModelId].SelectedTypeId), &TypeId);
+	avr::EEPROM::ReadByte( EEPROM_Address( ExtensionEeprom.Model[ ModelId].SelectedTypeId), &TypeId);
 	
 	if(( TypeId < SETUP_MODEL_TYPES_START) || ( TypeId >= ( SETUP_MODEL_TYPES_END)))
 	{
@@ -841,14 +841,14 @@ void Setup_Service::SetRFMode( uint8_t ModelId, uint8_t RFMode)
 		return;
 	}
 
-	EEPROM_WriteByte( EEPROMAddress( ExtensionEeprom.Model[ ModelId].RFMode), RFMode);
+	avr::EEPROM::WriteByte( EEPROM_Address( ExtensionEeprom.Model[ ModelId].RFMode), RFMode);
 }
 
 uint8_t Setup_Service::GetRFMode( uint8_t ModelId)
 {
 	uint8_t RFMode;
 
-	EEPROM_ReadByte( EEPROMAddress( ExtensionEeprom.Model[ ModelId].RFMode), &RFMode);
+	avr::EEPROM::ReadByte( EEPROM_Address( ExtensionEeprom.Model[ ModelId].RFMode), &RFMode);
 
 	if( RFMode >= RF_ModeCount)
 	{
@@ -866,7 +866,7 @@ void Setup_Service::SetChannelName( uint8_t ModelId, uint8_t ChannelId, const ch
 		return;
 	}
 
-	EEPROM_WriteString( EEPROMAddress( ExtensionEeprom.Model[ ModelId].ChannelName[ ChannelId]),
+	avr::EEPROM::WriteString( EEPROM_Address( ExtensionEeprom.Model[ ModelId].ChannelName[ ChannelId]),
 						SETUP_SOURCE_NAME_SIZE, ChannelName);
 }
 
@@ -879,7 +879,7 @@ char* Setup_Service::GetChannelName( uint8_t ModelId, uint8_t ChannelId, char* C
 	}
 	else
 	{
-		EEPROM_ReadString( EEPROMAddress( ExtensionEeprom.Model[ ModelId].ChannelName[ ChannelId]),
+		avr::EEPROM::ReadString( EEPROM_Address( ExtensionEeprom.Model[ ModelId].ChannelName[ ChannelId]),
 						   SETUP_SOURCE_NAME_SIZE, ChannelName, Size);
 	}
 
@@ -904,7 +904,7 @@ void Setup_Service::SetChannel( uint8_t ModelId, uint8_t ChannelId, const Setup_
 		return;
 	}
 
-	EEPROM_WriteBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].Channel[ ChannelId]),
+	avr::EEPROM::WriteBytes( EEPROM_Address( ExtensionEeprom.Model[ ModelId].Channel[ ChannelId]),
 					   sizeof( Setup_Channel), Channel);
 }
 
@@ -916,7 +916,7 @@ void Setup_Service::GetChannel( uint8_t ModelId, uint8_t ChannelId, Setup_Channe
 		return;
 	}
 
-	EEPROM_ReadBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].Channel[ ChannelId]),
+	avr::EEPROM::ReadBytes( EEPROM_Address( ExtensionEeprom.Model[ ModelId].Channel[ ChannelId]),
 					  sizeof( Setup_Channel), Channel);
 }
 
@@ -938,7 +938,7 @@ void Setup_Service::SetStatusTimerId( uint8_t ModelId, uint8_t StatusId, uint16_
 		return;
 	}
 
-	EEPROM_WriteBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].StatusTimer[ StatusId]),
+	avr::EEPROM::WriteBytes( EEPROM_Address( ExtensionEeprom.Model[ ModelId].StatusTimer[ StatusId]),
 					   sizeof( SetupSourceId), &SetupSourceId);
 }
 
@@ -952,7 +952,7 @@ uint16_t Setup_Service::GetStatusTimerId( uint8_t ModelId, uint8_t StatusId)
 
 	uint16_t SetupSourceId;
 
-	EEPROM_ReadBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].StatusTimer[ StatusId]),
+	avr::EEPROM::ReadBytes( EEPROM_Address( ExtensionEeprom.Model[ ModelId].StatusTimer[ StatusId]),
 					  sizeof( SetupSourceId), &SetupSourceId);
 
 	return( SetupSourceId);
@@ -976,7 +976,7 @@ void Setup_Service::SetStatusSourceId( uint8_t ModelId, uint8_t StatusId, uint16
 		return;
 	}
 
-	EEPROM_WriteBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].StatusSource[ StatusId]),
+	avr::EEPROM::WriteBytes( EEPROM_Address( ExtensionEeprom.Model[ ModelId].StatusSource[ StatusId]),
 					   sizeof( SetupSourceId), &SetupSourceId);
 }
 
@@ -990,7 +990,7 @@ uint16_t Setup_Service::GetStatusSourceId( uint8_t ModelId, uint8_t StatusId)
 
 	uint16_t SetupSourceId;
 
-	EEPROM_ReadBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].StatusSource[ StatusId]),
+	avr::EEPROM::ReadBytes( EEPROM_Address( ExtensionEeprom.Model[ ModelId].StatusSource[ StatusId]),
 					  sizeof( SetupSourceId), &SetupSourceId);
 
 	return( SetupSourceId);
@@ -1014,7 +1014,7 @@ void Setup_Service::SetProxyReference( uint8_t ModelId, uint8_t ProxyId, const S
 		return;
 	}
 
-	EEPROM_WriteBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].ProxyReference[ ProxyId]),
+	avr::EEPROM::WriteBytes( EEPROM_Address( ExtensionEeprom.Model[ ModelId].ProxyReference[ ProxyId]),
 					   sizeof( Setup_Source_Tuple), ProxyReference);
 }
 
@@ -1026,8 +1026,12 @@ void Setup_Service::GetProxyReference( uint8_t ModelId, uint8_t ProxyId, Setup_S
 		return;
 	}
 
-	EEPROM_ReadBytes( EEPROMAddress( ExtensionEeprom.Model[ ModelId].ProxyReference[ ProxyId]),
-					  sizeof( Setup_Source_Tuple), ProxyReference);
+	avr::EEPROM::ReadBytes
+	(
+	    EEPROM_Address( ExtensionEeprom.Model[ ModelId].ProxyReference[ ProxyId]),
+        sizeof( Setup_Source_Tuple),
+        ProxyReference
+    );
 }
 
 void Setup_Service::SetProxyReference( uint8_t ProxyId, const Setup_Source_Tuple* ProxyReference)
