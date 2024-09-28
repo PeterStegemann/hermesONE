@@ -83,7 +83,7 @@ class Signal_Source_Source
 
 		// Be aware that to connect sources, they all of them have to be loaded by the signal
 		// processor.
-		void Initialize( void);
+		void Initialize( Input_Service* InputService);
 		void Reset( Type SourceType, uint16_t SetupSourceId, uint8_t ModelId);
 
 		// Load setup for this source.
@@ -95,6 +95,6 @@ class Signal_Source_Source
 		// Remove cache flag, so next GetValue() call a new value will be calculated.
 		void FlushCache( void);
 
-		// Get last calculated value, calulate a new one if needed.
+		// Get last calculated value, calculate a new one if needed.
 		int16_t GetValue( Signal_Processor* SignalProcessor);
 };

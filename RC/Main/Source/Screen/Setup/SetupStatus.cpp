@@ -8,8 +8,14 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_SetupStatus::Screen_Setup_SetupStatus( void)
-						: Screen_Setup_Base( 0b1010101001101, Text::Status)
+Screen_Setup_SetupStatus::Screen_Setup_SetupStatus
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen
+)
+    : Screen_Setup_Base( InputService, StatusScreen, 0b1010101001101, Text::Status)
+    , select( InputService, InterruptService)
 {
 	currentSource = 0;
 
@@ -149,11 +155,13 @@ bool Screen_Setup_SetupStatus::processMenu( DoMenuResult Result)
 
 					uint16_t SetupSourceId = GLOBAL.SetupService.GetStatusTimerId( CurrentTimer);
 
-					bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+					bool SourceChanged = select.DoSourceSelect
+					(
 						&( timerId[ CurrentTimer]), &SetupSourceId, &menuMarker,
 						&( timerLabel[ CurrentTimer]), NULL,
 						timerName[ CurrentTimer], this, &staticUpdate, false,
-						Signal_Source_Source::L_Model, Signal_Source_Source::T_Timer);
+						Signal_Source_Source::L_Model, Signal_Source_Source::T_Timer
+                    );
 
 					if( SourceChanged == true)
 					{
@@ -168,11 +176,13 @@ bool Screen_Setup_SetupStatus::processMenu( DoMenuResult Result)
 
 					uint16_t SetupSourceId = GLOBAL.SetupService.GetStatusSourceId( currentSource);
 
-					bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+					bool SourceChanged = select.DoSourceSelect
+					(
 						&( sourceId[ currentSource]), &SetupSourceId, &menuMarker,
 						&( sourceLabel[ currentSource]), &( statusGauge[ currentSource]),
 						sourceName[ currentSource], this, &staticUpdate, false,
-						Signal_Source_Source::L_Model);
+						Signal_Source_Source::L_Model
+                    );
 
 					if( SourceChanged == true)
 					{

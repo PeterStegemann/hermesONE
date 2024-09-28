@@ -115,7 +115,7 @@ void Signal_Processor::LoadModel( void)
 	for( uint8_t CurrentSourceId = 0; CurrentSourceId < SIGNAL_SOURCES; CurrentSourceId++)
 	{
 		// Tell source to pick up its source connections.
-		source[ CurrentSourceId].Initialize();
+		source[ CurrentSourceId].Initialize( inputService);
 	}
 
 	// Allow processing again.

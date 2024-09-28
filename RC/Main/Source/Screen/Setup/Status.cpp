@@ -11,8 +11,12 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Status::Screen_Setup_Status( void)
-				   : Screen_Setup_Base( 0b1, Text::Status, false)
+Screen_Setup_Status::Screen_Setup_Status
+(
+    Input_Service* InputService,
+    Screen_Status_Status* StatusScreen
+)
+    : Screen_Setup_Base( InputService, StatusScreen, 0b1, Text::Status, false)
 {
 	statusGauge[ SETUP_STATUS_SOURCE_LEFT_SIDE].SetOptions
 	(

@@ -10,6 +10,8 @@
 class GUI_Setup_Popup
 {
   private:
+    Input_Service* inputService;
+
     avr::font::FontId fontId;
 
     const char* text;
@@ -24,8 +26,9 @@ class GUI_Setup_Popup
     LCD_65K_RGB::Color BackgroundColor;
 
   public:
-    GUI_Setup_Popup( void)
-        : fontId( GUI_SETUP_MAIN_FONT)
+    GUI_Setup_Popup( Input_Service* InputService)
+        : inputService( InputService)
+        , fontId( GUI_SETUP_MAIN_FONT)
         , text( NULL)
         , text_P( NULL)
         , okText_P( NULL)
@@ -180,7 +183,7 @@ class GUI_Setup_Popup
 
             // Try rotary. Also get the RotaryButton to clear it. Otherwise, this popup would always be accepted on the
             // initial button release.
-            GLOBAL.InputService.GetRotary( NULL, &RotaryButton, &RotaryCurrentButton);
+            inputService->GetRotary( NULL, &RotaryButton, &RotaryCurrentButton);
 
             if( RotaryCurrentButton == true)
             {
@@ -221,7 +224,7 @@ class GUI_Setup_Popup
             int8_t RotarySelect;
             uint8_t RotaryButton;
 
-            GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+            inputService->GetRotary( &RotarySelect, &RotaryButton);
 
             if(( okText_P != NULL) && ( cancelText_P != NULL) && ( RotarySelect != 0))
             {

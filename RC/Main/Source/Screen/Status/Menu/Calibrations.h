@@ -17,6 +17,6 @@ class Screen_Status_Menu_Calibrations : public Screen_Status_Menu_Base
 		virtual void update( void);
 
 	public:
-		Screen_Status_Menu_Calibrations( void);
+		Screen_Status_Menu_Calibrations( Input_Service* InputService);
 		virtual ~Screen_Status_Menu_Calibrations( void);
 };

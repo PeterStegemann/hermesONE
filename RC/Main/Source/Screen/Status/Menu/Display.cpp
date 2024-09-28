@@ -21,8 +21,8 @@ enum MenuEntry
 	MENU_COUNT
 };
 
-Screen_Status_Menu_Display::Screen_Status_Menu_Display( void)
-						  : Screen_Status_Menu_Base( MENU_COUNT, L_Three)
+Screen_Status_Menu_Display::Screen_Status_Menu_Display( Input_Service* InputService)
+						  : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Three)
 {
 }
 

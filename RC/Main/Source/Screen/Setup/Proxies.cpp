@@ -9,9 +9,15 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Proxies::Screen_Setup_Proxies( void)
-					: Screen_Setup_BaseList( Text::Proxies)
-					, filledSourceLines( 0)
+Screen_Setup_Proxies::Screen_Setup_Proxies
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen
+)
+    : Screen_Setup_BaseList( InputService, StatusScreen, Text::Proxies)
+    , interruptService( InterruptService)
+    , filledSourceLines( 0)
 {
 	for( uint8_t SourceLine = 0; SourceLine < visibleLines; SourceLine++)
 	{
@@ -233,7 +239,7 @@ void Screen_Setup_Proxies::doAdd( void)
 	// Check if it worked.
 	if(( SetupSourceAvailable == false) || ( SignalSourceAvailable == false) || ( ProxyIdAvailable == false))
 	{
-		GUI_Setup_Popup Popup;
+		GUI_Setup_Popup Popup( inputService);
 
 		// Set text.
 		if( ProxyIdAvailable == false)
@@ -294,7 +300,10 @@ void Screen_Setup_Proxies::doSelect( uint8_t LineId)
 
 void Screen_Setup_Proxies::doSelectSource( uint8_t SignalSourceId)
 {
-	Screen_Setup_Source_Proxy ProxyScreen( SignalSourceId);
+	Screen_Setup_Source_Proxy ProxyScreen
+	(
+	    inputService, interruptService, statusScreen, SignalSourceId
+    );
 	ProxyScreen.Run();
 }
 
@@ -314,7 +323,7 @@ void Screen_Setup_Proxies::doDelete( uint8_t LineId)
 		return;
 	}
 
-	GUI_Setup_Popup Popup;
+	GUI_Setup_Popup Popup( inputService);
 
 	// Set text.
 	const flash_char* Format = Text::DeleteSourceProxyFormat;

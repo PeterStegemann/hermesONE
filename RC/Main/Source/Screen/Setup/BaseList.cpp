@@ -4,10 +4,15 @@
 
 #include <string.h>
 
-Screen_Setup_BaseList::Screen_Setup_BaseList( const flash_char* Title)
-					 : Screen_Setup_Base( -1, Title, false)
-					 , firstLine( 0)
-					 , visibleLines( SCREEN_SETUP_BASELIST_MAXIMUM_LINES)
+Screen_Setup_BaseList::Screen_Setup_BaseList
+(
+    Input_Service* InputService,
+    Screen_Status_Status* StatusScreen,
+    const flash_char* Title
+)
+    : Screen_Setup_Base( InputService, StatusScreen, -1, Title, false)
+    , firstLine( 0)
+    , visibleLines( SCREEN_SETUP_BASELIST_MAXIMUM_LINES)
 {
 	scrollUpMarker.SetOptions( GUI_Setup_Marker::O_LookUp);
 	scrollUpMarker.SetSize( SCREEN_SETUP_BASE_MENU_MARKER_WIDTH - 1);

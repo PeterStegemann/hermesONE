@@ -11,26 +11,34 @@
 
 class Screen_Setup_Source_Mix : public Screen_Setup_Source_Base
 {
-	private:
-		Signal_Source_Mix* sourceMix;
+  private:
+    GUI_Setup_Select select;
 
-		GUI_Setup_Label sourceLabel[ SETUP_SOURCE_MIX_INPUTS];
-		char sourceName[ SETUP_SOURCE_MIX_INPUTS][ SETUP_SOURCE_NAME_SIZE + 1];
-		GUI_Setup_Label volumeLabel[ SETUP_SOURCE_MIX_INPUTS];
-		GUI_Setup_Gauge valueGauge[ SETUP_SOURCE_MIX_INPUTS];
+    Signal_Source_Mix* sourceMix;
 
-		virtual void display( void);
-		virtual void update( void);
-		virtual bool processMenu( DoMenuResult Result);
+    GUI_Setup_Label sourceLabel[ SETUP_SOURCE_MIX_INPUTS];
+    char sourceName[ SETUP_SOURCE_MIX_INPUTS][ SETUP_SOURCE_NAME_SIZE + 1];
+    GUI_Setup_Label volumeLabel[ SETUP_SOURCE_MIX_INPUTS];
+    GUI_Setup_Gauge valueGauge[ SETUP_SOURCE_MIX_INPUTS];
 
-		void doSource( uint8_t Index);
-		void selectColumn( uint8_t Index, uint8_t Column, bool Selected);
+    virtual void display( void);
+    virtual void update( void);
+    virtual bool processMenu( DoMenuResult Result);
 
-		static void updateVolume( void* Object, GUI_Setup_Label* Label, int16_t Value);
+    void doSource( uint8_t Index);
+    void selectColumn( uint8_t Index, uint8_t Column, bool Selected);
 
-		// This is used for the GUI_Setup_Select callbacks.
-		uint8_t currentVolumeIndex;
+    static void updateVolume( void* Object, GUI_Setup_Label* Label, int16_t Value);
 
-	public:
-		Screen_Setup_Source_Mix( uint8_t SignalSourceId);
+    // This is used for the GUI_Setup_Select callbacks.
+    uint8_t currentVolumeIndex;
+
+  public:
+    Screen_Setup_Source_Mix
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen,
+        uint8_t SignalSourceId
+    );
 };

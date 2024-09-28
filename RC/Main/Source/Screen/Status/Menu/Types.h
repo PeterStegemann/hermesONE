@@ -18,6 +18,6 @@ class Screen_Status_Menu_Types : public Screen_Status_Menu_Base
 	virtual void display( void);
 
   public:
-	Screen_Status_Menu_Types( void);
+	Screen_Status_Menu_Types( Input_Service* InputService);
 	virtual ~Screen_Status_Menu_Types( void);
 };

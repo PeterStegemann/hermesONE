@@ -10,10 +10,24 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Source_Trimmer::Screen_Setup_Source_Trimmer( uint8_t SignalSourceId)
-						   : Screen_Setup_Source_Base( SignalSourceId, 0b101010101110101,
-													   Text::Trimmer)
-						   , sourceTrimmer( NULL)
+Screen_Setup_Source_Trimmer::Screen_Setup_Source_Trimmer
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t SignalSourceId
+)
+    : Screen_Setup_Source_Base
+    (
+        InputService,
+        InterruptService,
+        StatusScreen,
+        SignalSourceId,
+        0b101010101110101,
+        Text::Trimmer
+    )
+    , select( InputService, InterruptService)
+    , sourceTrimmer( NULL)
 {
 	sourceTrimmer = &( source->Body.Trimmer);
 
@@ -215,7 +229,7 @@ bool Screen_Setup_Source_Trimmer::processMenu( DoMenuResult Result)
 				{
 					currentPointId = ( currentMenuEntry - 8) / 2;
 
-					ValueChanged = GUI_Setup_Select::DoSelect16(
+					ValueChanged = select.DoSelect16(
 						&( sourceTrimmer->Setup.PointVolume[ currentPointId]), SIGNAL_MINIMUM_VALUE,
 						SIGNAL_MAXIMUM_VALUE, SIGNAL_CHANNEL_SIGNAL_PER_VALUE, &menuMarker,
 						&( pointVolumeLabel[ currentPointId]), this, &staticUpdate,
@@ -261,14 +275,14 @@ bool Screen_Setup_Source_Trimmer::doSource( uint8_t* SignalSourceId,
 										    GUI_Setup_Label* SourceVolumeLabel)
 {
 	// Do source.
-	bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+	bool SourceChanged = select.DoSourceSelect(
 		SignalSourceId, &( SourceTuple->Source), &menuMarker, SourceNameLabel, NULL, SourceName,
 		this, &staticUpdate, true, Signal_Source_Source::L_Model);
 
 	// Do volume.
 	currentVolumeLabel = SourceVolumeLabel;
 
-	bool VolumeChanged = GUI_Setup_Select::DoSelect16( &( SourceTuple->Volume),
+	bool VolumeChanged = select.DoSelect16( &( SourceTuple->Volume),
 		SIGNAL_MINIMUM_VALUE, SIGNAL_MAXIMUM_VALUE, SIGNAL_CHANNEL_INPUT_SIGNAL_PER_VALUE,
 		&menuMarker, SourceVolumeLabel, this, &staticUpdate, &updateVolume);
 

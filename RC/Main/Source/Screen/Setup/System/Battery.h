@@ -12,6 +12,9 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 {
   private:
     Setup_Battery* batterySetup;
+
+    GUI_Setup_Select select;
+
     uint8_t voltage;
 
     GUI_Setup_VoltageLabel warnLowVoltageLabel;
@@ -152,7 +155,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 
                     case 3 :
                     {
-                        IsUpdated = GUI_Setup_Select::DoSelect8
+                        IsUpdated = select.DoSelect8
                         (
                             ( int8_t*) &( batterySetup->WarnLowVoltage),
                             batterySetup->MinimumVoltage, batterySetup->MaximumVoltage, SETUP_BATTERY_VOLTAGE_STEPS,
@@ -163,7 +166,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 
                     case 4 :
                     {
-                        IsUpdated = GUI_Setup_Select::DoSelect8
+                        IsUpdated = select.DoSelect8
                         (
                             ( int8_t*) &( batterySetup->WarnCriticalVoltage),
                             batterySetup->MinimumVoltage, batterySetup->MaximumVoltage, SETUP_BATTERY_VOLTAGE_STEPS,
@@ -174,7 +177,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 
                     case 7 :
                     {
-                        IsUpdated = GUI_Setup_Select::DoSelect8
+                        IsUpdated = select.DoSelect8
                         (
                             ( int8_t*) &( batterySetup->MinimumVoltage),
                             SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,
@@ -185,7 +188,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
 
                     case 8 :
                     {
-                        IsUpdated = GUI_Setup_Select::DoSelect8
+                        IsUpdated = select.DoSelect8
                         (
                             ( int8_t*) &( batterySetup->MaximumVoltage),
                             SETUP_BATTERY_VOLTAGE_MINIMUM, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,
@@ -198,7 +201,7 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
                     {
                         uint8_t Value = voltage;
 
-                        IsUpdated = GUI_Setup_Select::DoSelect8
+                        IsUpdated = select.DoSelect8
                         (
                             ( int8_t*) &Value,
                             0, SETUP_BATTERY_VOLTAGE_MAXIMUM, SETUP_BATTERY_VOLTAGE_STEPS,
@@ -236,8 +239,14 @@ class Screen_Setup_System_Battery : public Screen_Setup_Base
     }
 
   public:
-    Screen_Setup_System_Battery( void)
-        : Screen_Setup_Base( 0b10110011001, Text::Battery)
+    Screen_Setup_System_Battery
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen
+    )
+        : Screen_Setup_Base( InputService, StatusScreen, 0b10110011001, Text::Battery)
+        , select( InputService, InterruptService)
     {
         batterySetup = GLOBAL.StatusBattery.GetBatterySetup();
         voltage = GLOBAL.StatusBattery.GetVoltage();

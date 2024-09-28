@@ -48,10 +48,9 @@ void Interrupt_Service::Process( void)
 		timeMillis = NewTimeMillis;
 	}
 
-	GLOBAL.InputService.Process();
-	GLOBAL.SignalProcessor.Process();
-
-	GLOBAL.StatusService.Process();
+	inputService->Process();
+	signalProcessor->Process();
+	statusService->Process();
 
 	// Dezisecond?
 	if(( timeMillis % 100) == 0)

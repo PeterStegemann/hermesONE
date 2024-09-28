@@ -64,6 +64,6 @@ class Screen_Status_Menu_Base : public Screen_Base
 	void SetSource( Level UseLevel, uint16_t SetupSourceId);
 
   public:
-	Screen_Status_Menu_Base( uint8_t MenuEntries, Level MenuLevel);
+	Screen_Status_Menu_Base( Input_Service* InputService, uint8_t MenuEntries, Level MenuLevel);
 	virtual ~Screen_Status_Menu_Base( void);
 };

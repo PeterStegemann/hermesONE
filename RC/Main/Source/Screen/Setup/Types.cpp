@@ -9,8 +9,13 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Types::Screen_Setup_Types( void)
-				  : Screen_Setup_BaseList( Text::Types)
+Screen_Setup_Types::Screen_Setup_Types
+(
+    Input_Service* InputService,
+    Screen_Status_Status* StatusScreen
+)
+    : Screen_Setup_BaseList( InputService, StatusScreen, Text::Types)
+    , inputService( InputService)
 {
 	visibleLines = SCREEN_SETUP_BASELIST_MAXIMUM_LINES - 2;
 
@@ -207,7 +212,7 @@ void Screen_Setup_Types::doAdd( void)
 
 	if( SetupTypeAvailable == false)
 	{
-		GUI_Setup_Popup Popup;
+		GUI_Setup_Popup Popup( inputService);
 
 		// Set text.
 		Popup.SetText_P( Text::NoSystemStorage);
@@ -238,7 +243,7 @@ void Screen_Setup_Types::doSelect( uint8_t LineId)
 		return;
 	}
 
-	Screen_Setup_Models ModelsScreen( SetupTypeId);
+	Screen_Setup_Models ModelsScreen( inputService, statusScreen, SetupTypeId);
 	ModelsScreen.Run();
 }
 
@@ -258,7 +263,7 @@ void Screen_Setup_Types::doDelete( uint8_t LineId)
 		return;
 	}
 
-	GUI_Setup_Popup Popup;
+	GUI_Setup_Popup Popup( inputService);
 
 	if( SetupTypeId == selectedTypeId)
 	{

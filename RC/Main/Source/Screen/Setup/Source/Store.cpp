@@ -9,9 +9,19 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Source_Store::Screen_Setup_Source_Store( uint8_t SignalSourceId)
-						 : Screen_Setup_Source_Base( SignalSourceId, 0b0101101, Text::Store)
-						 , sourceStore( NULL)
+Screen_Setup_Source_Store::Screen_Setup_Source_Store
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t SignalSourceId
+)
+    : Screen_Setup_Source_Base
+    (
+        InputService, InterruptService, StatusScreen, SignalSourceId, 0b0101101, Text::Store
+    )
+    , select( InputService, InterruptService)
+    , sourceStore( NULL)
 {
 	sourceStore = &( source->Body.Store);
 }
@@ -53,10 +63,12 @@ bool Screen_Setup_Source_Store::processMenu( DoMenuResult Result)
 			{
 				case 3 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSourceSelect(
+					ValueChanged = select.DoSourceSelect
+					(
 						&( sourceStore->SignalSourceId), &( sourceStore->Setup.InputSource),
 						&menuMarker, &sourceNameLabel, NULL, sourceName, this, &staticUpdate,
-						false, source->GetLevel());
+						false, source->GetLevel()
+                    );
 				}
 				break;
 

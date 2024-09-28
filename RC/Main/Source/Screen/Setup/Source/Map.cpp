@@ -10,9 +10,19 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Source_Map::Screen_Setup_Source_Map( uint8_t SignalSourceId)
-					   : Screen_Setup_Source_Base( SignalSourceId, 0b11111110010101, Text::Map)
-					   , sourceMap( NULL)
+Screen_Setup_Source_Map::Screen_Setup_Source_Map
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t SignalSourceId
+)
+    : Screen_Setup_Source_Base
+    (
+        InputService, InterruptService, StatusScreen, SignalSourceId, 0b11111110010101, Text::Map
+    )
+    , select( InputService, InterruptService)
+    , sourceMap( NULL)
 {
 	sourceMap = &( source->Body.Map);
 
@@ -117,12 +127,12 @@ bool Screen_Setup_Source_Map::processMenu( DoMenuResult Result)
 			{
 				case 4 :
 				{
-					bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+					bool SourceChanged = select.DoSourceSelect(
 						&( sourceMap->InputSignalSourceId), &( sourceMap->Setup.InputSource.Source),
 						&menuMarker, &sourceNameLabel, NULL, sourceName, this, &staticUpdate, false,
 						source->GetLevel());
 
-					bool VolumeChanged = GUI_Setup_Select::DoSelect16(
+					bool VolumeChanged = select.DoSelect16(
 						&( sourceMap->Setup.InputSource.Volume), SIGNAL_MINIMUM_VALUE,
 						SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_MAP_INPUT_SIGNAL_PER_VALUE, &menuMarker,
 						&sourceVolumeLabel, this, &staticUpdate, &updateVolume);
@@ -141,14 +151,14 @@ bool Screen_Setup_Source_Map::processMenu( DoMenuResult Result)
 					{
 						currentPointId = currentMenuEntry - 7;
 
-						bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+						bool SourceChanged = select.DoSourceSelect(
 							&( sourceMap->PointSignalSourceId[ currentPointId]),
 							&( sourceMap->Setup.PointSource[ currentPointId].Source), &menuMarker,
 							&( pointSourceNameLabel[ currentPointId]), NULL,
 							pointSourceName[ currentPointId], this, &staticUpdate, true,
 							source->GetLevel());
 
-						ValueChanged = GUI_Setup_Select::DoSelect16(
+						ValueChanged = select.DoSelect16(
 							&( sourceMap->Setup.PointSource[ currentPointId].Volume),
 							SIGNAL_MINIMUM_VALUE, SIGNAL_MAXIMUM_VALUE,
 							SIGNAL_SOURCE_MAP_SIGNAL_PER_VALUE, &menuMarker,

@@ -49,12 +49,12 @@ void Main_Setup::runOnStatusDisplay( void)
 
 void Main_Setup::doStatusStatus( void)
 {
-	StatusScreen.Run();
+	statusScreen.Run();
 }
 
 void Main_Setup::doStatusMain( void)
 {
-	Screen_Status_Menu_Main MainScreen;
+	Screen_Status_Menu_Main MainScreen( &inputService);
 	MainScreen.Run();
 }
 
@@ -64,7 +64,7 @@ void Main_Setup::runOnSetupDisplay( void)
 	SetupDisplay.SetBacklight( SetupService.GetSetupBacklight());
 
 	// Set up head screen.
-	StatusScreen.ReDisplay();
+	statusScreen.ReDisplay();
 
 	// Loop between status and start menu forever.
 	while( true)
@@ -76,14 +76,14 @@ void Main_Setup::runOnSetupDisplay( void)
 
 void Main_Setup::doSetupStatus( void)
 {
-	Screen_Setup_Status StatusScreen;
-	StatusScreen.Run();
+	Screen_Setup_Status SetupStatusScreen( &inputService, &statusScreen);
+	SetupStatusScreen.Run();
 }
 
 void Main_Setup::doSetupMain( void)
 {
-	Screen_Setup_Main MainScreen;
-	MainScreen.Run();
+	Screen_Setup_Main SetupMainScreen( &inputService, &interruptService, &statusScreen);
+	SetupMainScreen.Run();
 }
 
 void Main_Setup::Update( void)
@@ -96,7 +96,7 @@ void Main_Setup::Update( void)
 	}
 
     uint16_t CurrentUptime = GLOBAL.StatusTime.GetUptime();
-    uint16_t LastActivityUptime = GLOBAL.InputService.GetLastActivityUptime();
+    uint16_t LastActivityUptime = inputService.GetLastActivityUptime();
 
     if( hasSetupDisplay == true)
     {

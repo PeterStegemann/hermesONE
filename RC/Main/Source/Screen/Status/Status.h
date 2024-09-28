@@ -58,8 +58,8 @@ class Screen_Status_Status : public Screen_Base
     virtual void update( void);
 
   public:
-    Screen_Status_Status( LCD_DOG* StatusDisplay)
-        : Screen_Base()
+    Screen_Status_Status( Input_Service* InputService, LCD_DOG* StatusDisplay)
+        : Screen_Base( InputService)
         , statusDisplay( StatusDisplay)
         , modelNameLabel( StatusDisplay)
         , typeNameLabel( StatusDisplay)

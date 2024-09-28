@@ -28,8 +28,8 @@ class Signal_Channel
 	uint8_t TrimSignalSourceId;
 	uint8_t LimitSignalSourceId;
 
-	// Be aware that to connect to sources, they all of them have to be loaded by the
-	// SignalProcessor.
+	// Be aware that to connect to sources, they all of them have to be loaded by the signal
+	// processor.
 	void Initialize( void);
 	void Reset( void);
 

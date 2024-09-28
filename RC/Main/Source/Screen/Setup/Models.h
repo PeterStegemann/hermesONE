@@ -9,25 +9,30 @@
 
 class Screen_Setup_Models : public Screen_Setup_BaseList
 {
-	private:
-		uint8_t setupTypeId;
-		uint8_t model[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
+  private:
+    Input_Service* inputService;
 
-		GUI_Setup_Label modelLabel[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
-		char modelName[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES][ SETUP_MODEL_NAME_SIZE + 1];
+    uint8_t setupTypeId;
+    uint8_t model[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
 
-		virtual void display( void);
-		virtual bool processMenu( DoMenuResult Result);
+    GUI_Setup_Label modelLabel[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
+    char modelName[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES][ SETUP_MODEL_NAME_SIZE + 1];
 
-		void reDisplay( void);
-		void displayMarker( void);
+    virtual void display( void);
+    virtual bool processMenu( DoMenuResult Result);
 
-		void doChanged( void);
-		void doAdd( void);
-		void doSelect( uint8_t LineId);
-		void doSelectModel( uint8_t SetupModelId);
-		void doDelete( uint8_t LineId);
+    void reDisplay( void);
+    void displayMarker( void);
 
-	public:
-		Screen_Setup_Models( uint8_t SetupTypeId);
+    void doChanged( void);
+    void doAdd( void);
+    void doSelect( uint8_t LineId);
+    void doSelectModel( uint8_t SetupModelId);
+    void doDelete( uint8_t LineId);
+
+  public:
+    Screen_Setup_Models
+    (
+        Input_Service* InputService, Screen_Status_Status* StatusScreen, uint8_t SetupTypeId
+    );
 };

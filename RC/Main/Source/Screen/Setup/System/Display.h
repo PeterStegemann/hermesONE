@@ -5,11 +5,16 @@
 #include "../Base.h"
 #include "GUI/Setup/CheckBox.h"
 #include "GUI/Setup/Gauge.h"
+#include "GUI/Setup/GaugeSelect.h"
 #include "GUI/Setup/Label.h"
+#include "GUI/Setup/Select.h"
 
 class Screen_Setup_System_Display : public Screen_Setup_Base
 {
   private:
+    GUI_Setup_Select select;
+    GUI_Setup_GaugeSelect gaugeSelect;
+
     GUI_Setup_Gauge setupBacklightGauge;
     uint8_t setupBacklight;
 
@@ -51,5 +56,10 @@ class Screen_Setup_System_Display : public Screen_Setup_Base
     void doStatusInverted( void);
 
   public:
-    Screen_Setup_System_Display( void);
+    Screen_Setup_System_Display
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen
+    );
 };

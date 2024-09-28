@@ -14,6 +14,8 @@ template< uint8_t DeviceId>
 class Serial_DesktopConnection
 {
   private:
+    Input_Service* inputService;
+
     avr::serial::TypedConnection< DeviceId> connection;
 
     void openComplex( uint8_t Id)
@@ -2761,7 +2763,8 @@ class Serial_DesktopConnection
     }
 
   public:
-    Serial_DesktopConnection( void)
+    Serial_DesktopConnection( Input_Service* InputService)
+        : inputService( InputService)
     {
     }
 
@@ -2832,7 +2835,7 @@ class Serial_DesktopConnection
             uint8_t RotaryButton;
 
             // Try rotary.
-            GLOBAL.InputService.GetRotary( NULL, &RotaryButton, NULL);
+            inputService->GetRotary( NULL, &RotaryButton, NULL);
 
             if( RotaryButton > 0)
             {
@@ -2876,7 +2879,7 @@ class Serial_DesktopConnection
             uint8_t RotaryButton;
 
             // Try rotary.
-            GLOBAL.InputService.GetRotary( NULL, &RotaryButton, NULL);
+            inputService->GetRotary( NULL, &RotaryButton, NULL);
 
             if( RotaryButton > 0)
             {

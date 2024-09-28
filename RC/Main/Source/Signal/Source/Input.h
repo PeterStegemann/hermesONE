@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Input/Rotary.h"
+#include "Input/Service.h"
 #include "Setup/Source/Input.h"
 
 #define SIGNAL_SOURCE_INPUT_INIT_SIGNAL_PER_VALUE		( SIGNAL_VALUE_RANGE / 200)
@@ -16,24 +17,26 @@ class Signal_Processor;
 
 class Signal_Source_Input
 {
-	private:
-		Input_Rotary rotary;
+  private:
+    Input_Service* inputService;
 
-		int16_t value;
+    Input_Rotary rotary;
 
-		bool lastLowInput, lastHighInput;
+    int16_t value;
 
-		// Signals whether the setup of this source was modified since the last time it was
-		// stored / loaded.
-		bool modified;
+    bool lastLowInput, lastHighInput;
 
-	public:
-		Setup_Source_Input Setup;
+    // Signals whether the setup of this source was modified since the last time it was stored /
+    // loaded.
+    bool modified;
 
-		void Initialize( void);
-		void Reset( void);
-		void LoadSetup( uint16_t SetupSourceId);
-		void StoreIfModified( uint16_t SetupSourceId);
+  public:
+    Setup_Source_Input Setup;
 
-		int16_t CalculateValue( const Signal_Processor* SignalProcessor);
+    void Initialize( Input_Service* InputService);
+    void Reset( void);
+    void LoadSetup( uint16_t SetupSourceId);
+    void StoreIfModified( uint16_t SetupSourceId);
+
+    int16_t CalculateValue( const Signal_Processor* SignalProcessor);
 };

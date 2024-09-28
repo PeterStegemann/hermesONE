@@ -20,10 +20,17 @@ enum Menu
 	M_ChannelStart	= 4
 };
 
-Screen_Setup_Channels::Screen_Setup_Channels( void)
-					 : Screen_Setup_BaseList( Text::Channels)
-					 , selectedModelId( GLOBAL.SetupService.GetSelectedModelId())
-			         , rfMode( GLOBAL.SetupService.GetRFMode( selectedModelId))
+Screen_Setup_Channels::Screen_Setup_Channels
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen
+)
+    : Screen_Setup_BaseList( InputService, StatusScreen, Text::Channels)
+    , interruptService( InterruptService)
+    , select( InputService, InterruptService)
+    , selectedModelId( GLOBAL.SetupService.GetSelectedModelId())
+    , rfMode( GLOBAL.SetupService.GetRFMode( selectedModelId))
 {
 	visibleLines = SIGNAL_PPM_CHANNELS;
 
@@ -31,11 +38,13 @@ Screen_Setup_Channels::Screen_Setup_Channels( void)
 	{
 		channelLabel[ ChannelLine].SetText( channelName[ ChannelLine]);
 
-		valueGauge[ ChannelLine].SetOptions(
+		valueGauge[ ChannelLine].SetOptions
+		(
 			( GUI_Setup_Gauge::Options)( GUI_Setup_Gauge::O_Percentage |
 										 GUI_Setup_Gauge::O_DualPercentage |
 										 GUI_Setup_Gauge::O_CenterLine |
-										 GUI_Setup_Gauge::O_Marker));
+										 GUI_Setup_Gauge::O_Marker)
+        );
 	}
 
 	rfModeLabel.SetText( rfModeName);
@@ -131,7 +140,7 @@ bool Screen_Setup_Channels::processMenu( DoMenuResult Result)
 
 				case 1 :
 				{
-					bool ValueChanged = GUI_Setup_Select::DoSelect8(
+					bool ValueChanged = select.DoSelect8(
 						( int8_t*) &rfMode, Setup_Service::RF_None, Setup_Service::RF_Both, 1,
 						&menuMarker, &rfModeLabel, this, &staticUpdate, &updateRFMode);
 
@@ -193,7 +202,10 @@ void Screen_Setup_Channels::doSelect( uint8_t LineId)
 		return;
 	}
 
-	Screen_Setup_Channel ChannelScreen( firstLine + LineId);
+	Screen_Setup_Channel ChannelScreen
+	(
+	    inputService, interruptService, statusScreen, firstLine + LineId
+    );
 	ChannelScreen.Run();
 
 	ReDisplay();

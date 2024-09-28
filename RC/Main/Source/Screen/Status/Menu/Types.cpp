@@ -14,9 +14,13 @@
 #define MENU_START		1
 #define MENU_COUNT		1
 
-Screen_Status_Menu_Types::Screen_Status_Menu_Types( void)
-						: Screen_Status_Menu_Base( GLOBAL.SetupService.CountTypes(
-							Setup_Service::CTO_Used) + MENU_COUNT, L_Two)
+Screen_Status_Menu_Types::Screen_Status_Menu_Types( Input_Service* InputService)
+						: Screen_Status_Menu_Base
+						(
+						    InputService,
+						    GLOBAL.SetupService.CountTypes( Setup_Service::CTO_Used) + MENU_COUNT,
+						    L_Two
+                        )
 {
 }
 
@@ -109,7 +113,7 @@ bool Screen_Status_Menu_Types::processMenu( DoMenuResult Result)
 
 				default :
 				{
-					Screen_Status_Menu_Models ModelsScreen( selectedTypeId);
+					Screen_Status_Menu_Models ModelsScreen( inputService, selectedTypeId);
 					ModelsScreen.Run();
 
 					clearSubMenuLine();

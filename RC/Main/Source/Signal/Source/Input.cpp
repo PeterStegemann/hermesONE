@@ -17,11 +17,13 @@
 #define BUZZ_TICK_PAUSE			0
 #define BUZZ_TICK_REPEAT		1
 
-void Signal_Source_Input::Initialize( void)
+void Signal_Source_Input::Initialize( Input_Service* InputService)
 {
+    inputService = InputService;
+
 	value = Setup.InitVolume;
-	lastLowInput = GLOBAL.InputService.GetDigitalInput( Setup.InputIdA);
-	lastHighInput = GLOBAL.InputService.GetDigitalInput( Setup.InputIdB);
+	lastLowInput = inputService->GetDigitalInput( Setup.InputIdA);
+	lastHighInput = inputService->GetDigitalInput( Setup.InputIdB);
 	modified = false;
 
 	rotary.Initialize( lastLowInput, lastHighInput);
@@ -30,8 +32,8 @@ void Signal_Source_Input::Initialize( void)
 void Signal_Source_Input::Reset( void)
 {
 	value = SIGNAL_MINIMUM_VALUE;
-	lastLowInput = GLOBAL.InputService.GetDigitalInput( Setup.InputIdA);
-	lastHighInput = GLOBAL.InputService.GetDigitalInput( Setup.InputIdB);
+	lastLowInput = inputService->GetDigitalInput( Setup.InputIdA);
+	lastHighInput = inputService->GetDigitalInput( Setup.InputIdB);
 
 	Setup.Type = Setup_Source_Input::IT_Button;
 	Setup.InputIdA = 0;
@@ -77,7 +79,7 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 		{
 			if( Setup.Toggle == false)
 			{
-				if( GLOBAL.InputService.GetDigitalInput( Setup.InputIdA) == true)
+				if( inputService->GetDigitalInput( Setup.InputIdA) == true)
 				{
 					value = Setup.TopVolume;
 				}
@@ -90,7 +92,7 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 			{
 				// Button was pressed and released?
 				if(( lastLowInput == false) &&
-				   ( GLOBAL.InputService.GetDigitalInput( Setup.InputIdA) == true))
+				   ( inputService->GetDigitalInput( Setup.InputIdA) == true))
 				{
 					if( value == Setup.TopVolume)
 					{
@@ -108,7 +110,7 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 					}
 				}
 
-				lastLowInput = GLOBAL.InputService.GetDigitalInput( Setup.InputIdA);
+				lastLowInput = inputService->GetDigitalInput( Setup.InputIdA);
 			}
 		}
 		break;
@@ -116,11 +118,11 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 		case Setup_Source_Input::IT_Switch :
 		{
 			// This is undefined for low & high == true and ends up low.
-			if( GLOBAL.InputService.GetDigitalInput( Setup.InputIdA) == true)
+			if( inputService->GetDigitalInput( Setup.InputIdA) == true)
 			{
 				value = Setup.TopVolume;
 			}
-			else if( GLOBAL.InputService.GetDigitalInput( Setup.InputIdB) == true)
+			else if( inputService->GetDigitalInput( Setup.InputIdB) == true)
 			{
 				value = Setup.BottomVolume;
 			}
@@ -144,14 +146,14 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 			// Check if there was a tick and what was its direction. This is undefined for low &
 			// high == true and ends up low.
 			if(( lastLowInput == false) &&
-			   ( GLOBAL.InputService.GetDigitalInput( Setup.InputIdA) == true))
+			   ( inputService->GetDigitalInput( Setup.InputIdA) == true))
 			{
 				Step = Setup.StepVolume;
 				Tick = true;
 			}
 
 			if(( lastHighInput == false) &&
-			   ( GLOBAL.InputService.GetDigitalInput( Setup.InputIdB) == true))
+			   ( inputService->GetDigitalInput( Setup.InputIdB) == true))
 			{
 				Step = -Setup.StepVolume;
 				Tick = true;
@@ -234,8 +236,8 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 				value = NewValue;
 			}
 
-			lastLowInput = GLOBAL.InputService.GetDigitalInput( Setup.InputIdA);
-			lastHighInput = GLOBAL.InputService.GetDigitalInput( Setup.InputIdB);
+			lastLowInput = inputService->GetDigitalInput( Setup.InputIdA);
+			lastHighInput = inputService->GetDigitalInput( Setup.InputIdB);
 		}
 		break;
 
@@ -243,8 +245,8 @@ int16_t Signal_Source_Input::CalculateValue( const Signal_Processor* SignalProce
 		{
 			int8_t Difference =
 				rotary.CalculateDifference(
-					GLOBAL.InputService.GetDigitalInput( Setup.InputIdA),
-					GLOBAL.InputService.GetDigitalInput( Setup.InputIdB));
+					inputService->GetDigitalInput( Setup.InputIdA),
+					inputService->GetDigitalInput( Setup.InputIdB));
 			
 			if( Difference != 0)
 			{

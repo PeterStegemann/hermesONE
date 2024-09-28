@@ -8,8 +8,14 @@
 
 #include "AVR/Source/EEPROM.h"
 
-Screen_Setup_Info::Screen_Setup_Info( void)
-				 : Screen_Setup_Base( 0b101, Text::Info)
+Screen_Setup_Info::Screen_Setup_Info
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen
+)
+    : Screen_Setup_Base( InputService, StatusScreen, 0b101, Text::Info)
+    , ownerInput( InputService, InterruptService)
 {
 	GLOBAL.SetupService.GetOwner( owner, sizeof( owner));
 

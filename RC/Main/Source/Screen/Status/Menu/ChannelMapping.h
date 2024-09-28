@@ -22,6 +22,6 @@ class Screen_Status_Menu_ChannelMapping : public Screen_Status_Menu_Base
 		virtual void display( void);
 
 	public:
-		Screen_Status_Menu_ChannelMapping( uint8_t PPMId);
+		Screen_Status_Menu_ChannelMapping( Input_Service* InputService, uint8_t PPMId);
 		virtual ~Screen_Status_Menu_ChannelMapping( void);
 };

@@ -10,9 +10,19 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Source_Proxy::Screen_Setup_Source_Proxy( uint8_t SignalSourceId)
-						 : Screen_Setup_Source_Base( SignalSourceId, 0b10101, Text::Proxy)
-						 , sourceProxy( NULL)
+Screen_Setup_Source_Proxy::Screen_Setup_Source_Proxy
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t SignalSourceId
+)
+    : Screen_Setup_Source_Base
+    (
+        InputService, InterruptService, StatusScreen, SignalSourceId, 0b10101, Text::Proxy
+    )
+    , select( InputService, InterruptService)
+    , sourceProxy( NULL)
 {
 	sourceProxy = &( source->Body.Proxy);
 
@@ -58,12 +68,12 @@ bool Screen_Setup_Source_Proxy::processMenu( DoMenuResult Result)
 			{
 				case 4 :
 				{
-					bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+					bool SourceChanged = select.DoSourceSelect(
 						&( sourceProxy->SignalSourceId), &( sourceProxy->ReferenceSetup.Source),
 						&menuMarker, &sourceNameLabel, NULL, sourceName, this, &staticUpdate, true,
 						Signal_Source_Source::L_Model);
 
-					ValueChanged = GUI_Setup_Select::DoSelect16(
+					ValueChanged = select.DoSelect16(
 						&( sourceProxy->ReferenceSetup.Volume), SIGNAL_MINIMUM_VALUE,
 						SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_PROXY_SIGNAL_PER_VALUE, &menuMarker,
 						&sourceVolumeLabel, this, &staticUpdate, &updateVolume);

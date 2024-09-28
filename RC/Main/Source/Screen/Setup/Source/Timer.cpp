@@ -15,10 +15,25 @@
 #define PAUSE_TIME_LIMIT			( 5 * 60 * 60)
 #define PAUSE_TIME_STEP_WIDTH		1
 
-Screen_Setup_Source_Timer::Screen_Setup_Source_Timer( uint8_t SignalSourceId)
-						 : Screen_Setup_Source_Base( SignalSourceId, 0b1011010101110101,
-													 Text::Timer, false)
-						 , sourceTimer( NULL)
+Screen_Setup_Source_Timer::Screen_Setup_Source_Timer
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t SignalSourceId
+)
+    : Screen_Setup_Source_Base
+    (
+        InputService,
+        InterruptService,
+        StatusScreen,
+        SignalSourceId,
+        0b1011010101110101,
+        Text::Timer,
+        false
+    )
+    , select( InputService, InterruptService)
+    , sourceTimer( NULL)
 {
 	sourceTimer = &( source->Body.Timer);
 
@@ -182,9 +197,11 @@ bool Screen_Setup_Source_Timer::processMenu( DoMenuResult Result)
 			{
 				case 4 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSelectTime(
+					ValueChanged = select.DoSelectTime
+					(
 						&( sourceTimer->Setup.InitTime), 0, TIME_LIMIT, TIME_STEP_WIDTH,
-						&menuMarker, &initTimeLabel, this, &updateTime);
+						&menuMarker, &initTimeLabel, this, &updateTime
+                    );
 				}
 				break;
 
@@ -206,27 +223,33 @@ bool Screen_Setup_Source_Timer::processMenu( DoMenuResult Result)
 
 				case 8 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSourceSelect(
+					ValueChanged = select.DoSourceSelect
+					(
 						&( sourceTimer->TriggerSignalSourceId),
 						&( sourceTimer->Setup.TriggerSource), &menuMarker,
 						&triggerNameLabel, NULL, triggerName, this, &staticUpdate, false,
-						source->GetLevel());
+						source->GetLevel()
+                    );
 				}
 				break;
 
 				case 10 :
 				{
-					bool LowChanged = GUI_Setup_Select::DoSelect16(
+					bool LowChanged = select.DoSelect16
+					(
 						&( sourceTimer->Setup.TriggerLowLimit), SIGNAL_MINIMUM_VALUE,
 						SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_FOLLOWER_TRIGGER_SIGNAL_PER_VALUE,
 						&menuMarker, &triggerLowLimitLabel, this, &staticUpdate,
-						&updateTriggerLimit);
+						&updateTriggerLimit
+                    );
 
-					bool HighChanged = GUI_Setup_Select::DoSelect16(
+					bool HighChanged = select.DoSelect16
+					(
 						&( sourceTimer->Setup.TriggerHighLimit), SIGNAL_MINIMUM_VALUE,
 						SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_FOLLOWER_TRIGGER_SIGNAL_PER_VALUE,
 						&menuMarker, &triggerHighLimitLabel, this, &staticUpdate,
-						&updateTriggerLimit);
+						&updateTriggerLimit
+                    );
 
 					ValueChanged = HighChanged || LowChanged;
 				}
@@ -234,13 +257,17 @@ bool Screen_Setup_Source_Timer::processMenu( DoMenuResult Result)
 
 				case 12 :
 				{
-					bool LowChanged = GUI_Setup_Select::DoSelectTime(
+					bool LowChanged = select.DoSelectTime
+					(
 						&( sourceTimer->Setup.WarnLowTime), 0, TIME_LIMIT, TIME_STEP_WIDTH,
-						&menuMarker, &warnLowTimeLabel, this, &updateTime);
+						&menuMarker, &warnLowTimeLabel, this, &updateTime
+                    );
 
-					bool HighChanged = GUI_Setup_Select::DoSelectTime(
+					bool HighChanged = select.DoSelectTime
+					(
 						&( sourceTimer->Setup.WarnCriticalTime), 0, TIME_LIMIT, TIME_STEP_WIDTH,
-						&menuMarker, &warnCriticalTimeLabel, this, &updateTime);
+						&menuMarker, &warnCriticalTimeLabel, this, &updateTime
+                    );
 
 					ValueChanged = HighChanged || LowChanged;
 				}
@@ -248,9 +275,11 @@ bool Screen_Setup_Source_Timer::processMenu( DoMenuResult Result)
 
 				case 13 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSelectTime(
+					ValueChanged = select.DoSelectTime
+					(
 						&( sourceTimer->Setup.WarnPauseTime), 0, PAUSE_TIME_LIMIT,
-						PAUSE_TIME_STEP_WIDTH, &menuMarker, &warnPauseTimeLabel, this, &updateTime);
+						PAUSE_TIME_STEP_WIDTH, &menuMarker, &warnPauseTimeLabel, this, &updateTime
+                    );
 				}
 				break;
 
@@ -288,16 +317,22 @@ void Screen_Setup_Source_Timer::updateTime( void* Object, GUI_Setup_Label* Label
 	(( GUI_Setup_TimeLabel*) Label)->SetTime( Value);
 }
 
-void Screen_Setup_Source_Timer::updateTriggerLimit( void* Object, GUI_Setup_Label* Label,
-												    int16_t Value)
+void Screen_Setup_Source_Timer::updateTriggerLimit
+(
+    void* Object, GUI_Setup_Label* Label, int16_t Value
+)
 {
 	// Refresh label.
-	(( Screen_Setup_Source_Timer*) Object)->updateVolume( Label, Value,
-		SIGNAL_SOURCE_FOLLOWER_TRIGGER_SIGNAL_PER_VALUE);
+	(( Screen_Setup_Source_Timer*) Object)->updateVolume
+	(
+	    Label, Value, SIGNAL_SOURCE_FOLLOWER_TRIGGER_SIGNAL_PER_VALUE
+    );
 }
 
-void Screen_Setup_Source_Timer::updateVolume( GUI_Setup_Label* Label, int16_t Value,
-											  int16_t SignalPerValue)
+void Screen_Setup_Source_Timer::updateVolume
+(
+    GUI_Setup_Label* Label, int16_t Value, int16_t SignalPerValue
+)
 {
 	// Refresh label.		
 	Label->SetValue( Value / SignalPerValue);

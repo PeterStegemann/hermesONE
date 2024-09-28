@@ -9,10 +9,15 @@
 #include "AVR/Source/Font/Font.h"
 #include "AVR/Source/LCD/DOG/DOG.h"
 
-Screen_Status_Menu_Base::Screen_Status_Menu_Base( uint8_t MenuEntries, Level MenuLevel)
-					   : Screen_Base()
-					   , menuEntries( MenuEntries)
-					   , menuLevel( MenuLevel)
+Screen_Status_Menu_Base::Screen_Status_Menu_Base
+(
+    Input_Service* InputService,
+    uint8_t MenuEntries,
+    Level MenuLevel
+)
+    : Screen_Base( InputService)
+    , menuEntries( MenuEntries)
+    , menuLevel( MenuLevel)
 {
 	uint32_t MenuPattern = 0;
 
@@ -144,7 +149,7 @@ bool Screen_Status_Menu_Base::selectValue( int8_t* Value, int8_t LowerLimit, int
 		int8_t RotarySelect;
 		uint8_t RotaryButton;
 
-		GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+		inputService->GetRotary( &RotarySelect, &RotaryButton);
 
 		if( RotaryButton > 0)
 		{
@@ -203,7 +208,7 @@ bool Screen_Status_Menu_Base::selectValue( int16_t* Value, int16_t LowerLimit, i
 		int8_t RotarySelect;
 		uint8_t RotaryButton;
 
-		GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+		inputService->GetRotary( &RotarySelect, &RotaryButton);
 
 		if( RotaryButton > 0)
 		{
@@ -262,7 +267,7 @@ bool Screen_Status_Menu_Base::selectValue( uint16_t* Value, uint16_t LowerLimit,
 		int8_t RotarySelect;
 		uint8_t RotaryButton;
 
-		GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+		inputService->GetRotary( &RotarySelect, &RotaryButton);
 
 		if( RotaryButton > 0)
 		{
@@ -320,7 +325,7 @@ bool Screen_Status_Menu_Base::selectSource
 		int8_t RotarySelect;
 		uint8_t RotaryButton;
 
-		GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+		inputService->GetRotary( &RotarySelect, &RotaryButton);
 
 		if( RotaryButton > 0)
 		{

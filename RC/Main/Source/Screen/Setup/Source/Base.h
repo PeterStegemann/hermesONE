@@ -31,6 +31,14 @@ class Screen_Setup_Source_Base : public Screen_Setup_Base
 		virtual void update( void);
 		virtual bool processMenu( DoMenuResult Result);
 
-		Screen_Setup_Source_Base( uint8_t SignalSourceId, uint32_t MenuPattern,
-								  const flash_char* Title, bool hasGauge = true);
+		Screen_Setup_Source_Base
+		(
+            Input_Service* InputService,
+            Interrupt_Service* InterruptService,
+		    Screen_Status_Status* StatusScreen,
+	    	uint8_t SignalSourceId,
+	    	uint32_t MenuPattern,
+            const flash_char* Title,
+            bool hasGauge = true
+        );
 };

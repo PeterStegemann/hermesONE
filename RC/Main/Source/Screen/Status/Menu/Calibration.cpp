@@ -16,9 +16,12 @@
 #define MENU_HIGH		3
 #define MENU_COUNT		4
 
-Screen_Status_Menu_Calibration::Screen_Status_Menu_Calibration( uint8_t CalibrationId)
-							  : Screen_Status_Menu_Base( MENU_COUNT, L_Three)
-							  , calibrationId( CalibrationId)
+Screen_Status_Menu_Calibration::Screen_Status_Menu_Calibration
+(
+    Input_Service* InputService, uint8_t CalibrationId
+)
+    : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Three)
+    , calibrationId( CalibrationId)
 {
 	calibration = GLOBAL.SignalProcessor.GetCalibration( calibrationId);
 }

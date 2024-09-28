@@ -9,9 +9,19 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Source_Mix::Screen_Setup_Source_Mix( uint8_t SignalSourceId)
-					   : Screen_Setup_Source_Base( SignalSourceId, 0b111111100101, Text::Mix)
-					   , sourceMix( NULL)
+Screen_Setup_Source_Mix::Screen_Setup_Source_Mix
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t SignalSourceId
+)
+    : Screen_Setup_Source_Base
+    (
+        InputService, InterruptService, StatusScreen, SignalSourceId, 0b111111100101, Text::Mix
+    )
+    , select( InputService, InterruptService)
+    , sourceMix( NULL)
 {
 	sourceMix = &( source->Body.Mix);
 
@@ -115,7 +125,7 @@ bool Screen_Setup_Source_Mix::processMenu( DoMenuResult Result)
 void Screen_Setup_Source_Mix::doSource( uint8_t Index)
 {
 	// Do source.
-	bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+	bool SourceChanged = select.DoSourceSelect(
 		&( sourceMix->SignalSourceId[ Index]), &( sourceMix->Setup.InputSource[ Index].Source),
 		&menuMarker, &( sourceLabel[ Index]), &( valueGauge[ Index]), sourceName[ Index], this,
 		&staticUpdate, true, source->GetLevel());
@@ -123,7 +133,7 @@ void Screen_Setup_Source_Mix::doSource( uint8_t Index)
 	// Do volume.
 	currentVolumeIndex = Index;
 
-	bool VolumeChanged = GUI_Setup_Select::DoSelect16(
+	bool VolumeChanged = select.DoSelect16(
 		&( sourceMix->Setup.InputSource[ currentVolumeIndex].Volume), SIGNAL_MINIMUM_VALUE,
 		SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_MIX_SIGNAL_PER_VALUE, &menuMarker,
 		&( volumeLabel[ currentVolumeIndex]), this, &staticUpdate, &updateVolume);

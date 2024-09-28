@@ -14,6 +14,8 @@
 class Screen_Setup_Main : public Screen_Setup_Base
 {
   private:
+    Interrupt_Service* interruptService;
+
   	virtual void display( void)
     {
     	// Adjust menu entries to frame and set them up.
@@ -130,55 +132,70 @@ class Screen_Setup_Main : public Screen_Setup_Base
 
     void doModels( void)
     {
-        Screen_Setup_Types TypesScreen;
+        Screen_Setup_Types TypesScreen( inputService, statusScreen);
         TypesScreen.Run();
     }
 
     void doSetupChannels( void)
     {
-        Screen_Setup_Channels ChannelsScreen;
+        Screen_Setup_Channels ChannelsScreen( inputService, interruptService, statusScreen);
         ChannelsScreen.Run();
     }
 
     void doSetupModel( void)
     {
-        Screen_Setup_Model SetupModelScreen( Signal_Source_Source::L_Model);
+        Screen_Setup_Model SetupModelScreen
+        (
+            inputService, interruptService, statusScreen, Signal_Source_Source::L_Model
+        );
         SetupModelScreen.Run();
     }
 
     void doSetupType( void)
     {
-        Screen_Setup_Model SetupTypeScreen( Signal_Source_Source::L_Type);
+        Screen_Setup_Model SetupTypeScreen
+        (
+            inputService, interruptService, statusScreen, Signal_Source_Source::L_Type
+        );
         SetupTypeScreen.Run();
     }
 
     void doSetupGlobal( void)
     {
-        Screen_Setup_Model SetupGlobalScreen( Signal_Source_Source::L_Global);
+        Screen_Setup_Model SetupGlobalScreen
+        (
+            inputService, interruptService, statusScreen, Signal_Source_Source::L_Global
+        );
         SetupGlobalScreen.Run();
     }
 
     void doSetupStatus( void)
     {
-        Screen_Setup_SetupStatus SetupStatusScreen;
+        Screen_Setup_SetupStatus SetupStatusScreen( inputService, interruptService, statusScreen);
         SetupStatusScreen.Run();
     }
 
     void doInfo( void)
     {
-        Screen_Setup_Info InfoScreen;
+        Screen_Setup_Info InfoScreen( inputService, interruptService, statusScreen);
         InfoScreen.Run();
     }
 
     void doSystem( void)
     {
-        Screen_Setup_System SystemScreen;
+        Screen_Setup_System SystemScreen( inputService, interruptService, statusScreen);
         SystemScreen.Run();
     }
 
   public:
-    Screen_Setup_Main( void)
-        : Screen_Setup_Base( 0b1100101110100101, Text::Main)
+    Screen_Setup_Main
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen
+    )
+        : Screen_Setup_Base( InputService, StatusScreen, 0b1100101110100101, Text::Main)
+        , interruptService( InterruptService)
     {
     }
 };

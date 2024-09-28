@@ -7,7 +7,7 @@
 #include "Label.h"
 #include "Marker.h"
 
-#include "Main/Global.h"
+#include "Input/Service.h"
 #include "Setup/Defines.h"
 #include "Text/Text.h"
 
@@ -19,11 +19,24 @@ class GUI_Setup_Marker;
 
 class GUI_Setup_GaugeSelect
 {
+  private:
+    Input_Service* inputService;
+
   public:
-	static bool DoSelect8
+    GUI_Setup_GaugeSelect( Input_Service* InputService)
+        : inputService( InputService)
+    {
+    }
+
+	bool DoSelect8
 	(
-	    uint8_t* Value, uint8_t LowerLimit, uint8_t UpperLimit, uint8_t StepWidth,
-        GUI_Setup_Marker* Marker, GUI_Setup_Gauge* Gauge, void ( *UpdateGauge)( uint8_t Value)
+	    uint8_t* Value,
+	    uint8_t LowerLimit,
+	    uint8_t UpperLimit,
+	    uint8_t StepWidth,
+        GUI_Setup_Marker* Marker,
+        GUI_Setup_Gauge* Gauge,
+        void ( *UpdateGauge)( uint8_t Value)
     )
     {
         // Save some eeprom write cycles with this flag.
@@ -48,7 +61,7 @@ class GUI_Setup_GaugeSelect
             int8_t RotarySelect;
             uint8_t RotaryButton;
 
-            GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+            inputService->GetRotary( &RotarySelect, &RotaryButton);
 
             if( RotaryButton > 0)
             {

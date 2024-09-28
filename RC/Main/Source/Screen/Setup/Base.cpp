@@ -12,15 +12,23 @@
 
 #include <string.h>
 
-Screen_Setup_Base::Screen_Setup_Base( uint32_t MenuPattern, const flash_char* Title, bool ManageMenuMarker)
-				 : Screen_Base( MenuPattern)
-				 , manageMenuMarker( ManageMenuMarker)
-				 , title( Title)
-				 , lastSequence( 0)
-				 , frameLeft( 0)
-				 , frameTop( 0)
-				 , frameWidth( GLOBAL.SetupDisplay.GetWidth())
-				 , frameHeight( GLOBAL.SetupDisplay.GetHeight())
+Screen_Setup_Base::Screen_Setup_Base
+(
+    Input_Service* InputService,
+    Screen_Status_Status* StatusScreen,
+    uint32_t MenuPattern,
+    const flash_char* Title,
+    bool ManageMenuMarker
+)
+     : Screen_Base( InputService, MenuPattern)
+     , manageMenuMarker( ManageMenuMarker)
+     , title( Title)
+     , lastSequence( 0)
+     , statusScreen( StatusScreen)
+     , frameLeft( 0)
+     , frameTop( 0)
+     , frameWidth( GLOBAL.SetupDisplay.GetWidth())
+     , frameHeight( GLOBAL.SetupDisplay.GetHeight())
 {
 	const avr::font::Type* Font = avr::font::Font::Get( SCREEN_SETUP_BASE_MAIN_FONT);
 
@@ -44,7 +52,7 @@ extern unsigned int __heap_end;
 
 void Screen_Setup_Base::update( void)
 {
-	GLOBAL.StatusScreen.Update();
+	statusScreen->Update();
 
     if( GLOBAL.GetDebug() == false)
     {

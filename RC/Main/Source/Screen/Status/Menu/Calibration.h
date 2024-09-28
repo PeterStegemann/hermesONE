@@ -23,6 +23,6 @@ class Screen_Status_Menu_Calibration : public Screen_Status_Menu_Base
 		virtual void display( void);
 
 	public:
-		Screen_Status_Menu_Calibration( uint8_t CalibrationId);
+		Screen_Status_Menu_Calibration( Input_Service* InputService, uint8_t CalibrationId);
 		virtual ~Screen_Status_Menu_Calibration( void);
 };

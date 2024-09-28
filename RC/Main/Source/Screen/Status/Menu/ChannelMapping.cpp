@@ -13,9 +13,12 @@
 #define MENU_CHANNELS_START		1
 #define MENU_COUNT				MENU_CHANNELS_START + SIGNAL_PPM_CHANNELS
 
-Screen_Status_Menu_ChannelMapping::Screen_Status_Menu_ChannelMapping( uint8_t PPMId)
-						         : Screen_Status_Menu_Base( MENU_COUNT, L_Three)
-								 , ppmId( PPMId)
+Screen_Status_Menu_ChannelMapping::Screen_Status_Menu_ChannelMapping
+(
+    Input_Service* InputService, uint8_t PPMId
+)
+    : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Three)
+    , ppmId( PPMId)
 {
 	GLOBAL.SetupService.GetPPM( ppmId, &ppmSetup);
 }

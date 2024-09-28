@@ -15,8 +15,8 @@
 #define MENU_START		1
 #define MENU_COUNT		SIGNAL_PROCESSOR_ANALOG_INPUTS + MENU_START
 
-Screen_Status_Menu_Calibrations::Screen_Status_Menu_Calibrations( void)
-							   : Screen_Status_Menu_Base( MENU_COUNT, L_Two)
+Screen_Status_Menu_Calibrations::Screen_Status_Menu_Calibrations( Input_Service* InputService)
+							   : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Two)
 {
 }
 
@@ -66,8 +66,11 @@ bool Screen_Status_Menu_Calibrations::processMenu( DoMenuResult Result)
 
 					char String[ 3];
 
-					snprintf_P( String, sizeof( String), Text::TwinCharacterFormat,
-								'A' + ( Id / 2), '0' + ( Id % 2));
+					snprintf_P
+					(
+					    String, sizeof( String), Text::TwinCharacterFormat,
+                        'A' + ( Id / 2), '0' + ( Id % 2)
+                    );
 
 					SetText( String);
 				}
@@ -86,8 +89,10 @@ bool Screen_Status_Menu_Calibrations::processMenu( DoMenuResult Result)
 				{
 					SetText_P(( Level)( menuLevel + 2), NULL);
 
-					Screen_Status_Menu_Calibration CalibrationScreen(
-						currentMenuEntry - MENU_START);
+					Screen_Status_Menu_Calibration CalibrationScreen
+					(
+					    inputService, currentMenuEntry - MENU_START
+                    );
 					CalibrationScreen.Run();
 
 					clearSubMenuLine();

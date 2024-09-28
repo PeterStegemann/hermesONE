@@ -39,9 +39,19 @@ static void setDigitalInput( char Value[ 2 + 1], uint8_t InputId)
 	Value[ 2] = 0;
 }
 
-Screen_Setup_Source_Input::Screen_Setup_Source_Input( uint8_t SignalSourceId)
-						 : Screen_Setup_Source_Base( SignalSourceId, 0, Text::Input)
-						 , sourceInput( NULL)
+Screen_Setup_Source_Input::Screen_Setup_Source_Input
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t SignalSourceId
+)
+    : Screen_Setup_Source_Base
+    (
+        InputService, InterruptService, StatusScreen, SignalSourceId, 0, Text::Input
+    )
+    , select( InputService, InterruptService)
+    , sourceInput( NULL)
 {
 	sourceInput = &( source->Body.Input.Setup);
 
@@ -82,7 +92,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 			{
 				case 3 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSelect8(
+					ValueChanged = select.DoSelect8(
 						( int8_t*) &( sourceInput->Type), 0,
 						Setup_Source_Input::IT_InputTypeCount - 1, 1,
 						&menuMarker, &typeValueLabel, this, &staticUpdate, &updateType);
@@ -95,7 +105,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 					{
 						case Setup_Source_Input::IT_Analog :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect8(
+							ValueChanged = select.DoSelect8(
 								( int8_t*) &( sourceInput->InputIdA), 0,
 								SIGNAL_PROCESSOR_ANALOG_INPUTS - 1, 1, &menuMarker,
 								&inputAValueLabel, this, &staticUpdate, &updateInputAnalog);
@@ -104,7 +114,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 
 						default :
 						{							
-							ValueChanged = GUI_Setup_Select::DoSelect8(
+							ValueChanged = select.DoSelect8(
 								( int8_t*) &( sourceInput->InputIdA), 0,
 								SIGNAL_PROCESSOR_DIGITAL_INPUTS - 1, 1, &menuMarker,
 								&inputAValueLabel, this, &staticUpdate, &updateInputDigitalA);
@@ -116,7 +126,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 
 				case 6 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSelect8(
+					ValueChanged = select.DoSelect8(
 						( int8_t*) &( sourceInput->InputIdB), 0,
 						SIGNAL_PROCESSOR_DIGITAL_INPUTS - 1, 1, &menuMarker, &inputBValueLabel,
 						this, &staticUpdate, &updateInputDigitalB);
@@ -129,7 +139,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 					{
 						case Setup_Source_Input::IT_Analog :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->TopVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_VOLUME_SIGNAL_PER_VALUE,
 								&menuMarker, &topValueLabel, this, &staticUpdate, &updateVolume);
@@ -153,7 +163,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 					{
 						case Setup_Source_Input::IT_Analog :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->BottomVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_VOLUME_SIGNAL_PER_VALUE,
 								&menuMarker, &bottomValueLabel, this, &staticUpdate, &updateVolume);
@@ -162,7 +172,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 
 						case Setup_Source_Input::IT_Button :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->InitVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_INIT_SIGNAL_PER_VALUE,
 								&menuMarker, &initValueLabel, this, &staticUpdate, &updateInit);
@@ -180,7 +190,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 
 						case Setup_Source_Input::IT_Switch :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->TopVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_VOLUME_SIGNAL_PER_VALUE,
 								&menuMarker, &topValueLabel, this, &staticUpdate, &updateVolume);
@@ -205,7 +215,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 						case Setup_Source_Input::IT_Rotary :
 						case Setup_Source_Input::IT_Ticker :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->InitVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_INIT_SIGNAL_PER_VALUE,
 								&menuMarker, &initValueLabel, this, &staticUpdate, &updateInit);
@@ -214,7 +224,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 
 						case Setup_Source_Input::IT_Switch :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->BottomVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_VOLUME_SIGNAL_PER_VALUE,
 								&menuMarker, &bottomValueLabel, this, &staticUpdate, &updateVolume);
@@ -231,7 +241,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 						case Setup_Source_Input::IT_Rotary :
 						case Setup_Source_Input::IT_Ticker :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->StepVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_STEP_SIGNAL_PER_VALUE,
 								&menuMarker, &stepValueLabel, this, &staticUpdate, &updateStep);
@@ -247,7 +257,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 					{
 						case Setup_Source_Input::IT_Button :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->TopVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_VOLUME_SIGNAL_PER_VALUE,
 								&menuMarker, &topValueLabel, this, &staticUpdate, &updateVolume);
@@ -263,7 +273,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 					{
 						case Setup_Source_Input::IT_Button :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->BottomVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_VOLUME_SIGNAL_PER_VALUE,
 								&menuMarker, &bottomValueLabel, this, &staticUpdate, &updateVolume);
@@ -273,7 +283,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 						case Setup_Source_Input::IT_Rotary :
 						case Setup_Source_Input::IT_Ticker :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->TopVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_VOLUME_SIGNAL_PER_VALUE,
 								&menuMarker, &topValueLabel, this, &staticUpdate, &updateVolume);
@@ -290,7 +300,7 @@ bool Screen_Setup_Source_Input::processMenu( DoMenuResult Result)
 						case Setup_Source_Input::IT_Rotary :
 						case Setup_Source_Input::IT_Ticker :
 						{
-							ValueChanged = GUI_Setup_Select::DoSelect16(
+							ValueChanged = select.DoSelect16(
 								&( sourceInput->BottomVolume), SIGNAL_MINIMUM_VALUE,
 								SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_INPUT_VOLUME_SIGNAL_PER_VALUE,
 								&menuMarker, &bottomValueLabel, this, &staticUpdate, &updateVolume);

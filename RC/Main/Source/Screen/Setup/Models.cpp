@@ -8,9 +8,15 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Models::Screen_Setup_Models( uint8_t SetupTypeId)
-				   : Screen_Setup_BaseList( Text::Models)
-				   , setupTypeId( SetupTypeId)
+Screen_Setup_Models::Screen_Setup_Models
+(
+    Input_Service* InputService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t SetupTypeId
+)
+   : Screen_Setup_BaseList( InputService, StatusScreen, Text::Models)
+   , inputService( InputService)
+   , setupTypeId( SetupTypeId)
 {
 	visibleLines = SCREEN_SETUP_BASELIST_MAXIMUM_LINES - 2;
 
@@ -207,7 +213,7 @@ void Screen_Setup_Models::doAdd( void)
 
 	if( SetupModelAvailable == false)
 	{
-		GUI_Setup_Popup Popup;
+		GUI_Setup_Popup Popup( inputService);
 
 		// Set text.
 		Popup.SetText_P( Text::NoSystemStorage);
@@ -251,7 +257,7 @@ void Screen_Setup_Models::doSelectModel( uint8_t SetupModelId)
 
 	GLOBAL.SignalProcessor.LoadModel();
 
-	GLOBAL.StatusScreen.Display();
+	statusScreen->Display();
 }
 
 void Screen_Setup_Models::doDelete( uint8_t LineId)
@@ -270,7 +276,7 @@ void Screen_Setup_Models::doDelete( uint8_t LineId)
 		return;
 	}
 
-	GUI_Setup_Popup Popup;
+	GUI_Setup_Popup Popup( inputService);
 
 	if( SetupModelId == GLOBAL.SetupService.GetSelectedModelId())
 	{

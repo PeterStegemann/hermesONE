@@ -25,6 +25,6 @@ class Screen_Status_Menu_Battery : public Screen_Status_Menu_Base
 		virtual void display( void);
 
 	public:
-		Screen_Status_Menu_Battery( void);
+		Screen_Status_Menu_Battery( Input_Service* InputService);
 		virtual ~Screen_Status_Menu_Battery( void);
 };

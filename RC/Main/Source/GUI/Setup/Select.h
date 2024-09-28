@@ -13,6 +13,9 @@
 class GUI_Setup_Select
 {
   private:
+    Input_Service* inputService;
+    Interrupt_Service* interruptService;
+
     static void select( GUI_Setup_Marker* Marker, GUI_Setup_Label* Label)
     {
         Marker->ForegroundColor = LCD_65K_RGB::C_Red;
@@ -28,7 +31,7 @@ class GUI_Setup_Select
         Label->Display();
     }
 
-    static void blink( GUI_Setup_Label* Label, uint16_t* Millis, bool* Inverted)
+    void blink( GUI_Setup_Label* Label, uint16_t* Millis, bool* Inverted)
     {
         if( Blink( Millis, Inverted))
         {
@@ -90,9 +93,15 @@ class GUI_Setup_Select
     }
 
   public:
-    static bool Blink( uint16_t* Millis, bool* Inverted)
+    GUI_Setup_Select( Input_Service* InputService, Interrupt_Service* InterruptService)
+        : inputService( InputService)
+        , interruptService( InterruptService)
     {
-        uint16_t NewMillis = GLOBAL.InterruptService.GetMillis();
+    }
+
+    bool Blink( uint16_t* Millis, bool* Inverted)
+    {
+        uint16_t NewMillis = interruptService->GetMillis();
         int32_t Diff = NewMillis;
         Diff -= *Millis;
 
@@ -112,11 +121,17 @@ class GUI_Setup_Select
         return( false);
     }
 
-    static bool DoSelect8
+    bool DoSelect8
     (
-        int8_t* Value, int8_t LowerLimit, int8_t UpperLimit, int8_t StepWidth,
-        GUI_Setup_Marker* Marker, GUI_Setup_Label* Label, void* Object,
-        void ( *Update)( void* Object), void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int8_t Value)
+        int8_t* Value,
+        int8_t LowerLimit,
+        int8_t UpperLimit,
+        int8_t StepWidth,
+        GUI_Setup_Marker* Marker,
+        GUI_Setup_Label* Label,
+        void* Object,
+        void ( *Update)( void* Object),
+        void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int8_t Value)
     )
     {
         select( Marker, Label);
@@ -143,7 +158,7 @@ class GUI_Setup_Select
             int8_t RotarySelect;
             uint8_t RotaryButton;
 
-            GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+            inputService->GetRotary( &RotarySelect, &RotaryButton);
 
             if( RotaryButton > 0)
             {
@@ -173,11 +188,17 @@ class GUI_Setup_Select
         return( ValueChanged);
     }
 
-    static bool DoSelect16
+    bool DoSelect16
     (
-        int16_t* Value, int16_t LowerLimit, int16_t UpperLimit, int16_t StepWidth,
-        GUI_Setup_Marker* Marker, GUI_Setup_Label* Label, void* Object,
-        void ( *Update)( void* Object), void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int16_t Value)
+        int16_t* Value,
+        int16_t LowerLimit,
+        int16_t UpperLimit,
+        int16_t StepWidth,
+        GUI_Setup_Marker* Marker,
+        GUI_Setup_Label* Label,
+        void* Object,
+        void ( *Update)( void* Object),
+        void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int16_t Value)
     )
     {
         select( Marker, Label);
@@ -204,7 +225,7 @@ class GUI_Setup_Select
             int8_t RotarySelect;
             uint8_t RotaryButton;
 
-            GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+            inputService->GetRotary( &RotarySelect, &RotaryButton);
 
             if( RotaryButton > 0)
             {
@@ -234,10 +255,15 @@ class GUI_Setup_Select
         return( ValueChanged);
     }
 
-	static bool DoSelectTime
+	bool DoSelectTime
 	(
-	    int16_t* Value, int16_t LowerLimit, int16_t UpperLimit, uint8_t StepWidth,
-        GUI_Setup_Marker* Marker, GUI_Setup_Label* Label, void* Object,
+	    int16_t* Value,
+	    int16_t LowerLimit,
+	    int16_t UpperLimit,
+	    uint8_t StepWidth,
+        GUI_Setup_Marker* Marker,
+        GUI_Setup_Label* Label,
+        void* Object,
         void ( *UpdateLabel)( void* Object, GUI_Setup_Label* Label, int16_t Value)
     )
     {
@@ -260,7 +286,7 @@ class GUI_Setup_Select
             int8_t RotarySelect;
             uint8_t RotaryButton;
 
-            GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+            inputService->GetRotary( &RotarySelect, &RotaryButton);
 
             if( RotaryButton > 0)
             {
@@ -291,12 +317,19 @@ class GUI_Setup_Select
     }
 
 	// Gauge may be null. T_Empty means "All"
-	static bool DoSourceSelect
+	bool DoSourceSelect
 	(
-	    uint8_t* SignalSourceId, uint16_t* SetupSourceId,
-	    GUI_Setup_Marker* Marker, GUI_Setup_Label* Label, GUI_Setup_Gauge* Gauge,
-        char SourceName[ SETUP_SOURCE_NAME_SIZE + 1], void* Object, void ( *Update)( void* Object), bool HasFixed,
-        Signal_Source_Source::Level SourceLevel, Signal_Source_Source::Type SourceType = Signal_Source_Source::T_Empty
+	    uint8_t* SignalSourceId,
+	    uint16_t* SetupSourceId,
+	    GUI_Setup_Marker* Marker,
+	    GUI_Setup_Label* Label,
+	    GUI_Setup_Gauge* Gauge,
+        char SourceName[ SETUP_SOURCE_NAME_SIZE + 1],
+        void* Object,
+        void ( *Update)( void* Object),
+        bool HasFixed,
+        Signal_Source_Source::Level SourceLevel,
+        Signal_Source_Source::Type SourceType = Signal_Source_Source::T_Empty
     )
     {
         select( Marker, Label);
@@ -318,7 +351,7 @@ class GUI_Setup_Select
             int8_t RotarySelect;
             uint8_t RotaryButton;
 
-            GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+            inputService->GetRotary( &RotarySelect, &RotaryButton);
 
             if( RotaryButton > 0)
             {

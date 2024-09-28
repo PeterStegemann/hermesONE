@@ -20,9 +20,12 @@
 #define MENU_LIMIT		7
 #define MENU_COUNT		8
 
-Screen_Status_Menu_Channel::Screen_Status_Menu_Channel( uint8_t ChannelId)
-						  : Screen_Status_Menu_Base( MENU_COUNT, L_Three)
-						  , channelId( ChannelId)
+Screen_Status_Menu_Channel::Screen_Status_Menu_Channel
+(
+    Input_Service* InputService, uint8_t ChannelId
+)
+    : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Three)
+    , channelId( ChannelId)
 {
 	channel = GLOBAL.SignalProcessor.GetChannel( channelId);
 }

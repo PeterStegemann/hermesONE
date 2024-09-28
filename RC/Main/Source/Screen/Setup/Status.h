@@ -26,5 +26,5 @@ class Screen_Setup_Status : public Screen_Setup_Base
     virtual bool processMenu( DoMenuResult Result);
 
   public:
-    Screen_Setup_Status( void);
+    Screen_Setup_Status( Input_Service* InputService, Screen_Status_Status* StatusScreen);
 };

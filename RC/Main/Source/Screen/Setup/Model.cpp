@@ -36,24 +36,6 @@ uint16_t getMenuPattern( Signal_Source_Source::Level SourceLevel)
 	return( 0);
 }
 
-Screen_Setup_Model::Screen_Setup_Model( Signal_Source_Source::Level SourceLevel)
-				  : Screen_Setup_Base( getMenuPattern( SourceLevel), getTitle( SourceLevel))
-				  , sourceLevel( SourceLevel)
-				  , selectedModelId( GLOBAL.SetupService.GetSelectedModelId())
-				  , selectedTypeId( GLOBAL.SetupService.GetSelectedTypeId( selectedModelId))
-{
-	if( sourceLevel == Signal_Source_Source::L_Model)
-	{
-		GLOBAL.SetupService.GetModelName( selectedModelId, modelName, sizeof( modelName));
-	}
-	else if( sourceLevel == Signal_Source_Source::L_Type)
-	{
-		GLOBAL.SetupService.GetTypeName( selectedTypeId, modelName, sizeof( modelName));
-	}
-
-	modelNameInput.SetOptions(( GUI_Setup_TextInput::Options)( GUI_Setup_TextInput::O_LimitAlphaNumeric));
-}
-
 void Screen_Setup_Model::display( void)
 {
 	// Adjust menu entries to frame and set them up.
@@ -266,7 +248,7 @@ void Screen_Setup_Model::doModelName( void)
 
 void Screen_Setup_Model::doType( void)
 {
-    bool selected = GUI_Setup_Select::DoSelect8
+    bool selected = select.DoSelect8
     (
         ( int8_t*) &selectedTypeId, SETUP_MODEL_TYPES_START, SETUP_MODEL_TYPES_END, 1,
         &menuMarker, &typeLabel, this, &staticUpdate, &updateType
@@ -286,7 +268,7 @@ void Screen_Setup_Model::doSelectType( uint8_t SetupTypeId)
 		return;
 	}
 
-	GUI_Setup_Popup Popup;
+	GUI_Setup_Popup Popup( inputService);
 
 	// Set text.
 	Popup.SetText_P( Text::SwitchTypeWarning);
@@ -313,13 +295,16 @@ void Screen_Setup_Model::doSelectType( uint8_t SetupTypeId)
 
 void Screen_Setup_Model::doProxies( void)
 {
-	Screen_Setup_Proxies ProxiesScreen;
+	Screen_Setup_Proxies ProxiesScreen( inputService, interruptService, statusScreen);
 	ProxiesScreen.Run();
 }
 
 void Screen_Setup_Model::doSources( Signal_Source_Source::Type SourceType)
 {
-	Screen_Setup_Sources SourcesScreen( SourceType, sourceLevel);
+	Screen_Setup_Sources SourcesScreen
+	(
+	    inputService, interruptService, statusScreen, SourceType, sourceLevel
+    );
 	SourcesScreen.Run();
 }
 
@@ -360,4 +345,34 @@ void Screen_Setup_Model::updateType( GUI_Setup_Label* Label, int8_t Value)
 	GLOBAL.SetupService.GetTypeName( selectedTypeId, typeName, sizeof( typeName));
 	Label->SetText( typeName);
 	Label->Display();
+}
+
+Screen_Setup_Model::Screen_Setup_Model
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    Signal_Source_Source::Level SourceLevel
+)
+    : Screen_Setup_Base
+    (
+        InputService, StatusScreen, getMenuPattern( SourceLevel), getTitle( SourceLevel)
+    )
+    , interruptService( InterruptService)
+    , select( InputService, InterruptService)
+    , sourceLevel( SourceLevel)
+    , selectedModelId( GLOBAL.SetupService.GetSelectedModelId())
+    , selectedTypeId( GLOBAL.SetupService.GetSelectedTypeId( selectedModelId))
+    , modelNameInput( InputService, InterruptService)
+{
+	if( sourceLevel == Signal_Source_Source::L_Model)
+	{
+		GLOBAL.SetupService.GetModelName( selectedModelId, modelName, sizeof( modelName));
+	}
+	else if( sourceLevel == Signal_Source_Source::L_Type)
+	{
+		GLOBAL.SetupService.GetTypeName( selectedTypeId, modelName, sizeof( modelName));
+	}
+
+	modelNameInput.SetOptions(( GUI_Setup_TextInput::Options)( GUI_Setup_TextInput::O_LimitAlphaNumeric));
 }

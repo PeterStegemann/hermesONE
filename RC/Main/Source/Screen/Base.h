@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Input/Service.h"
+
 #include "AVR/Source/Types.h"
 
 #include <string.h>
@@ -30,6 +32,8 @@ class Screen_Base
     virtual bool processMenu( DoMenuResult Result);
 
   protected:
+    Input_Service* inputService;
+
     // The current logical entry (not the display line).
     uint8_t currentMenuEntry;
 
@@ -39,7 +43,7 @@ class Screen_Base
     virtual void update( void);
 
   public:
-    Screen_Base( uint32_t MenuPattern = 0);
+    Screen_Base( Input_Service* InputService, uint32_t MenuPattern = 0);
     virtual ~Screen_Base( void);
 
     // Change menu pattern.

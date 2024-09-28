@@ -14,8 +14,8 @@
 #define MENU_CHANNELS_START		1
 #define MENU_COUNT				9
 
-Screen_Status_Menu_Channels::Screen_Status_Menu_Channels( void)
-						   : Screen_Status_Menu_Base( MENU_COUNT, L_Two)
+Screen_Status_Menu_Channels::Screen_Status_Menu_Channels( Input_Service* InputService)
+						   : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Two)
 {
 }
 
@@ -84,8 +84,10 @@ bool Screen_Status_Menu_Channels::processMenu( DoMenuResult Result)
 				{
 					SetText_P(( Level)( menuLevel + 2), NULL);
 
-					Screen_Status_Menu_Channel ChannelScreen(
-						currentMenuEntry - MENU_CHANNELS_START);
+					Screen_Status_Menu_Channel ChannelScreen
+					(
+					    inputService, currentMenuEntry - MENU_CHANNELS_START
+                    );
 					ChannelScreen.Run();
 
 					clearSubMenuLine();

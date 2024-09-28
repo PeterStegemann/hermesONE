@@ -18,6 +18,6 @@ class Screen_Status_Menu_Models : public Screen_Status_Menu_Base
 	virtual void display( void);
 
   public:
-	Screen_Status_Menu_Models( uint8_t SetupTypeId);
+	Screen_Status_Menu_Models( Input_Service* InputService, uint8_t SetupTypeId);
 	virtual ~Screen_Status_Menu_Models( void);
 };

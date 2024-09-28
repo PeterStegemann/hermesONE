@@ -11,8 +11,9 @@
 
 #include <string.h>
 
-Screen_Base::Screen_Base( uint32_t MenuPattern)
+Screen_Base::Screen_Base( Input_Service* InputService, uint32_t MenuPattern)
 		   : menuPattern( MenuPattern)
+		   , inputService( InputService)
 		   , currentMenuEntry( 0)
 {
 }
@@ -77,7 +78,7 @@ Screen_Base::DoMenuResult Screen_Base::doMenu( uint32_t MenuPattern)
 	bool RotaryCurrentButton;
 	uint16_t RotaryButtonTime;
 
-	GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton, &RotaryCurrentButton, &RotaryButtonTime);
+	inputService->GetRotary( &RotarySelect, &RotaryButton, &RotaryCurrentButton, &RotaryButtonTime);
 
 	// Check for long press while the button is still pressed.
 	if( RotaryCurrentButton == true)

@@ -96,7 +96,7 @@ class Screen_Status_Menu_PPM : public Screen_Status_Menu_Base
 
                     case MENU_CHANNEL_MAPPING :
                     {
-                        Screen_Status_Menu_ChannelMapping ChannelMappingScreen( ppmId);
+                        Screen_Status_Menu_ChannelMapping ChannelMappingScreen( inputService, ppmId);
                         ChannelMappingScreen.Run();
 
                         GLOBAL.SetupService.GetPPM( ppmId, &ppmSetup);
@@ -122,8 +122,8 @@ class Screen_Status_Menu_PPM : public Screen_Status_Menu_Base
     }
 
   public:
-    Screen_Status_Menu_PPM( uint8_t PPMId)
-        : Screen_Status_Menu_Base( MENU_COUNT, L_Two)
+    Screen_Status_Menu_PPM( Input_Service* InputService, uint8_t PPMId)
+        : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Two)
         , ppmId( PPMId)
     {
     	GLOBAL.SetupService.GetPPM( ppmId, &ppmSetup);

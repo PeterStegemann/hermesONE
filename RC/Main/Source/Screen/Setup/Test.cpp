@@ -11,7 +11,8 @@
 
 using namespace Screen::Setup;
 
-Test::Test( void)
+Test::Test( Screen_Status_Status* StatusScreen)
+    : Screen_Setup_Base( InputService, StatusScreen)
 {
 }
 

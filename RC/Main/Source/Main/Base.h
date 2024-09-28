@@ -25,22 +25,22 @@ class Main_Base
     uint16_t lastStoreModifiedTime;
     bool debug;
 
+  protected:
+    Input_Service inputService;
+    Interrupt_Service interruptService;
+    Screen_Status_Status statusScreen;
+
   public:
     Setup_Service SetupService;
-
+    Signal_Service SignalService;
+    Signal_Processor SignalProcessor;
     Status_Battery StatusBattery;
     Status_Service StatusService;
     Status_Time StatusTime;
-    Input_Service InputService;
-    Interrupt_Service InterruptService;
-    Signal_Service SignalService;
-    Signal_Processor SignalProcessor;
 
     avr::SPI Spi;
 
     LCD_DOG_S102 StatusDisplay;
-
-    Screen_Status_Status StatusScreen;
 
   private:
     virtual void run( void) = 0;
@@ -49,9 +49,11 @@ class Main_Base
     Main_Base( void)
         : lastStoreModifiedTime( 0)
         , debug( false)
+        , interruptService( &inputService, &SignalProcessor, &StatusService)
+        , statusScreen( &inputService, &StatusDisplay)
+        , SignalProcessor( &inputService)
         , StatusBattery( &SignalProcessor, &StatusService)
         , StatusService( &SignalService)
-        , StatusScreen( &StatusDisplay)
     {
     }
 
@@ -76,7 +78,7 @@ class Main_Base
 
         StatusService.Initialize();
 
-        InputService.Initialize();
+        inputService.Initialize();
 
         StatusBattery.Initialize( &SetupService);
 
@@ -90,7 +92,7 @@ class Main_Base
         );
 
         // Show intro on status screen.
-        StatusScreen.ShowIntro();
+        statusScreen.ShowIntro();
 
         // Enable interrupts.
         sei();
@@ -107,7 +109,7 @@ class Main_Base
         StatusTime.Initialize();
 
         // Run interrupt service last.
-        InterruptService.Start();
+        interruptService.Start();
 
         // Wait a moment for all services to come up.
         avr::Utility::Pause( 5);

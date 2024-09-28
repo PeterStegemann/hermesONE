@@ -55,49 +55,49 @@ class Screen_Status_Menu_Main : public Screen_Status_Menu_Base
 
                     case MENU_MODELS :
                     {
-                        Screen_Status_Menu_Types TypesScreen;
+                        Screen_Status_Menu_Types TypesScreen( inputService);
                         TypesScreen.Run();
                     }
                     break;
 
                     case MENU_CHANNELS :
                     {
-                        Screen_Status_Menu_Channels ChannelsScreen;
+                        Screen_Status_Menu_Channels ChannelsScreen( inputService);
                         ChannelsScreen.Run();
                     }
                     break;
 
                     case MENU_STATUS :
                     {
-                        Screen_Status_Menu_Status StatusScreen;
+                        Screen_Status_Menu_Status StatusScreen( inputService);
                         StatusScreen.Run();
                     }
                     break;
 
                     case MENU_SYSTEM :
                     {
-                        Screen_Status_Menu_System SystemScreen;
+                        Screen_Status_Menu_System SystemScreen( inputService);
                         SystemScreen.Run();
                     }
                     break;
 
                     case MENU_PPM_0 :
                     {
-                        Screen_Status_Menu_PPM PPMScreen( 0);
+                        Screen_Status_Menu_PPM PPMScreen( inputService, 0);
                         PPMScreen.Run();
                     }
                     break;
 
                     case MENU_PPM_1 :
                     {
-                        Screen_Status_Menu_PPM PPMScreen( 1);
+                        Screen_Status_Menu_PPM PPMScreen( inputService, 1);
                         PPMScreen.Run();
                     }
                     break;
 
                     case MENU_CALIBRATIONS :
                     {
-                        Screen_Status_Menu_Calibrations CalibrationsScreen;
+                        Screen_Status_Menu_Calibrations CalibrationsScreen( inputService);
                         CalibrationsScreen.Run();
                     }
                     break;
@@ -123,8 +123,8 @@ class Screen_Status_Menu_Main : public Screen_Status_Menu_Base
     }
 
   public:
-    Screen_Status_Menu_Main( void)
-        : Screen_Status_Menu_Base( MENU_COUNT, L_One)
+    Screen_Status_Menu_Main( Input_Service* InputService)
+        : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_One)
     {
     }
 

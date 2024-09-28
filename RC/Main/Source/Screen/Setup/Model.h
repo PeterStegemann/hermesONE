@@ -10,31 +10,41 @@
 
 class Screen_Setup_Model : public Screen_Setup_Base
 {
-	private:
-		Signal_Source_Source::Level sourceLevel;
-		uint8_t selectedModelId;
-		uint8_t selectedTypeId;
+  private:
+    Interrupt_Service* interruptService;
 
-		GUI_Setup_Label modelNameLabel;
-		GUI_Setup_TextInput modelNameInput;
-		char modelName[ SETUP_MODEL_NAME_SIZE + 1];
+    GUI_Setup_Select select;
 
-		GUI_Setup_Label typeLabel;
-		char typeName[ SETUP_MODEL_TYPE_NAME_SIZE + 1];
+    Signal_Source_Source::Level sourceLevel;
+    uint8_t selectedModelId;
+    uint8_t selectedTypeId;
 
-		virtual void display( void);
-		virtual bool processMenu( DoMenuResult Result);
+    GUI_Setup_Label modelNameLabel;
+    GUI_Setup_TextInput modelNameInput;
+    char modelName[ SETUP_MODEL_NAME_SIZE + 1];
 
-		void doModelName( void);
-		void doType( void);
-		void doSelectType( uint8_t SetupTypeId);
-		void doProxies( void);
-		void doSources( Signal_Source_Source::Type SourceType);
+    GUI_Setup_Label typeLabel;
+    char typeName[ SETUP_MODEL_TYPE_NAME_SIZE + 1];
 
-		void updateType( GUI_Setup_Label* Label, int8_t Value);
+    virtual void display( void);
+    virtual bool processMenu( DoMenuResult Result);
 
-		static void updateType( void* Object, GUI_Setup_Label* Label, int8_t Value);
+    void doModelName( void);
+    void doType( void);
+    void doSelectType( uint8_t SetupTypeId);
+    void doProxies( void);
+    void doSources( Signal_Source_Source::Type SourceType);
 
-	public:
-		Screen_Setup_Model( Signal_Source_Source::Level SourceLevel = Signal_Source_Source::L_Model);
+    void updateType( GUI_Setup_Label* Label, int8_t Value);
+
+    static void updateType( void* Object, GUI_Setup_Label* Label, int8_t Value);
+
+  public:
+    Screen_Setup_Model
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen,
+        Signal_Source_Source::Level SourceLevel = Signal_Source_Source::L_Model
+    );
 };

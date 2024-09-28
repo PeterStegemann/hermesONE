@@ -11,44 +11,52 @@
 
 class Screen_Setup_Sources : public Screen_Setup_BaseList
 {
-	private:
-		Signal_Source_Source::Type sourceType;
-		Signal_Source_Source::Level sourceLevel;
+  private:
+    Interrupt_Service* interruptService;
 
-		uint8_t filledSourceLines;
+    Signal_Source_Source::Type sourceType;
+    Signal_Source_Source::Level sourceLevel;
 
-		uint8_t source[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
+    uint8_t filledSourceLines;
 
-		GUI_Setup_Label sourceLabel[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
-		char sourceName[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES][ SETUP_SOURCE_NAME_SIZE + 1];
-		GUI_Setup_Gauge valueGauge[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
+    uint8_t source[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
 
-		virtual void display( void);
-		virtual void update( void);
-		virtual bool processMenu( DoMenuResult Result);
+    GUI_Setup_Label sourceLabel[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
+    char sourceName[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES][ SETUP_SOURCE_NAME_SIZE + 1];
+    GUI_Setup_Gauge valueGauge[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
 
-		void reDisplay( void);
-		void displayMarker( void);
+    virtual void display( void);
+    virtual void update( void);
+    virtual bool processMenu( DoMenuResult Result);
 
-		void doChanged( void);
-		void doAdd( void);
-		void doSelect( uint8_t LineId);
-		void doSelectSource( uint8_t SignalSourceId);
-		void doDelete( uint8_t LineId);
+    void reDisplay( void);
+    void displayMarker( void);
 
-		void doInput( uint8_t SignalSourceId);
-		void doMap( uint8_t SignalSourceId);
-		void doMix( uint8_t SignalSourceId);
-		void doProxy( uint8_t SignalSourceId);
-		void doStore( uint8_t SignalSourceId);
-		void doTimer( uint8_t SignalSourceId);
-		void doFollower( uint8_t SignalSourceId);
-		void doTrimmer( uint8_t SignalSourceId);
+    void doChanged( void);
+    void doAdd( void);
+    void doSelect( uint8_t LineId);
+    void doSelectSource( uint8_t SignalSourceId);
+    void doDelete( uint8_t LineId);
 
-		uint8_t countSources( void);
+    void doInput( uint8_t SignalSourceId);
+    void doMap( uint8_t SignalSourceId);
+    void doMix( uint8_t SignalSourceId);
+    void doProxy( uint8_t SignalSourceId);
+    void doStore( uint8_t SignalSourceId);
+    void doTimer( uint8_t SignalSourceId);
+    void doFollower( uint8_t SignalSourceId);
+    void doTrimmer( uint8_t SignalSourceId);
 
-	public:
-		Screen_Setup_Sources( Signal_Source_Source::Type SourceType = Signal_Source_Source::T_Empty,
-							  Signal_Source_Source::Level SourceLevel =
-							  Signal_Source_Source::L_Model);
+    uint8_t countSources( void);
+
+  public:
+    Screen_Setup_Sources
+    (
+        Input_Service* inputService,
+        Interrupt_Service* interruptService,
+        Screen_Status_Status* StatusScreen,
+        Signal_Source_Source::Type SourceType = Signal_Source_Source::T_Empty,
+        Signal_Source_Source::Level SourceLevel =
+        Signal_Source_Source::L_Model
+    );
 };

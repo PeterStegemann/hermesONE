@@ -26,7 +26,7 @@ class Screen_Setup_Fractal : public Screen_Setup_Base
 //		void render( uint64_t Left, uint64_t Top);
 
 	public:
-		Screen_Setup_Fractal( void);
+		Screen_Setup_Fractal( Input_Service* InputService, Screen_Status_Status* StatusScreen);
 //		~Fractal( void);
 
 		void SetCenter( float X, float Y);

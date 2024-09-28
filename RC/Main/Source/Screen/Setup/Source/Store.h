@@ -10,15 +10,23 @@
 
 class Screen_Setup_Source_Store : public Screen_Setup_Source_Base
 {
-	private:
-		Signal_Source_Store* sourceStore;
+  private:
+    GUI_Setup_Select select;
 
-		GUI_Setup_Label sourceNameLabel;
-		char sourceName[ SETUP_SOURCE_NAME_SIZE + 1];
+    Signal_Source_Store* sourceStore;
 
-		virtual void display( void);
-		virtual bool processMenu( DoMenuResult Result);
+    GUI_Setup_Label sourceNameLabel;
+    char sourceName[ SETUP_SOURCE_NAME_SIZE + 1];
 
-	public:
-		Screen_Setup_Source_Store( uint8_t SignalSourceId);
+    virtual void display( void);
+    virtual bool processMenu( DoMenuResult Result);
+
+  public:
+    Screen_Setup_Source_Store
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen,
+        uint8_t SignalSourceId
+    );
 };

@@ -105,8 +105,8 @@ class Screen_Status_Menu_Status : public Screen_Status_Menu_Base
     }
 
   public:
-    Screen_Status_Menu_Status( void)
-        : Screen_Status_Menu_Base( MENU_STATUS_COUNT, L_Two)
+    Screen_Status_Menu_Status( Input_Service* InputService)
+        : Screen_Status_Menu_Base( InputService, MENU_STATUS_COUNT, L_Two)
     {
     }
 

@@ -7,7 +7,7 @@
 class Screen_Setup_Test : public Screen_Setup_Base
 {
   public:
-    Screen_Setup_Test( void);
+    Screen_Setup_Test( Input_Service* InputService, Screen_Status_Status* StatusScreen);
 
     // Run this screen.
     void Run( void);

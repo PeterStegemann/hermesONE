@@ -11,22 +11,23 @@
 
 using namespace Screen::Setup;
 
-Fractal::Fractal( void)
-	   : centerX( -0.74)
-       , centerY( 0.15)
-       , height( 1.1)
-       , resolutionWidth( 640)
-       , resolutionHeight( 480)
-       , maximumIteration( 1024)
+Fractal::Fractal( Input_Service* InputService, Screen_Status_Status* StatusScreen)
+    : Screen_Setup_Base( InputService, StatusScreen)
+    , centerX( -0.74)
+    , centerY( 0.15)
+    , height( 1.1)
+    , resolutionWidth( 640)
+    , resolutionHeight( 480)
+    , maximumIteration( 1024)
 /*       , hasSubFractals( false)
-       , leftTopFractal( NULL)
-	   , rightTopFractal( NULL)
-       , leftBottomFractal( NULL)
-	   , rightBottomFractal( NULL)
-	   , fractalArray( 0)
-	   , singleIteration( 0)
-       , fractalWidth( 0)
-       , fractalHeight( 0)
+   , leftTopFractal( NULL)
+   , rightTopFractal( NULL)
+   , leftBottomFractal( NULL)
+   , rightBottomFractal( NULL)
+   , fractalArray( 0)
+   , singleIteration( 0)
+   , fractalWidth( 0)
+   , fractalHeight( 0)
 */
 {
 }

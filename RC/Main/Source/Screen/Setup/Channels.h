@@ -5,35 +5,45 @@
 #include "BaseList.h"
 #include "GUI/Setup/Gauge.h"
 #include "GUI/Setup/Label.h"
+#include "GUI/Setup/Select.h"
 #include "Setup/Defines.h"
 
 class Screen_Setup_Channels : public Screen_Setup_BaseList
 {
-	private:
-		uint8_t selectedModelId;
-		uint8_t rfMode;
+  private:
+    Interrupt_Service* interruptService;
 
-		GUI_Setup_Label rfModeLabel;
-		char rfModeName[ SETUP_PPM_NAME_SIZE];
+    GUI_Setup_Select select;
 
-		GUI_Setup_Label channelLabel[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
-		char channelName[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES][ SETUP_CHANNEL_NAME_SIZE + 1];
-		GUI_Setup_Gauge valueGauge[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
+    uint8_t selectedModelId;
+    uint8_t rfMode;
 
-		virtual void display( void);
-		virtual void update( void);
-		virtual bool processMenu( DoMenuResult Result);
+    GUI_Setup_Label rfModeLabel;
+    char rfModeName[ SETUP_PPM_NAME_SIZE];
 
-		void reDisplay( void);
-		void displayMarker( void);
+    GUI_Setup_Label channelLabel[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
+    char channelName[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES][ SETUP_CHANNEL_NAME_SIZE + 1];
+    GUI_Setup_Gauge valueGauge[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
 
-		void doChanged( void);
-		void doSelect( uint8_t LineId);
+    virtual void display( void);
+    virtual void update( void);
+    virtual bool processMenu( DoMenuResult Result);
 
-		void updateRFMode( GUI_Setup_Label* Label, int8_t Value);
+    void reDisplay( void);
+    void displayMarker( void);
 
-		static void updateRFMode( void* Object, GUI_Setup_Label* Label, int8_t Value);
+    void doChanged( void);
+    void doSelect( uint8_t LineId);
 
-	public:
-		Screen_Setup_Channels( void);
+    void updateRFMode( GUI_Setup_Label* Label, int8_t Value);
+
+    static void updateRFMode( void* Object, GUI_Setup_Label* Label, int8_t Value);
+
+  public:
+    Screen_Setup_Channels
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen
+    );
 };

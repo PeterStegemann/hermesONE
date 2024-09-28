@@ -9,24 +9,26 @@
 
 class Screen_Setup_Types : public Screen_Setup_BaseList
 {
-	private:
-		uint8_t selectedTypeId;
-		uint8_t type[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
+  private:
+    Input_Service* inputService;
 
-		GUI_Setup_Label typeLabel[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
-		char typeName[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES][ SETUP_MODEL_NAME_SIZE + 1];
+    uint8_t selectedTypeId;
+    uint8_t type[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
 
-		virtual void display( void);
-		virtual bool processMenu( DoMenuResult Result);
+    GUI_Setup_Label typeLabel[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES];
+    char typeName[ SCREEN_SETUP_BASELIST_MAXIMUM_LINES][ SETUP_MODEL_NAME_SIZE + 1];
 
-		void reDisplay( void);
-		void displayMarker( void);
+    virtual void display( void);
+    virtual bool processMenu( DoMenuResult Result);
 
-		void doChanged( void);
-		void doAdd( void);
-		void doSelect( uint8_t LineId);
-		void doDelete( uint8_t LineId);
+    void reDisplay( void);
+    void displayMarker( void);
 
-	public:
-		Screen_Setup_Types( void);
+    void doChanged( void);
+    void doAdd( void);
+    void doSelect( uint8_t LineId);
+    void doDelete( uint8_t LineId);
+
+  public:
+    Screen_Setup_Types( Input_Service* InputService, Screen_Status_Status* StatusScreen);
 };

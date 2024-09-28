@@ -83,11 +83,10 @@ class Screen_Status_Menu_System : public Screen_Status_Menu_Base
 
                         SetText_P(( Level)( menuLevel + 1), Text::Cancel);
 
-                        Serial_DesktopConnection< SYSTEM_SERIAL_ID> UseConnection;
-                        // Set up serial.
-                        UseConnection.Initialize();
+                        Serial_DesktopConnection< SYSTEM_SERIAL_ID> DesktopConnection( inputService);
 
-                        UseConnection.DoSerialConnection();
+                        DesktopConnection.Initialize();
+                        DesktopConnection.DoSerialConnection();
 
                         clearSubMenuLine();
                     }
@@ -95,7 +94,7 @@ class Screen_Status_Menu_System : public Screen_Status_Menu_Base
 
                     case MENU_DISPLAY :
                     {
-                        Screen_Status_Menu_Display DisplayScreen;
+                        Screen_Status_Menu_Display DisplayScreen( inputService);
                         DisplayScreen.Run();
 
                         clearSubMenuLine();
@@ -104,7 +103,7 @@ class Screen_Status_Menu_System : public Screen_Status_Menu_Base
 
                     case MENU_BATTERY :
                     {
-                        Screen_Status_Menu_Battery BatteryScreen;
+                        Screen_Status_Menu_Battery BatteryScreen( inputService);
                         BatteryScreen.Run();
 
                         clearSubMenuLine();
@@ -139,8 +138,8 @@ class Screen_Status_Menu_System : public Screen_Status_Menu_Base
     }
 
   public:
-    Screen_Status_Menu_System( void)
-        : Screen_Status_Menu_Base( MENU_COUNT, L_Two)
+    Screen_Status_Menu_System( Input_Service* InputService)
+        : Screen_Status_Menu_Base( InputService, MENU_COUNT, L_Two)
     {
     }
 

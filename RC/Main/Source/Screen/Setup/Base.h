@@ -30,6 +30,8 @@ class Screen_Setup_Base : public Screen_Base
     virtual void drawMenuMarker( void);
 
   protected:
+    Screen_Status_Status* statusScreen;
+
     uint16_t markerLeft, markerTop, menuLeft;
     uint16_t frameLeft, frameTop, frameWidth, frameHeight;
 
@@ -43,7 +45,15 @@ class Screen_Setup_Base : public Screen_Base
     static void staticUpdate( void* Object);
 
   public:
-    Screen_Setup_Base( uint32_t MenuPattern, const flash_char* Title = NULL, bool ManageMenuMarker = true);
+    Screen_Setup_Base
+    (
+        Input_Service* InputService,
+        Screen_Status_Status* StatusScreen,
+        uint32_t MenuPattern,
+        const flash_char* Title = NULL,
+        bool ManageMenuMarker = true
+    );
+
     virtual ~Screen_Setup_Base( void);
 
     // Rebuild entire display.

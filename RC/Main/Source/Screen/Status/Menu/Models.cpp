@@ -13,10 +13,17 @@
 #define MENU_START		1
 #define MENU_COUNT		1
 
-Screen_Status_Menu_Models::Screen_Status_Menu_Models( uint8_t SetupTypeId)
-						 : Screen_Status_Menu_Base( GLOBAL.SetupService.CountModels(
-							   SetupTypeId, Setup_Service::CMO_Used) + MENU_COUNT, L_Three)
-						 , setupTypeId( SetupTypeId)
+Screen_Status_Menu_Models::Screen_Status_Menu_Models
+(
+    Input_Service* InputService, uint8_t SetupTypeId
+)
+    : Screen_Status_Menu_Base
+    (
+        InputService,
+        GLOBAL.SetupService.CountModels( SetupTypeId, Setup_Service::CMO_Used) + MENU_COUNT,
+        L_Three
+    )
+    , setupTypeId( SetupTypeId)
 {
 }
 

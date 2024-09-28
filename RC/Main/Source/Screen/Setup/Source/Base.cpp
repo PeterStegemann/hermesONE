@@ -9,11 +9,20 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Source_Base::Screen_Setup_Source_Base( uint8_t SignalSourceId, uint32_t MenuPattern,
-												    const flash_char* Title, bool HasGauge)
-						: Screen_Setup_Base( MenuPattern, Title)
-						, hasGauge( HasGauge)
-						, signalSourceId( SignalSourceId)
+Screen_Setup_Source_Base::Screen_Setup_Source_Base
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t SignalSourceId,
+    uint32_t MenuPattern,
+    const flash_char* Title,
+    bool HasGauge
+)
+    : Screen_Setup_Base( InputService, StatusScreen, MenuPattern, Title)
+    , currentNameInput( InputService, InterruptService)
+    , hasGauge( HasGauge)
+    , signalSourceId( SignalSourceId)
 {
 	source = GLOBAL.SignalProcessor.GetSource( signalSourceId);
 

@@ -16,6 +16,8 @@
 class Screen_Setup_System : public Screen_Setup_Base
 {
   private:
+    Interrupt_Service* interruptService;
+
     GUI_Setup_CheckBox debugCheckBox;
 
     virtual void display( void)
@@ -30,8 +32,8 @@ class Screen_Setup_System : public Screen_Setup_Base
 
         GLOBAL.SetupDisplay.Print_P
         (
-            menuLeft, frameTop, SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black,
-            LCD::PO_Proportional, Text::Exit
+            menuLeft, frameTop, SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_WarmYellow, LCD_65K_RGB::C_Black, LCD::PO_Proportional, Text::Exit
         );
 
         Line += 2;
@@ -78,7 +80,8 @@ class Screen_Setup_System : public Screen_Setup_Base
         GLOBAL.SetupDisplay.Print
         (
             SubMenuLeft + ( 15 * Font->GetCellWidth()), frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-            SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModuleName
+            SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModuleName
         );
 
         GLOBAL.SetupDisplay.Print_P
@@ -92,7 +95,8 @@ class Screen_Setup_System : public Screen_Setup_Base
         GLOBAL.SetupDisplay.Print
         (
             SubMenuLeft + ( 15 * Font->GetCellWidth()), frameTop + ( Line++ * SCREEN_SETUP_BASE_LINE_HEIGHT),
-            SCREEN_SETUP_BASE_MAIN_FONT, LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModuleName
+            SCREEN_SETUP_BASE_MAIN_FONT,
+            LCD_65K_RGB::C_White, LCD_65K_RGB::C_Black, LCD::PO_Proportional, ModuleName
         );
 
         Line += 2;
@@ -163,7 +167,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 
     void doSerial( void)
     {
-        GUI_Setup_Popup Popup;
+        GUI_Setup_Popup Popup( inputService);
 
         // Set text.
         Popup.SetText_P( Text::SerialAsk);
@@ -171,18 +175,17 @@ class Screen_Setup_System : public Screen_Setup_Base
 
         Popup.Show();
 
-        Serial_DesktopConnection< SYSTEM_SERIAL_ID> UseConnection;
-        // Set up serial.
-        UseConnection.Initialize();
+        Serial_DesktopConnection< SYSTEM_SERIAL_ID> DesktopConnection( inputService);
 
-        UseConnection.DoSerialConnection();
+        DesktopConnection.Initialize();
+        DesktopConnection.DoSerialConnection();
 
         ReDisplay();
     }
 
     void doDisplay( void)
     {
-        Screen_Setup_System_Display DisplayScreen;
+        Screen_Setup_System_Display DisplayScreen( inputService, interruptService, statusScreen);
         DisplayScreen.Run();
 
         ReDisplay();
@@ -190,7 +193,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 
     void doBattery( void)
     {
-        Screen_Setup_System_Battery BatteryScreen;
+        Screen_Setup_System_Battery BatteryScreen( inputService, interruptService, statusScreen);
         BatteryScreen.Run();
 
         ReDisplay();
@@ -198,7 +201,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 
     void doPPM( uint8_t Id)
     {
-        Screen_Setup_System_PPM PPMScreen( Id);
+        Screen_Setup_System_PPM PPMScreen( inputService, interruptService, statusScreen, Id);
         PPMScreen.Run();
 
         ReDisplay();
@@ -206,7 +209,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 
     void doCalibration( void)
     {
-        Screen_Setup_System_Calibration CalibrationScreen;
+        Screen_Setup_System_Calibration CalibrationScreen( inputService, statusScreen);
         CalibrationScreen.Run();
 
         ReDisplay();
@@ -226,7 +229,7 @@ class Screen_Setup_System : public Screen_Setup_Base
 
     void doReset( void)
     {
-        GUI_Setup_Popup Popup;
+        GUI_Setup_Popup Popup( inputService);
 
         // Set text.
         Popup.SetText_P( Text::ResetCheck);
@@ -250,9 +253,15 @@ class Screen_Setup_System : public Screen_Setup_Base
         // No comin' back.
     }
 
- public:
-    Screen_Setup_System( void)
-        : Screen_Setup_Base( 0b1101001100110101, Text::System)
+  public:
+    Screen_Setup_System
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen
+    )
+        : Screen_Setup_Base( InputService, StatusScreen, 0b1101001100110101, Text::System)
+        , interruptService( InterruptService)
     {
     }
 };

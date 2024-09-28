@@ -27,6 +27,6 @@ class Screen_Status_Menu_Channel : public Screen_Status_Menu_Base
 		virtual void display( void);
 
 	public:
-		Screen_Status_Menu_Channel( uint8_t ChannelId);
+		Screen_Status_Menu_Channel( Input_Service* InputService, uint8_t ChannelId);
 		virtual ~Screen_Status_Menu_Channel( void);
 };

@@ -13,18 +13,26 @@
 
 class Screen_Setup_Source_Proxy : public Screen_Setup_Source_Base
 {
-	private:
-		Signal_Source_Proxy* sourceProxy;
+  private:
+    GUI_Setup_Select select;
 
-		GUI_Setup_Label sourceNameLabel;
-		char sourceName[ SETUP_SOURCE_NAME_SIZE + 1];
-		GUI_Setup_Label sourceVolumeLabel;
+    Signal_Source_Proxy* sourceProxy;
 
-		virtual void display( void);
-		virtual bool processMenu( DoMenuResult Result);
+    GUI_Setup_Label sourceNameLabel;
+    char sourceName[ SETUP_SOURCE_NAME_SIZE + 1];
+    GUI_Setup_Label sourceVolumeLabel;
 
-		static void updateVolume( void* Object, GUI_Setup_Label* Label, int16_t Value);
+    virtual void display( void);
+    virtual bool processMenu( DoMenuResult Result);
 
-	public:
-		Screen_Setup_Source_Proxy( uint8_t SignalSourceId);
+    static void updateVolume( void* Object, GUI_Setup_Label* Label, int16_t Value);
+
+  public:
+    Screen_Setup_Source_Proxy
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen,
+        uint8_t SignalSourceId
+    );
 };

@@ -51,6 +51,10 @@ class GUI_Setup_TextInput
     };
 
   private:
+    Input_Service* inputService;
+
+    GUI_Setup_Select select;
+
     uint16_t left, top;
 
     Options options;
@@ -296,15 +300,17 @@ class GUI_Setup_TextInput
 
     void blink( uint16_t* Millis)
     {
-        if( GUI_Setup_Select::Blink( Millis, &blinkState))
+        if( select.Blink( Millis, &blinkState))
         {
             displayCursor();
         }
     }
 
   public:
-    GUI_Setup_TextInput( void)
-        : left( 0)
+    GUI_Setup_TextInput( Input_Service* InputService, Interrupt_Service* InterruptService)
+        : inputService( InputService)
+        , select( InputService, InterruptService)
+        , left( 0)
         , top( 0)
         , options( O_None)
         , fontId( GUI_SETUP_MAIN_FONT)
@@ -386,7 +392,7 @@ class GUI_Setup_TextInput
             uint8_t RotaryButton;
             bool RotaryCurrentButton;
 
-            GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton, &RotaryCurrentButton);
+            inputService->GetRotary( &RotarySelect, &RotaryButton, &RotaryCurrentButton);
 
             if( RotarySelect != 0)
             {

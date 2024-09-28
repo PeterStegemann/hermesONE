@@ -23,5 +23,10 @@ class Screen_Setup_Info : public Screen_Setup_Base
     void doOwner( void);
 
   public:
-    Screen_Setup_Info( void);
+    Screen_Setup_Info
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen
+    );
 };

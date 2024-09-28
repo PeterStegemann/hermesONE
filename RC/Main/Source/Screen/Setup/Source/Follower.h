@@ -14,6 +14,8 @@
 class Screen_Setup_Source_Follower : public Screen_Setup_Source_Base
 {
   private:
+    GUI_Setup_Select select;
+
     Signal_Source_Follower* sourceFollower;
 
     GUI_Setup_Label targetNameLabel;
@@ -161,16 +163,20 @@ class Screen_Setup_Source_Follower : public Screen_Setup_Source_Base
                 {
                     case 4 :
                     {
-                        bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+                        bool SourceChanged = select.DoSourceSelect
+                        (
                             &( sourceFollower->TargetSignalSourceId),
                             &( sourceFollower->Setup.TargetSource.Source), &menuMarker,
                             &targetNameLabel, NULL, targetName, this, &staticUpdate, false,
-                            source->GetLevel());
+                            source->GetLevel()
+                        );
 
-                        bool VolumeChanged = GUI_Setup_Select::DoSelect16(
+                        bool VolumeChanged = select.DoSelect16
+                        (
                             &( sourceFollower->Setup.TargetSource.Volume), SIGNAL_MINIMUM_VALUE,
                             SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_FOLLOWER_TARGET_SIGNAL_PER_VALUE,
-                            &menuMarker, &targetVolumeLabel, this, &staticUpdate, &updateTargetVolume);
+                            &menuMarker, &targetVolumeLabel, this, &staticUpdate, &updateTargetVolume
+                        );
 
                         ValueChanged = SourceChanged || VolumeChanged;
                     }
@@ -178,15 +184,19 @@ class Screen_Setup_Source_Follower : public Screen_Setup_Source_Base
 
                     case 6 :
                     {
-                        bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+                        bool SourceChanged = select.DoSourceSelect
+                        (
                             &( sourceFollower->StepSignalSourceId),
                             &( sourceFollower->Setup.StepSource.Source), &menuMarker, &stepNameLabel,
-                            NULL, stepName, this, &staticUpdate, false, source->GetLevel());
+                            NULL, stepName, this, &staticUpdate, false, source->GetLevel()
+                            );
 
-                        bool VolumeChanged = GUI_Setup_Select::DoSelect16(
+                        bool VolumeChanged = select.DoSelect16
+                        (
                             &( sourceFollower->Setup.StepSource.Volume), SIGNAL_NEUTRAL_VALUE,
                             SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_FOLLOWER_STEP_SIGNAL_PER_VALUE,
-                            &menuMarker, &stepVolumeLabel, this, &staticUpdate, &updateStepVolume);
+                            &menuMarker, &stepVolumeLabel, this, &staticUpdate, &updateStepVolume
+                        );
 
                         ValueChanged = SourceChanged || VolumeChanged;
                     }
@@ -194,27 +204,33 @@ class Screen_Setup_Source_Follower : public Screen_Setup_Source_Base
 
                     case 9 :
                     {
-                        ValueChanged = GUI_Setup_Select::DoSourceSelect(
+                        ValueChanged = select.DoSourceSelect
+                        (
                             &( sourceFollower->TriggerSignalSourceId),
                             &( sourceFollower->Setup.TriggerSource), &menuMarker,
                             &triggerNameLabel, NULL, triggerName, this, &staticUpdate, false,
-                            source->GetLevel());
+                            source->GetLevel()
+                        );
                     }
                     break;
 
                     case 11 :
                     {
-                        bool LowChanged = GUI_Setup_Select::DoSelect16(
+                        bool LowChanged = select.DoSelect16
+                        (
                             &( sourceFollower->Setup.TriggerLowLimit), SIGNAL_MINIMUM_VALUE,
                             SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_FOLLOWER_TRIGGER_SIGNAL_PER_VALUE,
                             &menuMarker, &triggerLowLimitLabel, this, &staticUpdate,
-                            &updateTriggerLimit);
+                            &updateTriggerLimit
+                        );
 
-                        bool HighChanged = GUI_Setup_Select::DoSelect16(
+                        bool HighChanged = select.DoSelect16
+                        (
                             &( sourceFollower->Setup.TriggerHighLimit), SIGNAL_MINIMUM_VALUE,
                             SIGNAL_MAXIMUM_VALUE, SIGNAL_SOURCE_FOLLOWER_TRIGGER_SIGNAL_PER_VALUE,
                             &menuMarker, &triggerHighLimitLabel, this, &staticUpdate,
-                            &updateTriggerLimit);
+                            &updateTriggerLimit
+                        );
 
                         ValueChanged = HighChanged || LowChanged;
                     }
@@ -272,8 +288,18 @@ class Screen_Setup_Source_Follower : public Screen_Setup_Source_Base
     }
 
   public:
-    Screen_Setup_Source_Follower( uint8_t SignalSourceId)
-        : Screen_Setup_Source_Base( SignalSourceId, 0b101001010101, Text::Follower)
+    Screen_Setup_Source_Follower
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen,
+        uint8_t SignalSourceId
+    )
+        : Screen_Setup_Source_Base
+        (
+            InputService, InterruptService, StatusScreen, SignalSourceId, 0b101001010101, Text::Follower
+        )
+        , select( InputService, InterruptService)
         , sourceFollower( NULL)
     {
         sourceFollower = &( source->Body.Follower);

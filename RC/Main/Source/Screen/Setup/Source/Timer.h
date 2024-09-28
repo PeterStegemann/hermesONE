@@ -12,40 +12,48 @@
 
 class Screen_Setup_Source_Timer : public Screen_Setup_Source_Base
 {
-	private:
-		Signal_Source_Timer* sourceTimer;
+  private:
+    GUI_Setup_Select select;
 
-		GUI_Setup_TimeLabel initTimeLabel;
+    Signal_Source_Timer* sourceTimer;
 
-		GUI_Setup_Label storeLabel;
-		GUI_Setup_CheckBox storeCheckBox;
+    GUI_Setup_TimeLabel initTimeLabel;
 
-		GUI_Setup_TimeLabel timeLabel;
+    GUI_Setup_Label storeLabel;
+    GUI_Setup_CheckBox storeCheckBox;
 
-		GUI_Setup_Label reverseLabel;
-		GUI_Setup_CheckBox reverseCheckBox;
+    GUI_Setup_TimeLabel timeLabel;
 
-		GUI_Setup_Label triggerNameLabel;
-		char triggerName[ SETUP_SOURCE_NAME_SIZE + 1];
+    GUI_Setup_Label reverseLabel;
+    GUI_Setup_CheckBox reverseCheckBox;
 
-		GUI_Setup_Gauge triggerGauge;
+    GUI_Setup_Label triggerNameLabel;
+    char triggerName[ SETUP_SOURCE_NAME_SIZE + 1];
 
-		GUI_Setup_Label triggerHighLimitLabel;
-		GUI_Setup_Label triggerLowLimitLabel;
+    GUI_Setup_Gauge triggerGauge;
 
-		GUI_Setup_TimeLabel warnLowTimeLabel;
-		GUI_Setup_TimeLabel warnCriticalTimeLabel;
+    GUI_Setup_Label triggerHighLimitLabel;
+    GUI_Setup_Label triggerLowLimitLabel;
 
-		GUI_Setup_TimeLabel warnPauseTimeLabel;
+    GUI_Setup_TimeLabel warnLowTimeLabel;
+    GUI_Setup_TimeLabel warnCriticalTimeLabel;
 
-		virtual void display( void);
-		virtual void update( void);
-		virtual bool processMenu( DoMenuResult Result);
+    GUI_Setup_TimeLabel warnPauseTimeLabel;
 
-		static void updateTime( void* Object, GUI_Setup_Label* Label, int16_t Value);
-		static void updateTriggerLimit( void* Object, GUI_Setup_Label* Label, int16_t Value);
-		static void updateVolume( GUI_Setup_Label* Label, int16_t Value, int16_t SignalPerValue);
+    virtual void display( void);
+    virtual void update( void);
+    virtual bool processMenu( DoMenuResult Result);
 
-	public:
-		Screen_Setup_Source_Timer( uint8_t SignalSourceId);
+    static void updateTime( void* Object, GUI_Setup_Label* Label, int16_t Value);
+    static void updateTriggerLimit( void* Object, GUI_Setup_Label* Label, int16_t Value);
+    static void updateVolume( GUI_Setup_Label* Label, int16_t Value, int16_t SignalPerValue);
+
+  public:
+    Screen_Setup_Source_Timer
+    (
+        Input_Service* InputService,
+        Interrupt_Service* InterruptService,
+        Screen_Status_Status* StatusScreen,
+        uint8_t SignalSourceId
+    );
 };

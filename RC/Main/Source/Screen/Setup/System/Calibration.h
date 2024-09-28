@@ -10,23 +10,25 @@
 
 class Screen_Setup_System_Calibration : public Screen_Setup_Base
 {
-	private:
-		GUI_Setup_Label label[ SIGNAL_PROCESSOR_ANALOG_INPUTS];
-		GUI_Setup_Label high[ SIGNAL_PROCESSOR_ANALOG_INPUTS];
-		GUI_Setup_Label center[ SIGNAL_PROCESSOR_ANALOG_INPUTS];
-		GUI_Setup_Label low[ SIGNAL_PROCESSOR_ANALOG_INPUTS];
+  private:
+    Input_Service* inputService;
 
-		GUI_Setup_Label currentLabel;
-		GUI_Setup_Gauge currentGauge;
+    GUI_Setup_Label label[ SIGNAL_PROCESSOR_ANALOG_INPUTS];
+    GUI_Setup_Label high[ SIGNAL_PROCESSOR_ANALOG_INPUTS];
+    GUI_Setup_Label center[ SIGNAL_PROCESSOR_ANALOG_INPUTS];
+    GUI_Setup_Label low[ SIGNAL_PROCESSOR_ANALOG_INPUTS];
 
-		void selectColumn( uint8_t Index, uint8_t Column, bool Selected);
+    GUI_Setup_Label currentLabel;
+    GUI_Setup_Gauge currentGauge;
 
-		void doCalibration( uint8_t Index);
+    void selectColumn( uint8_t Index, uint8_t Column, bool Selected);
 
-		virtual void display( void);
-		virtual void update( void);
-		virtual bool processMenu( DoMenuResult Result);
+    void doCalibration( uint8_t Index);
 
-	public:
-		Screen_Setup_System_Calibration( void);
+    virtual void display( void);
+    virtual void update( void);
+    virtual bool processMenu( DoMenuResult Result);
+
+  public:
+    Screen_Setup_System_Calibration( Input_Service* inputService, Screen_Status_Status* StatusScreen);
 };

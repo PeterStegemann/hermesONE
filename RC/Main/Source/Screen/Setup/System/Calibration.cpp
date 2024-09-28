@@ -7,8 +7,13 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_System_Calibration::Screen_Setup_System_Calibration( void)
-							   : Screen_Setup_Base( 0b111111001, Text::Calibration)
+Screen_Setup_System_Calibration::Screen_Setup_System_Calibration
+(
+    Input_Service* InputService,
+    Screen_Status_Status* StatusScreen
+)
+    : Screen_Setup_Base( InputService, StatusScreen, 0b111111001, Text::Calibration)
+    , inputService( InputService)
 {
 	for( uint8_t Count = 0; Count < SIGNAL_PROCESSOR_ANALOG_INPUTS; Count++)
 	{
@@ -179,7 +184,7 @@ void Screen_Setup_System_Calibration::doCalibration( uint8_t Index)
 		int8_t RotarySelect;
 		uint8_t RotaryButton;
 
-		GLOBAL.InputService.GetRotary( &RotarySelect, &RotaryButton);
+		inputService->GetRotary( &RotarySelect, &RotaryButton);
 
 		if( RotaryButton > 0)
 		{

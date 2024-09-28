@@ -33,12 +33,19 @@ static const flash_char* getTitle( Signal_Source_Source::Type SourceType)
 	return( NULL);
 }
 
-Screen_Setup_Sources::Screen_Setup_Sources( Signal_Source_Source::Type SourceType,
-										    Signal_Source_Source::Level SourceLevel)
-					: Screen_Setup_BaseList( getTitle( SourceType))
-					, sourceType( SourceType)
-					, sourceLevel( SourceLevel)
-					, filledSourceLines( 0)
+Screen_Setup_Sources::Screen_Setup_Sources
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    Signal_Source_Source::Type SourceType,
+    Signal_Source_Source::Level SourceLevel
+)
+    : Screen_Setup_BaseList( InputService, StatusScreen, getTitle( SourceType))
+    , interruptService( InterruptService)
+    , sourceType( SourceType)
+    , sourceLevel( SourceLevel)
+    , filledSourceLines( 0)
 {
 	if( sourceType != Signal_Source_Source::T_Empty)
 	{
@@ -47,11 +54,13 @@ Screen_Setup_Sources::Screen_Setup_Sources( Signal_Source_Source::Type SourceTyp
 
 	for( uint8_t SourceLine = 0; SourceLine < visibleLines; SourceLine++)
 	{
-		valueGauge[ SourceLine].SetOptions(
+		valueGauge[ SourceLine].SetOptions
+		(
 			( GUI_Setup_Gauge::Options)( GUI_Setup_Gauge::O_Percentage |
 										 GUI_Setup_Gauge::O_DualPercentage |
 										 GUI_Setup_Gauge::O_CenterLine |
-										 GUI_Setup_Gauge::O_Marker));
+										 GUI_Setup_Gauge::O_Marker)
+        );
 	}
 }
 
@@ -299,7 +308,7 @@ void Screen_Setup_Sources::doAdd( void)
 
 	if(( SetupSourceAvailable == false) || ( SignalSourceAvailable == false))
 	{
-		GUI_Setup_Popup Popup;
+		GUI_Setup_Popup Popup( inputService);
 
 		// Set text.
 		if( SetupSourceAvailable == false)
@@ -401,7 +410,7 @@ void Screen_Setup_Sources::doDelete( uint8_t LineId)
 		return;
 	}
 
-	GUI_Setup_Popup Popup;
+	GUI_Setup_Popup Popup( inputService);
 
 	// Set text.
 	const flash_char* Format;
@@ -459,43 +468,55 @@ void Screen_Setup_Sources::doDelete( uint8_t LineId)
 
 void Screen_Setup_Sources::doInput( uint8_t SignalSourceId)
 {
-	Screen_Setup_Source_Input MapInput( SignalSourceId);
+	Screen_Setup_Source_Input MapInput( inputService, interruptService, statusScreen, SignalSourceId);
 	MapInput.Run();
 }
 
 void Screen_Setup_Sources::doMap( uint8_t SignalSourceId)
 {
-	Screen_Setup_Source_Map MapScreen( SignalSourceId);
+	Screen_Setup_Source_Map MapScreen( inputService, interruptService, statusScreen, SignalSourceId);
 	MapScreen.Run();
 }
 
 void Screen_Setup_Sources::doMix( uint8_t SignalSourceId)
 {
-	Screen_Setup_Source_Mix MixScreen( SignalSourceId);
+	Screen_Setup_Source_Mix MixScreen( inputService, interruptService, statusScreen, SignalSourceId);
 	MixScreen.Run();
 }
 
 void Screen_Setup_Sources::doStore( uint8_t SignalSourceId)
 {
-	Screen_Setup_Source_Store StoreScreen( SignalSourceId);
+	Screen_Setup_Source_Store StoreScreen
+	(
+	    inputService, interruptService, statusScreen, SignalSourceId
+    );
 	StoreScreen.Run();
 }
 
 void Screen_Setup_Sources::doTimer( uint8_t SignalSourceId)
 {
-	Screen_Setup_Source_Timer TimerScreen( SignalSourceId);
+	Screen_Setup_Source_Timer TimerScreen
+	(
+	    inputService, interruptService, statusScreen, SignalSourceId
+    );
 	TimerScreen.Run();
 }
 
 void Screen_Setup_Sources::doFollower( uint8_t SignalSourceId)
 {
-	Screen_Setup_Source_Follower FollowerScreen( SignalSourceId);
+	Screen_Setup_Source_Follower FollowerScreen
+	(
+	    inputService, interruptService, statusScreen, SignalSourceId
+    );
 	FollowerScreen.Run();
 }
 
 void Screen_Setup_Sources::doTrimmer( uint8_t SignalSourceId)
 {
-	Screen_Setup_Source_Trimmer TrimmerScreen( SignalSourceId);
+	Screen_Setup_Source_Trimmer TrimmerScreen
+	(
+	    inputService, interruptService, statusScreen, SignalSourceId
+    );
 	TrimmerScreen.Run();
 }
 

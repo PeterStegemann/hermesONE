@@ -10,9 +10,17 @@
 
 #include "AVR/Source/Utility.h"
 
-Screen_Setup_Channel::Screen_Setup_Channel( uint8_t ChannelId)
-					: Screen_Setup_Base( 0b11011101110101, Text::Channel)
-					, channelId( ChannelId)
+Screen_Setup_Channel::Screen_Setup_Channel
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t ChannelId
+)
+    : Screen_Setup_Base( InputService, StatusScreen, 0b11011101110101, Text::Channel)
+    , select( InputService, InterruptService)
+    , channelId( ChannelId)
+    , channelNameInput( InputService, InterruptService)
 {
 	channel = GLOBAL.SignalProcessor.GetChannel( channelId);
 
@@ -178,17 +186,23 @@ void Screen_Setup_Channel::update( void)
 {
 	Screen_Setup_Base::update();
 
-	int16_t SourceValue = Signal_Utility::GetVolumizedSourceValue(
+	int16_t SourceValue = Signal_Utility::GetVolumizedSourceValue
+	(
 		&( GLOBAL.SignalProcessor), channel->InputSignalSourceId,
-		SIGNAL_CHANNEL_INPUT_100_PERCENT_VALUE, channel->Setup.InputSource.Volume);
+		SIGNAL_CHANNEL_INPUT_100_PERCENT_VALUE, channel->Setup.InputSource.Volume
+    );
 
-	int16_t TrimValue = Signal_Utility::GetVolumizedSourceValue(
+	int16_t TrimValue = Signal_Utility::GetVolumizedSourceValue
+	(
 		&( GLOBAL.SignalProcessor), channel->TrimSignalSourceId,
-		SIGNAL_CHANNEL_INPUT_0_PERCENT_VALUE, channel->Setup.TrimSource.Volume);
+		SIGNAL_CHANNEL_INPUT_0_PERCENT_VALUE, channel->Setup.TrimSource.Volume
+    );
 
-	int16_t LimitValue = Signal_Utility::GetVolumizedSourceValue(
+	int16_t LimitValue = Signal_Utility::GetVolumizedSourceValue
+	(
 		&( GLOBAL.SignalProcessor), channel->LimitSignalSourceId,
-		SIGNAL_CHANNEL_INPUT_100_PERCENT_VALUE, channel->Setup.LimitSource.Volume);
+		SIGNAL_CHANNEL_INPUT_100_PERCENT_VALUE, channel->Setup.LimitSource.Volume
+    );
 
 	points[ Setup_Channel::PV_Low] = Signal_Utility::VolumizeValue(
 		channel->Setup.PointVolume[ Setup_Channel::PV_Low], SIGNAL_CHANNEL_100_PERCENT_VALUE,
@@ -249,11 +263,13 @@ bool Screen_Setup_Channel::processMenu( DoMenuResult Result)
 				{
 					currentPointId = currentMenuEntry - 8;
 
-					ValueChanged = GUI_Setup_Select::DoSelect16(
+					ValueChanged = select.DoSelect16
+					(
 						&( channel->Setup.PointVolume[ currentPointId]), SIGNAL_MINIMUM_VALUE,
 						SIGNAL_MAXIMUM_VALUE, SIGNAL_CHANNEL_SIGNAL_PER_VALUE, &menuMarker,
 						&( pointVolumeLabel[ currentPointId]), this, &staticUpdate,
-						&updatePointVolume);
+						&updatePointVolume
+                    );
 				}
 				break;
 
@@ -269,10 +285,12 @@ bool Screen_Setup_Channel::processMenu( DoMenuResult Result)
 
 				case 13 :
 				{
-					ValueChanged = GUI_Setup_Select::DoSelect8(
+					ValueChanged = select.DoSelect8
+					(
 						( int8_t*) &( channel->Setup.Mode), Setup_Channel::M_Warp,
 						Setup_Channel::M_Clip, 1, &menuMarker, &modeLabel, this, &staticUpdate,
-						&updateMode);
+						&updateMode
+					);
 				}
 				break;
 			}
@@ -308,22 +326,31 @@ void Screen_Setup_Channel::doChannelName( void)
 	channelNameValueLabel.Display();
 }
 
-bool Screen_Setup_Channel::doSource( uint8_t* SignalSourceId, Setup_Source_Tuple* SourceTuple,
-									 char SourceName[ SETUP_SOURCE_NAME_SIZE + 1],
-									 GUI_Setup_Label* SourceNameLabel,
-									 GUI_Setup_Label* SourceVolumeLabel)
+bool Screen_Setup_Channel::doSource
+(
+    uint8_t* SignalSourceId,
+    Setup_Source_Tuple* SourceTuple,
+    char SourceName[ SETUP_SOURCE_NAME_SIZE + 1],
+    GUI_Setup_Label* SourceNameLabel,
+    GUI_Setup_Label* SourceVolumeLabel
+)
 {
 	// Do source.
-	bool SourceChanged = GUI_Setup_Select::DoSourceSelect(
+	bool SourceChanged = select.DoSourceSelect
+	(
 		SignalSourceId, &( SourceTuple->Source), &menuMarker, SourceNameLabel, NULL, SourceName,
-		this, &staticUpdate, true, Signal_Source_Source::L_Model);
+		this, &staticUpdate, true, Signal_Source_Source::L_Model
+    );
 
 	// Do volume.
 	currentVolumeLabel = SourceVolumeLabel;
 
-	bool VolumeChanged = GUI_Setup_Select::DoSelect16( &( SourceTuple->Volume),
+	bool VolumeChanged = select.DoSelect16
+	(
+	    &( SourceTuple->Volume),
 		SIGNAL_MINIMUM_VALUE, SIGNAL_MAXIMUM_VALUE, SIGNAL_CHANNEL_INPUT_SIGNAL_PER_VALUE,
-		&menuMarker, SourceVolumeLabel, this, &staticUpdate, &updateVolume);
+		&menuMarker, SourceVolumeLabel, this, &staticUpdate, &updateVolume
+    );
 
 	return( SourceChanged || VolumeChanged);
 }

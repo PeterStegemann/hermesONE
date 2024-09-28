@@ -31,9 +31,17 @@ static const flash_char* getTitle( uint8_t PPMId)
 	}
 }
 
-Screen_Setup_System_PPM::Screen_Setup_System_PPM( uint8_t PPMId)
-					   : Screen_Setup_BaseList( getTitle( PPMId))
-					   , ppmId( PPMId)
+Screen_Setup_System_PPM::Screen_Setup_System_PPM
+(
+    Input_Service* InputService,
+    Interrupt_Service* InterruptService,
+    Screen_Status_Status* StatusScreen,
+    uint8_t PPMId
+)
+    : Screen_Setup_BaseList( InputService, StatusScreen, getTitle( PPMId))
+    , select( InputService, InterruptService)
+    , ppmId( PPMId)
+    , ppmNameInput( InputService, InterruptService)
 {
 	GLOBAL.SetupService.GetPPM( ppmId, &ppmSetup);
 
@@ -189,7 +197,7 @@ bool Screen_Setup_System_PPM::processMenu( DoMenuResult Result)
 					uint8_t ChannelIndex = ( currentMenuEntry - firstLine) - 4;
 					int8_t* SourceChannel = ( int8_t*) &( ppmSetup.ChannelMapping[ ChannelIndex]);
 
-					if( GUI_Setup_Select::DoSelect8( SourceChannel, 0, SIGNAL_PPM_CHANNELS - 1, 1, &menuMarker,
+					if( select.DoSelect8( SourceChannel, 0, SIGNAL_PPM_CHANNELS - 1, 1, &menuMarker,
 												    &( sourceChannelLabel[ ChannelIndex]),
 												    this, NULL, &updateSourceChannel) == true)
 					{
@@ -261,7 +269,7 @@ void Screen_Setup_System_PPM::doInverted( void)
 
 void Screen_Setup_System_PPM::doCenter( void)
 {
-	if( GUI_Setup_Select::DoSelect8( &( ppmSetup.Center), SIGNAL_PPM_CENTER_MINIMUM,
+	if( select.DoSelect8( &( ppmSetup.Center), SIGNAL_PPM_CENTER_MINIMUM,
 									SIGNAL_PPM_CENTER_MAXIMUM, 1, &menuMarker, &centerLabel,
 								    this, NULL, &updateCenter))
 	{
